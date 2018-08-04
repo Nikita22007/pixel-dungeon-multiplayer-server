@@ -15,4 +15,8 @@ android {
 
 dependencies {
     implementation project(':PD-classes')
+    repositories {
+        google()
+        jcenter()
+    }
 }
