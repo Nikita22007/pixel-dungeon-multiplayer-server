@@ -1,20 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion appAndroidCompileSDK
 
     defaultConfig {
+        manifestPlaceholders = [appName:appName]
+        applicationId appPackageName
+
+        versionCode appVersionCode
+        versionName appVersionName
+
         //noinspection MinSdkTooLow
-        minSdkVersion 8
-        targetSdkVersion 28
+        minSdkVersion appAndroidMinSDK
+        targetSdkVersion appAndroidTargetSDK
     }
 
 }
 
 dependencies {
     implementation project(':PD-classes')
-    repositories {
-        google()
-        jcenter()
-    }
 }

@@ -1,18 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion appAndroidCompileSDK
 
     defaultConfig {
         //noinspection MinSdkTooLow
-        minSdkVersion 8
-    }
-}
-
-dependencies {
-    repositories {
-        google()
-        jcenter()
+        minSdkVersion appAndroidMinSDK
     }
 }
 

@@ -4,6 +4,28 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
+}
+
+allprojects {
+
+    ext {
+        appName = 'Pixel Dungeon'
+        appPackageName = 'com.watabou.pixeldungeon'
+
+        appVersionCode = 74
+        appVersionName = '1.9.1'
+
+        appAndroidCompileSDK = 28
+        appAndroidMinSDK = 8
+        appAndroidTargetSDK = 28
+    }
+    version = appVersionName
+
+    repositories {
+        google()
+        jcenter()
+    }
+
 }
