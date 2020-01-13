@@ -112,7 +112,9 @@ import com.watabou.utils.Random;
 public class Hero extends Char {
 	
 	private static final String TXT_LEAVE = "One does not simply leave Pixel Dungeon.";
-	
+
+	public  int gold;
+
 	private static final String TXT_LEVEL_UP = "level up!";
 	private static final String TXT_NEW_LEVEL = 
 		"Welcome to level %d! Now you are healthier and more focused. " +
@@ -1392,7 +1394,7 @@ public class Hero extends Char {
 	public void resurrect( int resetLevel ) {
 		
 		HP = HT;
-		Dungeon.gold = 0;
+		gold = 0;
 		exp = 0;
 		
 		belongings.resurrect( resetLevel );

@@ -132,7 +132,7 @@ public class WndTradeItem extends Window {
 				}
 			};
 			btnBuy.setRect( 0, pos + GAP, WIDTH, BTN_HEIGHT );
-			btnBuy.enable( price <= Dungeon.gold );
+			btnBuy.enable( price <= Dungeon.hero.gold );
 			add( btnBuy );
 			
 			RedButton btnCancel = new RedButton( TXT_CANCEL ) {
@@ -238,7 +238,7 @@ public class WndTradeItem extends Window {
 		Item item = heap.pickUp();
 		
 		int price = price( item );
-		Dungeon.gold -= price;
+		Dungeon.hero.gold -= price;
 		
 		GLog.i( TXT_BOUGHT, item.name(), price );
 		

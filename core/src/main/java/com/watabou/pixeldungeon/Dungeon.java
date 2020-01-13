@@ -83,7 +83,7 @@ public class Dungeon {
 	public static Level level;
 	
 	public static int depth;
-	public static int gold;
+	//public static int gold;
 	// Reason of death
 	public static String resultDescription;
 	
@@ -113,7 +113,6 @@ public class Dungeon {
 		Journal.reset();
 		
 		depth = 0;
-		gold = 0;
 		
 		droppedItems = new SparseArray<ArrayList<Item>>();
 		
@@ -367,7 +366,7 @@ public class Dungeon {
 			bundle.put( VERSION, Game.version );
 			bundle.put( CHALLENGES, challenges );
 			bundle.put( HERO, hero );
-			bundle.put( GOLD, gold );
+			bundle.put( GOLD, hero.gold);
 			bundle.put( DEPTH, depth );
 			
 			for (int d : droppedItems.keyArray()) {
@@ -518,7 +517,7 @@ public class Dungeon {
 		
 		QuickSlot.compress();
 		
-		gold = bundle.getInt( GOLD );
+		hero.gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
 		
 		Statistics.restoreFromBundle( bundle );

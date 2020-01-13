@@ -38,7 +38,7 @@ public class Bones {
 	private static int depth = -1;
 	private static Item item;
 	
-	public static void leave() {
+	public static void leave() { //Todo  связать с Hero
 		
 		item = null;
 		switch (Random.Int( 4 )) {
@@ -56,8 +56,8 @@ public class Bones {
 			break;
 		}
 		if (item == null) {
-			if (Dungeon.gold > 0) {
-				item = new Gold( Random.IntRange( 1, Dungeon.gold ) );
+			if (Dungeon.hero.gold > 0) {
+				item = new Gold( Random.IntRange( 1, Dungeon.hero.gold ) );
 			} else {
 				item = new Gold( 1 );
 			}
