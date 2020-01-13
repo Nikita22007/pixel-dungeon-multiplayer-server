@@ -222,7 +222,7 @@ public class Dungeon {
 		
 		level.create();
 		
-		Statistics.qualifiedForNoKilling = !bossLevel();
+		Statistics.qualifiedForNoKilling = !bossLevel(depth);
 		
 		return level;
 	}
@@ -240,11 +240,7 @@ public class Dungeon {
 	public static boolean shopOnLevel() {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
-	
-	public static boolean bossLevel() {
-		return bossLevel( depth );
-	}
-	
+
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
