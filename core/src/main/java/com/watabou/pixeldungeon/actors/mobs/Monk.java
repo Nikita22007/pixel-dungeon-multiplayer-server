@@ -85,7 +85,7 @@ public class Monk extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		
-		if (Random.Int( 6 ) == 0 && enemy == Dungeon.hero) {
+		if (Random.Int( 6 ) == 0 && enemy instanceof Hero) {
 			
 			Hero hero = Dungeon.hero;
 			KindOfWeapon weapon = hero.belongings.weapon;

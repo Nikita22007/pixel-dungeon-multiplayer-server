@@ -156,7 +156,7 @@ public abstract class Mob extends Char {
 	protected Char chooseEnemy() {
 		
 		if (buff( Amok.class ) != null) {
-			if (enemy == Dungeon.hero || enemy == null) {
+			if (enemy instanceof Hero || enemy == null) {
 				
 				HashSet<Mob> enemies = new HashSet<Mob>();
 				for (Mob mob:Dungeon.level.mobs) {
@@ -295,7 +295,7 @@ public abstract class Mob extends Char {
 	
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
-		if (!enemySeen && enemy == Dungeon.hero && ((Hero)enemy).subClass == HeroSubClass.ASSASSIN) {
+		if (!enemySeen && enemy instanceof Hero && ((Hero)enemy).subClass == HeroSubClass.ASSASSIN) {
 			damage += Random.Int( 1, damage );
 			Wound.hit( this );
 		}

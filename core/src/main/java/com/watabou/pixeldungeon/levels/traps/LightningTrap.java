@@ -40,7 +40,7 @@ public class LightningTrap {
 		
 		if (ch != null) {
 			ch.damage( Math.max( 1, Random.Int( ch.HP / 3, 2 * ch.HP / 3 ) ), LIGHTNING );
-			if (ch == Dungeon.hero) {
+			if (ch instanceof Hero) {
 				
 				Camera.main.shake( 2, 0.3f );
 				

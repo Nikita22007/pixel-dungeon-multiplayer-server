@@ -154,7 +154,7 @@ public abstract class Char extends Actor {
 				Sample.INSTANCE.play( Assets.SND_HIT, 1, 1, Random.Float( 0.8f, 1.25f ) );
 			}
 
-			if (enemy == Dungeon.hero) {
+			if (enemy instanceof Hero) {
 				Dungeon.hero.interrupt();
 				if (effectiveDamage > enemy.HT / 4) {
 					Camera.main.shake( GameMath.gate( 1, effectiveDamage / (enemy.HT / 4), 5), 0.3f );
@@ -165,7 +165,7 @@ public abstract class Char extends Actor {
 			enemy.sprite.flash();
 			
 			if (!enemy.isAlive() && visibleFight) {
-				if (enemy == Dungeon.hero) {
+				if (enemy instanceof Hero) {
 					
 					if (Dungeon.hero.killerGlyph != null) {
 						
@@ -196,7 +196,7 @@ public abstract class Char extends Actor {
 			if (visibleFight) {
 				String defense = enemy.defenseVerb();
 				enemy.sprite.showStatus( CharSprite.NEUTRAL, defense );
-				if (this == Dungeon.hero) {
+				if (this instanceof Hero) {
 					GLog.i( TXT_YOU_MISSED, enemy.name, defense );
 				} else {
 					GLog.i( TXT_SMB_MISSED, enemy.name, defense, name );

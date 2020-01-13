@@ -621,7 +621,7 @@ public abstract class Level implements Bundlable {
 	
 	public void press( int cell, Char ch ) {
 
-		if (pit[cell] && ch == Dungeon.hero) {
+		if (pit[cell] && ch instanceof Hero) {
 			Chasm.heroFall( cell );
 			return;
 		}
@@ -707,7 +707,7 @@ public abstract class Level implements Bundlable {
 		
 		if (trap) {
 			Sample.INSTANCE.play( Assets.SND_TRAP );
-			if (ch == Dungeon.hero) {
+			if (ch instanceof Hero) {
 				Dungeon.hero.interrupt();
 			}
 			set( cell, Terrain.INACTIVE_TRAP );
@@ -836,7 +836,7 @@ public abstract class Level implements Bundlable {
 					fieldOfView[p + WIDTH] = true;
 					fieldOfView[p - WIDTH] = true;
 				}
-			} else if (c == Dungeon.hero && ((Hero)c).heroClass == HeroClass.HUNTRESS) {
+			} else if (c instanceof Hero && ((Hero)c).heroClass == HeroClass.HUNTRESS) {
 				for (Mob mob : mobs) {
 					int p = mob.pos;
 					if (distance( c.pos, p) == 2) {

@@ -27,6 +27,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.utils.SparseArray;
 
 public class BuffIndicator extends Component {
@@ -81,7 +82,7 @@ public class BuffIndicator extends Component {
 		super();
 		
 		this.ch = ch;
-		if (ch == Dungeon.hero) {
+		if (ch instanceof Hero) {
 			heroInstance = this;
 		}
 	}
