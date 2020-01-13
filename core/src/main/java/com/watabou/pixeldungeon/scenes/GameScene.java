@@ -311,7 +311,7 @@ public class GameScene extends PixelScene {
 					((RegularLevel) Dungeon.level).secretDoors > Random.IntRange( 3, 4 )) {
 				GLog.w( TXT_SECRETS );
 			}
-			if (Dungeon.nightMode && !Dungeon.bossLevel()) {
+			if (Dungeon.nightMode && !Dungeon.bossLevel(Dungeon.depth)) {
 				GLog.w( TXT_NIGHT_MODE );
 			}
 

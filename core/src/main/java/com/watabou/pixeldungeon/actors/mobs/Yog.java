@@ -37,6 +37,7 @@ import com.watabou.pixeldungeon.actors.buffs.Poison;
 import com.watabou.pixeldungeon.actors.buffs.Sleep;
 import com.watabou.pixeldungeon.actors.buffs.Terror;
 import com.watabou.pixeldungeon.actors.buffs.Vertigo;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.Pushing;
 import com.watabou.pixeldungeon.effects.particles.ShadowParticle;
 import com.watabou.pixeldungeon.items.keys.SkeletonKey;
@@ -337,7 +338,7 @@ public class Yog extends Mob {
 					enemy.sprite.bloodBurstA( sprite.center(), dmg );
 					enemy.sprite.flash();
 					
-					if (!enemy.isAlive() && enemy == Dungeon.hero) {
+					if (!enemy.isAlive() && enemy instanceof Hero) {
 						Dungeon.fail( Utils.format( ResultDescriptions.BOSS, name, Dungeon.depth ) );
 						GLog.n( TXT_KILL, name );
 					}

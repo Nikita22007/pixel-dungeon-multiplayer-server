@@ -83,7 +83,7 @@ public class Dungeon {
 	public static Level level;
 	
 	public static int depth;
-	public static int gold;
+	//public static int gold;
 	// Reason of death
 	public static String resultDescription;
 	
@@ -113,7 +113,6 @@ public class Dungeon {
 		Journal.reset();
 		
 		depth = 0;
-		gold = 0;
 		
 		droppedItems = new SparseArray<ArrayList<Item>>();
 		
@@ -223,7 +222,7 @@ public class Dungeon {
 		
 		level.create();
 		
-		Statistics.qualifiedForNoKilling = !bossLevel();
+		Statistics.qualifiedForNoKilling = !bossLevel(depth);
 		
 		return level;
 	}
@@ -241,11 +240,7 @@ public class Dungeon {
 	public static boolean shopOnLevel() {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
-	
-	public static boolean bossLevel() {
-		return bossLevel( depth );
-	}
-	
+
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
@@ -367,7 +362,7 @@ public class Dungeon {
 			bundle.put( VERSION, Game.version );
 			bundle.put( CHALLENGES, challenges );
 			bundle.put( HERO, hero );
-			bundle.put( GOLD, gold );
+			bundle.put( GOLD, hero.gold);
 			bundle.put( DEPTH, depth );
 			
 			for (int d : droppedItems.keyArray()) {
@@ -518,7 +513,7 @@ public class Dungeon {
 		
 		QuickSlot.compress();
 		
-		gold = bundle.getInt( GOLD );
+		hero.gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
 		
 		Statistics.restoreFromBundle( bundle );

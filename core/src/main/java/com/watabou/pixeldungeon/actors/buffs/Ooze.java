@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon.actors.buffs;
 
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.ResultDescriptions;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -44,7 +45,7 @@ public class Ooze extends Buff {
 	public boolean act() {
 		if (target.isAlive()) {
 			target.damage( damage, this );
-			if (!target.isAlive() && target == Dungeon.hero) {
+			if (!target.isAlive() && target instanceof Hero) {
 				Dungeon.fail( Utils.format( ResultDescriptions.OOZE, Dungeon.depth ) );
 				GLog.n( TXT_HERO_KILLED, toString() );
 			}

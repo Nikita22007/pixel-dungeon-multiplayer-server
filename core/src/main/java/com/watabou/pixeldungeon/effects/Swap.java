@@ -24,6 +24,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.CharSprite;
@@ -87,7 +88,7 @@ public class Swap extends Actor {
 				}
 			}
 			
-			if (ch1 == Dungeon.hero || ch2 == Dungeon.hero) {
+			if (ch1 instanceof Hero || ch2 instanceof Hero) {
 				Dungeon.observe();
 			}
 		}

@@ -37,7 +37,7 @@ public class Displacement extends Glyph {
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage ) {
 
-		if (Dungeon.bossLevel()) {
+		if (Dungeon.bossLevel(Dungeon.depth)) {
 			return damage;
 		}
 		

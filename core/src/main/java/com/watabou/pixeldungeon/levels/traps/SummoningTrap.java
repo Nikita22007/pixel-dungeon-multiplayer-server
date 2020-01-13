@@ -39,7 +39,7 @@ public class SummoningTrap {
 	
 	public static void trigger( int pos, Char c ) {
 		
-		if (Dungeon.bossLevel()) {
+		if (Dungeon.bossLevel(Dungeon.depth)) {
 			return;
 		}
 		

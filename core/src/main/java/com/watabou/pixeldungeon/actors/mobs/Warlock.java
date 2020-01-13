@@ -24,6 +24,7 @@ import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Weakness;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.items.weapon.enchantments.Death;
 import com.watabou.pixeldungeon.levels.Level;
@@ -98,14 +99,14 @@ public class Warlock extends Mob implements Callback {
 		spend( TIME_TO_ZAP );
 		
 		if (hit( this, enemy, true )) {
-			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {
+			if (enemy instanceof Hero && Random.Int( 2 ) == 0) {
 				Buff.prolong( enemy, Weakness.class, Weakness.duration( enemy ) );
 			}
 			
 			int dmg = Random.Int( 12, 18 );
 			enemy.damage( dmg, this );
 			
-			if (!enemy.isAlive() && enemy == Dungeon.hero) {
+			if (!enemy.isAlive() && enemy instanceof Hero) {
 				Dungeon.fail( Utils.format( ResultDescriptions.MOB, 
 					Utils.indefinite( name ), Dungeon.depth ) );
 				GLog.n( TXT_SHADOWBOLT_KILLED, name );
