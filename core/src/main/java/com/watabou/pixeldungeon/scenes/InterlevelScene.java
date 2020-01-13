@@ -282,7 +282,7 @@ public class InterlevelScene extends PixelScene {
 		
 		Actor.fixTime(); 
 		
-		if (Dungeon.bossLevel()) {
+		if (Dungeon.bossLevel(Dungeon.depth)) {
 			Dungeon.hero.resurrect( Dungeon.depth );
 			Dungeon.depth--;
 			Level level = Dungeon.newLevel();

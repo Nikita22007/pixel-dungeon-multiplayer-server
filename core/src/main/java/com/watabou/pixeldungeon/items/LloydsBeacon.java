@@ -100,7 +100,7 @@ public class LloydsBeacon extends Item {
 		
 		if (action == AC_SET || action == AC_RETURN) {
 			
-			if (Dungeon.bossLevel()) {
+			if (Dungeon.bossLevel(Dungeon.depth)) {
 				hero.spend( LloydsBeacon.TIME_TO_USE );
 				GLog.w( TXT_PREVENTING );
 				return;
