@@ -32,7 +32,7 @@ import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.GamesInProgress;
+//import com.watabou.pixeldungeon.GamesInProgress;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.effects.BannerSprites;
@@ -54,16 +54,16 @@ public class StartScene extends PixelScene {
 	private static final float BUTTON_HEIGHT	= 24;
 	private static final float GAP				= 2;
 	
-	private static final String TXT_LOAD	= "Load Game";
-	private static final String TXT_NEW		= "New Game";
+	//private static final String TXT_LOAD	= "Load Game";
+	//private static final String TXT_NEW		= "New Game";
+	private static final String TXT_CHOOSE = "Choose";
+	//private static final String TXT_ERASE		= "Erase current game";
+	//private static final String TXT_DPTH_LVL	= "Depth: %d, level: %d";
 	
-	private static final String TXT_ERASE		= "Erase current game";
-	private static final String TXT_DPTH_LVL	= "Depth: %d, level: %d";
-	
-	private static final String TXT_REALLY	= "Do you really want to start new game?";
-	private static final String TXT_WARNING	= "Your current game progress will be erased.";
-	private static final String TXT_YES		= "Yes, start new game";
-	private static final String TXT_NO		= "No, return to main menu";
+	//private static final String TXT_REALLY	= "Do you really want to start new game?";
+	//private static final String TXT_WARNING	= "Your current game progress will be erased.";
+	//private static final String TXT_YES		= "Yes, start new game";
+	//private static final String TXT_NO		= "No, return to main menu";
 	
 	private static final String TXT_UNLOCK	= "To unlock this character class, slay the 3rd boss with any other class";
 	
@@ -81,9 +81,10 @@ public class StartScene extends PixelScene {
 	private float buttonX;
 	private float buttonY;
 	
-	private GameButton btnLoad;
-	private GameButton btnNewGame;
-	
+	//private GameButton btnLoad;
+	//private GameButton btnNewGame;
+	private GameButton  btnChoose;
+
 	private boolean huntressUnlocked;
 	private Group unlock;
 	
@@ -126,10 +127,10 @@ public class StartScene extends PixelScene {
 		buttonX = left;
 		buttonY = bottom - BUTTON_HEIGHT;
 		
-		btnNewGame = new GameButton( TXT_NEW ) {
+		btnChoose = new GameButton( TXT_CHOOSE ) {
 			@Override
 			protected void onClick() {
-				if (GamesInProgress.check( curClass ) != null) {
+				/*if (GamesInProgress.check( curClass ) != null) {
 					StartScene.this.add( new WndOptions( TXT_REALLY, TXT_WARNING, TXT_YES, TXT_NO ) {
 						@Override
 						protected void onSelect( int index ) {
@@ -138,23 +139,13 @@ public class StartScene extends PixelScene {
 							}
 						}
 					} );
-					
-				} else {
+
+				} else */{
 					startNewGame();
 				}
 			}
 		};
-		add( btnNewGame );
-
-		btnLoad = new GameButton( TXT_LOAD ) {	
-			@Override
-			protected void onClick() {
-				InterlevelScene.mode = InterlevelScene.Mode.CONTINUE;
-				Game.switchScene( InterlevelScene.class );
-			}
-		};
-		add( btnLoad );	
-		
+		add( btnChoose );
 		float centralHeight = buttonY - title.y - title.height();
 		
 		HeroClass[] classes = {
@@ -201,8 +192,9 @@ public class StartScene extends PixelScene {
 		
 		unlock = new Group();
 		add( unlock );
-		
-		if (!(huntressUnlocked = Badges.isUnlocked( Badges.Badge.BOSS_SLAIN_3 ))) {
+        huntressUnlocked = Badges.isUnlocked( Badges.Badge.BOSS_SLAIN_3 );
+        huntressUnlocked=true;//may be later we will test this...
+		if (!huntressUnlocked) {
 		
 			BitmapTextMultiline text = PixelScene.createMultiline( TXT_UNLOCK, 9 );
 			text.maxWidth = (int)width;
@@ -264,8 +256,9 @@ public class StartScene extends PixelScene {
 		
 			unlock.visible = false;
 			
-			GamesInProgress.Info info = GamesInProgress.check( curClass );
-			if (info != null) {
+			//GamesInProgress.Info info = GamesInProgress.check( curClass );
+			/*if (info != null) {//if  false
+
 				
 				btnLoad.visible = true;
 				btnLoad.secondary( Utils.format( TXT_DPTH_LVL, info.depth, info.level ), info.challenges );
@@ -280,19 +273,18 @@ public class StartScene extends PixelScene {
 				btnNewGame.setRect(
 					btnLoad.right() + GAP, buttonY, w, BUTTON_HEIGHT );
 				
-			} else {
-				btnLoad.visible = false;
+			} else */{
 				
-				btnNewGame.visible = true;
-				btnNewGame.secondary( null, false );
-				btnNewGame.setRect( buttonX, buttonY, Camera.main.width - buttonX * 2, BUTTON_HEIGHT );
+				btnChoose.visible = true;
+				btnChoose.secondary( null, false );
+				btnChoose.setRect( buttonX, buttonY, Camera.main.width - buttonX * 2, BUTTON_HEIGHT );
 			}
 			
 		} else {
 			
 			unlock.visible = true;
-			btnLoad.visible = false;
-			btnNewGame.visible = false;
+		//	btnLoad.visible = false;
+		//	btnNewGame.visible = false;
 			
 		}
 	}

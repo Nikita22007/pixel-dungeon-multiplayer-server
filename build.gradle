@@ -11,11 +11,11 @@ buildscript {
 allprojects {
 
     ext {
-        appName = 'Pixel Dungeon'
-        appPackageName = 'com.watabou.pixeldungeon'
+        appName = 'Pixel Dungeon Client'
+        appPackageName = 'com.watabou.pixeldungeonClient'
 
         appVersionCode = 74
-        appVersionName = '1.9.1'
+        appVersionName = 'Client0.1'
 
         appAndroidCompileSDK = 28
         appAndroidMinSDK = 8
