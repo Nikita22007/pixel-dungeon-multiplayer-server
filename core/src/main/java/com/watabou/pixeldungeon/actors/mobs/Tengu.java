@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.ToxicGas;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroSubClass;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.Speck;
@@ -46,140 +47,146 @@ import com.watabou.utils.Random;
 
 public class Tengu extends Mob {
 
-	private static final int JUMP_DELAY = 5;
-	
-	{
-		name = Dungeon.depth == Statistics.deepestFloor ? "Tengu" : "memory of Tengu";
-		spriteClass = TenguSprite.class;
-		
-		HP = HT = 120;
-		EXP = 20;
-		defenseSkill = 20;
-	}
-	
+    private static final int JUMP_DELAY = 5;
+
+    {
+        name = Dungeon.depth == Statistics.deepestFloor ? "Tengu" : "memory of Tengu";
+        spriteClass = TenguSprite.class;
+
+        HP = HT = 120;
+        EXP = 20;
+        defenseSkill = 20;
+    }
+
 	private int timeToJump = JUMP_DELAY;
 	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 8, 15 );
-	}
-	
-	@Override
-	public int attackSkill( Char target ) {
-		return 20;
-	}
-	
-	@Override
-	public int dr() {
-		return 5;
-	}
-	
-	@Override
-	public void die( Object cause ) {
-		
-		Badges.Badge badgeToCheck = null;
-		switch (Dungeon.hero.heroClass) {
-		case WARRIOR:
-			badgeToCheck = Badge.MASTERY_WARRIOR;
-			break;
-		case MAGE:
-			badgeToCheck = Badge.MASTERY_MAGE;
-			break;
-		case ROGUE:
-			badgeToCheck = Badge.MASTERY_ROGUE;
-			break;
-		case HUNTRESS:
-			badgeToCheck = Badge.MASTERY_HUNTRESS;
-			break;
-		}
-		if (!Badges.isUnlocked( badgeToCheck ) || Dungeon.hero.subClass != HeroSubClass.NONE) {
-			Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
-		}
-		
-		GameScene.bossSlain();
-		Dungeon.level.drop( new SkeletonKey(), pos ).sprite.drop();
-		super.die( cause );
-		
-		Badges.validateBossSlain();
-		
-		yell( "Free at last..." );
-	}
-	
-	@Override
-	protected boolean getCloser( int target ) {
-		if (Level.fieldOfView[target]) {
-			jump();
-			return true;
-		} else {
-			return super.getCloser( target );
-		}
-	}
-	
-	@Override
-	protected boolean canAttack( Char enemy ) {
-		return Ballistica.cast( pos, enemy.pos, false, true ) == enemy.pos;
-	}
-	
-	@Override
-	protected boolean doAttack( Char enemy ) {
-		timeToJump--;
-		if (timeToJump <= 0 && Level.adjacent( pos, enemy.pos )) {
-			jump();
-			return true;
-		} else {
-			return super.doAttack( enemy );
-		}
-	}
-	
-	private void jump() {
-		timeToJump = JUMP_DELAY;
-		
-		for (int i=0; i < 4; i++) {
-			int trapPos;
-			do {
-				trapPos = Random.Int( Level.LENGTH );
-			} while (!Level.fieldOfView[trapPos] || !Level.passable[trapPos]);
-			
-			if (Dungeon.level.map[trapPos] == Terrain.INACTIVE_TRAP) {
-				Level.set( trapPos, Terrain.POISON_TRAP );
-				GameScene.updateMap( trapPos );
-				ScrollOfMagicMapping.discover( trapPos );
-			}
-		}
-		
-		int newPos;
-		do {
-			newPos = Random.Int( Level.LENGTH );
-		} while (
-			!Level.fieldOfView[newPos] || 
-			!Level.passable[newPos] || 
-			(enemy != null && Level.adjacent( newPos, enemy.pos )) ||
-			Actor.findChar( newPos ) != null);
-		
-		sprite.move( pos, newPos );
-		move( newPos );
-		
-		if (Dungeon.visible[newPos]) {
-			CellEmitter.get( newPos ).burst( Speck.factory( Speck.WOOL ), 6 );
-			Sample.INSTANCE.play( Assets.SND_PUFF );
-		}
-		
-		spend( 1 / speed() );
-	}
-	
-	@Override
-	public void notice() {
-		super.notice();
-		yell( "Gotcha, " + Dungeon.hero.heroClass.title() + "!" );
-	}
-	
-	@Override
-	public String description() {
-		return
-			"Tengu are members of the ancient assassins clan, which is also called Tengu. " +
-			"These assassins are noted for extensive use of shuriken and traps.";
-	}
-	
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange(8, 15);
+    }
+
+    @Override
+    public int attackSkill(Char target) {
+        return 20;
+    }
+
+    @Override
+    public int dr() {
+        return 5;
+    }
+
+    @Override
+    public void die(Object cause) {
+
+        Badges.Badge badgeToCheck = null;
+        for (Hero hero : Dungeon.heroes) {
+            if (hero==null){continue;};
+            switch (hero.heroClass) {
+                case WARRIOR:
+                    badgeToCheck = Badge.MASTERY_WARRIOR;
+                    break;
+                case MAGE:
+                    badgeToCheck = Badge.MASTERY_MAGE;
+                    break;
+                case ROGUE:
+                    badgeToCheck = Badge.MASTERY_ROGUE;
+                    break;
+                case HUNTRESS:
+                    badgeToCheck = Badge.MASTERY_HUNTRESS;
+                    break;
+            }
+            if (!Badges.isUnlocked(badgeToCheck) || hero.subClass != HeroSubClass.NONE) {
+                Dungeon.level.drop(new TomeOfMastery(), pos).sprite.drop();
+            }
+        }
+        GameScene.bossSlain();
+        Dungeon.level.drop(new SkeletonKey(), pos).sprite.drop();
+        super.die(cause);
+
+        Badges.validateBossSlain();
+
+        yell("Free at last...");
+    }
+
+    @Override
+    protected boolean getCloser(int target) {
+        if (Level.fieldOfView[target]) {
+            jump();
+            return true;
+        } else {
+            return super.getCloser(target);
+        }
+    }
+
+    @Override
+    protected boolean canAttack(Char enemy) {
+        return Ballistica.cast(pos, enemy.pos, false, true) == enemy.pos;
+    }
+
+    @Override
+    protected boolean doAttack(Char enemy) {
+        timeToJump--;
+        if (timeToJump <= 0 && Level.adjacent(pos, enemy.pos)) {
+            jump();
+            return true;
+        } else {
+            return super.doAttack(enemy);
+        }
+    }
+
+    private void jump() {
+        timeToJump = JUMP_DELAY;
+
+        for (int i = 0; i < 4; i++) {
+            int trapPos;
+            do {
+                trapPos = Random.Int(Level.LENGTH);
+            } while (!Level.fieldOfView[trapPos] || !Level.passable[trapPos]);
+
+            if (Dungeon.level.map[trapPos] == Terrain.INACTIVE_TRAP) {
+                Level.set(trapPos, Terrain.POISON_TRAP);
+                GameScene.updateMap(trapPos);
+                ScrollOfMagicMapping.discover(trapPos);
+            }
+        }
+
+        int newPos;
+        do {
+            newPos = Random.Int(Level.LENGTH);
+        } while (
+                !Level.fieldOfView[newPos] ||
+                        !Level.passable[newPos] ||
+                        (enemy != null && Level.adjacent(newPos, enemy.pos)) ||
+                        Actor.findChar(newPos) != null);
+
+        sprite.move(pos, newPos);
+        move(newPos);
+
+        if (Dungeon.visible[newPos]) {
+            CellEmitter.get(newPos).burst(Speck.factory(Speck.WOOL), 6);
+            Sample.INSTANCE.play(Assets.SND_PUFF);
+        }
+
+        spend(1 / speed());
+    }
+
+    @Override
+    public void notice() {
+        super.notice();
+        Hero hero;
+        do {
+        hero=Random.element(Dungeon.heroes);
+        }while (hero==null);
+        yell("Gotcha, " + hero.heroClass.title() + "!");
+    }
+
+    @Override
+    public String description() {
+        return
+                "Tengu are members of the ancient assassins clan, which is also called Tengu. " +
+                        "These assassins are noted for extensive use of shuriken and traps.";
+    }
+
 	private static final HashSet<Class<?>> RESISTANCES = new HashSet<Class<?>>();
 	static {
 		RESISTANCES.add( ToxicGas.class );
@@ -188,8 +195,8 @@ public class Tengu extends Mob {
 		RESISTANCES.add( ScrollOfPsionicBlast.class );
 	}
 	
-	@Override
-	public HashSet<Class<?>> resistances() {
-		return RESISTANCES;
-	}
+    @Override
+    public HashSet<Class<?>> resistances() {
+        return RESISTANCES;
+    }
 }

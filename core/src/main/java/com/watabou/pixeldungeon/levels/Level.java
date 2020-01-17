@@ -708,7 +708,7 @@ public abstract class Level implements Bundlable {
 		if (trap) {
 			Sample.INSTANCE.play( Assets.SND_TRAP );
 			if (ch instanceof Hero) {
-				Dungeon.hero.interrupt();
+				((Hero)ch).interrupt();
 			}
 			set( cell, Terrain.INACTIVE_TRAP );
 			GameScene.updateMap( cell );

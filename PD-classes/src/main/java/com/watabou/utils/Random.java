@@ -41,7 +41,8 @@ public class Random {
 	public static int Int( int max ) {
 		return max > 0 ? (int)(Math.random() * max) : 0;
 	}
-	
+
+	//TODO TEST THIS
 	public static int Int( int min, int max ) {
 		return min + (int)(Math.random() * (max - min));
 	}

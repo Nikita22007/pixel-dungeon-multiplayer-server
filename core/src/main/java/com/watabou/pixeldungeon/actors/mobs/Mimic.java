@@ -85,7 +85,7 @@ public class Mimic extends Mob {
 			Gold gold = new Gold( Random.Int( ((Hero)enemy).gold / 10,  ((Hero)enemy).gold / 2 ) );
 			if (gold.quantity() > 0) {
 				((Hero)enemy).gold -= gold.quantity();
-				Dungeon.level.drop( gold, Dungeon.hero.pos ).sprite.drop();
+				Dungeon.level.drop( gold, enemy.pos).sprite.drop();
 			}
 		}
 		return super.attackProc( enemy, damage );
@@ -125,8 +125,8 @@ public class Mimic extends Mob {
 			"Mimics are magical creatures which can take any shape they wish. In dungeons they almost always " +
 			"choose a shape of a treasure chest, because they know how to beckon an adventurer.";
 	}
-	
-	public static Mimic spawnAt( int pos, List<Item> items ) {
+	public static Mimic spawnAt( int pos, List<Item> items ){return spawnAt(pos,items,null);};
+	public static Mimic spawnAt( int pos, List<Item> items,  Char enemy ) {
 		Char ch = Actor.findChar( pos ); 
 		if (ch != null) {
 			ArrayList<Integer> candidates = new ArrayList<Integer>();
@@ -159,9 +159,13 @@ public class Mimic extends Mob {
 		m.pos = pos;
 		m.state = m.HUNTING;
 		GameScene.add( m, 1 );
-		
-		m.sprite.turnTo( pos, Dungeon.hero.pos );
-		
+		if (!(enemy==null)) {
+			m.sprite.turnTo(pos, enemy.pos);
+		}
+		else{                       //TODO SEARCH MOB AROUND
+			m.sprite.turnTo(pos, Level.NEIGHBOURS8[Random.Int(7)]);
+		}
+
 		if (Dungeon.visible[m.pos]) {
 			CellEmitter.get( pos ).burst( Speck.factory( Speck.STAR ), 10 );
 			Sample.INSTANCE.play( Assets.SND_MIMIC );

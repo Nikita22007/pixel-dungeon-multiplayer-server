@@ -29,7 +29,7 @@ public class RingOfDetection extends Ring {
 	@Override
 	public boolean doEquip( Hero hero ) {
 		if (super.doEquip( hero )) {
-			Dungeon.hero.search( false );
+			hero.search( false );
 			return true;
 		} else {
 			return false;

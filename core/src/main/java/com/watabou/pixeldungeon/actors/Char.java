@@ -155,7 +155,7 @@ public abstract class Char extends Actor {
 			}
 
 			if (enemy instanceof Hero) {
-				Dungeon.hero.interrupt();
+				((Hero)enemy).interrupt();
 				if (effectiveDamage > enemy.HT / 4) {
 					Camera.main.shake( GameMath.gate( 1, effectiveDamage / (enemy.HT / 4), 5), 0.3f );
 				}
@@ -167,7 +167,7 @@ public abstract class Char extends Actor {
 			if (!enemy.isAlive() && visibleFight) {
 				if (enemy instanceof Hero) {
 					
-					if (Dungeon.hero.killerGlyph != null) {
+					if (((Hero)enemy).killerGlyph != null) {
 						
 					// FIXME
 					//	Dungeon.fail( Utils.format( ResultDescriptions.GLYPH, Dungeon.hero.killerGlyph.name(), Dungeon.depth ) );
@@ -490,7 +490,7 @@ public abstract class Char extends Actor {
 			Door.enter( pos );
 		}
 		
-		if (this != Dungeon.hero) {
+		if (!(this instanceof Hero)) {
 			sprite.visible = Dungeon.visible[pos];
 		}
 	}

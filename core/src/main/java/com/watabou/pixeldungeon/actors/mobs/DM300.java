@@ -89,7 +89,7 @@ public class DM300 extends Mob {
 			HP += Random.Int( 1, HT - HP );
 			sprite.emitter().burst( ElmoParticle.FACTORY, 5 );
 			
-			if (Dungeon.visible[step] && Dungeon.hero.isAlive()) {
+			if (Dungeon.visible[step] /*&& Dungeon.hero.isAlive()*/) {//FixMe if anybody on the floor
 				GLog.n( "DM-300 repairs itself!" );
 			}
 		}

@@ -79,7 +79,7 @@ public class Dungeon {
 	
 	public static int challenges;
 	
-	public static Hero hero;
+	public static Hero[] heroes;
 	public static Level level;
 	
 	public static int depth;
@@ -97,6 +97,9 @@ public class Dungeon {
 	public static SparseArray<ArrayList<Item>> droppedItems;
 	
 	public static void init() {
+		//TODO SETTING MENU
+		Settings.maxPlayers=4;//
+
 
 		challenges = PixelDungeon.challenges();
 		
@@ -133,12 +136,13 @@ public class Dungeon {
 		QuickSlot.primaryValue = null;
 		QuickSlot.secondaryValue = null;
 
-		hero = new Hero();
-		hero.live();
+		heroes=new Hero[Settings.maxPlayers];
+		heroes[0]=new Hero();
+		heroes[0].live();
 		
 		Badges.reset();
 
-		StartScene.curClass.initHero( hero );
+		StartScene.curClass.initHero( heroes[0] );
 	}
 	
 	public static boolean isChallenged( int mask ) {
@@ -361,8 +365,8 @@ public class Dungeon {
 			
 			bundle.put( VERSION, Game.version );
 			bundle.put( CHALLENGES, challenges );
-			bundle.put( HERO, hero );
-			bundle.put( GOLD, hero.gold);
+			bundle.put( HERO, heroes[0] );
+			bundle.put( GOLD, heroes[0].gold);
 			bundle.put( DEPTH, depth );
 			
 			for (int d : droppedItems.keyArray()) {
@@ -423,14 +427,14 @@ public class Dungeon {
 		output.close();
 	}
 	
-	public static void saveAll() throws IOException {
-		if (hero.isAlive()) {
+	public static void saveAll() throws IOException { //fixme
+		if (heroes[0].isAlive()) {
 			
 			Actor.fixTime();
-			saveGame( gameFile( hero.heroClass ) );
+			saveGame( gameFile( heroes[0].heroClass ) );
 			saveLevel();
 			
-			GamesInProgress.set( hero.heroClass, depth, hero.lvl, challenges != 0 );
+			GamesInProgress.set( heroes[0].heroClass, depth, heroes[0].lvl, challenges != 0 );
 			
 		} else if (WndResurrect.instance != null) {
 			

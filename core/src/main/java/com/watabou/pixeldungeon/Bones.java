@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Gold;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.rings.Ring;
@@ -38,26 +39,26 @@ public class Bones {
 	private static int depth = -1;
 	private static Item item;
 	
-	public static void leave() { //Todo  связать с Hero
+	public static void leave(Hero hero) {
 		
 		item = null;
 		switch (Random.Int( 4 )) {
 		case 0:
-			item = Dungeon.hero.belongings.weapon;
+			item = hero.belongings.weapon;
 			break;
 		case 1:
-			item = Dungeon.hero.belongings.armor;
+			item = hero.belongings.armor;
 			break;
 		case 2:
-			item = Dungeon.hero.belongings.ring1;
+			item = hero.belongings.ring1;
 			break;
 		case 3:
-			item = Dungeon.hero.belongings.ring2;
+			item = hero.belongings.ring2;
 			break;
 		}
 		if (item == null) {
-			if (Dungeon.hero.gold > 0) {
-				item = new Gold( Random.IntRange( 1, Dungeon.hero.gold ) );
+			if (hero.gold > 0) {
+				item = new Gold( Random.IntRange( 1, hero.gold ) );
 			} else {
 				item = new Gold( 1 );
 			}

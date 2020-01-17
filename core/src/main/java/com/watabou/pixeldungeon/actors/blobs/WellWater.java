@@ -20,6 +20,8 @@ package com.watabou.pixeldungeon.actors.blobs;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.Journal;
 import com.watabou.pixeldungeon.Journal.Feature;
+import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
@@ -63,8 +65,8 @@ public class WellWater extends Blob {
 	protected boolean affect() {
 
 		Heap heap;
-		
-		if (pos == Dungeon.hero.pos && affectHero( Dungeon.hero )) {
+		Char enemy = Actor.findChar(pos);
+		if (enemy!=null && enemy instanceof Hero && affectHero( (Hero)enemy )) {
 			
 			volume = off[pos] = cur[pos] = 0;
 			return true;

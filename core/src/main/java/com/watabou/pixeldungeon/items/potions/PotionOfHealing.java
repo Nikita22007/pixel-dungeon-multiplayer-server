@@ -36,7 +36,7 @@ public class PotionOfHealing extends Potion {
 	@Override
 	protected void apply( Hero hero ) {
 		setKnown();
-		heal( Dungeon.hero );
+		heal( hero );
 		GLog.p( "Your wounds heal completely." );
 	}
 	

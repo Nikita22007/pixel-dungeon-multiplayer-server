@@ -741,7 +741,7 @@ public class Hero extends Char {
 					ready();
 				} else {
 					Dungeon.win( ResultDescriptions.WIN );
-					Dungeon.deleteGame( Dungeon.hero.heroClass, true );
+					Dungeon.deleteGame(this.heroClass, true );
 					Game.switchScene( SurfaceScene.class );
 				}
 				
@@ -1156,17 +1156,17 @@ public class Hero extends Char {
 		Ankh ankh = (Ankh)belongings.getItem( Ankh.class );
 		if (ankh == null) {
 			
-			reallyDie( cause );
+			this.reallyDie( cause );
 			
 		} else {
 			
-			Dungeon.deleteGame( Dungeon.hero.heroClass, false );
+			Dungeon.deleteGame( this.heroClass, false );
 			GameScene.show( new WndResurrect( ankh, cause ) );
 			
 		}
 	}
 	
-	public static void reallyDie( Object cause ) {
+	public void reallyDie( Object cause ) {
 		
 		int length = Level.LENGTH;
 		int[] map = Dungeon.level.map;
@@ -1187,13 +1187,13 @@ public class Hero extends Char {
 			}
 		}
 		
-		Bones.leave();
+		Bones.leave(this);
 		
 		Dungeon.observe();
 				
-		Dungeon.hero.belongings.identify();
+		this.belongings.identify();
 		
-		int pos = Dungeon.hero.pos;
+		int pos = this.pos;
 		
 		ArrayList<Integer> passable = new ArrayList<Integer>();
 		for (Integer ofs : Level.NEIGHBOURS8) {
@@ -1204,7 +1204,7 @@ public class Hero extends Char {
 		}
 		Collections.shuffle( passable );
 		
-		ArrayList<Item> items = new ArrayList<Item>( Dungeon.hero.belongings.backpack.items );
+		ArrayList<Item> items = new ArrayList<Item>( this.belongings.backpack.items );
 		for (Integer cell : passable) {
 			if (items.isEmpty()) {
 				break;
@@ -1221,7 +1221,7 @@ public class Hero extends Char {
 			((Hero.Doom)cause).onDeath();
 		}
 		
-		Dungeon.deleteGame( Dungeon.hero.heroClass, true );
+		Dungeon.deleteGame( this.heroClass, true );
 	}
 	
 	@Override

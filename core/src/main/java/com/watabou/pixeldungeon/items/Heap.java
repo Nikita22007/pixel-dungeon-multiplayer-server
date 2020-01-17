@@ -107,7 +107,7 @@ public class Heap implements Bundlable {
 	public void open( Hero hero ) {
 		switch (type) {
 		case MIMIC:
-			if (Mimic.spawnAt( pos, items ) != null) {
+			if (Mimic.spawnAt( pos, items,  hero ) != null) {
 				GLog.n( TXT_MIMIC );
 				destroy();
 			} else {

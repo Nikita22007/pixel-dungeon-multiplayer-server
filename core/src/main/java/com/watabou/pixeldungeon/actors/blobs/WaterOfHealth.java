@@ -49,7 +49,7 @@ public class WaterOfHealth extends WellWater {
 		
 		CellEmitter.get( pos ).start( ShaftParticle.FACTORY, 0.2f, 3 );
 
-		Dungeon.hero.interrupt();
+		hero.interrupt();
 	
 		GLog.p( TXT_PROCCED );
 		
