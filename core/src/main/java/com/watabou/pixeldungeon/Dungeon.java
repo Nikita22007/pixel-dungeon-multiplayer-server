@@ -132,24 +132,24 @@ public class Dungeon {
 		
 		QuickSlot.primaryValue = null;
 		QuickSlot.secondaryValue = null;
-		
+
 		hero = new Hero();
 		hero.live();
 		
 		Badges.reset();
-		
+
 		StartScene.curClass.initHero( hero );
 	}
 	
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
 	}
-	
+
 	public static Level newLevel() {
-		
+
 		Dungeon.level = null;
 		Actor.clear();
-		
+
 		depth++;
 		if (depth > Statistics.deepestFloor) {
 			Statistics.deepestFloor = depth;
@@ -237,7 +237,7 @@ public class Dungeon {
 		switchLevel( level, level.entrance );
 	}
 	
-	public static boolean shopOnLevel() {
+	public static boolean shopOnLevel(int depth) {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
 

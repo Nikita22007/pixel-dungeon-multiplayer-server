@@ -114,8 +114,8 @@ public abstract class RegularLevel extends Level {
 				connected.add( or );
 			}
 		}
-		
-		if (Dungeon.shopOnLevel()) {
+
+		if (Dungeon.shopOnLevel(Dungeon.depth)) {
 			Room shop = null;
 			for (Room r : roomEntrance.connected.keySet()) {
 				if (r.connected.size() == 1 && r.width() >= 5 && r.height() >= 5) {
