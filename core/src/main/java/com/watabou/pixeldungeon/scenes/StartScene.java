@@ -141,7 +141,7 @@ public class StartScene extends PixelScene {
 					} );
 
 				} else */{
-					startNewGame();
+					Game.switchScene( ConnectScene.class );
 				}
 			}
 		};
