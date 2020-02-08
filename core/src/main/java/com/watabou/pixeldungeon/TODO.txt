@@ -1,0 +1,31 @@
+Version: 1 //increment when modify
+Графика:
+    Все, что связано  с графикой - удалить и заменить заглушками
+    окна должны  принимать героя как параметр. По  герою определяется  клиент, которому отправить запрос окна и  ждать результат
+
+Настройка:
+    Много переключателей  и  кнопка START (stop)
+
+Скорее разработать архитектуру  передачи данных между клиентом и  сервером
+
+Цель:
+    1. Скомпилировать! (хотя бы)
+    2. Запустить прототип
+    3. Запустить нормально  работающее приложение
+
+
+FromVersion: 1 //increment when translate
+Translator: translate.yandex.ru //change if use other
+Graphics:
+    Everything related to graphics - remove and replace with stubs
+    Windows must accept the hero as a parameter. The hero determines the client to send the window request to and wait for the result
+
+Customization:
+    A lot of switches and a START (stop) button
+
+Faster develop an architecture for data transfer between the client and the server
+
+Goal:
+    1. Compile! (at least)
+    2. Run the prototype
+    3. Launch a normally running app
