@@ -24,6 +24,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.Splash;
 import com.watabou.pixeldungeon.items.Item;
@@ -193,9 +194,9 @@ public class Potion extends Item {
 	
 	@Override
 	protected void onThrow( int cell ) {
-		if (Dungeon.hero.pos == cell) {
+		if (Actor.findChar(cell) instanceof Hero) {
 			
-			apply( Dungeon.hero );
+			apply( (Hero)Actor.findChar(cell));
 			
 		} else if (Dungeon.level.map[cell] == Terrain.WELL || Level.pit[cell]) {
 			

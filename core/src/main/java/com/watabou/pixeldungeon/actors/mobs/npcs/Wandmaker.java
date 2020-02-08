@@ -24,6 +24,7 @@ import com.watabou.pixeldungeon.Journal;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.quest.CorpseDust;
@@ -89,9 +90,9 @@ public class Wandmaker extends NPC {
 	}
 	
 	@Override
-	public void interact() {
-		sprite.turnTo( pos, Dungeon.hero.pos );
-		Quest.type.handler.interact( this );
+	public void interact(Hero  hero) {
+		sprite.turnTo( pos, hero.pos );
+		Quest.type.handler.interact( hero,this );
 	}
 	
 	private void tell( String format, Object...args ) {
@@ -266,14 +267,14 @@ public class Wandmaker extends NPC {
 		protected String txtQuest1;
 		protected String txtQuest2;
 		
-		public void interact( Wandmaker wandmaker ) {
+		public void interact(Hero hero, Wandmaker wandmaker ) {
 			if (Quest.given) {
 				
-				Item item = checkItem();
+				Item item = checkItem(hero);
 				if (item != null) {
 					GameScene.show( new WndWandmaker( wandmaker, item ) );
 				} else {
-					wandmaker.tell( txtQuest2, Dungeon.hero.className() );
+					wandmaker.tell( txtQuest2, hero.className() );
 				}
 				
 			} else {
@@ -286,7 +287,7 @@ public class Wandmaker extends NPC {
 			}
 		}
 		
-		abstract protected Item checkItem();
+		abstract protected Item checkItem(Hero hero);
 		abstract protected void placeItem();
 	}
 	
@@ -302,8 +303,8 @@ public class Wandmaker extends NPC {
 		}
 
 		@Override
-		protected Item checkItem() {
-			return Dungeon.hero.belongings.getItem( Rotberry.Seed.class );
+		protected Item checkItem(Hero hero) {
+			return hero.belongings.getItem( Rotberry.Seed.class );
 		}
 
 		@Override
@@ -328,8 +329,8 @@ public class Wandmaker extends NPC {
 		}
 		
 		@Override
-		protected Item checkItem() {
-			return Dungeon.hero.belongings.getItem( CorpseDust.class );
+		protected Item checkItem(Hero hero) {
+			return hero.belongings.getItem( CorpseDust.class );
 		}
 
 		@Override
@@ -368,8 +369,8 @@ public class Wandmaker extends NPC {
 		}
 		
 		@Override
-		protected Item checkItem() {
-			return Dungeon.hero.belongings.getItem( PhantomFish.class );
+		protected Item checkItem(Hero hero) {
+			return hero.belongings.getItem( PhantomFish.class );
 		}
 
 		@Override

@@ -22,6 +22,7 @@ import com.watabou.pixeldungeon.Journal;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Golem;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.actors.mobs.Monk;
@@ -114,16 +115,16 @@ public class Imp extends NPC {
 	}
 	
 	@Override
-	public void interact() {
+	public void interact(Hero hero) {
 		
-		sprite.turnTo( pos, Dungeon.hero.pos );
+		sprite.turnTo( pos, hero.pos );
 		if (Quest.given) {
 			
-			DwarfToken tokens = Dungeon.hero.belongings.getItem( DwarfToken.class );
+			DwarfToken tokens = hero.belongings.getItem( DwarfToken.class );
 			if (tokens != null && (tokens.quantity() >= 8 || (!Quest.alternative && tokens.quantity() >= 6))) {
 				GameScene.show( new WndImp( this, tokens ) );
 			} else {
-				tell( Quest.alternative ? TXT_MONKS2 : TXT_GOLEMS2, Dungeon.hero.className() );
+				tell( Quest.alternative ? TXT_MONKS2 : TXT_GOLEMS2, hero.className() );
 			}
 			
 		} else {

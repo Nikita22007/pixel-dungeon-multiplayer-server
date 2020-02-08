@@ -30,6 +30,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Paralysis;
 import com.watabou.pixeldungeon.actors.buffs.Roots;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.CursePersonification;
 import com.watabou.pixeldungeon.actors.mobs.FetidRat;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
@@ -104,11 +105,11 @@ public class Ghost extends NPC {
 	}
 	
 	@Override
-	public void interact() {
-		sprite.turnTo( pos, Dungeon.hero.pos );
+	public void interact(Hero hero) {
+		sprite.turnTo( pos, hero.pos );
 		Sample.INSTANCE.play( Assets.SND_GHOST );
 		
-		Quest.type.handler.interact( this );
+		Quest.type.handler.interact(hero, this );
 	}
 	
 	@Override
@@ -330,7 +331,7 @@ public class Ghost extends NPC {
 
 	abstract public static class QuestHandler {
 		
-		abstract public void interact(  Ghost ghost ); 
+		abstract public void interact(Hero hero,  Ghost ghost );
 		
 		protected void relocate( Ghost ghost ) {
 			int newPos = -1;
@@ -366,10 +367,10 @@ public class Ghost extends NPC {
 			"And you can take one of these items, maybe they " +
 			"will be useful to you in your journey...";
 
-		public void interact( Ghost ghost ) {
+		public void interact( Hero hero,  Ghost ghost ) {
 			if (Quest.given) {
 
-				Item item = Dungeon.hero.belongings.getItem( DriedRose.class );	
+				Item item = hero.belongings.getItem( DriedRose.class );
 				if (item != null) {
 					GameScene.show( new WndSadGhost( ghost, item, TXT_ROSE3 ) );
 				} else {
@@ -400,10 +401,10 @@ public class Ghost extends NPC {
 			"Please take one of these items, maybe they " +
 			"will be useful to you in your journey...";
 		
-		public void interact( Ghost ghost ) {
+		public void interact(Hero hero, Ghost ghost ) {
 			if (Quest.given) {
 
-				Item item = Dungeon.hero.belongings.getItem( RatSkull.class );	
+				Item item = hero.belongings.getItem( RatSkull.class );
 				if (item != null) {
 					GameScene.show( new WndSadGhost( ghost, item, TXT_RAT3 ) );
 				} else {
@@ -433,10 +434,10 @@ public class Ghost extends NPC {
 		private static final String TXT_YES	= "Yes, I will do it for you";
 		private static final String TXT_NO	= "No, I can't help you";
 		
-		public void interact( final Ghost ghost ) {
+		public void interact(final Hero hero, final Ghost ghost ) {
 			if (Quest.given) {
 
-				GameScene.show( new WndSadGhost( ghost, null, Utils.format( TXT_CURSE2, Dungeon.hero.className() ) ) );
+				GameScene.show( new WndSadGhost( ghost, null, Utils.format( TXT_CURSE2, hero.className() ) ) );
 				
 			} else {
 				GameScene.show( new WndQuest( ghost, TXT_CURSE1, TXT_YES, TXT_NO ) {
@@ -450,7 +451,7 @@ public class Ghost extends NPC {
 							d.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
 							Sample.INSTANCE.play( Assets.SND_GHOST );
 							
-							Dungeon.hero.next();
+							hero.next();
 						} else {
 							relocate( ghost );
 						}

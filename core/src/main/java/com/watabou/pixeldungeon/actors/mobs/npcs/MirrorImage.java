@@ -122,18 +122,18 @@ public class MirrorImage extends NPC {
 	}
 
 	@Override
-	public void interact() {
+	public void interact(Hero  hero) {
 		
 		int curPos = pos;
 		
-		moveSprite( pos, Dungeon.hero.pos );
-		move( Dungeon.hero.pos );
-		
-		Dungeon.hero.sprite.move( Dungeon.hero.pos, curPos );
-		Dungeon.hero.move( curPos );
-		
-		Dungeon.hero.spend( 1 / Dungeon.hero.speed() );
-		Dungeon.hero.busy();
+		moveSprite( pos, hero.pos );
+		move( hero.pos );
+		hero.move( curPos );
+
+		hero.sprite.move( hero.pos, curPos );
+
+		hero.spend( 1 / hero.speed() );
+		hero.busy();
 	}
 	
 	private static final HashSet<Class<?>> IMMUNITIES = new HashSet<Class<?>>();

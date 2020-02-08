@@ -21,6 +21,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.sprites.RatKingSprite;
 
 public class RatKing extends NPC {
@@ -61,8 +62,8 @@ public class RatKing extends NPC {
 	}
 	
 	@Override
-	public void interact() {
-		sprite.turnTo( pos, Dungeon.hero.pos );
+	public void interact(Hero hero) {
+		sprite.turnTo( pos, hero.pos );
 		if (state == SLEEPEING) {
 			notice();
 			yell( "I'm not sleeping!" );
