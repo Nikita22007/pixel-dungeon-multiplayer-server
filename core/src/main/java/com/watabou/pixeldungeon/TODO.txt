@@ -1,4 +1,4 @@
-Version: 1 //increment when modify
+Version: 2 //increment when modify
 Графика:
     Все, что связано  с графикой - удалить и заменить заглушками
     окна должны  принимать героя как параметр. По  герою определяется  клиент, которому отправить запрос окна и  ждать результат
@@ -8,13 +8,45 @@ Version: 1 //increment when modify
 
 Скорее разработать архитектуру  передачи данных между клиентом и  сервером
 
+Сервер это тоже клиент, подключающийся сам к себе.
+
+Прототип 1:
+    Игроки имеют синхронный мир.
+    Когда кто-то  спускается перебрасывает всех
+    Код:
+        local Bages переносятся в класс hero (или удаляется совсем)
+        window принимает hero как параметр
+        классы клиент-сервера
+
+Прототип 2:
+    Игроки могут быть  на разных этажах
+    Код:
+        level -> levels[]
+        actor: int depth;
+
+Прототип 3:
+    Игроки могут обмениваться предметами
+
+Прототип 4:
+    Сервер работает в фоне даже если окно закрыто
+    Уведомление  о работе
+    Сервер теперь лишь сервер
+
+Прототип N:
+    Работающие сохранения
+    (вернуть local bages если удалено)
+
+
 Цель:
     1. Скомпилировать! (хотя бы)
     2. Запустить прототип
     3. Запустить нормально  работающее приложение
 
+Второстепенные цели:
+    тексты вынести в отдельный класс
+    выгрузка текстов из файлов с локализациями
 
-FromVersion: 1 //increment when translate
+FromVersion: 2 //Copy from "version"
 Translator: translate.yandex.ru //change if use other
 Graphics:
     Everything related to graphics - remove and replace with stubs
@@ -25,7 +57,40 @@ Customization:
 
 Faster develop an architecture for data transfer between the client and the server
 
+A server is also a client that connects to itself.
+
+Prototype 1:
+    Players have a synchronous world.
+    When someone comes down throws everyone
+    Code:
+        local Bages are moved to the hero class (or removed altogether)
+        window accepts hero as a parameter
+        client-server classes
+
+Prototype 2:
+    Players can be on different floors
+    Code:
+        level -> levels[]
+        actor: int depth;
+
+Prototype 3:
+    Players can exchange items
+
+Prototype 4:
+    The server runs in the background even if the window is closed
+    Job notification
+    The server is now just a server
+
+Prototype N:
+    Working saves
+    (return local bages if deleted)
+
+
 Goal:
     1. Compile! (at least)
     2. Run the prototype
     3. Launch a normally running app
+
+Secondary goals:
+    put texts in a separate class
+    uploading texts from files with localizations

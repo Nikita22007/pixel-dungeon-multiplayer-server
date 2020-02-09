@@ -1,0 +1,18 @@
+version 1  //increment when modify
+1. Передача основывается на стандарте json.
+2. Единый сервер, множество клиентов.
+3. Функция info для предметов и окружения работает на стороне клиента (если сервер не требует иного, тогда это явно передается).
+    3.1 сервер отправит специальный пакет клиенту, сообщающий, что для функции Info последний ОБЯЗАН обратиться к серверу за получением конечной строки.
+4. Сервер передает клиенту мир так, как клиент его видит (т.е. вместо скрытых ловушек  передается просто пол).
+5. Клиент имеет право отправить специальный пакет о полной синхронизации мира. Сервер обязан провести эту процедуру.
+6. Сервер имеет право проводить процедуру полной синхронизации по своему желанию и обязан проводить по запросу клиента.
+
+FromVersion: 1 //Copy from "version"
+Translator: translate.yandex.ru //change if use other
+1. The transfer is based on the json standard.
+2. Single server, multiple clients.
+3. The info function for objects and world works on the client side (unless the server requires otherwise, then this is explicitly passed).
+    3.1 the server will send a special packet to the client informing that for the Info function, the Latter MUST contact the server to get the final string.
+4. The server passes the world to the client as the client sees it (i.e., instead of hidden traps, just the floor is passed).
+5. The client has the right to send a special package about full synchronization of the world. The server must perform this procedure.
+6. The server has the right to perform the full synchronization procedure at its own request and is obliged to perform it at the request of the client.
