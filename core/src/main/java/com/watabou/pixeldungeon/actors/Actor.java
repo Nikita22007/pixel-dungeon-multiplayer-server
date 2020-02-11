@@ -23,20 +23,22 @@ import java.util.HashSet;
 import android.util.SparseArray;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
 public abstract class Actor implements Bundlable {
-	
+
 	public static final float TICK	= 1f;
 
 	private float time;
-	
+
 	private int id = 0;
 	
 	protected abstract boolean act();
@@ -103,7 +105,6 @@ public abstract class Actor implements Bundlable {
 	private static float now = 0;
 	
 	private static Char[] chars = new Char[Level.LENGTH];
-	
 	public static void clear() {
 		
 		now = 0;
@@ -115,10 +116,10 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static void fixTime() {
-		
-		if (Dungeon.hero != null && all.contains( Dungeon.hero )) {
+		//But for what  need next? delete it for some time
+		/*if (Dungeon.hero != null && all.contains( Dungeon.hero )) {//it is  need
 			Statistics.duration += now;
-		}
+		}*/
 		
 		float min = Float.MAX_VALUE;
 		for (Actor a : all) {
@@ -133,8 +134,9 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static void init() {
-		
-		addDelayed( Dungeon.hero, -Float.MIN_VALUE );
+		for (Hero hero:Dungeon.heroes) {
+			addDelayed( hero, -Float.MIN_VALUE );
+		}
 		
 		for (Mob mob : Dungeon.level.mobs) {
 			add( mob );
@@ -197,7 +199,7 @@ public abstract class Actor implements Bundlable {
 				}
 				
 				doNext = current.act();
-				if (doNext && !Dungeon.hero.isAlive()) {
+				if (doNext && !HeroHelp.haveAliveHero()) {
 					doNext = false;
 					current = null;
 				}
