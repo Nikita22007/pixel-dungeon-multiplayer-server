@@ -17,6 +17,7 @@
  */
 package com.watabou.pixeldungeon;
 
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.utils.Bundle;
 
 public class Statistics {
@@ -35,8 +36,9 @@ public class Statistics {
 	public static boolean qualifiedForNoKilling = false;
 	public static boolean completedWithNoKilling = false;
 	
-	public static boolean amuletObtained = false;
-	
+	//public static boolean amuletObtained = false;
+	public static int amuletHeroID=-1;
+
 	public static void reset() {
 		
 		goldCollected	= 0;
@@ -52,7 +54,7 @@ public class Statistics {
 		
 		qualifiedForNoKilling = false;
 		
-		amuletObtained = false;
+		amuletHeroID = -1 ;
 		
 	}
 	
@@ -77,7 +79,7 @@ public class Statistics {
 		bundle.put( NIGHT,		nightHunt );
 		bundle.put( ANKHS,		ankhsUsed );
 		bundle.put( DURATION,	duration );
-		bundle.put( AMULET,		amuletObtained );
+		bundle.put( AMULET,		amuletHeroID );
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
@@ -90,7 +92,7 @@ public class Statistics {
 		nightHunt		= bundle.getInt( NIGHT );
 		ankhsUsed		= bundle.getInt( ANKHS );
 		duration		= bundle.getFloat( DURATION );
-		amuletObtained	= bundle.getBoolean( AMULET );
+		amuletHeroID	= bundle.getInt( AMULET );
 	}
 
 }

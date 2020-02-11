@@ -2,6 +2,8 @@ package com.watabou.pixeldungeon;
 
 import com.watabou.pixeldungeon.actors.hero.Hero;
 
+import java.util.Arrays;
+
 public class HeroHelp {
     public static int HeroCount(){
         int count=0;
@@ -30,4 +32,15 @@ public class HeroHelp {
         return Dungeon.heroes[0];//fixme  This need to be other code
         // Dungeon.heroes[i]==depth?  return  Dungeon.heroes[i];
     };
+    public static int getHeroID(Hero hero){
+        return Arrays.asList(Dungeon.heroes).indexOf(hero);
+    }
+    public static boolean haveAliveHero(){
+        for (int i=0;i<Settings.maxPlayers;i++){
+             if (Dungeon.heroes[i].isAlive()){
+                 return true;
+             }
+        }
+        return false;
+        }
 }

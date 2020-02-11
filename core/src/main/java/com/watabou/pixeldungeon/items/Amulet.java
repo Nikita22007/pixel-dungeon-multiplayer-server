@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.scenes.AmuletScene;
@@ -62,20 +63,22 @@ public class Amulet extends Item {
 	@Override
 	public boolean doPickUp( Hero hero ) {
 		if (super.doPickUp( hero )) {
-			
-			if (!Statistics.amuletObtained) {
-				Statistics.amuletObtained = true;
+				Statistics.amuletHeroID = HeroHelp.getHeroID(hero);
 				Badges.validateVictory();
 
 				showAmuletScene( true );
-			}
 			
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+	@Override
+	public void doDrop(Hero hero){
+		super.doDrop(hero);
+		Statistics.amuletHeroID=-1;
+	}
+
 	private void showAmuletScene( boolean showText ) {
 		try {
 			Dungeon.saveAll();

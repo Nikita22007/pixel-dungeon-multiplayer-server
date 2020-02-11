@@ -168,8 +168,8 @@ public class GameScene extends PixelScene {
 		
 		for (Mob mob : Dungeon.level.mobs) {
 			addMobSprite( mob );
-			if (Statistics.amuletObtained) {
-				mob.beckon( Dungeon.hero.pos );
+			if (Statistics.amuletHeroID>-1) {
+				mob.beckon( Dungeon.heroes[Statistics.amuletHeroID].pos );
 			}
 		}
 		

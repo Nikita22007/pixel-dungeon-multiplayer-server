@@ -28,6 +28,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Challenges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -73,7 +74,7 @@ import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
 public abstract class Level implements Bundlable {
-	
+
 	public static enum Feeling {
 		NONE,
 		CHASM,
@@ -370,14 +371,14 @@ public abstract class Level implements Bundlable {
 					Mob mob = Bestiary.mutable( Dungeon.depth );
 					mob.state = mob.WANDERING;
 					mob.pos = randomRespawnCell();
-					if (Dungeon.hero.isAlive() && mob.pos != -1) {
+					if (HeroHelp.haveAliveHero() && mob.pos != -1) {
 						GameScene.add( mob );
-						if (Statistics.amuletObtained) {
-							mob.beckon( Dungeon.hero.pos );
+						if (Statistics.amuletHeroID>-1) {
+							mob.beckon( Dungeon.heroes[Statistics.amuletHeroID].pos);
 						}
 					}
 				}
-				spend( Dungeon.nightMode || Statistics.amuletObtained ? TIME_TO_RESPAWN / 2 : TIME_TO_RESPAWN );
+				spend( Dungeon.nightMode || (Statistics.amuletHeroID>-1 )? TIME_TO_RESPAWN / 2 : TIME_TO_RESPAWN );
 				return true;
 			}
 		};
