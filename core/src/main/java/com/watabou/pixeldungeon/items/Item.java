@@ -181,7 +181,8 @@ public class Item implements Bundlable {
 		
 		if (items.size() < container.size) {
 			
-			if (Dungeon.hero != null && Dungeon.hero.isAlive()) {
+			//if (Dungeon.hero != null && Dungeon.hero.isAlive()) {
+			if (container.owner!=null && (container.owner   instanceof Hero)  && container.owner.isAlive()){
 				Badges.validateItemLevelAquired( this );
 			}
 			
@@ -300,7 +301,7 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	public void use() {
+	public void use() {                  //degrade
 		if (level > 0 && !isBroken()) {
 			int threshold = (int)(maxDurability() * DURABILITY_WARNING_LEVEL);
 			if (durability-- >= threshold && threshold > durability && levelKnown) {
