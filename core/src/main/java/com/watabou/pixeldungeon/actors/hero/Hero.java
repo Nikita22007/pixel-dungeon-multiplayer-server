@@ -1045,7 +1045,7 @@ public class Hero extends Char {
 			sprite.showStatus( CharSprite.POSITIVE, TXT_LEVEL_UP );
 			Sample.INSTANCE.play( Assets.SND_LEVELUP );
 			
-			Badges.validateLevelReached();
+			Badges.validateLevelReached(this);
 		}
 		
 		if (subClass == HeroSubClass.WARLOCK) {

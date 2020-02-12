@@ -64,7 +64,7 @@ public class Amulet extends Item {
 	public boolean doPickUp( Hero hero ) {
 		if (super.doPickUp( hero )) {
 				Statistics.amuletHeroID = HeroHelp.getHeroID(hero);
-				Badges.validateVictory();
+				Badges.validateVictory(hero);
 
 				showAmuletScene( true );
 			

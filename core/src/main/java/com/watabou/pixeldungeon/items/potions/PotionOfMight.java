@@ -38,7 +38,7 @@ public class PotionOfMight extends PotionOfStrength {
 		hero.sprite.showStatus( CharSprite.POSITIVE, "+1 str, +5 ht" );
 		GLog.p( "Newfound strength surges through your body." );
 		
-		Badges.validateStrengthAttained();
+		Badges.validateStrengthAttained(hero);
 	}
 	
 	@Override

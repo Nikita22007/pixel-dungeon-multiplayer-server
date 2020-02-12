@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Acidic;
 import com.watabou.pixeldungeon.actors.mobs.Albino;
 import com.watabou.pixeldungeon.actors.mobs.Bandit;
@@ -293,22 +294,22 @@ public class Badges {
 		displayBadge( badge );
 	}
 	
-	public static void validateLevelReached() {
+	public static void validateLevelReached(Hero hero) {
 		Badge badge = null;
 		
-		if (!local.contains( Badge.LEVEL_REACHED_1 ) && Dungeon.hero.lvl >= 6) {
+		if (!local.contains( Badge.LEVEL_REACHED_1 ) && hero.lvl >= 6) {
 			badge = Badge.LEVEL_REACHED_1;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.LEVEL_REACHED_2 ) && Dungeon.hero.lvl >= 12) {
+		if (!local.contains( Badge.LEVEL_REACHED_2 ) && hero.lvl >= 12) {
 			badge = Badge.LEVEL_REACHED_2;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.LEVEL_REACHED_3 ) && Dungeon.hero.lvl >= 18) {
+		if (!local.contains( Badge.LEVEL_REACHED_3 ) && hero.lvl >= 18) {
 			badge = Badge.LEVEL_REACHED_3;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.LEVEL_REACHED_4 ) && Dungeon.hero.lvl >= 24) {
+		if (!local.contains( Badge.LEVEL_REACHED_4 ) && hero.lvl >= 24) {
 			badge = Badge.LEVEL_REACHED_4;
 			local.add( badge );
 		}
@@ -316,22 +317,22 @@ public class Badges {
 		displayBadge( badge );
 	}
 	
-	public static void validateStrengthAttained() {
+	public static void validateStrengthAttained(Hero hero) {
 		Badge badge = null;
 		
-		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && Dungeon.hero.STR >= 13) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && hero.STR >= 13) {
 			badge = Badge.STRENGTH_ATTAINED_1;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_2 ) && Dungeon.hero.STR >= 15) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_2 ) && hero.STR >= 15) {
 			badge = Badge.STRENGTH_ATTAINED_2;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_3 ) && Dungeon.hero.STR >= 17) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_3 ) && hero.STR >= 17) {
 			badge = Badge.STRENGTH_ATTAINED_3;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_4 ) && Dungeon.hero.STR >= 19) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_4 ) && hero.STR >= 19) {
 			badge = Badge.STRENGTH_ATTAINED_4;
 			local.add( badge );
 		}
@@ -429,7 +430,9 @@ public class Badges {
 	}
 	
 	public static void validateAllPotionsIdentified() {
-		if (Dungeon.hero != null && Dungeon.hero.isAlive() && 
+		if (//Dungeon.hero != null &&
+				//Dungeon.hero.isAlive() &&
+				HeroHelp.haveAliveHero()&&
 			!local.contains( Badge.ALL_POTIONS_IDENTIFIED ) && Potion.allKnown()) {
 			
 			Badge badge = Badge.ALL_POTIONS_IDENTIFIED;
@@ -441,7 +444,8 @@ public class Badges {
 	}
 	
 	public static void validateAllScrollsIdentified() {
-		if (Dungeon.hero != null && Dungeon.hero.isAlive() && 
+		if (//Dungeon.hero != null && Dungeon.hero.isAlive() &&
+				HeroHelp.haveAliveHero()&&
 			!local.contains( Badge.ALL_SCROLLS_IDENTIFIED ) && Scroll.allKnown()) {
 			
 			Badge badge = Badge.ALL_SCROLLS_IDENTIFIED;
@@ -453,7 +457,8 @@ public class Badges {
 	}
 	
 	public static void validateAllRingsIdentified() {
-		if (Dungeon.hero != null && Dungeon.hero.isAlive() && 
+		if (//Dungeon.hero != null && Dungeon.hero.isAlive() &&
+				HeroHelp.haveAliveHero()&&
 			!local.contains( Badge.ALL_RINGS_IDENTIFIED ) && Ring.allKnown()) {
 			
 			Badge badge = Badge.ALL_RINGS_IDENTIFIED;
@@ -465,7 +470,8 @@ public class Badges {
 	}
 	
 	public static void validateAllWandsIdentified() {
-		if (Dungeon.hero != null && Dungeon.hero.isAlive() && 
+		if (//Dungeon.hero != null && Dungeon.hero.isAlive() &&
+				HeroHelp.haveAliveHero()&&
 			!local.contains( Badge.ALL_WANDS_IDENTIFIED ) && Wand.allKnown()) {
 			
 			Badge badge = Badge.ALL_WANDS_IDENTIFIED;
@@ -681,7 +687,7 @@ public class Badges {
 		}
 	}
 	
-	public static void validateMastery() {
+	public static void validateMastery(Hero hero) {
 		
 		Badge badge = null;
 		switch (Dungeon.hero.heroClass) {
@@ -759,12 +765,12 @@ public class Badges {
 		}
 	}
 	
-	public static void validateVictory() {
+	public static void validateVictory(Hero hero) {
 
 		Badge badge = Badge.VICTORY;
 		displayBadge( badge );
 
-		switch (Dungeon.hero.heroClass) {
+		switch (hero.heroClass) {
 		case WARRIOR:
 			badge = Badge.VICTORY_WARRIOR;
 			break;
