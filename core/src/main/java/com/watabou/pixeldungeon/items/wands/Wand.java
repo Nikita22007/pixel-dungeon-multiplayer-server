@@ -264,9 +264,9 @@ public abstract class Wand extends KindOfWeapon {
 	}
 	
 	@Override
-	public String info() {
+	public String info(Hero hero) {
 		StringBuilder info = new StringBuilder( isKnown() ? desc() : String.format( TXT_WOOD, wood ) );
-		if (Dungeon.hero.heroClass == HeroClass.MAGE) {
+		if (hero.heroClass == HeroClass.MAGE) {
 			info.append( "\n\n" );
 			if (levelKnown) {
 				int min = min();

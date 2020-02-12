@@ -274,8 +274,8 @@ public class Ring extends EquipableItem {
 	}
 	
 	@Override
-	public String info() {
-		if (isEquipped( Dungeon.hero )) {
+	public String info(Hero hero) {
+		if (isEquipped( hero )) {
 			
 			return desc() + "\n\n" + "The " + name() + " is on your finger" + 
 				(cursed ? ", and because it is cursed, you are powerless to remove it." : "." );

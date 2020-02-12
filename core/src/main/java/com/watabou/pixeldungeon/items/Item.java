@@ -428,8 +428,18 @@ public class Item implements Bundlable {
 	public ItemSprite.Glowing glowing() {
 		return null;
 	}
-	
-	public String info() {
+
+	//always need hero.
+	//This method used only in windows,
+	//then we can give hero because every window gets hero
+	//If item need Hero to create info, then item override this function
+	//  else this function call overrided method.
+	//Thanks to this trick, I didn't have to edit all classes of items.
+	public String info(Hero hero){
+		return info();
+	}
+
+	protected String info() {
 		return desc();
 	}
 	

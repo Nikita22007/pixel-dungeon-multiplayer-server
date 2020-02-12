@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.items.weapon.melee;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -81,7 +82,7 @@ public class MeleeWeapon extends Weapon {
 	}
 	
 	@Override
-	public String info() {
+	public String info(Hero hero) {
 		
 		final String p = "\n\n";
 		
@@ -107,7 +108,7 @@ public class MeleeWeapon extends Weapon {
 			info.append( 
 				"Its typical average damage is " + (min + (max - min) / 2) + " points per hit " +
 				"and usually it requires " + typicalSTR() + " points of strength. " );
-			if (typicalSTR() > Dungeon.hero.STR()) {
+			if (typicalSTR() > hero.STR()) {
 				info.append( "Probably this weapon is too heavy for you. " );
 			}
 		}
@@ -140,14 +141,14 @@ public class MeleeWeapon extends Weapon {
 			info.append( "It is enchanted." );
 		}
 		
-		if (levelKnown && Dungeon.hero.belongings.backpack.items.contains( this )) {
-			if (STR > Dungeon.hero.STR()) {
+		if (levelKnown && hero.belongings.backpack.items.contains( this )) {
+			if (STR > hero.STR()) {
 				info.append( p );
 				info.append( 
 					"Because of your inadequate strength the accuracy and speed " +
 					"of your attack with this " + name + " is decreased." );
 			}
-			if (STR < Dungeon.hero.STR()) {
+			if (STR < hero.STR()) {
 				info.append( p );
 				info.append( 
 					"Because of your excess strength the damage " +
@@ -155,7 +156,7 @@ public class MeleeWeapon extends Weapon {
 			}
 		}
 		
-		if (isEquipped( Dungeon.hero )) {
+		if (isEquipped( hero )) {
 			info.append( p );
 			info.append( "You hold the " + name + " at the ready" + 
 				(cursed ? ", and because it is cursed, you are powerless to let go." : ".") ); 
