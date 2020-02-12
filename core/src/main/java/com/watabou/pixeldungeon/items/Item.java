@@ -197,10 +197,13 @@ public class Item implements Bundlable {
 			
 		}
 	}
-	
-	public boolean collect() {
-		return collect( Dungeon.hero.belongings.backpack );
+	public boolean collect(Hero hero) {
+		return collect( hero.belongings.backpack );
 	}
+
+	/*public boolean collect() {
+		return collect( Dungeon.hero.belongings.backpack );
+	}*/
 	
 	public final Item detach( Bag container ) {
 		
