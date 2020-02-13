@@ -23,6 +23,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -144,7 +145,7 @@ public class King extends Mob {
 		
 		Badges.validateBossSlain();
 		
-		yell( "You cannot kill me, " + Dungeon.hero.heroClass.title() + "... I am... immortal..." );
+		yell( "You cannot kill me, " + (HeroHelp.HeroCount()>1?"heroes":HeroHelp.GetHeroOnLevel(-1).heroClass.title()) + "... I am... immortal..." );//fixME  when  fix depth
 	}
 	
 	private int maxArmySize() {

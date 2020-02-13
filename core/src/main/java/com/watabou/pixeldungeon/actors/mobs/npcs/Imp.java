@@ -141,9 +141,9 @@ public class Imp extends NPC {
 			new WndQuest( this, Utils.format( format, args ) ) );
 	}
 	
-	public void flee() {
+	public void flee(Hero hero) {
 		
-		yell( Utils.format( TXT_CYA, Dungeon.hero.className() ) );
+		yell( Utils.format( TXT_CYA, hero.className() ) );
 		
 		destroy();
 		sprite.die();

@@ -83,7 +83,7 @@ public class WndImp extends Window {
 			Dungeon.level.drop( reward, imp.pos ).sprite.drop();
 		}
 		
-		imp.flee();
+		imp.flee(Dungeon.hero);
 		
 		Imp.Quest.complete();
 	}
