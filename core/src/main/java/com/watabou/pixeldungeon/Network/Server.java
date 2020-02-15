@@ -46,8 +46,7 @@ public class Server extends Thread {
             initializeRegistrationListener();
         }
         registerService(localPort);
-        while (regListenerState == RegListenerState.NONE) {
-        }//should  we use  Sleep?
+        while (regListenerState == RegListenerState.NONE) {}//should  we use  Sleep?
 
         started = (regListenerState == RegListenerState.REGISTERED);
 
@@ -55,7 +54,11 @@ public class Server extends Thread {
     }
 
     public static boolean stopServer() {
+        if (!started){
+            return true;
+        }
         unregisterService();
+        while (regListenerState!=RegListenerState.UNREGISTERED  || regListenerState!=RegListenerState.UNREGISTRATION_FAILED){}//should  we use  Sleep?
         return true;
     }
 
