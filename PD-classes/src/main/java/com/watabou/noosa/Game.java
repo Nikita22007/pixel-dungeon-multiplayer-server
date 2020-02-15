@@ -37,6 +37,7 @@ import com.watabou.utils.SystemTime;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.opengl.GLES20;
@@ -51,8 +52,8 @@ import android.view.View;
 
 public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTouchListener {
 	
-	public static Game instance;
-	
+	public static Game instance;  //game inherits context, then we  can use "instance" as a Context
+
 	// Actual size of the screen
 	public static int width;
 	public static int height;

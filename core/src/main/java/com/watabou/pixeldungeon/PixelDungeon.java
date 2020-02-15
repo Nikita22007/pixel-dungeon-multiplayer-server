@@ -21,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.net.Network;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.View;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.pixeldungeon.Network.Server;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -198,7 +200,13 @@ public class PixelDungeon extends Game {
 			updateImmersiveMode();
 		}
 	}
-	
+
+	@Override
+	public void onDestroy(){
+		Server.stopServer();
+		super.onDestroy();
+	}
+
 	public static void switchNoFade( Class<? extends PixelScene> c ) {
 		PixelScene.noFade = true;
 		switchScene( c );
@@ -223,7 +231,7 @@ public class PixelDungeon extends Game {
 	
 	private static boolean immersiveModeChanged = false;
 	
-	@SuppressLint("NewApi")
+    //@SuppressLint("NewApi")  //now is not new
 	public static void immerse( boolean value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_IMMERSIVE, value );
 		
@@ -246,7 +254,7 @@ public class PixelDungeon extends Game {
 		}
 	}
 	
-	@SuppressLint("NewApi")
+	//@SuppressLint("NewApi")  //now is not new
 	public static void updateImmersiveMode() {
 		if (android.os.Build.VERSION.SDK_INT >= 19) {
 			try {
