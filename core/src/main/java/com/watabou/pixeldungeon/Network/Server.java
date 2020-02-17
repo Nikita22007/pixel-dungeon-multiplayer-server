@@ -24,7 +24,8 @@ public class Server extends Thread {
 
     //network
     protected static ServerSocket serverSocket;
-
+    protected static Server serverThread;
+    protected static ClientThread[] clients;
     //NSD
     public static RegListenerState regListenerState = RegListenerState.NONE;
     protected static NsdManager nsdManager;
@@ -49,7 +50,10 @@ public class Server extends Thread {
         while (regListenerState == RegListenerState.NONE) {}//should  we use  Sleep?
 
         started = (regListenerState == RegListenerState.REGISTERED);
-
+        if (serverThread==null){
+            serverThread=new Server();
+        }
+        serverThread.start();
         return started;
     }
 
@@ -62,7 +66,19 @@ public class Server extends Thread {
         return true;
     }
 
-    public void run() {    }
+    //Server thread
+    public void run() {
+
+        while (started) {
+            try {
+                Socket client = serverSocket.accept();
+            } catch (IOException e) {
+                if ((e.getMessage().equals("Socket is closed"))) { break;}
+                GLog.h("IO exception:".concat(e.getMessage()));
+            }
+        }
+
+    }
 
     //NSD
     protected static void registerService(int port) {
@@ -135,71 +151,3 @@ public class Server extends Thread {
 
     public static enum RegListenerState {NONE, UNREGISTERED, REGISTERED, REGISTRATION_FAILED, UNREGISTRATION_FAILED}
 }
-
-class clientThread extends Thread {
-
-    DataInputStream is = null;
-    PrintStream os = null;
-    Socket clientSocket = null;
-    List<clientThread> t;
-
-    String name;
-
-    public clientThread(Socket clientSocket, List<clientThread> t) {
-        this.clientSocket = clientSocket;
-        this.t = t;
-    }
-
-    public void run() {
-        String line;
-
-        try {
-            is = new DataInputStream(clientSocket.getInputStream());
-            os = new PrintStream(clientSocket.getOutputStream());
-            os.println("Enter your name: ");
-            name = is.readLine();
-            os.println("Hello " + name + " to our chat room.\nTo leave enter /quit in a new line");
-            for (clientThread client : t)
-                client.os.println("*** A new user " + name + " entered the chat room !!! ***");
-            while (true) {
-                line = is.readLine();
-                if (line.startsWith("/quit"))
-                    break;
-                if (line.startsWith("<")) {
-                    String tempName = line.substring(1, line.lastIndexOf(">"));
-                    System.out.println(tempName);
-                    boolean flag = true;
-                    for (clientThread ct : t) {
-                        if (ct != null) {
-                            if (ct.name.equals(tempName)) {
-                                ct.os.println(line);
-                                flag = false;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                    if (flag)
-                        this.os.println("User " + tempName + " is not online");
-                } else {
-                    for (clientThread client : t)
-                        client.os.println("<" + name + "> " + line);
-                }
-            }
-
-            for (clientThread client : t)
-                if (client != null && client != this)
-                    client.os.println("*** The user " + name + " is leaving the chat room !!! ***");
-            os.println("*** Bye " + name + " ***");
-
-            for (clientThread client : t)
-                if (client == this) client = null;
-
-            is.close();
-            os.close();
-            clientSocket.close();
-        } catch (IOException e) {
-        }
-        ;
-    }
-} //may be needn't
