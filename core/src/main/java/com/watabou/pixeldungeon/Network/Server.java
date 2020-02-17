@@ -6,6 +6,7 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.*;
@@ -33,7 +34,7 @@ public class Server extends Thread {
 
 
     public static boolean startServer() {
-
+        clients=new ClientThread[Settings.maxPlayers];
         if (started) {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;
@@ -68,13 +69,27 @@ public class Server extends Thread {
 
     //Server thread
     public void run() {
-
-        while (started) {
+        while (started) { //clients  listener
+            Socket client;
             try {
-                Socket client = serverSocket.accept();
+                client = serverSocket.accept();  //accept connect
+
+                for (int i = 0; i < clients.length; i++) {   //search not connected
+                    if (clients[i] == null) {
+                        clients[i] = new ClientThread(client); //found
+                        break;
+                    } else {
+                        if (i == clients.length) { //If we test last and it's connected too
+                            new ObjectOutputStream(client.getOutputStream()).writeObject(Codes.SERVER_FULL);
+                            client.close();
+                        }
+                    }
+                }
             } catch (IOException e) {
-                if ((e.getMessage().equals("Socket is closed"))) { break;}
-                GLog.h("IO exception:".concat(e.getMessage()));
+                if (!(e.getMessage().equals("Socket is closed"))) {  //"Socket is closed" means  hat client disconnected
+                    GLog.h("IO exception:".concat(e.getMessage()));
+                }
+                break;
             }
         }
 
