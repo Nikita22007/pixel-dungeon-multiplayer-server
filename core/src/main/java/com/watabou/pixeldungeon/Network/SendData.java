@@ -6,7 +6,7 @@ import static com.watabou.pixeldungeon.Network.Server.clients;  //I'm too lazy t
 
 public class SendData {
 
-
+    //-------------------Level
     public static void sendLevelMap(Level level, int ID) {
         if (clients[ID] != null) {
             clients[ID].send(ID, Codes.LEVEL_MAP, level.map);
@@ -22,4 +22,7 @@ public class SendData {
             clients[ID].send(ID, Codes.LEVEL_MAPPED, level.mapped);
         }
     }
+
+    //---------------------------
+
 }

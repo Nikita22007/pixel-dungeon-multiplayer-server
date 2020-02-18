@@ -11,8 +11,6 @@ import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Server extends Thread {
     public static final String SERVICENAME = "MupriplayerPD"; //any nonzero string
@@ -27,7 +25,7 @@ public class Server extends Thread {
     protected static ServerSocket serverSocket;
     protected static Server serverThread;
     protected static ClientThread[] clients;
-    
+
     //NSD
     public static RegListenerState regListenerState = RegListenerState.NONE;
     protected static NsdManager nsdManager;
@@ -36,6 +34,7 @@ public class Server extends Thread {
 
     public static boolean startServer() {
         clients=new ClientThread[Settings.maxPlayers];
+        clients[0]=new ServerClientThread();
         if (started) {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;
@@ -55,6 +54,7 @@ public class Server extends Thread {
         if (serverThread==null){
             serverThread=new Server();
         }
+
         serverThread.start();
         return started;
     }
@@ -63,13 +63,14 @@ public class Server extends Thread {
         if (!started){
             return true;
         }
+        ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
         while (regListenerState!=RegListenerState.UNREGISTERED  || regListenerState!=RegListenerState.UNREGISTRATION_FAILED){}//should  we use  Sleep?
         return true;
     }
 
     //Server thread
-    public void run() {
+        public void run() {
         while (started) { //clients  listener
             Socket client;
             try {
