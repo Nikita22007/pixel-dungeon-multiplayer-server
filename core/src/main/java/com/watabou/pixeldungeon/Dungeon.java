@@ -511,15 +511,17 @@ public class Dungeon {
 		
 		@SuppressWarnings("unused")
 		String version = bundle.getString( VERSION );
-		
-		hero = null;
-		hero = (Hero)bundle.get( HERO );
-		
-		QuickSlot.compress();
-		
-		hero.gold = bundle.getInt( GOLD );
-		depth = bundle.getInt( DEPTH );
-		
+
+		if (!fullLoad) {
+			heroes=new Hero[1];
+			heroes[0] = null; //TODO FIX LOAD
+			heroes[0]= (Hero) bundle.get(HERO);
+
+			QuickSlot.compress();
+
+			heroes[0].gold = bundle.getInt(GOLD);
+			depth = bundle.getInt(DEPTH);
+		}
 		Statistics.restoreFromBundle( bundle );
 		Journal.restoreFromBundle( bundle );
 		
