@@ -27,6 +27,7 @@ public class Server extends Thread {
     protected static ServerSocket serverSocket;
     protected static Server serverThread;
     protected static ClientThread[] clients;
+    
     //NSD
     public static RegListenerState regListenerState = RegListenerState.NONE;
     protected static NsdManager nsdManager;
@@ -76,7 +77,7 @@ public class Server extends Thread {
 
                 for (int i = 0; i < clients.length; i++) {   //search not connected
                     if (clients[i] == null) {
-                        clients[i] = new ClientThread(client); //found
+                        clients[i] = new ClientThread(i, client); //found
                         break;
                     } else {
                         if (i == clients.length) { //If we test last and it's connected too
