@@ -22,8 +22,10 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.scenes.PixelScene;
-
-public class GoldIndicator extends Component {
+/*
+Желтое число, что влетает над  головой, когда  собираешь деньги
+*/
+public class GoldIndicator extends Component {//Clients only
 
 	private static final float TIME	= 2f;
 	
@@ -63,9 +65,9 @@ public class GoldIndicator extends Component {
 			
 		}
 		
-		if (Dungeon.hero.gold != lastValue) {
+		if (Dungeon.heroes[0].gold != lastValue) {
 			
-			lastValue = Dungeon.hero.gold;
+			lastValue = Dungeon.heroes[0].gold;
 			
 			tf.text( Integer.toString( lastValue ) );
 			tf.measure();

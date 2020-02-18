@@ -28,9 +28,8 @@ import com.watabou.pixeldungeon.scenes.RankingsScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.RedButton;
-import com.watabou.pixeldungeon.ui.Window;
 
-public class WndGame extends Window {
+public class WndGame extends WndOnlyClient{
 	
 	private static final String TXT_SETTINGS	= "Settings";
 	private static final String TXT_CHALLEGES	= "Challenges";
@@ -67,7 +66,7 @@ public class WndGame extends Window {
 				}
 			} );
 		}
-		
+		/*
 		if (!Dungeon.hero.isAlive()) {
 			
 			RedButton btnStart;
@@ -90,7 +89,7 @@ public class WndGame extends Window {
 					Game.switchScene( RankingsScene.class );
 				}
 			} );
-		}
+		}*/
 				
 		addButtons( 
 			new RedButton( TXT_MENU ) {

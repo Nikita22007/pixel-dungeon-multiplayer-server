@@ -42,7 +42,10 @@ import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.ScrollPane;
 import com.watabou.pixeldungeon.utils.Utils;
 
-public class WndRanking extends WndTabbed {
+/*
+Экземпляр создается,  когда смотрешь результаты по игре в меню Rankings в начальном экране 
+ */
+public class WndRanking extends WndTabbed { //TODO client's only
 	
 	private static final String TXT_ERROR		= "Unable to load additional information";
 	
@@ -163,11 +166,11 @@ public class WndRanking extends WndTabbed {
 		public StatsTab() {
 			super();
 			
-			String heroClass = Dungeon.hero.className();
+			String heroClass = Dungeon.heroes[0].className();
 			
 			IconTitle title = new IconTitle();
-			title.icon( HeroSprite.avatar( Dungeon.hero.heroClass, Dungeon.hero.tier() ) );
-			title.label( Utils.format( TXT_TITLE, Dungeon.hero.lvl, heroClass ).toUpperCase( Locale.ENGLISH ) );
+			title.icon( HeroSprite.avatar( Dungeon.heroes[0].heroClass, Dungeon.heroes[0].tier() ) );
+			title.label( Utils.format( TXT_TITLE, Dungeon.heroes[0].lvl, heroClass ).toUpperCase( Locale.ENGLISH ) );
 			title.setRect( 0, 0, WIDTH, 0 );
 			add( title );
 			
@@ -188,8 +191,8 @@ public class WndRanking extends WndTabbed {
 			
 			pos += GAP + GAP;
 			
-			pos = statSlot( this, TXT_STR, Integer.toString( Dungeon.hero.STR ), pos );
-			pos = statSlot( this, TXT_HEALTH, Integer.toString( Dungeon.hero.HT ), pos );
+			pos = statSlot( this, TXT_STR, Integer.toString( Dungeon.heroes[0].STR ), pos );
+			pos = statSlot( this, TXT_HEALTH, Integer.toString( Dungeon.heroes[0].HT ), pos );
 			
 			pos += GAP;
 			
@@ -232,7 +235,7 @@ public class WndRanking extends WndTabbed {
 		public ItemsTab() {
 			super();
 			
-			Belongings stuff = Dungeon.hero.belongings;
+			Belongings stuff = Dungeon.heroes[0].belongings;
 			if (stuff.weapon != null) {
 				addItem( stuff.weapon );
 			}
@@ -280,14 +283,14 @@ public class WndRanking extends WndTabbed {
 		}
 		
 		private Item getQuickslot( Object value ) {
-			if (value instanceof Item && Dungeon.hero.belongings.backpack.contains( (Item)value )) {
+			if (value instanceof Item && Dungeon.heroes[0].belongings.backpack.contains( (Item)value )) {
 					
 					return (Item)value;
 					
 			} else if (value instanceof Class){
 				
 				@SuppressWarnings("unchecked")
-				Item item = Dungeon.hero.belongings.getItem( (Class<? extends Item>)value );
+				Item item = Dungeon.heroes[0].belongings.getItem( (Class<? extends Item>)value );
 				if (item != null) {
 					return item;
 				}
