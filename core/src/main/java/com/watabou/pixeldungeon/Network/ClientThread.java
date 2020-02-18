@@ -37,6 +37,7 @@ class ClientThread extends Thread {
             for (int i=0; i<data.length;i++){
                 writeStream.writeObject(data[i]);
             };
+            writeStream.flush();
         } catch (Exception e) {
             disconnect();
         }

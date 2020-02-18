@@ -33,6 +33,7 @@ import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.FogOfWar;
+import com.watabou.pixeldungeon.Network.SendData;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -75,7 +76,7 @@ import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.pixeldungeon.windows.WndStory;
 import com.watabou.utils.Random;
 
-public class GameScene extends PixelScene {
+public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private static final String TXT_WELCOME			= "Welcome to the level %d of Pixel Dungeon!";
 	private static final String TXT_WELCOME_BACK	= "Welcome back to the level %d of Pixel Dungeon!";
@@ -564,17 +565,11 @@ public class GameScene extends PixelScene {
 		
 		Sample.INSTANCE.play( Assets.SND_DEATH );
 	}
-	
+
 	public static void bossSlain() {
-		if (Dungeon.hero.isAlive()) {
-			Banner bossSlain = new Banner( BannerSprites.get( BannerSprites.Type.BOSS_SLAIN ) );
-			bossSlain.show( 0xFFFFFF, 0.3f, 5f );
-			scene.showBanner( bossSlain );
-			
-			Sample.INSTANCE.play( Assets.SND_BOSS );
-		}
+		SendData.sendAllBossSlain();
 	}
-	
+
 	public static void handleCell( int cell ) {
 		cellSelector.select( cell );
 	}
@@ -635,4 +630,17 @@ public class GameScene extends PixelScene {
 			return null;
 		}
 	};
+
+	//--------------------------- CLIENT
+	public static void ClientBossSlain() {
+
+		if (Dungeon.heroes[0].isAlive()) {
+			Banner bossSlain = new Banner( BannerSprites.get( BannerSprites.Type.BOSS_SLAIN ) );
+			bossSlain.show( 0xFFFFFF, 0.3f, 5f );
+			scene.showBanner( bossSlain );
+
+			Sample.INSTANCE.play( Assets.SND_BOSS );
+		}
+	}
+
 }
