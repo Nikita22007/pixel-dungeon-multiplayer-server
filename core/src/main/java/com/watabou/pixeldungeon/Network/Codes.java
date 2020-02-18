@@ -16,4 +16,7 @@ class Codes {
     public static final int LEVEL_MAP = 0X10;
     public static final int LEVEL_VISITED = 0X11;
     public static final int LEVEL_MAPPED = 0X12;
+
+    //UI block 0X20-0X3F
+    public static final int BOSS_SLAIN = 0X20;
 }
