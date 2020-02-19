@@ -25,8 +25,7 @@ public class SendData {
 
     //---------------------------UI  and mechanics
     public static void sendAllBossSlain(){
-        ClientThread.sendAll(Codes.BOSS_SLAIN
-        );
+        ClientThread.sendAll(Codes.BOSS_SLAIN);
     }
 
 }

@@ -618,7 +618,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		QuickSlot.cancel();
 	}
 	
-	private static final CellSelector.Listener defaultCellListener = new CellSelector.Listener() {
+	private static final CellSelector.Listener defaultCellListener = new CellSelector.Listener() { //client
 		@Override
 		public void onSelect( Integer cell ) {
 			if (Dungeon.hero.handle( cell )) {

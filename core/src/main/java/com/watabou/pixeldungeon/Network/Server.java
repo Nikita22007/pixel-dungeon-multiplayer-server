@@ -34,7 +34,9 @@ public class Server extends Thread {
 
     public static boolean startServer() {
         clients=new ClientThread[Settings.maxPlayers];
-        clients[0]=new ServerClientThread();
+        if (Settings.IS_CLIENT) {
+            clients[0] = new ServerClientThread();
+        }
         if (started) {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;

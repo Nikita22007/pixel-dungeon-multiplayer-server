@@ -1,5 +1,6 @@
 package com.watabou.pixeldungeon.Network;
 
+import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ class ClientThread extends Thread {
 
     public ObjectInputStream readStream;
     public ObjectOutputStream writeStream;
-    public int ThreadID;
+    public int threadID;
     protected Socket clientSocket = null;
 
     public ClientThread(int ThreadID, Socket clientSocket) {
@@ -19,7 +20,7 @@ class ClientThread extends Thread {
         try {
             readStream = new ObjectInputStream(clientSocket.getInputStream());
             writeStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            this.ThreadID = ThreadID;
+            this.threadID = ThreadID;
             this.start(); //auto start
         } catch (IOException e) {
             GLog.n(e.getMessage());
@@ -29,6 +30,24 @@ class ClientThread extends Thread {
 
     public void run() {
         //socket read
+        try {
+            int code = (int) readStream.readObject();
+            switch (code) {
+                //Level block
+                case (Codes.LEVEL_MAP): {SendData.sendLevelMap(Dungeon.level,threadID); break;}
+                case (Codes.LEVEL_VISITED): {SendData.sendLevelVisited(Dungeon.level,threadID);break;}
+                case (Codes.LEVEL_MAPPED):{SendData.sendLevelMapped(Dungeon.level,threadID);break;}
+                //control block
+                case (Codes.CELL_SELECT):{}//todo
+                default: {
+                    GLog.n("BadCode:{0}", code);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            disconnect();//  need?
+        }
+
     }
 
     public <T> void  send(int code, T ...  data) {
@@ -57,7 +76,7 @@ class ClientThread extends Thread {
         readStream = null;
         writeStream = null;
         clientSocket = null;
-        Server.clients[ThreadID] = null;
+        Server.clients[threadID] = null;
 
     }
 }
