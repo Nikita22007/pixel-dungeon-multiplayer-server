@@ -19,4 +19,10 @@ class Codes {
 
     //UI block 0X20-0X3F
     public static final int BOSS_SLAIN = 0X20;
+
+    //Hero block 0x40-0X5F
+
+    //Control block 0x60-0x6F
+    public static final int CELL_SELECT = 0x60;
+
 }
