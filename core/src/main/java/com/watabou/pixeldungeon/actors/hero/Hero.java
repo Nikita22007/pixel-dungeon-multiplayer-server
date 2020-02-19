@@ -159,7 +159,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
-	public boolean weakened = false;
+	//public boolean weakened = false;
 	
 	public float awareness;
 	
@@ -177,12 +177,12 @@ public class Hero extends Char {
 		awareness = 0.1f;
 		
 		belongings = new Belongings( this );
-		
+
 		visibleEnemies = new ArrayList<Mob>();
 	}
 
 	public int STR() {
-		return weakened ? STR - 2 : STR;
+		return  this.buff(Weakness.class)!=null ? STR - 2 : STR; //it was "weakened", but this is more easy
 	}
 
 	private static final String ATTACK		= "attackSkill";
