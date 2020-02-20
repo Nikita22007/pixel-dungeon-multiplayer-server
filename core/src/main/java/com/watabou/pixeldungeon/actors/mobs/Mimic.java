@@ -27,6 +27,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.Pushing;
 import com.watabou.pixeldungeon.effects.Speck;
@@ -80,10 +81,10 @@ public class Mimic extends Mob {
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		if (enemy == Dungeon.hero && Random.Int( 3 ) == 0) {
-			Gold gold = new Gold( Random.Int( Dungeon.gold / 10, Dungeon.gold / 2 ) );
+		if (enemy instanceof Hero  && Random.Int( 3 ) == 0) {
+			Gold gold = new Gold( Random.Int( ((Hero)enemy).gold / 10,  ((Hero)enemy).gold / 2 ) );
 			if (gold.quantity() > 0) {
-				Dungeon.gold -= gold.quantity();
+				((Hero)enemy).gold -= gold.quantity();
 				Dungeon.level.drop( gold, Dungeon.hero.pos ).sprite.drop();
 			}
 		}

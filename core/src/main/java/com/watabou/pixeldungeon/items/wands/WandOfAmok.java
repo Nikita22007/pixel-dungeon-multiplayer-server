@@ -25,6 +25,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Amok;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Vertigo;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.MagicMissile;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
@@ -40,7 +41,7 @@ public class WandOfAmok extends Wand {
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {
 			
-			if (ch == Dungeon.hero) {
+			if (ch instanceof Hero) {
 				Buff.affect( ch, Vertigo.class, Vertigo.duration( ch ) );
 			} else {
 				Buff.affect( ch, Amok.class, 3f + power() );

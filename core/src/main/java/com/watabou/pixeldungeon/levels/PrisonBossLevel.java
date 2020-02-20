@@ -25,6 +25,7 @@ import com.watabou.pixeldungeon.Bones;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Bestiary;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Heap;
@@ -304,7 +305,7 @@ public class PrisonBossLevel extends RegularLevel {
 		
 		super.press( cell, ch );
 		
-		if (ch == Dungeon.hero && !enteredArena && roomExit.inside( cell )) {
+		if (ch instanceof Hero && !enteredArena && roomExit.inside( cell )) {
 			
 			enteredArena = true;
 		

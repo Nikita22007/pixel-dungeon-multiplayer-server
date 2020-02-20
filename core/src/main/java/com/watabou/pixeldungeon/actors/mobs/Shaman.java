@@ -23,6 +23,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.particles.SparkParticle;
 import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.levels.Level;
@@ -101,7 +102,7 @@ public class Shaman extends Mob implements Callback {
 				enemy.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
 				enemy.sprite.flash();
 				
-				if (enemy == Dungeon.hero) {
+				if (enemy instanceof Hero) {
 					
 					Camera.main.shake( 2, 0.3f );
 					

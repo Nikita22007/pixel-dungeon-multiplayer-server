@@ -61,7 +61,7 @@ public class Gold extends Item {
 	@Override
 	public boolean doPickUp( Hero hero ) {
 		
-		Dungeon.gold += quantity;
+		hero.gold += quantity;
 		Statistics.goldCollected += quantity;
 		Badges.validateGoldCollected();
 		

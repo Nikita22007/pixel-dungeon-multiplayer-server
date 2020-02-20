@@ -25,6 +25,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Paralysis;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.particles.BlastParticle;
 import com.watabou.pixeldungeon.effects.particles.SmokeParticle;
@@ -76,7 +77,7 @@ public class Bomb extends Item {
 							ch.damage( dmg, this );
 							if (ch.isAlive()) {
 								Buff.prolong( ch, Paralysis.class, 2 );
-							} else if (ch == Dungeon.hero) {
+							} else if (ch instanceof Hero) {
 								Dungeon.fail( Utils.format( ResultDescriptions.BOMB, Dungeon.depth ) );
 								GLog.n( "You killed yourself with a bomb..." );
 							}

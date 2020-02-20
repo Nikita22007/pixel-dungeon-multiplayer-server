@@ -112,7 +112,9 @@ import com.watabou.utils.Random;
 public class Hero extends Char {
 	
 	private static final String TXT_LEAVE = "One does not simply leave Pixel Dungeon.";
-	
+
+	public  int gold;
+
 	private static final String TXT_LEVEL_UP = "level up!";
 	private static final String TXT_NEW_LEVEL = 
 		"Welcome to level %d! Now you are healthier and more focused. " +
@@ -157,7 +159,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
-	public boolean weakened = false;
+	//public boolean weakened = false;
 	
 	public float awareness;
 	
@@ -175,12 +177,12 @@ public class Hero extends Char {
 		awareness = 0.1f;
 		
 		belongings = new Belongings( this );
-		
+
 		visibleEnemies = new ArrayList<Mob>();
 	}
 
 	public int STR() {
-		return weakened ? STR - 2 : STR;
+		return  this.buff(Weakness.class)!=null ? STR - 2 : STR; //it was "weakened", but this is more easy
 	}
 
 	private static final String ATTACK		= "attackSkill";
@@ -1392,7 +1394,7 @@ public class Hero extends Char {
 	public void resurrect( int resetLevel ) {
 		
 		HP = HT;
-		Dungeon.gold = 0;
+		gold = 0;
 		exp = 0;
 		
 		belongings.resurrect( resetLevel );

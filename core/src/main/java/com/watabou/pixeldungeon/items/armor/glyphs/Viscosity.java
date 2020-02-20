@@ -22,6 +22,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.sprites.CharSprite;
@@ -124,7 +125,7 @@ public class Viscosity extends Glyph {
 			if (target.isAlive()) {
 				
 				target.damage( 1, this );
-				if (target == Dungeon.hero && !target.isAlive()) {
+				if (target instanceof Hero && !target.isAlive()) {
 					// FIXME
 					Dungeon.fail( Utils.format( ResultDescriptions.GLYPH, "enchantment of viscosity", Dungeon.depth ) );
 					GLog.n( "The enchantment of viscosity killed you..." );
