@@ -22,6 +22,8 @@ import com.watabou.pixeldungeon.windows.WndConnectServer;
 import com.watabou.pixeldungeon.windows.WndError;
 import com.watabou.pixeldungeon.windows.WndOptions;
 
+import java.util.List;
+
 
 /* TODO
     * Add UpdateButton
@@ -64,8 +66,12 @@ public class ConnectScene extends PixelScene {
         archs = new Archs();
         archs.setSize( w, h );
         add( archs );
+        ServerInfo[] serverList;
 
-        ServerInfo[] serverList= Scanner.getServerList();
+        List<ServerInfo> list;
+        list=Scanner.getServerList();
+        serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
+
         if (serverList==null){
 
             BitmapText title = PixelScene.createText( TXT_ERROR, 8 );
@@ -220,7 +226,7 @@ public class ConnectScene extends PixelScene {
 
         @Override
         protected void onClick() {
-            this.ConnectScene.add( new WndConnectServer(rec.name,rec.players,rec.maxPlayers,rec.IP,rec.port) );
+            this.ConnectScene.add( new WndConnectServer(rec.name,rec.players,rec.maxPlayers, rec.IP.toString(),rec.port) );
         }
     }
 }

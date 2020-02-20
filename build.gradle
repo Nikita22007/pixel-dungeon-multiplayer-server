@@ -18,7 +18,7 @@ allprojects {
         appVersionName = 'Client0.1'
 
         appAndroidCompileSDK = 28
-        appAndroidMinSDK = 8
+        appAndroidMinSDK = 16
         appAndroidTargetSDK = 28
     }
     version = appVersionName
