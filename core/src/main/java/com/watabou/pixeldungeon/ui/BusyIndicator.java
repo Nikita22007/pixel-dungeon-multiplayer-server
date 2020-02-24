@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.ui;
 import com.watabou.noosa.Image;
 import com.watabou.pixeldungeon.Dungeon;
 
-public class BusyIndicator extends Image {
+public class BusyIndicator extends Image { //client
 	
 	public BusyIndicator() {
 		super();
@@ -33,6 +33,6 @@ public class BusyIndicator extends Image {
 	@Override
 	public void update() {
 		super.update();
-		visible = Dungeon.hero.isAlive() && !Dungeon.hero.ready;
+		visible = Dungeon.heroes[0].isAlive() && !Dungeon.heroes[0].ready;
 	}
 }

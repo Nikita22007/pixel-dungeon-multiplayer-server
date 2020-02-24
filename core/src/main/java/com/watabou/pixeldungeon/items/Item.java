@@ -309,7 +309,7 @@ public class Item implements Bundlable {
 			}
 			if (isBroken()) {
 				getBroken();
-				if (levelKnown) {
+				/*if (levelKnown) {   CLIENT
 					GLog.n( TXT_BROKEN, name() );
 					Dungeon.hero.interrupt();
 					
@@ -325,7 +325,7 @@ public class Item implements Bundlable {
 						sprite.parent.add( Degradation.wand( point ) );
 					}
 					Sample.INSTANCE.play( Assets.SND_DEGRADE );
-				}
+				}*/
 			}
 		}
 	}

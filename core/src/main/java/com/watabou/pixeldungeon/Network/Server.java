@@ -14,7 +14,7 @@ import java.net.*;
 
 public class Server extends Thread {
     public static final String SERVICENAME = "MupriplayerPD"; //any nonzero string
-    public static final String SERVICETYPE = "_mppd._tcp"; // _name._protocol
+    public static final String SERVICETYPE = "_mppd._tcp"; // _name._protocol //mppd=MultiPlayerPixelDungeon
 
     //primitive vars
     public static String serviceName;

@@ -49,7 +49,7 @@ import com.watabou.pixeldungeon.windows.WndMessage;
 import com.watabou.pixeldungeon.windows.WndOptions;
 import com.watabou.utils.Callback;
 
-public class StartScene extends PixelScene {
+public class StartScene extends PixelScene {			//client  Scene
 
 	private static final float BUTTON_HEIGHT	= 24;
 	private static final float GAP				= 2;

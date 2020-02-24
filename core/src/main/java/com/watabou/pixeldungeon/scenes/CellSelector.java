@@ -24,7 +24,7 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 
-public class CellSelector extends TouchArea {
+public class CellSelector extends TouchArea {//client
 
 	public Listener listener = null;
 	

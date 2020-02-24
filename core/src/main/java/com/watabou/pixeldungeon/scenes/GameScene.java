@@ -120,13 +120,14 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		Music.INSTANCE.play( Assets.TUNE, true );
 		Music.INSTANCE.volume( 1f );
 		
-		PixelDungeon.lastClass( Dungeon.hero.heroClass.ordinal() );
+		//PixelDungeon.lastClass( Dungeon.hero.heroClass.ordinal() );
 		
 		super.create();
 		Camera.main.zoom( defaultZoom + PixelDungeon.zoom() );
 		
 		scene = this;
 
+		//graphics
 		terrain = new Group();
 		add( terrain );
 		
@@ -341,8 +342,8 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	@Override
-	public synchronized void update() {
-		if (Dungeon.hero == null) {
+	public synchronized void update() { //client
+		if (Dungeon.heroes == null||Dungeon.heroes[0]==null) {
 			return;
 		}
 			
@@ -352,11 +353,11 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		Actor.process();
 		
-		if (Dungeon.hero.ready && !Dungeon.hero.paralysed) {
+		if (Dungeon.heroes[0].ready && !Dungeon.heroes[0].paralysed) {
 			log.newLine();
 		}
 		
-		cellSelector.enabled = Dungeon.hero.ready;
+		cellSelector.enabled = Dungeon.heroes[0].ready;
 	}
 	
 	@Override

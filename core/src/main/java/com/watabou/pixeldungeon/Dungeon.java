@@ -335,7 +335,10 @@ public class Dungeon {
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
-	
+
+	private static String thisGameSaveFile;
+	private static String thisGameDepthSaveFile;
+
 	public static String gameFile( HeroClass cl ) {
 		switch (cl) {
 		case WARRIOR:
@@ -421,7 +424,7 @@ public class Dungeon {
 			
 		} catch (Exception e) {
 
-			GamesInProgress.setUnknown( hero.heroClass );
+			GamesInProgress.setUnknown( StartScene.curClass );
 		}
 	}
 	
@@ -429,7 +432,7 @@ public class Dungeon {
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, level );
 		
-		OutputStream output = Game.instance.openFileOutput( Utils.format( depthFile( hero.heroClass ), depth ), Game.MODE_PRIVATE );
+		OutputStream output = Game.instance.openFileOutput( Utils.format( depthFile( StartScene.curClass), depth ), Game.MODE_PRIVATE );
 		Bundle.write( bundle, output );
 		output.close();
 	}
@@ -446,7 +449,7 @@ public class Dungeon {
 		} else if (WndResurrect.instance != null) {
 			
 			WndResurrect.instance.hide();
-			Hero.reallyDie( WndResurrect.causeOfDeath );
+			/*Hero*/ heroes[0].reallyDie( WndResurrect.causeOfDeath );
 			
 		}
 	}
@@ -543,9 +546,9 @@ public class Dungeon {
 			}
 		}
 	}
-	
+
 	public static Level loadLevel( HeroClass cl ) throws IOException {
-		
+
 		Dungeon.level = null;
 		Actor.clear();
 		
@@ -555,7 +558,11 @@ public class Dungeon {
 		
 		return (Level)bundle.get( "level" );
 	}
-	
+
+	public static Level loadLevel() throws IOException {
+		return loadLevel(StartScene.curClass);
+	};
+
 	public static void deleteGame( HeroClass cl, boolean deleteLevels ) {
 		
 		Game.instance.deleteFile( gameFile( cl ) );
