@@ -29,6 +29,7 @@ import android.view.View;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.pixeldungeon.network.Scanner;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -198,7 +199,12 @@ public class PixelDungeon extends Game {
 			updateImmersiveMode();
 		}
 	}
-	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		Scanner.stop();
+	}
+
 	public static void switchNoFade( Class<? extends PixelScene> c ) {
 		PixelScene.noFade = true;
 		switchScene( c );
@@ -223,7 +229,7 @@ public class PixelDungeon extends Game {
 	
 	private static boolean immersiveModeChanged = false;
 	
-	@SuppressLint("NewApi")
+	//@SuppressLint("NewApi")
 	public static void immerse( boolean value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_IMMERSIVE, value );
 		
@@ -246,7 +252,7 @@ public class PixelDungeon extends Game {
 		}
 	}
 	
-	@SuppressLint("NewApi")
+	//@SuppressLint("NewApi")
 	public static void updateImmersiveMode() {
 		if (android.os.Build.VERSION.SDK_INT >= 19) {
 			try {

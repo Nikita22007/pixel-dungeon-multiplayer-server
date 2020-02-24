@@ -3,6 +3,7 @@ package com.watabou.pixeldungeon.scenes;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.Scene;
 import com.watabou.noosa.audio.Music;
@@ -38,7 +39,9 @@ public class ConnectScene extends PixelScene {
 
     private static final String TXT_TITLE		= "Servers";
     private static final String TXT_NO_GAMES	= "No servers found.";
-    private static final String TXT_ERROR	= "Servers search error.";
+    private static final String TXT_ERROR	    = "Servers search error.";
+    private static final String TXT_SEARCHING	= "Searching...";
+    private static final String TXT_WIFI_DISABLED	= "WI-FI is not connected.";
 
     private static final float ROW_HEIGHT_L	= 22;
     private static final float ROW_HEIGHT_P	= 28;
@@ -49,7 +52,8 @@ public class ConnectScene extends PixelScene {
 
     private Archs archs;
 
-    private int page;//Page of servers
+    private Group page;
+
     @Override
     public void create() {
 
@@ -66,62 +70,74 @@ public class ConnectScene extends PixelScene {
         archs = new Archs();
         archs.setSize( w, h );
         add( archs );
-        ServerInfo[] serverList;
-
-        List<ServerInfo> list;
-        list=Scanner.getServerList();
-        serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
-
-        if (serverList==null){
-
-            BitmapText title = PixelScene.createText( TXT_ERROR, 8 );
+        if (!Scanner.isWifiConnected()){
+            BitmapText title = PixelScene.createText( TXT_WIFI_DISABLED, 8 );
             title.hardlight( DEFAULT_COLOR );
             title.measure();
             title.x = align( (w - title.width()) / 2 );
             title.y = align( (h - title.height()) / 2 );
             add( title );
+        }
+        else {
+            if (!Scanner.start()) {
 
-        } else {
-            if (serverList.length > 0) {
-
-                float rowHeight = PixelDungeon.landscape() ? ROW_HEIGHT_L : ROW_HEIGHT_P;
-
-                float left = (w - Math.min(MAX_ROW_WIDTH, w)) / 2 + GAP;
-                float top = align((h - rowHeight * serverList.length) / 2);
-
-                BitmapText title = PixelScene.createText(TXT_TITLE, 9);
-                title.hardlight(Window.TITLE_COLOR);
-                title.measure();
-                title.x = align((w - title.width()) / 2);
-                title.y = align(top - title.height() - GAP);
-                add(title);
-
-                int pos = 0;
-
-                for (int i=0;i<TABLE_SIZE;i+=1) {
-                    Record row = new Record(pos, false, serverList[i],this);
-                    row.setRect(left, top + pos * rowHeight, w - left * 2, rowHeight);
-                    add(row);
-
-                    pos++;
-                }
-
-                if (serverList.length > TABLE_SIZE) {
-                  //todo previous/next
-                }
-
-            } else {
-
-                BitmapText title = PixelScene.createText(TXT_NO_GAMES, 8);
+                BitmapText title = PixelScene.createText(TXT_ERROR, 8);
                 title.hardlight(DEFAULT_COLOR);
                 title.measure();
                 title.x = align((w - title.width()) / 2);
                 title.y = align((h - title.height()) / 2);
                 add(title);
 
+            } else {
+                ServerInfo[] serverList;
+
+                List<ServerInfo> list;
+                list=Scanner.getServerList();
+                serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
+                if (serverList.length > 0) {
+
+                    float rowHeight = PixelDungeon.landscape() ? ROW_HEIGHT_L : ROW_HEIGHT_P;
+
+                    float left = (w - Math.min(MAX_ROW_WIDTH, w)) / 2 + GAP;
+                    float top = align((h - rowHeight * serverList.length) / 2);
+
+                    BitmapText title = PixelScene.createText(TXT_TITLE, 9);
+                    title.hardlight(Window.TITLE_COLOR);
+                    title.measure();
+                    title.x = align((w - title.width()) / 2);
+                    title.y = align(top - title.height() - GAP);
+                    add(title);
+
+                    int pos = 0;
+
+                    for (int i = 0; i < TABLE_SIZE; i += 1) {
+                        Record row = new Record(pos, false, serverList[i], this);
+                        row.setRect(left, top + pos * rowHeight, w - left * 2, rowHeight);
+                        add(row);
+
+                        pos++;
+                    }
+
+                    if (serverList.length > TABLE_SIZE) {
+                        //todo previous/next
+                    }
+
+                } else {
+
+                    BitmapText title = PixelScene.createText(TXT_SEARCHING, 8);
+                    title.hardlight(DEFAULT_COLOR);
+                    title.measure();
+                    title.x = align((w - title.width()) / 2);
+                    title.y = align((h - title.height()) / 2);
+                    add(title);
+
+                }
             }
         }
-        ExitButton btnExit = new ExitButton();
+        ExitButton btnExit = new ExitButton(){
+            @Override
+            public void onClick(){ onBackPressed(); }
+        };
         btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
         add( btnExit );
 
@@ -130,6 +146,7 @@ public class ConnectScene extends PixelScene {
 
     @Override
     protected void onBackPressed() {
+        Scanner.stop();
         PixelDungeon.switchNoFade( TitleScene.class );
     }
 
@@ -154,7 +171,7 @@ public class ConnectScene extends PixelScene {
         public Record( int pos, boolean withFlare, ServerInfo rec,Scene scene ) {
             super();
             this.ConnectScene=scene;
-        this.rec = rec;
+            this.rec = rec;
 
             if (withFlare) {
                 flare = new Flare( 6, 24 );

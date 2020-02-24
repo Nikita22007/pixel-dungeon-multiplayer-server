@@ -1,8 +1,11 @@
 package com.watabou.pixeldungeon.network;
 
+import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.net.wifi.WifiManager;
 
+import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import java.util.ArrayList;
@@ -20,23 +23,39 @@ public class Scanner { //Todo write this
     protected static NsdManager.ResolveListener resolveListener;
     protected static NsdManager nsdManager;
 
+    public  static boolean isWifiConnected(){
+        WifiManager  wifiManager = (WifiManager) Game.instance.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
+    public static List<ServerInfo> getServerList() {
+        return serverList;
+    }
+
     public static boolean start() {
+        initializeNSDManager();
         initializeResolveListener();
         initializeDiscoveryListener();
         state = ListenerState.NULL;
         nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
         while (state == ListenerState.NULL) {
+            //GLog.h(state.toString());
         }
         return state == ListenerState.STARTED;
     }
 
-    public static List<ServerInfo> getServerList() {
-        return serverList;
-    }
 
     public static boolean stop() {
-        nsdManager.stopServiceDiscovery(discoveryListener);
+        if (nsdManager != null) {
+            nsdManager.stopServiceDiscovery(discoveryListener);
+    }
         return true;
+    }
+
+    //NSD
+    private static void initializeNSDManager() {
+        if (nsdManager==null) {
+            nsdManager = (NsdManager) Game.instance.getSystemService(Context.NSD_SERVICE);
+        }
     }
 
     public static void initializeResolveListener() {
@@ -64,8 +83,6 @@ public class Scanner { //Todo write this
             }
         };
     }
-
-    //public static boolean
 
     public static void initializeDiscoveryListener() {
         if (discoveryListener != null) {
