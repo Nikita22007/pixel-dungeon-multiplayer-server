@@ -44,11 +44,12 @@ public class InterlevelScene extends PixelScene {
 	private static final String TXT_RESURRECTING= "Resurrecting...";
 	private static final String TXT_RETURNING	= "Returning...";
 	private static final String TXT_FALLING		= "Falling...";
-	
+    private static final String TXT_INCORRECT_MODE = "Incorrect Interlevel scene mode";
+
 	private static final String ERR_FILE_NOT_FOUND	= "File not found. For some reason.";
-	private static final String ERR_GENERIC			= "Something went wrong..."	;	
-	
-	public static enum Mode {
+	private static final String ERR_GENERIC			= "Something went wrong..."	;
+
+    public static enum Mode {
 		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, NONE
 	};
 	public static Mode mode;
@@ -96,6 +97,7 @@ public class InterlevelScene extends PixelScene {
 			text = TXT_FALLING;
 			break;
 		default:
+		    text = TXT_INCORRECT_MODE;
 		}
 		
 		message = PixelScene.createText( text, 9 );
@@ -193,6 +195,7 @@ public class InterlevelScene extends PixelScene {
 		case STATIC:
 			if (error != null) {
 				add( new WndError( error ) {
+				    @Override
 					public void onBackPressed() {
 						super.onBackPressed();
 						Game.switchScene( StartScene.class );
@@ -203,7 +206,9 @@ public class InterlevelScene extends PixelScene {
 			break;
 		}
 	}
-	
+
+
+	//==========level changing
 	private void descend() throws Exception {
 		
 		Actor.fixTime();
@@ -219,12 +224,7 @@ public class InterlevelScene extends PixelScene {
 		}
 		
 		Level level;
-		if (Dungeon.depth >= Statistics.deepestFloor) {
-			level = Dungeon.newLevel();
-		} else {
-			Dungeon.depth++;
-			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		}
+		level=getNextLevel();
 		Dungeon.switchLevel( level, level.entrance );
 	}
 	
@@ -234,14 +234,19 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.saveLevel();
 		
 		Level level;
-		if (Dungeon.depth >= Statistics.deepestFloor) {
-			level = Dungeon.newLevel();
-		} else {
-			Dungeon.depth++;
-			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		}
+		level=getNextLevel();
 		Dungeon.switchLevel( level, fallIntoPit ? level.pitCell() : level.randomRespawnCell() );
 	}
+
+	private Level getNextLevel()throws Exception {
+
+		if (Dungeon.depth >= Statistics.deepestFloor) {
+			return  Dungeon.newLevel();
+		} else {
+			Dungeon.depth++;
+			return Dungeon.loadLevel( Dungeon.hero.heroClass );
+		}
+	};
 	
 	private void ascend() throws Exception {
 		Actor.fixTime();

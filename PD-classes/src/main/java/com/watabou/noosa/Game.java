@@ -66,7 +66,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	// Current scene
 	protected Scene scene;
 	// New scene we are going to switch to
-	protected Scene requestedScene;
+	//protected Scene requestedScene;
 	// true if scene switch is requested
 	protected boolean requestedReset = true;
 	// callback to perform logic during scene change
@@ -265,9 +265,9 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	}
 	
 	public static void switchScene(Class<? extends Scene> c, SceneChangeCallback callback) {
+		instance.onChange = callback;
 		instance.sceneClass = c;
 		instance.requestedReset = true;
-		instance.onChange = callback;
 	}
 	
 	public static Scene scene() {
@@ -280,8 +280,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 			requestedReset = false;
 			
 			try {
-				requestedScene = sceneClass.newInstance();
-				switchScene();
+				switchScene( sceneClass.newInstance());
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -296,7 +295,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		scene.draw();
 	}
 	
-	protected void switchScene() {
+	protected void switchScene(Scene requestedScene) {
 		
 		Camera.reset();
 		
