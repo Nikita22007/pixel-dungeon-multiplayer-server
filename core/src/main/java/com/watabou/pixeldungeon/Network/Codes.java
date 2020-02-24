@@ -21,14 +21,39 @@ class Codes {
     public static final int BOSS_SLAIN    = 0X20;   //server->client
 
     //Hero block 0x40-0X5F
-    public static final int HERO_CLASS    = 0x40;   //1 = warrior; 2=mage; 3=rouge; 4=huntress; other=random //client->server
-    public static final int HERO_STRENGTH = 0x41;   //server->client; when hero generated or  update strength
-    public static final int HERO_SUBCLASS = 0x42;   //???
+    public static final int HERO_CLASS    = 0x40;   //0 = random;  1 = warrior; 2=mage; 3=rouge; 4=huntress; other=error+random //client->server
+    public static final int HERO_SUBCLASS = 0x41;   //???
 
-    public static final int HERO_VISIBLE_AREA  = 0x43;   //client->server:ask; //server->client: answer or dara;//Hero's field of view
+    public static final int HERO_STRENGTH = 0x42;   //client->server:ask; //server->client; when hero generated or update strength
+    public static final int HERO_HP       = 0x43;   //client->server:ask; //server->client:answer or data
+    public static final int HERO_HT       = 0x44;   //client->server:ask; //server->client:answer or data
+
+    public static final int HERO_VISIBLE_AREA  = 0x50;   //client->server:ask; //server->client: answer or dara;//Hero's field of view
 
 
     //Control block 0x60-0x6F
     public static final int CELL_SELECT   = 0x60;   //client->server; when client touch cell
 
+    //Bages block 0x70-0x8F  //server->client; param(if need)  is level of bage
+    public static final int MONSTERS_SLAIN      = 0x70;     //param need
+    public static final int GOLD_COLLECTED      = 0x71;     //param need
+    public static final int BAGE_BOSS_SLAIN     = 0x72;     //param need
+    public static final int LEVEL_REACHED       = 0x73;     //param need
+    public static final int STRENGTH_ATTAINED   = 0x74;     //param need
+    public static final int FOOD_EATEN          = 0x75;     //param need
+    public static final int ITEM_LEVEL          = 0x76;     //param need
+    public static final int POTIONS_COOKED      = 0x77;     //param need
+    public static final int DEATH_FROM_FIRE     = 0x78;
+    public static final int DEATH_FROM_GAS      = 0x79;
+    public static final int DEATH_FROM_HUNGER   = 0x7A;
+    public static final int DEATH_FROM_POISON   = 0x7B;
+    public static final int ALL_POTIONS_IDENTIFIED  = 0x7C;
+    public static final int ALL_SCROLLS_IDENTIFIED  = 0x7D;
+    public static final int ALL_RINGS_IDENTIFIED    = 0x7E;
+    public static final int ALL_WANDS_IDENTIFIED    = 0x7F;
+    public static final int VICTORY                 = 0x80;
+    public static final int BAGE_MASTERY            = 0x81;
+
+    //unclassed
+    public static final int ITEM_BROKEN   =0xE0;   //server->client;
 }
