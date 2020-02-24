@@ -34,25 +34,25 @@ class Codes {
     //Control block 0x60-0x6F
     public static final int CELL_SELECT   = 0x60;   //client->server; when client touch cell
 
-    //Bages block 0x70-0x8F  //server->client; param(if need)  is level of bage
-    public static final int MONSTERS_SLAIN      = 0x70;     //param need
-    public static final int GOLD_COLLECTED      = 0x71;     //param need
-    public static final int BAGE_BOSS_SLAIN     = 0x72;     //param need
-    public static final int LEVEL_REACHED       = 0x73;     //param need
-    public static final int STRENGTH_ATTAINED   = 0x74;     //param need
-    public static final int FOOD_EATEN          = 0x75;     //param need
-    public static final int ITEM_LEVEL          = 0x76;     //param need
-    public static final int POTIONS_COOKED      = 0x77;     //param need
-    public static final int DEATH_FROM_FIRE     = 0x78;
-    public static final int DEATH_FROM_GAS      = 0x79;
-    public static final int DEATH_FROM_HUNGER   = 0x7A;
-    public static final int DEATH_FROM_POISON   = 0x7B;
-    public static final int ALL_POTIONS_IDENTIFIED  = 0x7C;
-    public static final int ALL_SCROLLS_IDENTIFIED  = 0x7D;
-    public static final int ALL_RINGS_IDENTIFIED    = 0x7E;
-    public static final int ALL_WANDS_IDENTIFIED    = 0x7F;
-    public static final int VICTORY                 = 0x80;
-    public static final int BAGE_MASTERY            = 0x81;
+    //Badges block 0x70-0x8F  //server->client; param(if need)  is level of bage
+    public static final int BADGE_MONSTERS_SLAIN      = 0x70;     //param need
+    public static final int BADGE_GOLD_COLLECTED      = 0x71;     //param need
+    public static final int BADGE_BOSS_SLAIN          = 0x72;     //param need
+    public static final int BADGE_LEVEL_REACHED       = 0x73;     //param need
+    public static final int BADGE_STRENGTH_ATTAINED   = 0x74;     //param need
+    public static final int BADGE_FOOD_EATEN          = 0x75;     //param need
+    public static final int BADGE_ITEM_LEVEL          = 0x76;     //param need
+    public static final int BADGE_POTIONS_COOKED      = 0x77;     //param need
+    public static final int BADGE_DEATH_FROM_FIRE     = 0x78;
+    public static final int BADGE_DEATH_FROM_GAS      = 0x79;
+    public static final int BADGE_DEATH_FROM_HUNGER   = 0x7A;
+    public static final int BADGE_DEATH_FROM_POISON   = 0x7B;
+    public static final int BADGE_ALL_POTIONS_IDENTIFIED  = 0x7C;
+    public static final int BADGE_ALL_SCROLLS_IDENTIFIED  = 0x7D;
+    public static final int BADGE_ALL_RINGS_IDENTIFIED    = 0x7E;
+    public static final int BADGE_ALL_WANDS_IDENTIFIED    = 0x7F;
+    public static final int BADGE_VICTORY                 = 0x80;
+    public static final int BADGE_MASTERY            = 0x81;
 
     //unclassed
     public static final int ITEM_BROKEN   =0xE0;   //server->client;
