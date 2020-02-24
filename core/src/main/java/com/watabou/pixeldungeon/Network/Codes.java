@@ -37,7 +37,7 @@ class Codes {
     //Badges block 0x70-0x8F  //server->client; param(if need)  is level of bage
     public static final int BADGE_MONSTERS_SLAIN      = 0x70;     //param need
     public static final int BADGE_GOLD_COLLECTED      = 0x71;     //param need
-    public static final int BADGE_BAGE_BOSS_SLAIN     = 0x72;     //param need
+    public static final int BADGE_BOSS_SLAIN          = 0x72;     //param need
     public static final int BADGE_LEVEL_REACHED       = 0x73;     //param need
     public static final int BADGE_STRENGTH_ATTAINED   = 0x74;     //param need
     public static final int BADGE_FOOD_EATEN          = 0x75;     //param need
