@@ -34,7 +34,9 @@ class Codes {
     //Control block 0x60-0x6F
     public static final int CELL_SELECT   = 0x60;   //client->server; when client touch cell
 
+    //Bages block 0x70-0x8F
+    public static final int BAGE_BOSS_SLAIN  =0x70; //server->client; params: int Boss; Boss= number of boss (1,2,3 or 4) what was  slinet;
 
     //unclassed
-    public static final int ITEM_BROKEN   =0xE0;   //
+    public static final int ITEM_BROKEN   =0xE0;   //server->client;
 }
