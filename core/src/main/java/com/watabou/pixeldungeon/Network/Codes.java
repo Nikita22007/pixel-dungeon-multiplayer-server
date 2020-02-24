@@ -21,14 +21,20 @@ class Codes {
     public static final int BOSS_SLAIN    = 0X20;   //server->client
 
     //Hero block 0x40-0X5F
-    public static final int HERO_CLASS    = 0x40;   //1 = warrior; 2=mage; 3=rouge; 4=huntress; other=random //client->server
-    public static final int HERO_STRENGTH = 0x41;   //server->client; when hero generated or  update strength
-    public static final int HERO_SUBCLASS = 0x42;   //???
+    public static final int HERO_CLASS    = 0x40;   //0 = random;  1 = warrior; 2=mage; 3=rouge; 4=huntress; other=error+random //client->server
+    public static final int HERO_SUBCLASS = 0x41;   //???
 
-    public static final int HERO_VISIBLE_AREA  = 0x43;   //client->server:ask; //server->client: answer or dara;//Hero's field of view
+    public static final int HERO_STRENGTH = 0x42;   //client->server:ask; //server->client; when hero generated or update strength
+    public static final int HERO_HP       = 0x43;   //client->server:ask; //server->client:answer or data
+    public static final int HERO_HT       = 0x44;   //client->server:ask; //server->client:answer or data
+
+    public static final int HERO_VISIBLE_AREA  = 0x50;   //client->server:ask; //server->client: answer or dara;//Hero's field of view
 
 
     //Control block 0x60-0x6F
     public static final int CELL_SELECT   = 0x60;   //client->server; when client touch cell
 
+
+    //unclassed
+    public static final int ITEM_BROKEN   =0xE0;   //
 }
