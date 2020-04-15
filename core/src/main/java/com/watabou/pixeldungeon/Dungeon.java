@@ -306,9 +306,10 @@ public class Dungeon {
 		return false;
 	}
 	
-	private static final String RG_GAME_FILE	= "game.dat";
-	private static final String RG_DEPTH_FILE	= "depth%d.dat";
-	
+	private static final String GAME_FILE = "game.dat";
+	private static final String DEPTH_FILE = "depth%d.dat";
+
+	/*
 	private static final String WR_GAME_FILE	= "warrior.dat";
 	private static final String WR_DEPTH_FILE	= "warrior%d.dat";
 	
@@ -320,7 +321,7 @@ public class Dungeon {
 
 	private static final String HN_GAME_FILE	= "huntress.dat";
 	private static final String HN_DEPTH_FILE	= "huntress%d.dat";
-	
+	*/
 	private static final String VERSION		= "version";
 	private static final String CHALLENGES	= "challenges";
 	private static final String HERO		= "hero";
@@ -340,7 +341,7 @@ public class Dungeon {
 	private static String thisGameDepthSaveFile;
 
 	public static String gameFile( HeroClass cl ) {
-		switch (cl) {
+	/*	switch (cl) {
 		case WARRIOR:
 			return WR_GAME_FILE;
 		case MAGE:
@@ -350,12 +351,13 @@ public class Dungeon {
 		case HUNTRESS:
 			return HN_GAME_FILE;
 		default:
-			return RG_GAME_FILE;
-		}
+			return GAME_FILE;
+		}*/
+		return GAME_FILE;
 	}
 	
 	private static String depthFile( HeroClass cl ) {
-		switch (cl) {
+		/*switch (cl) {
 		case WARRIOR:
 			return WR_DEPTH_FILE;
 		case MAGE:
@@ -365,8 +367,9 @@ public class Dungeon {
 		case HUNTRESS:
 			return HN_DEPTH_FILE;
 		default:
-			return RG_DEPTH_FILE;
-		}
+			return DEPTH_FILE;
+		}*/
+		return DEPTH_FILE;
 	}
 	
 	public static void saveGame( String fileName ) throws IOException {
@@ -564,17 +567,21 @@ public class Dungeon {
 	};
 
 	public static void deleteGame( HeroClass cl, boolean deleteLevels ) {
+		deleteGame(deleteLevels);
+	}
+
+	public static void deleteGame( boolean deleteLevels ) {
 		
-		Game.instance.deleteFile( gameFile( cl ) );
+		Game.instance.deleteFile(GAME_FILE);
 		
 		if (deleteLevels) {
 			int depth = 1;
-			while (Game.instance.deleteFile( Utils.format( depthFile( cl ), depth ) )) {
+			while (Game.instance.deleteFile( Utils.format( DEPTH_FILE, depth ) )) {
 				depth++;
 			}
 		}
 		
-		GamesInProgress.delete( cl );
+		GamesInProgress.delete( );
 	}
 	
 	public static Bundle gameBundle( String fileName ) throws IOException {

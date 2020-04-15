@@ -68,7 +68,7 @@ public class AmuletScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				Dungeon.win( ResultDescriptions.WIN );
-				Dungeon.deleteGame( Dungeon.hero.heroClass, true );
+				Dungeon.deleteGame(true );
 				Game.switchScene( noText ? TitleScene.class : RankingsScene.class );
 			}
 		};

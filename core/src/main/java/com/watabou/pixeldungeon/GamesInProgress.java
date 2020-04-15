@@ -22,7 +22,7 @@ import java.util.HashMap;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.utils.Bundle;
 
-public class GamesInProgress {
+public class GamesInProgress { //TODO refactor
 
 	private static HashMap<HeroClass, Info> state = new HashMap<HeroClass, Info>();
 	
@@ -62,7 +62,12 @@ public class GamesInProgress {
 	public static void setUnknown( HeroClass cl ) {
 		state.remove( cl );
 	}
-	
+
+	public static void delete( ) {
+		for (HeroClass hero:state.keySet()) {
+			delete(hero);
+		}
+	}
 	public static void delete( HeroClass cl ) {
 		state.put( cl, null );
 	}

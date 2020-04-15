@@ -44,7 +44,10 @@ import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
-public class SurfaceScene extends PixelScene {
+/*
+*U can see this scene if have HappyEnd. U need send to client if he have HappyEnd
+*/
+public class SurfaceScene extends PixelScene { //Clients
 	
 	private static final int FRAME_WIDTH	= 88;
 	private static final int FRAME_HEIGHT	= 125;
@@ -121,7 +124,7 @@ public class SurfaceScene extends PixelScene {
 			window.add( patch );
 		}
 		
-		Avatar a = new Avatar( Dungeon.hero.heroClass );
+		Avatar a = new Avatar( Dungeon.heroes[0].heroClass );
 		a.x = PixelScene.align( (SKY_WIDTH - a.width) / 2 );
 		a.y = SKY_HEIGHT - a.height;
 		window.add( a );
