@@ -54,6 +54,15 @@ public class ConnectScene extends PixelScene {
 
     private Group page;
 
+    public void CreateCenterText(int cameraWidth, int cameraHeight,String text){
+        BitmapText title = PixelScene.createText( text, 8 );
+        title.hardlight( DEFAULT_COLOR );
+        title.measure();
+        title.x = align( (cameraWidth - title.width()) / 2 );
+        title.y = align( (cameraHeight - title.height()) / 2 );
+        add( title );
+    }
+
     @Override
     public void create() {
 
@@ -71,23 +80,11 @@ public class ConnectScene extends PixelScene {
         archs.setSize( w, h );
         add( archs );
         if (!Scanner.isWifiConnected()){
-            BitmapText title = PixelScene.createText( TXT_WIFI_DISABLED, 8 );
-            title.hardlight( DEFAULT_COLOR );
-            title.measure();
-            title.x = align( (w - title.width()) / 2 );
-            title.y = align( (h - title.height()) / 2 );
-            add( title );
+            CreateCenterText(w,h,TXT_WIFI_DISABLED);
         }
         else {
             if (!Scanner.start()) {
-
-                BitmapText title = PixelScene.createText(TXT_ERROR, 8);
-                title.hardlight(DEFAULT_COLOR);
-                title.measure();
-                title.x = align((w - title.width()) / 2);
-                title.y = align((h - title.height()) / 2);
-                add(title);
-
+                CreateCenterText(w,h,TXT_ERROR);
             } else {
                 ServerInfo[] serverList;
 
