@@ -250,7 +250,7 @@ public class Dungeon {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void switchLevel( final Level level, int pos ) {
+	public static void switchLevel( final Level level, int pos, Hero hero ) {
 		
 		nightMode = new Date().getHours() < 7;
 		

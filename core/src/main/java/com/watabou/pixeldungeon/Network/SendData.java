@@ -49,4 +49,41 @@ public class SendData {
             clients[ID].send(Codes.BADGE_MASTERY);
         }
     }
+
+    //-----------------------------Interlevel Scene
+    public static void sendInterLevelSceneDescend(int ID){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_DESCEND);
+        }
+    }
+    public static void sendInterLevelSceneAscend(int ID){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_ASCEND);
+        }
+    }
+    public static void sendInterLevelSceneDescendFall(int ID){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_FALL);
+        }
+    }
+    public static void sendInterLevelSceneResurrect(int ID){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_RESURRECT);
+        }
+    }
+    public static void sendInterLevelSceneReturn(int ID){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_RETURN);
+        }
+    }
+    public static void sendInterLevelSceneOther(int ID,String data){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_OTHER, data);
+       }
+    }
+    public static void sendInterLevelSceneFadeOut(int ID,String data) {
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IL_FADE_OUT, data);
+        }
+    }
 }

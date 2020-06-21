@@ -96,6 +96,7 @@ import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.levels.features.Sign;
 import com.watabou.pixeldungeon.plants.Earthroot;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.SurfaceScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
@@ -715,8 +716,9 @@ public class Hero extends Char {
 				hunger.satisfy( -Hunger.STARVING / 10 );
 			}
 			
-			InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-			Game.switchScene( InterlevelScene.class );
+			//InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+			InterLevelSceneServer.descend(this);
+			//Game.switchScene( InterlevelScene.class );
 			
 			return false;
 			
@@ -754,8 +756,7 @@ public class Hero extends Char {
 					hunger.satisfy( -Hunger.STARVING / 10 );
 				}
 				
-				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-				Game.switchScene( InterlevelScene.class );
+				InterLevelSceneServer.ascend(this);
 			}
 			
 			return false;
@@ -1161,7 +1162,7 @@ public class Hero extends Char {
 		} else {
 			
 			Dungeon.deleteGame( this.heroClass, false );
-			GameScene.show( new WndResurrect( ankh, cause ) );
+			GameScene.show( new WndResurrect( ankh, this, cause ) );
 			
 		}
 	}

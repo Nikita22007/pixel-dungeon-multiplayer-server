@@ -34,7 +34,7 @@ import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.windows.WndError;
 import com.watabou.pixeldungeon.windows.WndStory;
 
-public class InterlevelScene extends PixelScene {
+public class InterlevelSceneClient extends PixelScene {
 
 	private static final float TIME_TO_FADE = 0.3f;
 	

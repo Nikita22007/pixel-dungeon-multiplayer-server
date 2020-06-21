@@ -319,21 +319,14 @@ public abstract class Mob extends Char {
 		super.damage( dmg, src );
 	}
 	
-	
-	@Override
-	public void destroy() {
-		
-		super.destroy();
-		
-		Dungeon.level.mobs.remove( this );
-		
+	protected  void getExp(){
 		if (Dungeon.hero.isAlive()) {
 
 			if (hostile) {
 				Statistics.enemiesSlain++;
 				Badges.validateMonstersSlain();
 				Statistics.qualifiedForNoKilling = false;
-				
+
 				if (Dungeon.nightMode) {
 					Statistics.nightHunt++;
 				} else {
@@ -349,6 +342,14 @@ public abstract class Mob extends Char {
 			}
 		}
 	}
+	@Override
+	public void destroy() {
+		
+		super.destroy();
+		
+		Dungeon.level.mobs.remove( this );
+
+	}
 	
 	public int exp() {
 		return Dungeon.hero.lvl <= maxLvl ? EXP : 0;
@@ -362,6 +363,8 @@ public abstract class Mob extends Char {
 		if (Dungeon.hero.lvl <= maxLvl + 2) {
 			dropLoot();
 		}
+
+		getExp();
 
 		if (Dungeon.hero.isAlive() && !Dungeon.visible[pos]) {	
 			GLog.i( TXT_DIED );

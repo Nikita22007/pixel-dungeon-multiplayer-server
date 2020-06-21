@@ -218,7 +218,29 @@ public abstract class Level implements Bundlable {
 		}
 		createMobs();
 	}
-	
+
+		public int getSpawnCell(){
+		if (Actor.findChar( entrance ) == null){
+			return entrance;
+		}
+		//need to create random circle
+		else for (int i:NEIGHBOURS8) {
+			if ((Actor.findChar( entrance+i ) == null)&&(passable[entrance+i])){
+				return entrance+i;
+			}
+		}
+
+			int count = 10;
+			int pos;
+			do {
+				pos = Dungeon.level.randomRespawnCell();
+				if (count-- <= 0) {
+					break;
+				}
+			} while (pos == -1);
+			return pos;
+	};
+
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		
@@ -623,7 +645,7 @@ public abstract class Level implements Bundlable {
 	public void press( int cell, Char ch ) {
 
 		if (pit[cell] && ch instanceof Hero) {
-			Chasm.heroFall( cell );
+			Chasm.heroFall( cell, (Hero)ch );
 			return;
 		}
 		

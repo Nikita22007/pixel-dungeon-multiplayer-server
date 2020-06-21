@@ -42,7 +42,7 @@ public class WndResurrect extends Window {
 	public static WndResurrect instance;
 	public static Object causeOfDeath;
 	
-	public WndResurrect( final Ankh ankh, Object causeOfDeath ) {
+	public WndResurrect(final Ankh ankh, final Hero hero, Object causeOfDeath ) {
 		
 		super();
 		
@@ -81,7 +81,7 @@ public class WndResurrect extends Window {
 				hide();
 				
 				Rankings.INSTANCE.submit( false );
-				Hero.reallyDie( WndResurrect.causeOfDeath );
+				hero.reallyDie( WndResurrect.causeOfDeath );
 			}
 		};
 		btnNo.setRect( 0, btnYes.bottom() + GAP, WIDTH, BTN_HEIGHT );

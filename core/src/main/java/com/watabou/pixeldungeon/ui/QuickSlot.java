@@ -24,6 +24,7 @@ import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Belongings;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
@@ -39,6 +40,8 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	private static QuickSlot primary;
 	private static QuickSlot secondary;
 	
+	private Hero hero;
+
 	private Item itemInSlot;
 	private ItemSlot slot;
 	
@@ -50,7 +53,11 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	private static Char lastTarget= null;
 	public static Object primaryValue;
 	public static Object secondaryValue;
-	
+
+	public QuickSlot(Hero hero){
+		this.hero=hero;
+	}
+
 	public void primary() {
 		primary = this;
 		item( select() );
@@ -85,7 +92,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 					GameScene.handleCell( lastTarget.pos );
 				} else {
 					useTargeting();
-					select().execute( Dungeon.hero );
+					select().execute( hero );
 				}
 			}
 			@Override
@@ -142,7 +149,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 			
 		} else if (content != null) {
 			
-			Item item = Dungeon.hero.belongings.getItem( (Class<? extends Item>)content );			
+			Item item = hero.belongings.getItem( (Class<? extends Item>)content );
 			return item != null ? item : Item.virtual( (Class<? extends Item>)content );
 			
 		} else {
@@ -183,7 +190,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 		slot.enable( 
 			itemInSlot != null && 
 			itemInSlot.quantity() > 0 && 
-			(Dungeon.hero.belongings.backpack.contains( itemInSlot ) || itemInSlot.isEquipped( Dungeon.hero )));
+			(hero.belongings.backpack.contains( itemInSlot ) || itemInSlot.isEquipped( hero )));
 	}
 	
 	private void useTargeting() {
@@ -191,7 +198,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 		targeting = lastTarget != null && lastTarget.isAlive() && Dungeon.visible[lastTarget.pos];
 		
 		if (targeting) {
-			int pos = Ballistica.cast( Dungeon.hero.pos, lastTarget.pos, false, true );
+			int pos = Ballistica.cast( hero.pos, lastTarget.pos, false, true );
 			if (pos != lastTarget.pos) {
 				lastTarget = null;
 				targeting = false;
@@ -199,10 +206,10 @@ public class QuickSlot extends Button implements WndBag.Listener {
 		}
 		
 		if (!targeting) {
-			int n = Dungeon.hero.visibleEnemies();
+			int n = hero.visibleEnemies();
 			for (int i=0; i < n; i++) {
-				Mob enemy = Dungeon.hero.visibleEnemy( i );
-				int pos = Ballistica.cast( Dungeon.hero.pos, enemy.pos, false, true );
+				Mob enemy = hero.visibleEnemy( i );
+				int pos = Ballistica.cast( hero.pos, enemy.pos, false, true );
 				if (pos == enemy.pos) { 
 					lastTarget = enemy;
 					targeting = true;
@@ -232,7 +239,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	}
 	
 	public static void target( Item item, Char target ) {
-		if (target != Dungeon.hero) {
+		if (!(target instanceof Hero)) {
 			lastTarget = target;
 			HealthIndicator.instance.target( target );
 		}
@@ -256,7 +263,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	
 	@SuppressWarnings("unchecked")
 	public static void save( Bundle bundle ) {
-		Belongings stuff = Dungeon.hero.belongings;
+		Belongings stuff = hero.belongings;
 		
 		if (primaryValue instanceof Class && 
 			stuff.getItem( (Class<? extends Item>)primaryValue ) != null) {

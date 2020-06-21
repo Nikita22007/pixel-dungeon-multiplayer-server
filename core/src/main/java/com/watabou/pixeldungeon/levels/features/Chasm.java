@@ -31,6 +31,7 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.RegularLevel;
 import com.watabou.pixeldungeon.levels.Room;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.sprites.MobSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -62,24 +63,26 @@ public class Chasm {
 		);
 	}
 	
-	public static void heroFall( int pos ) {
+	public static void heroFall( int pos, Hero hero ) {
 		
 		jumpConfirmed = false;
 				
 		Sample.INSTANCE.play( Assets.SND_FALLING );
-		
-		if (Dungeon.hero.isAlive()) {
-			Dungeon.hero.interrupt();
-			InterlevelScene.mode = InterlevelScene.Mode.FALL;
+
+		if (hero.isAlive()) {
+			hero.interrupt();
 			if (Dungeon.level instanceof RegularLevel) {
 				Room room = ((RegularLevel)Dungeon.level).room( pos );
-				InterlevelScene.fallIntoPit = room != null && room.type == Room.Type.WEAK_FLOOR;
+				if ((room != null) && (room.type == Room.Type.WEAK_FLOOR)) {
+					InterLevelSceneServer.fall(hero,true);
+				}else {
+					InterLevelSceneServer.fall(hero);
+				}
 			} else {
-				InterlevelScene.fallIntoPit = false;
+				InterLevelSceneServer.fall(hero);
 			}
-			Game.switchScene( InterlevelScene.class );
 		} else {
-			Dungeon.hero.sprite.visible = false;
+			hero.sprite.visible = false;
 		}
 	}
 	
