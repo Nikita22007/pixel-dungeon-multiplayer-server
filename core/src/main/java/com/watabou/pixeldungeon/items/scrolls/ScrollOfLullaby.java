@@ -39,7 +39,7 @@ public class ScrollOfLullaby extends Scroll {
 		
 		curUser.sprite.centerEmitter().start( Speck.factory( Speck.NOTE ), 0.3f, 5 );
 		Sample.INSTANCE.play( Assets.SND_LULLABY );
-		Invisibility.dispel();
+		Invisibility.dispel(curUser);
 		
 		int count = 0;
 		Mob affected = null;

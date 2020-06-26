@@ -440,7 +440,7 @@ public abstract class Wand extends KindOfWeapon {
 						}
 					} );
 					
-					Invisibility.dispel();
+					Invisibility.dispel(curUser);
 					
 				} else {
 					

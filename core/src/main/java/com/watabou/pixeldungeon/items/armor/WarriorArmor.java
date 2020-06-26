@@ -95,7 +95,7 @@ public class WarriorArmor extends ClassArmor {
 					Buff.affect( curUser, Fury.class );
 				}
 				
-				Invisibility.dispel();
+				Invisibility.dispel(curUser);
 				
 				final int dest = cell;
 				curUser.busy();
