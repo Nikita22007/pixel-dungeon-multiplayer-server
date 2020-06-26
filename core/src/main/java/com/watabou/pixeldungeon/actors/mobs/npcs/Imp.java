@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.actors.mobs.npcs;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Journal;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -79,7 +80,8 @@ public class Imp extends NPC {
 		
 		if (!Quest.given && Dungeon.visible[pos]) {
 			if (!seenBefore) {
-				yell( Utils.format( TXT_HEY, Dungeon.hero.className() ) );
+			//	yell( Utils.format( TXT_HEY, Dungeon.hero.className() ) );
+				yell( Utils.format( TXT_HEY, HeroHelp.GetHeroesClass()) );
 			}
 			seenBefore = true;
 		} else {
