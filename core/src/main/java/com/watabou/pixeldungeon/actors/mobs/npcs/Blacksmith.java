@@ -190,7 +190,7 @@ public class Blacksmith extends NPC {
 		return null;
 	}
 	
-	public static void upgrade( Item item1, Item item2 ) {
+	public static void upgrade( Item item1, Item item2, Hero  hero ) {
 		
 		Item first, second;
 		if (item2.level() > item1.level()) {
@@ -202,27 +202,27 @@ public class Blacksmith extends NPC {
 		}
 
 		Sample.INSTANCE.play( Assets.SND_EVOKE );
-		ScrollOfUpgrade.upgrade( Dungeon.hero );
-		Item.evoke( Dungeon.hero );
+		ScrollOfUpgrade.upgrade( hero );
+		Item.evoke( hero );
 
-		if (first.isEquipped( Dungeon.hero )) {
-			((EquipableItem)first).doUnequip( Dungeon.hero, true );
+		if (first.isEquipped( hero )) {
+			((EquipableItem)first).doUnequip( hero, true );
 		}
 		first.upgrade();
 		GLog.p( TXT_LOOKS_BETTER, first.name() );
-		Dungeon.hero.spendAndNext( 2f );
+		hero.spendAndNext( 2f );
 		Badges.validateItemLevelAquired( first );
 
-		if (second.isEquipped( Dungeon.hero )) {
-			((EquipableItem)second).doUnequip( Dungeon.hero, false );
+		if (second.isEquipped( hero )) {
+			((EquipableItem)second).doUnequip( hero, false );
 		}
-		second.detachAll( Dungeon.hero.belongings.backpack );
+		second.detachAll( hero.belongings.backpack );
 
 		Quest.reforged = true;
 		
 		Journal.remove( Journal.Feature.TROLL );
 	}
-	
+
 	@Override
 	public int defenseSkill( Char enemy ) {
 		return 1000;

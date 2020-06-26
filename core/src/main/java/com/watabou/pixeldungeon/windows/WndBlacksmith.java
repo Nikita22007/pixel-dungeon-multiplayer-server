@@ -54,7 +54,7 @@ public class WndBlacksmith extends Window {
 	private static final String TXT_REFORGE =
 		"Reforge them";
 	
-	public WndBlacksmith( Blacksmith troll, Hero hero ) {
+	public WndBlacksmith(Blacksmith troll, final Hero hero ) {
 		
 		super();
 		
@@ -93,7 +93,7 @@ public class WndBlacksmith extends Window {
 		btnReforge = new RedButton( TXT_REFORGE ) {
 			@Override
 			protected void onClick() {
-				Blacksmith.upgrade( btnItem1.item, btnItem2.item );
+				Blacksmith.upgrade( btnItem1.item, btnItem2.item, hero );
 				hide();
 			}
 		};
