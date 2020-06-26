@@ -39,7 +39,7 @@ public class ScrollOfEnchantment extends InventoryScroll {
 	@Override
 	protected void onItemSelected( Item item ) {
 
-		ScrollOfRemoveCurse.uncurse( Dungeon.hero, item );
+		ScrollOfRemoveCurse.uncurse( curUser, item );
 		
 		if (item instanceof Weapon) {
 			

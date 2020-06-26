@@ -136,7 +136,7 @@ public class LloydsBeacon extends Item {
 				Dungeon.level.press( returnPos, hero );
 				Dungeon.observe();
 			} else {
-				InterLevelSceneServer.returnTo(returnDepth, returnPos,  );
+				InterLevelSceneServer.returnTo(returnDepth, returnPos, hero );
 				reset();
 			}
 			
