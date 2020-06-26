@@ -112,7 +112,7 @@ public class InterLevelSceneServer {
         }
     }
 
-    private void resurrect() throws Exception {
+    public static void resurrect() throws Exception {
 
         Actor.fixTime();
 
