@@ -264,7 +264,7 @@ public class InterlevelSceneClient extends PixelScene {
 		Dungeon.saveLevel();
 		Dungeon.depth = returnDepth;
 		Level level = Dungeon.loadLevel();
-		Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( returnPos ) : returnPos );
+		Dungeon.switchLevel( level, returnPos );
 	}
 	
 	private void restore() throws Exception {
@@ -279,7 +279,7 @@ public class InterlevelSceneClient extends PixelScene {
 			Dungeon.switchLevel( Dungeon.loadLevel( StartScene.curClass ), -1 );
 		} else {
 			Level level = Dungeon.loadLevel( StartScene.curClass );
-			Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( Dungeon.hero.pos ) : Dungeon.hero.pos );
+			Dungeon.switchLevel( level,  Dungeon.hero.pos );
 		}
 	}
 	

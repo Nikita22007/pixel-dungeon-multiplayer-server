@@ -83,7 +83,7 @@ public class InterLevelSceneServer {
         Dungeon.saveLevel();
         Dungeon.depth--;
         Level level = Dungeon.loadLevel();
-        Dungeon.switchLevel( level, level.exit );
+        Dungeon.switchLevel( level, level.exit, hero );
     }
 
     public static void returnTo(int  depth, int pos, Hero  hero) throws Exception {
@@ -93,7 +93,7 @@ public class InterLevelSceneServer {
         Dungeon.saveLevel();
         Dungeon.depth = returnDepth;
         Level level = Dungeon.loadLevel();
-        Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( returnPos ) : returnPos );
+        Dungeon.switchLevel( level, returnPos ,  hero);
     }
 
     private void restore() throws Exception {
@@ -108,7 +108,7 @@ public class InterLevelSceneServer {
             Dungeon.switchLevel( Dungeon.loadLevel( StartScene.curClass ), -1 );
         } else {
             Level level = Dungeon.loadLevel( StartScene.curClass );
-            Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( Dungeon.hero.pos ) : Dungeon.hero.pos );
+            Dungeon.switchLevel( level,  Dungeon.hero.pos );
         }
     }
 
