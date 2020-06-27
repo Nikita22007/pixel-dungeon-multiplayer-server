@@ -62,7 +62,6 @@ class Codes {
     public static final int BADGE_VICTORY                 = 0x80;
     public static final int BADGE_MASTERY            = 0x81;
 
-    public static final int BADGE_MASTERY            = 0x81;
 
     //unclassed
 
