@@ -7,9 +7,4 @@ public class Settings {
 
     public static int maxPlayers;
 
-    public static enum GetXPMode{
-        everyone
-    }
-
-    public static GetXPMode getXPMode = GetXPMode.everyone;
 }

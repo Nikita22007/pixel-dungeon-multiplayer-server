@@ -591,7 +591,7 @@ public class Item implements Bundlable {
 			} );
 	}
 	
-	protected static Hero curUser = null;
+	public static Hero curUser = null;
 	protected static Item curItem = null;
 	protected static CellSelector.Listener thrower = new CellSelector.Listener() {	
 		@Override

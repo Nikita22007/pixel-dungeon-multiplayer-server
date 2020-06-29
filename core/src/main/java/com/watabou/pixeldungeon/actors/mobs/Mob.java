@@ -23,6 +23,7 @@ import java.util.Set;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Challenges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.NotImplementedException;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
@@ -46,82 +47,82 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public abstract class Mob extends Char {
-	
-	private static final String	TXT_DIED	= "You hear something died in the distance";
-	
-	protected static final String	TXT_ECHO	= "echo of ";
-	
-	protected static final String TXT_NOTICE1	= "?!";
-	protected static final String TXT_RAGE		= "#$%^";
-	protected static final String TXT_EXP		= "%+dEXP";
-	
-	public AiState SLEEPEING	= new Sleeping();
-	public AiState HUNTING		= new Hunting();
-	public AiState WANDERING	= new Wandering();
-	public AiState FLEEING		= new Fleeing();
-	public AiState PASSIVE		= new Passive();
+
+	private static final String TXT_DIED = "You hear something died in the distance";
+
+	protected static final String TXT_ECHO = "echo of ";
+
+	protected static final String TXT_NOTICE1 = "?!";
+	protected static final String TXT_RAGE = "#$%^";
+	protected static final String TXT_EXP = "%+dEXP";
+
+	public AiState SLEEPEING = new Sleeping();
+	public AiState HUNTING = new Hunting();
+	public AiState WANDERING = new Wandering();
+	public AiState FLEEING = new Fleeing();
+	public AiState PASSIVE = new Passive();
 	public AiState state = SLEEPEING;
-	
+
 	public Class<? extends CharSprite> spriteClass;
-	
+
 	protected int target = -1;
-	
+
 	protected int defenseSkill = 0;
-	
+
 	protected int EXP = 1;
 	protected int maxLvl = 30;
-	
+
 	protected Char enemy;
 	protected boolean enemySeen;
 	protected boolean alerted = false;
 
 	protected static final float TIME_TO_WAKE_UP = 1f;
-	
+
 	public boolean hostile = true;
-	
-	private static final String STATE	= "state";
-	private static final String TARGET	= "target";
-	
+
+	private static final String STATE = "state";
+	private static final String TARGET = "target";
+
 	@Override
-	public void storeInBundle( Bundle bundle ) {
-		
-		super.storeInBundle( bundle );
-		
+	public void storeInBundle(Bundle bundle) {
+
+		super.storeInBundle(bundle);
+
 		if (state == SLEEPEING) {
-			bundle.put( STATE, Sleeping.TAG );
+			bundle.put(STATE, Sleeping.TAG);
 		} else if (state == WANDERING) {
-			bundle.put( STATE, Wandering.TAG );
+			bundle.put(STATE, Wandering.TAG);
 		} else if (state == HUNTING) {
-			bundle.put( STATE, Hunting.TAG );
+			bundle.put(STATE, Hunting.TAG);
 		} else if (state == FLEEING) {
-			bundle.put( STATE, Fleeing.TAG );
+			bundle.put(STATE, Fleeing.TAG);
 		} else if (state == PASSIVE) {
-			bundle.put( STATE, Passive.TAG );
+			bundle.put(STATE, Passive.TAG);
 		}
-		bundle.put( TARGET, target );
+		bundle.put(TARGET, target);
 	}
-	
+
 	@Override
-	public void restoreFromBundle( Bundle bundle ) {
-		
-		super.restoreFromBundle( bundle );
-		
-		String state = bundle.getString( STATE );
-		if (state.equals( Sleeping.TAG )) {
+	public void restoreFromBundle(Bundle bundle) {
+
+		super.restoreFromBundle(bundle);
+
+		String state = bundle.getString(STATE);
+		if (state.equals(Sleeping.TAG)) {
 			this.state = SLEEPEING;
-		} else if (state.equals( Wandering.TAG )) {
+		} else if (state.equals(Wandering.TAG)) {
 			this.state = WANDERING;
-		} else if (state.equals( Hunting.TAG )) {
+		} else if (state.equals(Hunting.TAG)) {
 			this.state = HUNTING;
-		} else if (state.equals( Fleeing.TAG )) {
+		} else if (state.equals(Fleeing.TAG)) {
 			this.state = FLEEING;
-		} else if (state.equals( Passive.TAG )) {
+		} else if (state.equals(Passive.TAG)) {
 			this.state = PASSIVE;
 		}
 
-		target = bundle.getInt( TARGET );
+		target = bundle.getInt(TARGET);
 	}
-	
+
 	public CharSprite sprite() {
 		CharSprite sprite = null;
 		try {
@@ -130,142 +131,142 @@ public abstract class Mob extends Char {
 		}
 		return sprite;
 	}
-	
+
 	@Override
 	protected boolean act() {
-		
+
 		super.act();
-		
+
 		boolean justAlerted = alerted;
 		alerted = false;
-		
+
 		sprite.hideAlert();
-		
+
 		if (paralysed) {
 			enemySeen = false;
-			spend( TICK );
+			spend(TICK);
 			return true;
 		}
-		
+
 		enemy = chooseEnemy();
-		
-		boolean enemyInFOV = 
-			enemy != null && enemy.isAlive() && 
-			Level.fieldOfView[enemy.pos] && enemy.invisible <= 0;
-		
-		return state.act( enemyInFOV, justAlerted );
+
+		boolean enemyInFOV =
+				enemy != null && enemy.isAlive() &&
+						Level.fieldOfView[enemy.pos] && enemy.invisible <= 0;
+
+		return state.act(enemyInFOV, justAlerted);
 	}
-	
+
 	protected Char chooseEnemy() {
-		
-		if (buff( Amok.class ) != null) {
+
+		if (buff(Amok.class) != null) {
 			if (enemy instanceof Hero || enemy == null) {
-				
+
 				HashSet<Mob> enemies = new HashSet<Mob>();
-				for (Mob mob:Dungeon.level.mobs) {
+				for (Mob mob : Dungeon.level.mobs) {
 					if (mob != this && Level.fieldOfView[mob.pos]) {
-						enemies.add( mob );
+						enemies.add(mob);
 					}
 				}
 				if (enemies.size() > 0) {
-					return Random.element( enemies );
+					return Random.element(enemies);
 				}
-				
+
 			}
 		}
-		
-		Terror terror = (Terror)buff( Terror.class );
+
+		Terror terror = (Terror) buff(Terror.class);
 		if (terror != null) {
-			Char source = (Char)Actor.findById( terror.object );
+			Char source = (Char) Actor.findById(terror.object);
 			if (source != null) {
 				return source;
 			}
 		}
 
-		return enemy != null && enemy.isAlive() ? enemy : Dungeon.hero;
+		return enemy != null && enemy.isAlive() ? enemy : HeroHelp.GetRandomHero();// Dungeon.hero;
 	}
-	
-	protected boolean moveSprite( int from, int to ) {
+
+	protected boolean moveSprite(int from, int to) {
 
 		if (sprite.isVisible() && (Dungeon.visible[from] || Dungeon.visible[to])) {
-			sprite.move( from, to );
+			sprite.move(from, to);
 			return true;
 		} else {
-			sprite.place( to );
+			sprite.place(to);
 			return true;
 		}
 	}
-	
+
 	@Override
-	public void add( Buff buff ) {
-		super.add( buff );
+	public void add(Buff buff) {
+		super.add(buff);
 		if (buff instanceof Amok) {
 			if (sprite != null) {
-				sprite.showStatus( CharSprite.NEGATIVE, TXT_RAGE );
+				sprite.showStatus(CharSprite.NEGATIVE, TXT_RAGE);
 			}
 			state = HUNTING;
 		} else if (buff instanceof Terror) {
 			state = FLEEING;
 		} else if (buff instanceof Sleep) {
 			if (sprite != null) {
-				new Flare( 4, 32 ).color( 0x44ffff, true ).show( sprite, 2f ) ;
+				new Flare(4, 32).color(0x44ffff, true).show(sprite, 2f);
 			}
 			state = SLEEPEING;
-			postpone( Sleep.SWS );
+			postpone(Sleep.SWS);
 		}
 	}
-	
+
 	@Override
-	public void remove( Buff buff ) {
-		super.remove( buff );
+	public void remove(Buff buff) {
+		super.remove(buff);
 		if (buff instanceof Terror) {
-			sprite.showStatus( CharSprite.NEGATIVE, TXT_RAGE );
+			sprite.showStatus(CharSprite.NEGATIVE, TXT_RAGE);
 			state = HUNTING;
 		}
 	}
-	
-	protected boolean canAttack( Char enemy ) {
-		return Level.adjacent( pos, enemy.pos ) && !isCharmedBy( enemy );
+
+	protected boolean canAttack(Char enemy) {
+		return Level.adjacent(pos, enemy.pos) && !isCharmedBy(enemy);
 	}
-	
-	protected boolean getCloser( int target ) {
-		
+
+	protected boolean getCloser(int target) {
+
 		if (rooted) {
 			return false;
 		}
-		
-		int step = Dungeon.findPath( this, pos, target, 
-			Level.passable, 
-			Level.fieldOfView );
+
+		int step = Dungeon.findPath(this, pos, target,
+				Level.passable,
+				Level.fieldOfView);
 		if (step != -1) {
-			move( step );
+			move(step);
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	protected boolean getFurther( int target ) {
-		int step = Dungeon.flee( this, pos, target, 
-			Level.passable, 
-			Level.fieldOfView );
+
+	protected boolean getFurther(int target) {
+		int step = Dungeon.flee(this, pos, target,
+				Level.passable,
+				Level.fieldOfView);
 		if (step != -1) {
-			move( step );
+			move(step);
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	@Override
-	public void move( int step ) {
-		super.move( step );
-		
+	public void move(int step) {
+		super.move(step);
+
 		if (!flying) {
-			Dungeon.level.mobPress( this );
+			Dungeon.level.mobPress(this);
 		}
 	}
-	
+
 	protected float attackDelay() {
 		return 1f;
 	}
@@ -297,10 +298,10 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
-		if (!enemySeen && enemy instanceof Hero && ((Hero)enemy).subClass == HeroSubClass.ASSASSIN) {
-			damage += Random.Int( 1, damage );
-			Wound.hit( this );
+	public int defenseProc(Char enemy, int damage) {
+		if (!enemySeen && enemy instanceof Hero && ((Hero) enemy).subClass == HeroSubClass.ASSASSIN) {
+			damage += Random.Int(1, damage);
+			Wound.hit(this);
 		}
 		return damage;
 	}
@@ -322,66 +323,74 @@ public abstract class Mob extends Char {
 		super.damage(dmg, src);
 	}
 
-	protected void getExp() {
-		switch (Settings.getXPMode) {
-			case everyone: {
-				for (Hero hero : Dungeon.heroes) {
-					if ((hero!=null)&&(hero.isAlive())) {
+	protected void getExp(Hero hero) {
+		if ((hero != null) && (hero.isAlive())) {
 
-						if (hostile) {
-							Statistics.enemiesSlain++;
-							Badges.validateMonstersSlain();
-							Statistics.qualifiedForNoKilling = false;
+			if (hostile) {
+				Statistics.enemiesSlain++;
+				Badges.validateMonstersSlain();
+				Statistics.qualifiedForNoKilling = false;
 
-							if (Dungeon.nightMode) {
-								Statistics.nightHunt++;
-							} else {
-								Statistics.nightHunt = 0;
-							}
-							Badges.validateNightHunter();
-						}
-
-						int exp = exp();
-						if (exp > 0) {
-							hero.sprite.showStatus(CharSprite.POSITIVE, TXT_EXP, exp);
-							hero.earnExp(exp);
-						}
-					}
+				if (Dungeon.nightMode) {
+					Statistics.nightHunt++;
+				} else {
+					Statistics.nightHunt = 0;
 				}
+				Badges.validateNightHunter();
 			}
-			break;
-			default: {
-				throw new NotImplementedException();
+
+			int exp = exp(hero);
+			if (exp > 0) {
+				hero.sprite.showStatus(CharSprite.POSITIVE, TXT_EXP, exp);
+				hero.earnExp(exp);
 			}
 		}
 	}
 
 	@Override
 	public void destroy() {
-		
+
 		super.destroy();
-		
-		Dungeon.level.mobs.remove( this );
+
+		Dungeon.level.mobs.remove(this);
 
 	}
-	
-	public int exp() {
-		return Dungeon.hero.lvl <= maxLvl ? EXP : 0;
-	}
-	
-	@Override
-	public void die( Object cause ) {
-		
-		super.die( cause );
 
-		if (Dungeon.hero.lvl <= maxLvl + 2) {
+	public int exp(Hero hero) {
+		return hero.lvl <= maxLvl ? EXP : 0;
+	}
+
+	private void die(Hero hero) {
+		if (hero.lvl <= maxLvl + 2) {
 			dropLoot();
 		}
 
-		getExp();
+		getExp(hero);
 
-		if (Dungeon.hero.isAlive() && !Dungeon.visible[pos]) {	
-			GLog.i( TXT_DIED );
+		if (hero.isAlive() && !Dungeon.visible[pos]) {
+			GLog.i(TXT_DIED);
+		}
+	}
+
+		@Override
+	public void die (Object cause ) {
+		super.die(cause);
+		if (cause==null){return;}
+
+		if (cause instanceof Hero) {
+			die ((Hero) cause);
+		} else {
+			if (cause instanceof  Item)
+			{
+				if ((((Item) cause).curUser !=null))
+				{
+					die(((Item) cause).curUser);
+				}
+			}
+			else
+			{
+
+			}
 		}
 	}
 	
