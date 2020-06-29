@@ -18,10 +18,13 @@
 package com.watabou.pixeldungeon.actors.mobs;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Challenges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.NotImplementedException;
+import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -266,33 +269,33 @@ public abstract class Mob extends Char {
 	protected float attackDelay() {
 		return 1f;
 	}
-	
-	protected boolean doAttack( Char enemy ) {
-		
+
+	protected boolean doAttack(Char enemy) {
+
 		boolean visible = Dungeon.visible[pos];
-		
+
 		if (visible) {
-			sprite.attack( enemy.pos );
+			sprite.attack(enemy.pos);
 		} else {
-			attack( enemy );
+			attack(enemy);
 		}
-				
-		spend( attackDelay() );
-		
+
+		spend(attackDelay());
+
 		return !visible;
 	}
-	
+
 	@Override
 	public void onAttackComplete() {
-		attack( enemy );
+		attack(enemy);
 		super.onAttackComplete();
 	}
-	
+
 	@Override
-	public int defenseSkill( Char enemy ) {
+	public int defenseSkill(Char enemy) {
 		return enemySeen && !paralysed ? defenseSkill : 0;
 	}
-	
+
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
 		if (!enemySeen && enemy instanceof Hero && ((Hero)enemy).subClass == HeroSubClass.ASSASSIN) {
@@ -301,47 +304,58 @@ public abstract class Mob extends Char {
 		}
 		return damage;
 	}
-	
-	public void aggro( Char ch ) {
+
+	public void aggro(Char ch) {
 		enemy = ch;
 	}
-	
-	@Override
-	public void damage( int dmg, Object src ) {
 
-		Terror.recover( this );
-		
+	@Override
+	public void damage(int dmg, Object src) {
+
+		Terror.recover(this);
+
 		if (state == SLEEPEING) {
 			state = WANDERING;
 		}
 		alerted = true;
-		
-		super.damage( dmg, src );
+
+		super.damage(dmg, src);
 	}
-	
-	protected  void getExp(){
-		if (Dungeon.hero.isAlive()) {
 
-			if (hostile) {
-				Statistics.enemiesSlain++;
-				Badges.validateMonstersSlain();
-				Statistics.qualifiedForNoKilling = false;
+	protected void getExp() {
+		switch (Settings.getXPMode) {
+			case everyone: {
+				for (Hero hero : Dungeon.heroes) {
+					if ((hero!=null)&&(hero.isAlive())) {
 
-				if (Dungeon.nightMode) {
-					Statistics.nightHunt++;
-				} else {
-					Statistics.nightHunt = 0;
+						if (hostile) {
+							Statistics.enemiesSlain++;
+							Badges.validateMonstersSlain();
+							Statistics.qualifiedForNoKilling = false;
+
+							if (Dungeon.nightMode) {
+								Statistics.nightHunt++;
+							} else {
+								Statistics.nightHunt = 0;
+							}
+							Badges.validateNightHunter();
+						}
+
+						int exp = exp();
+						if (exp > 0) {
+							hero.sprite.showStatus(CharSprite.POSITIVE, TXT_EXP, exp);
+							hero.earnExp(exp);
+						}
+					}
 				}
-				Badges.validateNightHunter();
 			}
-
-			int exp = exp();
-			if (exp > 0) {
-				Dungeon.hero.sprite.showStatus( CharSprite.POSITIVE, TXT_EXP, exp );
-				Dungeon.hero.earnExp( exp );
+			break;
+			default: {
+				throw new NotImplementedException();
 			}
 		}
 	}
+
 	@Override
 	public void destroy() {
 		
