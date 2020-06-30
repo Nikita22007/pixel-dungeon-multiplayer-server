@@ -272,7 +272,7 @@ public class Wandmaker extends NPC {
 				
 				Item item = checkItem(hero);
 				if (item != null) {
-					GameScene.show( new WndWandmaker( wandmaker, item ) );
+					GameScene.show( new WndWandmaker( wandmaker, item, hero  ) );
 				} else {
 					wandmaker.tell( txtQuest2, hero.className() );
 				}

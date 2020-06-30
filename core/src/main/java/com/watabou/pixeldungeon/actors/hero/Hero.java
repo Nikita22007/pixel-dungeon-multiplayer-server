@@ -534,7 +534,7 @@ public class Hero extends Char {
 			
 			Heap heap = Dungeon.level.heaps.get( dst );
 			if (heap != null && heap.type == Type.FOR_SALE && heap.size() == 1) {
-				GameScene.show( new WndTradeItem( heap, true ) );
+				GameScene.show( new WndTradeItem( heap, true, this ) );
 			}
 			
 			return false;

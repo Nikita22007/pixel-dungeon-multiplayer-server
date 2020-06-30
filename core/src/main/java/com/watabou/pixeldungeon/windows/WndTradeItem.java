@@ -112,7 +112,7 @@ public class WndTradeItem extends Window {
 		resize( WIDTH, (int)btnCancel.bottom() );
 	}
 	
-	public WndTradeItem( final Heap heap, boolean canBuy ) {
+	public WndTradeItem( final Heap heap, boolean canBuy, Hero hero ) {
 		
 		super();
 		
@@ -132,7 +132,7 @@ public class WndTradeItem extends Window {
 				}
 			};
 			btnBuy.setRect( 0, pos + GAP, WIDTH, BTN_HEIGHT );
-			btnBuy.enable( price <= Dungeon.hero.gold );
+			btnBuy.enable( price <= hero.gold );
 			add( btnBuy );
 			
 			RedButton btnCancel = new RedButton( TXT_CANCEL ) {

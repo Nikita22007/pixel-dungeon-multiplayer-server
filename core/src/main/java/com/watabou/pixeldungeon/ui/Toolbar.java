@@ -175,7 +175,7 @@ public class Toolbar extends Component {
 		instance.layout();
 	}
 	
-	private static CellSelector.Listener informer = new CellSelector.Listener() {
+	private static CellSelector.Listener informer = new CellSelector.Listener() {//it  is  Info cell listener. It is not neede to  Server
 		@Override
 		public void onSelect( Integer cell ) {
 			

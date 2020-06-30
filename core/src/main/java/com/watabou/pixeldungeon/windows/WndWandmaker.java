@@ -38,10 +38,10 @@ public class WndWandmaker extends WndQuest {
 	private Item questItem;
 	
 	
-	public WndWandmaker( final Wandmaker wandmaker, final Item item ) {
+	public WndWandmaker( final Wandmaker wandmaker, final Item item, Hero hero ) {
 		
 		super( wandmaker, TXT_MESSAGE, TXT_BATTLE, TXT_NON_BATTLE );
-		
+		ownerHero=hero;
 		this.wandmaker = wandmaker;
 		questItem = item;
 	}
@@ -49,17 +49,17 @@ public class WndWandmaker extends WndQuest {
 	@Override
 	protected void onSelect( int index ) {
 
-		questItem.detach( Dungeon.hero.belongings.backpack );
+		questItem.detach( ownerHero.belongings.backpack );
 		
 		Item reward = index == 0 ? Wandmaker.Quest.wand1 : Wandmaker.Quest.wand2;
 		reward.identify();
-		if (reward.doPickUp( Dungeon.hero )) {
+		if (reward.doPickUp( ownerHero )) {
 			GLog.i( Hero.TXT_YOU_NOW_HAVE, reward.name() );
 		} else {
 			Dungeon.level.drop( reward, wandmaker.pos ).sprite.drop();
 		}
 		
-		wandmaker.yell( Utils.format( TXT_FARAWELL, Dungeon.hero.className() ) );
+		wandmaker.yell( Utils.format( TXT_FARAWELL,ownerHero.className() ) );
 		wandmaker.destroy();
 		
 		wandmaker.sprite.die();
