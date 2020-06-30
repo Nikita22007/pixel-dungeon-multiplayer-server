@@ -31,7 +31,8 @@ public class AttackIndicator extends Tag {
 	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
-	
+	public static final int COLOR	= 0xFF4C4C;
+
 	private static AttackIndicator instance;
 	
 	private CharSprite sprite = null;
@@ -40,7 +41,7 @@ public class AttackIndicator extends Tag {
 	private ArrayList<Mob> candidates = new ArrayList<Mob>();
 	
 	public AttackIndicator() {
-		super( DangerIndicator.COLOR );
+		super( COLOR );
 		
 		instance = this;
 		

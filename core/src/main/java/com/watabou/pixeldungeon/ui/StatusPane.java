@@ -56,9 +56,7 @@ public class StatusPane extends Component {    //remove when server is not clien
 	private BitmapText level;
 	private BitmapText depth;
 	private BitmapText keys;
-	
-	private DangerIndicator danger;
-	private LootIndicator loot;
+
 	private ResumeButton resume;
 	private BuffIndicator buffs;
 	private Compass compass;
@@ -116,13 +114,7 @@ public class StatusPane extends Component {    //remove when server is not clien
 		keys = new BitmapText( PixelScene.font1x );
 		keys.hardlight( 0xCACFC2 );
 		add( keys );
-		
-		danger = new DangerIndicator();
-		add( danger );
-		
-		loot = new LootIndicator();
-		add( loot );
-		
+
 		resume = new ResumeButton();
 		add( resume );
 		
@@ -162,33 +154,18 @@ public class StatusPane extends Component {    //remove when server is not clien
 		
 		float pos = 18;
 		
-		if (tagDanger) {
-			danger.setPos( width - danger.width(), pos );
-			pos = danger.bottom() + 1;
-		}
-		
-		if (tagLoot) {
-			loot.setPos( width - loot.width(), pos );
-			pos = loot.bottom() + 1;
-		}
-		
 		if (tagResume) {
 			resume.setPos( width - resume.width(), pos );
 		}
 	}
-	
-	private boolean tagDanger	= false;
-	private boolean tagLoot		= false;
+
 	private boolean tagResume	= false;
 	
 	@Override
 	public void update() {
 		super.update();
 		
-		if (tagDanger != danger.visible || tagLoot != loot.visible || tagResume != resume.visible) {
-			
-			tagDanger = danger.visible;
-			tagLoot = loot.visible;
+		if ( tagResume != resume.visible) {
 			tagResume = resume.visible;
 			
 			layoutTags();
