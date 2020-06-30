@@ -26,8 +26,12 @@ class Codes {
     public static final int IL_RETURN     = 0x24;   //server->client
     public static final int IL_RESURRECT  = 0x25;   //server->client
     public static final int IL_OTHER      = 0x26;   //server->client //text:string
-    public static final int IL_FADE_OUT   = 0x26;   //server->client //when IL loading finished
+    public static final int IL_FADE_OUT   = 0x27;   //server->client //when IL loading finished
 
+	public static final int SHOW_WINDOW   = 0.30; //server->client ; Int:window_ID;
+	public static final int WINDOW_BUTTON_PRESSED = 0.31 //client-> server; Int:window_ID; int: button_id
+	public static final int SHOW_CUSTOM_WINDOW; //server->client; customWindowParams is  udefined now
+	
     //Hero block 0x40-0X5F
     public static final int HERO_CLASS    = 0x40;   //0 = random;  1 = warrior; 2=mage; 3=rouge; 4=huntress; other=error+random //client->server
     public static final int HERO_SUBCLASS = 0x41;   //???
