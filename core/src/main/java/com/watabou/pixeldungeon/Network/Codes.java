@@ -28,9 +28,44 @@ class Codes {
     public static final int IL_OTHER      = 0x26;   //server->client //text:string
     public static final int IL_FADE_OUT   = 0x27;   //server->client //when IL loading finished
 
-	public static final int SHOW_WINDOW   = 0.30; //server->client ; Int:window_ID;
-	public static final int WINDOW_BUTTON_PRESSED = 0.31 //client-> server; Int:window_ID; int: button_id
-	public static final int SHOW_CUSTOM_WINDOW; //server->client; customWindowParams is  udefined now
+	public static final int SHOW_WINDOW   = 0x30; //server->client ; Int:window_ID;
+	public static final int WINDOW_BUTTON_PRESSED = 0x31; //client-> server; Int:window_ID; int: button_id
+	public static final int SHOW_CUSTOM_WINDOW  =  0x32; //server->client; customWindowParams is  udefined now
+	/*
+	WINDOW ID: (if -1 then client-only window)
+	WndBadge: 		-1
+	WndBag:			-1
+	WndCatalogus:	-1
+	WndChallenges: 	-1
+	WndClass
+	WndGame
+	WndHero
+	WndInfoCell
+	WndInfoItem
+	WndInfoMob
+	WndInfoPlant
+	WndItem
+	WndJournal
+	WndRanking
+	WndSettings
+	
+	//WndTabbed
+	//WndTitledMessage
+	
+	WndBlacksmith: 	1
+	WndChooseWay	2
+	WndError		3
+	WndImp			4
+	WndMessage		5
+	WndQuest		6
+	WndResurrect	7
+	WndSadGhost		8
+	WndStory		9
+	WndTradeItem	10
+	WndWandmaker	11
+	*/
+	
+	public static final int CHOOSE_ITEM  =  0x35; // server->client:asc;//param: het Item mode //client->server:result;//param:item;
 	
     //Hero block 0x40-0X5F
     public static final int HERO_CLASS    = 0x40;   //0 = random;  1 = warrior; 2=mage; 3=rouge; 4=huntress; other=error+random //client->server
