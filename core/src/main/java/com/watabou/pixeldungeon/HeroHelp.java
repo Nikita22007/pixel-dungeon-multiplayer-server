@@ -2,14 +2,34 @@ package com.watabou.pixeldungeon;
 
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.utils.Utils;
+import com.watabou.utils.PathFinder;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
 import static com.watabou.pixeldungeon.Dungeon.heroes;
+import static com.watabou.pixeldungeon.Dungeon.level;
 
 public class HeroHelp {
+    public static Hero GetNearestHero(int pos, int radius)
+    {
+        int pathLength=Integer.MAX_VALUE;
+        Hero nearestHero=null;
+        PathFinder.buildDistanceMap(pos,level.passable.clone(),radius);
+
+        for (Hero hero:heroes) {
+            if (hero!=null && hero.isAlive())
+            {
+                if (PathFinder.distance[hero.pos]<pathLength)
+                {
+                    pathLength=PathFinder.distance[hero.pos];
+                    nearestHero=hero;
+                }
+            }
+        }
+        return nearestHero;
+    }
     public static int HeroCount(){
         int count=0;
         for (int i=0;i<Settings.maxPlayers;i++){

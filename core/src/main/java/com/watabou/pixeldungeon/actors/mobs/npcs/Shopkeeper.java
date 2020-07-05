@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.actors.mobs.npcs;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
@@ -30,6 +31,7 @@ import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.pixeldungeon.windows.WndTradeItem;
 
 public class Shopkeeper extends NPC {
+	private static final int MAX_HERO_PATH_LENGTH = 14;
 
 	{
 		name = "shopkeeper";
@@ -40,8 +42,11 @@ public class Shopkeeper extends NPC {
 	protected boolean act() {
 		
 		throwItem();
-		
-		sprite.turnTo( pos, Dungeon.hero.pos );
+		Hero nearestHero;
+		nearestHero=HeroHelp.GetNearestHero(pos,MAX_HERO_PATH_LENGTH);
+		if (nearestHero!=null) {
+			sprite.turnTo(pos, nearestHero.pos);
+		}
 		spend( TICK );
 		return true;
 	}

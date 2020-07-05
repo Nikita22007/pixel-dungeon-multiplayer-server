@@ -249,9 +249,10 @@ public class Dungeon {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
 	
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
+
 	public static void switchLevel( final Level level, int pos, Hero hero ) {
-		
+		//todo rewrite
 		nightMode = new Date().getHours() < 7;
 		
 		Dungeon.level = level;
