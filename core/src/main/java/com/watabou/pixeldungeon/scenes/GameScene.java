@@ -237,7 +237,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		busy.y = sb.bottom() + 1;
 		add( busy );
 		
-		switch (InterlevelScene.mode) {
+		switch (InterlevelScene.mode) {   //TODO move it to  InterlevelSceneServer
 		case RESURRECT:
 			WandOfBlink.appear( Dungeon.hero, Dungeon.level.entrance );
 			new Flare( 8, 32 ).color( 0xFFFF66, true ).show( hero, 2f ) ;

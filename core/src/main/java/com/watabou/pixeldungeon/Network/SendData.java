@@ -61,7 +61,7 @@ public class SendData {
             clients[ID].send(Codes.IL_ASCEND);
         }
     }
-    public static void sendInterLevelSceneDescendFall(int ID){
+    public static void sendInterLevelSceneFall(int ID){
         if (clients[ID] != null) {
             clients[ID].send(Codes.IL_FALL);
         }
@@ -81,9 +81,9 @@ public class SendData {
             clients[ID].send(Codes.IL_OTHER, data);
        }
     }
-    public static void sendInterLevelSceneFadeOut(int ID,String data) {
+    public static void sendInterLevelSceneFadeOut(int ID) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_FADE_OUT, data);
+            clients[ID].send(Codes.IL_FADE_OUT);
         }
     }
 }

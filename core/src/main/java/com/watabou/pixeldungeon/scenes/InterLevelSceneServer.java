@@ -34,6 +34,7 @@ public class InterLevelSceneServer {
     public static boolean fallIntoPit;
 
     public static void descend(Hero hero) throws Exception {// спуск
+
         for (int i=0;i<Dungeon.heroes.length;i++) {
             SendData.sendInterLevelSceneDescend(i);
         }
@@ -54,18 +55,29 @@ public class InterLevelSceneServer {
         Level level;
         level=getNextLevel();
         Dungeon.switchLevel( level, level.entrance, hero );
+
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFadeOut(i);
+        }
     }
     public static  void  fall(Hero  hero)throws Exception {
      fall(hero,false);
     }
     public static void fall(Hero hero, boolean fallIntoPit) throws Exception {
 
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFall(i);
+        }
         Actor.fixTime();
         Dungeon.saveLevel();
 
         Level level;
         level=getNextLevel();
         Dungeon.switchLevel( level, fallIntoPit ? level.pitCell() : level.randomRespawnCell(),hero );
+
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFadeOut(i);
+        }
     }
     private static Level getNextLevel()throws Exception {
 
@@ -78,15 +90,26 @@ public class InterLevelSceneServer {
     };
 
     public static void ascend(Hero hero) throws Exception {
+
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneAscend(i);
+        }
         Actor.fixTime();
 
         Dungeon.saveLevel();
         Dungeon.depth--;
         Level level = Dungeon.loadLevel();
         Dungeon.switchLevel( level, level.exit, hero );
+
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFadeOut(i);
+        }
     }
 
     public static void returnTo(int  depth, int pos, Hero  hero) throws Exception {
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneReturn(i);
+        }
 
         Actor.fixTime();
 
@@ -94,6 +117,9 @@ public class InterLevelSceneServer {
         Dungeon.depth = returnDepth;
         Level level = Dungeon.loadLevel();
         Dungeon.switchLevel( level, returnPos ,  hero);
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFadeOut(i);
+        }
     }
 
     private void restore() throws Exception {
@@ -112,8 +138,11 @@ public class InterLevelSceneServer {
         }
     }
 
-    public static void resurrect() throws Exception {
+    public static void resurrect(Hero hero) throws Exception {
 
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneResurrect(i);
+        }
         Actor.fixTime();
 
         if (Dungeon.bossLevel(Dungeon.depth)) {
@@ -126,9 +155,12 @@ public class InterLevelSceneServer {
          //   Dungeon.resetLevel();
         }
 
-        int pos = Dungeon.level.getSpawnCell(hero);
+        int pos = Dungeon.level.getSpawnCell();
         if (pos!=-1){
-            WandOfBlink.appear(hero);
+            WandOfBlink.appear(hero,pos);
+        }
+        for (int i=0;i<Dungeon.heroes.length;i++) {
+            SendData.sendInterLevelSceneFadeOut(i);
         }
     }
 

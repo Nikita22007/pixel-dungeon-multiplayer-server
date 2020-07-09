@@ -67,7 +67,7 @@ public class WndResurrect extends Window {
 				hide();
 				
 				Statistics.ankhsUsed++;
-				InterLevelSceneServer.resurrect();
+				InterLevelSceneServer.resurrect(hero);
 			}
 		};
 		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );
