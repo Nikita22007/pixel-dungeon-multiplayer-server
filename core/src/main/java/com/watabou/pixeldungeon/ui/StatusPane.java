@@ -57,7 +57,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 	private BitmapText depth;
 	private BitmapText keys;
 
-	private ResumeButton resume;
 	private BuffIndicator buffs;
 	private Compass compass;
 	
@@ -115,9 +114,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 		keys.hardlight( 0xCACFC2 );
 		add( keys );
 
-		resume = new ResumeButton();
-		add( resume );
-		
 		buffs = new BuffIndicator( Dungeon.heroes[0] );
 		add( buffs );
 	}
@@ -142,35 +138,16 @@ public class StatusPane extends Component {    //remove when server is not clien
 		depth.y = 6;
 		
 		keys.y = 6;
-		
-		layoutTags();
-		
+
 		buffs.setPos( 32, 11 );
 		
 		btnMenu.setPos( width - btnMenu.width(), 1 );
 	}
-	
-	private void layoutTags() {
-		
-		float pos = 18;
-		
-		if (tagResume) {
-			resume.setPos( width - resume.width(), pos );
-		}
-	}
 
-	private boolean tagResume	= false;
-	
 	@Override
 	public void update() {
 		super.update();
-		
-		if ( tagResume != resume.visible) {
-			tagResume = resume.visible;
-			
-			layoutTags();
-		}
-		
+
 		float health = (float)Dungeon.heroes[0].HP / Dungeon.heroes[0].HT;
 		
 		if (health == 0) {

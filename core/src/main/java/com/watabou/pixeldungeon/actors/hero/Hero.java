@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Bones;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.GamesInProgress;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -108,6 +109,8 @@ import com.watabou.pixeldungeon.windows.WndResurrect;
 import com.watabou.pixeldungeon.windows.WndTradeItem;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import static com.watabou.pixeldungeon.Network.SendData.sendResumeButtonVisible;
 
 public class Hero extends Char {
 	
@@ -475,14 +478,18 @@ public class Hero extends Char {
 	public void interrupt() {
 		if (isAlive() && curAction != null && curAction.dst != pos) {
 			lastAction = curAction;
+			sendResumeButtonVisible(HeroHelp.getHeroID(this), true);
 		}
 		curAction = null;
 	}
 	
 	public void resume() {
-		curAction = lastAction;
-		lastAction = null;
-		act();
+		if (isAlive() /*&& curAction==null && lastAction != null*/ ) {
+			curAction = lastAction;
+			lastAction = null;
+			act();
+		}
+		sendResumeButtonVisible(HeroHelp.getHeroID(this), false);
 	}
 	
 	private boolean actMove( HeroAction.Move action ) {

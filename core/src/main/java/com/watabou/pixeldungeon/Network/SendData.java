@@ -28,6 +28,11 @@ public class SendData {
     public static void sendAllBossSlain(){
         ClientThread.sendAll(Codes.BOSS_SLAIN);
     }
+    public static void sendResumeButtonVisible(int ID, boolean visible) {
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.RESUME_BUTTON, visible);
+        }
+    }
 
     //---------------------------Badges
     //public static void sendBadge
