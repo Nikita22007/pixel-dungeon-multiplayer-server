@@ -85,9 +85,8 @@ public class Chasm {
 		}
 	}
 	
-	public static void heroLand() {
-		
-		Hero hero = Dungeon.hero;
+	public static void heroLand(@org.jetbrains.annotations.NotNull Hero hero) {
+
 		
 		hero.sprite.burst( hero.sprite.blood(), 10 );
 		Camera.main.shake( 4, 0.2f );

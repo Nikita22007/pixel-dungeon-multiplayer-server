@@ -218,15 +218,17 @@ public abstract class Level implements Bundlable {
 		}
 		createMobs();
 	}
-
-		public int getSpawnCell(){
-		if (Actor.findChar( entrance ) == null){
-			return entrance;
+	public int getSpawnCell(){
+		return getNearClearCell(entrance);
+	}
+	public static int getNearClearCell(int startPos){
+		if (Actor.findChar( startPos ) == null){
+			return startPos;
 		}
 		//need to create random circle
 		else for (int i:NEIGHBOURS8) {
-			if ((Actor.findChar( entrance+i ) == null)&&(passable[entrance+i])){
-				return entrance+i;
+			if ((Actor.findChar( startPos+i ) == null)&&(passable[startPos+i])){
+				return startPos+i;
 			}
 		}
 

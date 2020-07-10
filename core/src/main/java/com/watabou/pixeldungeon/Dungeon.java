@@ -251,8 +251,14 @@ public class Dungeon {
 	
 	//@SuppressWarnings("deprecation")
 
+	public  static void GetPosNear(int pos)
+	{
+
+	}
+
 	public static void switchLevel( final Level level, int pos, Hero hero ) {
 		//todo rewrite
+		//todo add cheking Hero pos is  clear
 		nightMode = new Date().getHours() < 7;
 		
 		Dungeon.level = level;
@@ -263,8 +269,8 @@ public class Dungeon {
 			Actor.add( level.respawner() );
 		}
 		
-		hero.pos = pos != -1 ? pos : level.exit;
-		
+		hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
+
 		Light light = hero.buff( Light.class );
 		hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
 		

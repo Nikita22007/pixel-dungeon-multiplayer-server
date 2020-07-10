@@ -19,4 +19,5 @@ android {
 
 dependencies {
     implementation project(':PD-classes')
+    implementation 'org.jetbrains:annotations-java5:15.0'
 }

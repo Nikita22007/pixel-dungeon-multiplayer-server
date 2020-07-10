@@ -99,8 +99,9 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private BusyIndicator busy;
 	
 	private static CellSelector cellSelector;
-	
-	private Group terrain;
+
+	//graphics
+	private Group terrain = new Group();
 	private Group ripples;
 	private Group plants;
 	private Group heaps;
@@ -127,8 +128,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		scene = this;
 
-		//graphics
-		terrain = new Group();
 		add( terrain );
 		
 		water = new SkinnedBlock( 
@@ -245,31 +244,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		case RETURN:
 			WandOfBlink.appear(  Dungeon.hero, Dungeon.hero.pos );
 			break;
-		case FALL:
-			Chasm.heroLand();
-			break;
-		case DESCEND:
-			switch (Dungeon.depth) {
-			case 1:
-				WndStory.showChapter( WndStory.ID_SEWERS );
-				break;
-			case 6:
-				WndStory.showChapter( WndStory.ID_PRISON );
-				break;
-			case 11:
-				WndStory.showChapter( WndStory.ID_CAVES );
-				break;
-			case 16:
-				WndStory.showChapter( WndStory.ID_METROPOLIS );
-				break;
-			case 22:
-				WndStory.showChapter( WndStory.ID_HALLS );
-				break;
-			}
-			if (Dungeon.hero.isAlive() && Dungeon.depth != 22) {
-				Badges.validateNoKilling();
-			}
-			break;
 		default:
 		}
 		
@@ -289,38 +263,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 		
 		Camera.main.target = hero;
-
-		if (InterlevelScene.mode != InterlevelScene.Mode.NONE) {
-			if (Dungeon.depth < Statistics.deepestFloor) {
-				GLog.h( TXT_WELCOME_BACK, Dungeon.depth );
-			} else {
-				GLog.h( TXT_WELCOME, Dungeon.depth );
-				Sample.INSTANCE.play( Assets.SND_DESCEND );
-			}
-			switch (Dungeon.level.feeling) {
-				case CHASM:
-					GLog.w( TXT_CHASM );
-					break;
-				case WATER:
-					GLog.w( TXT_WATER );
-					break;
-				case GRASS:
-					GLog.w( TXT_GRASS );
-					break;
-				default:
-			}
-			if (Dungeon.level instanceof RegularLevel &&
-					((RegularLevel) Dungeon.level).secretDoors > Random.IntRange( 3, 4 )) {
-				GLog.w( TXT_SECRETS );
-			}
-			if (Dungeon.nightMode && !Dungeon.bossLevel(Dungeon.depth)) {
-				GLog.w( TXT_NIGHT_MODE );
-			}
-
-			InterlevelScene.mode = InterlevelScene.Mode.NONE;
-
-			fadeIn();
-		}
 	}
 	
 	public void destroy() {

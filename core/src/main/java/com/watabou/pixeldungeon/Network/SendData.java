@@ -1,6 +1,7 @@
 package com.watabou.pixeldungeon.Network;
 
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.windows.WndStory;
 
 import static com.watabou.pixeldungeon.Network.Server.clients;  //I'm too lazy to write "Server.clients". Never do as I do.
 
@@ -85,5 +86,15 @@ public class SendData {
         if (clients[ID] != null) {
             clients[ID].send(Codes.IL_FADE_OUT);
         }
+    }
+
+    //-----------------------------Windows
+    public static void sendWindow(int ID, int WindowID) {
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.SHOW_WINDOW, WindowID);
+        }
+    }
+    public static void sendWindowStory(int storyID) {
+        ClientThread.sendAll(Codes.SHOW_WINDOW, WndStory.ID());
     }
 }
