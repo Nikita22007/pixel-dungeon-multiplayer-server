@@ -1,6 +1,18 @@
-This repository contains the original Pixel Dungeon code, adapted to work with modern Android build tools. The original codebase for the game uses the outdated ANT build system, this codebase uses Gradle but is otherwise functionally identical.
+# About this repository
+This repository contains Pixel Dungeon code modified to multiplayer game. This codebase uses Gradle.
 
-Look below for compilation instructions
+### **If you don't see commits in the Master branch it doesn't mean that the project is dead!**
+
+Pixel Dungeon was split into a server and a client. You can see their commits in the branches with the corresponding names. 
+
+Now we have this branches:
+1. **_master_**: this   branch only for Readme.md and etc
+2. **_Client_**: that's easy - it is client branch
+3. **_Server_**: that's easy - it is server branch
+4. **_NetworkCodes_**: this branch including only one file: codes.java. Еhis file contains codes that indicate various events. If you change this branch, you must merge it with the server and client before building it to avoid conflicts. After the release of a more or less workable version, try not to change the already installed codes.
+5. **_NetworkUpdate_**: This branch contains the main work on creating the server before creating the base (compilable) version. Please don't ask why it's called that. It just happened.
+
+Copyrite will be updated after creating base build.
 
 # Pixel Dungeon
 
@@ -11,6 +23,9 @@ https://play.google.com/store/apps/details?id=com.watabou.pixeldungeon
 
 Original Pixel Dungeon Source Code:
 https://GitHub.com/watabou/pixel-dungeon
+
+Pixel Dungeon Source Code  with Gradle:
+https://github.com/00-Evan/pixel-dungeon-gradle
 
 Official web-site:
 http://pixeldungeon.watabou.ru/
