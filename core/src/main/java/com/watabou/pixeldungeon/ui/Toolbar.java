@@ -96,7 +96,6 @@ public class Toolbar extends Component {
 		} );
 		
 		add( btnInventory = new Tool( 60, 7, 23, 25 ) {
-			private GoldIndicator gold;
 			@Override
 			protected void onClick() {
 				GameScene.show( new WndBag( Dungeon.hero.belongings.backpack, null, WndBag.Mode.ALL, null ) );
@@ -108,13 +107,10 @@ public class Toolbar extends Component {
 			@Override
 			protected void createChildren() {
 				super.createChildren();
-				gold = new GoldIndicator();
-				add( gold );
 			};
 			@Override
 			protected void layout() {
 				super.layout();
-				gold.fill( this );
 			};
 		} );
 		
