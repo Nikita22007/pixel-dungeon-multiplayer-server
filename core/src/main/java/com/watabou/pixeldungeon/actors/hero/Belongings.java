@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.KindOfWeapon;
 import com.watabou.pixeldungeon.items.armor.Armor;
@@ -32,6 +33,8 @@ import com.watabou.pixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import static com.watabou.pixeldungeon.Network.SendData.sendIronKeysCount;
 
 public class Belongings implements Iterable<Item> {
 
@@ -127,6 +130,7 @@ public class Belongings implements Iterable<Item> {
 				IronKeyCount_visual ++;
 			}
 		}
+		sendIronKeysCount(HeroHelp.getHeroID(owner),IronKeyCount_visual);
 	}
 	
 	public void identify() {

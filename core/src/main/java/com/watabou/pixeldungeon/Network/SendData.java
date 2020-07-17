@@ -34,6 +34,13 @@ public class SendData {
         }
     }
 
+    public static void sendIronKeysCount(int ID, int count)
+    {
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.IRON_KEYS_COUNT,count);
+        }
+    }
+
     //---------------------------Badges
     //public static void sendBadge
     public static void sendBadgeLevelReached(int ID, int bLevel){//bLevel=BadgeLevel
