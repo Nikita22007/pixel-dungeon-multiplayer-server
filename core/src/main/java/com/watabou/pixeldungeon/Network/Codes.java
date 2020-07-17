@@ -28,7 +28,10 @@ class Codes {
     public static final int IL_OTHER      = 0x26;   //server->client //text:string
     public static final int IL_FADE_OUT   = 0x27;   //server->client //when IL loading finished
 
-	public static final int SHOW_WINDOW   = 0x30; //server->client ; Int:window_ID;
+    public static final int START_STORY   = 0x28;   //server-> client //story: string //this is text what player see before start  game //
+    public static final int IRON_KEYS_COUNT = 0x29; //server-> client // This is cound of iron keys of  this depth
+
+    public static final int SHOW_WINDOW   = 0x30; //server->client ; Int:window_ID;
 	public static final int WINDOW_BUTTON_PRESSED = 0x31; //client-> server; Int:window_ID; int: button_id
 	public static final int SHOW_CUSTOM_WINDOW  =  0x32; //server->client; customWindowParams is  udefined now
 	/*
