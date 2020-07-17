@@ -224,7 +224,7 @@ public class Item implements Bundlable {
 			
 			try { 
 				Item detached = getClass().newInstance();
-				detached.onDetach( );
+				detached.onDetach( container);
 				return detached;
 			} catch (Exception e) {
 				return null;
@@ -237,7 +237,7 @@ public class Item implements Bundlable {
 		for (Item item : container.items) {
 			if (item == this) {
 				container.items.remove( this );
-				item.onDetach( );
+				item.onDetach(container );
 				QuickSlot.refresh();
 				return this;
 			} else if (item instanceof Bag) {
@@ -251,9 +251,13 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	protected void onDetach( ) {
+	protected void onDetach( Bag container) {
+		onDetach();
 	}
-	
+
+	protected void onDetach() {
+
+	}
 	public int level() {
 		return level;
 	}

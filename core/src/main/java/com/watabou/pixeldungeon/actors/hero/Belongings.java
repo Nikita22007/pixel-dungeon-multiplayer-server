@@ -45,7 +45,7 @@ public class Belongings implements Iterable<Item> {
 	public Armor armor = null;
 	public Ring ring1 = null;
 	public Ring ring2 = null;
-	
+	public int IronKeyCount_visual = 0; //this is count keys of  this depth. This  is "IronKey.curDepthQuantity"
 	public Belongings( Hero owner ) {
 		this.owner = owner;
 		
@@ -119,12 +119,12 @@ public class Belongings implements Iterable<Item> {
 	}
 	
 	public void countIronKeys() {
-		
-		IronKey.curDepthQuantity = 0;
+
+		IronKeyCount_visual  = 0;
 		
 		for (Item item : backpack) {
 			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				IronKey.curDepthQuantity++;
+				IronKeyCount_visual ++;
 			}
 		}
 	}

@@ -23,6 +23,7 @@ import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 
+/* it is a small window, what tell you current listener. "choose cell to throw" or  "choose cell to zap" etc */
 public class Toast extends Component {
 
 	private static final float MARGIN_HOR	= 2;

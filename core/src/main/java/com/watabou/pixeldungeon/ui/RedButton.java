@@ -26,6 +26,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 
+// red buton with white  text what  used in windows
 public class RedButton extends Button {
 	
 	protected NinePatch bg;
