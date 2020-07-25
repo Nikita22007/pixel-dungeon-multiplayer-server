@@ -37,7 +37,6 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.windows.WndGame;
-import com.watabou.pixeldungeon.windows.WndHero;
 
 public class StatusPane extends Component {    //remove when server is not client
 	
@@ -75,7 +74,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 				if (!sprite.isVisible()) {
 					Camera.main.focusOn( sprite );
 				}
-				GameScene.show( new WndHero() );
 			};			
 		} );
 		

@@ -35,7 +35,6 @@ import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.windows.WndCatalogus;
-import com.watabou.pixeldungeon.windows.WndHero;
 import com.watabou.pixeldungeon.windows.WndInfoCell;
 import com.watabou.pixeldungeon.windows.WndInfoItem;
 import com.watabou.pixeldungeon.windows.WndInfoMob;
@@ -190,7 +189,6 @@ public class Toolbar extends Component {
 			}
 			
 			if (cell == Dungeon.hero.pos) {
-				GameScene.show( new WndHero() );
 				return;
 			}
 			
