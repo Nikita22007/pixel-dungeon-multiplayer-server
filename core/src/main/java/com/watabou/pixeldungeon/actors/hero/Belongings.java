@@ -40,7 +40,7 @@ public class Belongings implements Iterable<Item> {
 
 	public static final int BACKPACK_SIZE	= 19;
 	
-	private Hero owner;
+	public Hero owner;
 	
 	public Bag backpack;	
 
@@ -123,14 +123,17 @@ public class Belongings implements Iterable<Item> {
 	
 	public void countIronKeys() {
 
-		IronKeyCount_visual  = 0;
+		int keyscount =0;
 		
 		for (Item item : backpack) {
 			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				IronKeyCount_visual ++;
+				keyscount ++;
 			}
 		}
-		sendIronKeysCount(HeroHelp.getHeroID(owner),IronKeyCount_visual);
+		if (keyscount!=IronKeyCount_visual) {
+			IronKeyCount_visual=keyscount;
+			sendIronKeysCount(HeroHelp.getHeroID(owner), keyscount);
+		}
 	}
 	
 	public void identify() {

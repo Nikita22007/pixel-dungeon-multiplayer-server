@@ -50,7 +50,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 	private Image exp;
 	
 	private int lastLvl = -1;
-	private int lastKeys = -1;
 	
 	private BitmapText level;
 	private BitmapText depth;
@@ -176,14 +175,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 			level.measure();
 			level.x = PixelScene.align( 27.5f - level.width() / 2 );
 			level.y = PixelScene.align( 28.0f - level.baseLine() / 2 );
-		}
-		
-		int k = IronKey.curDepthQuantity;
-		if (k != lastKeys) {
-			lastKeys = k;
-			keys.text( Integer.toString( lastKeys ) );
-			keys.measure();
-			keys.x = width - 8 - keys.width()    - 18;
 		}
 		
 		int tier = Dungeon.heroes[0].tier();
