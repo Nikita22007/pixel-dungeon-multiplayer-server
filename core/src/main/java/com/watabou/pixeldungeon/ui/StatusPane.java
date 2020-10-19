@@ -45,8 +45,7 @@ public class StatusPane extends Component {    //remove when server is not clien
 	private Emitter blood;
 	
 	private int lastTier = 0;
-	
-	private Image hp;
+
 	private Image exp;
 	
 	private int lastLvl = -1;
@@ -91,9 +90,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 		compass = new Compass( Dungeon.level.exit );
 		add( compass );
 		
-		hp = new Image( Assets.HP_BAR );	
-		add( hp );
-		
 		exp = new Image( Assets.XP_BAR );
 		add( exp );
 		
@@ -128,9 +124,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 		compass.x = avatar.x + avatar.width / 2 - compass.origin.x;
 		compass.y = avatar.y + avatar.height / 2 - compass.origin.y;
 		
-		hp.x = 30;
-		hp.y = 3;
-		
 		depth.x = width - 24 - depth.width()    - 18;
 		depth.y = 6;
 		
@@ -145,20 +138,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 	public void update() {
 		super.update();
 
-		float health = (float)Dungeon.heroes[0].HP / Dungeon.heroes[0].HT;
-		
-		if (health == 0) {
-			avatar.tint( 0x000000, 0.6f );
-			blood.on = false;
-		} else if (health < 0.25f) {
-			avatar.tint( 0xcc0000, 0.4f );
-			blood.on = true;
-		} else {
-			avatar.resetColor();
-			blood.on = false;
-		}
-		
-		hp.scale.x = health;
 		exp.scale.x = (width / exp.width) * Dungeon.heroes[0].exp / Dungeon.heroes[0].maxExp();
 		
 		if (Dungeon.heroes[0].lvl != lastLvl) {
