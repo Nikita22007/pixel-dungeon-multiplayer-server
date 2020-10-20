@@ -67,7 +67,6 @@ import com.watabou.pixeldungeon.ui.HealthIndicator;
 import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Toast;
-import com.watabou.pixeldungeon.ui.Toolbar;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndBag.Mode;
@@ -112,8 +111,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private Group spells;
 	private Group statuses;
 	private Group emoicons;
-	
-	private Toolbar toolbar;
+
 	private Toast prompt;
 	
 	@Override
@@ -212,22 +210,17 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sb.camera = uiCamera;
 		sb.setSize( uiCamera.width, 0 );
 		add( sb );
-		
-		toolbar = new Toolbar();
-		toolbar.camera = uiCamera;
-		toolbar.setRect( 0,uiCamera.height - toolbar.height(), uiCamera.width, toolbar.height() );
-		add( toolbar );
-		
+
 		AttackIndicator attack = new AttackIndicator();
 		attack.camera = uiCamera;
 		attack.setPos( 
-			uiCamera.width - attack.width(), 
-			toolbar.top() - attack.height() );
+			uiCamera.width - attack.width(),
+				uiCamera.height - attack.height() );//toolbar.top() - attack.height() );
 		add( attack );
 		
 		log = new GameLog();
 		log.camera = uiCamera;
-		log.setRect( 0, toolbar.top(), attack.left(),  0 );
+		log.setRect( 0, uiCamera.height, attack.left(),  0 );
 		add( log );
 		
 		busy = new BusyIndicator();
@@ -460,9 +453,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		return scene != null ? (FloatingText)scene.statuses.recycle( FloatingText.class ) : null;
 	}
 	
-	public static void pickUp( Item item ) {
-		scene.toolbar.pickup( item );
-	}
+	public static void pickUp( Item item ) { }
 	
 	public static void updateMap() {
 		if (scene != null) {

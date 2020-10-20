@@ -24,7 +24,6 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.CheckBox;
 import com.watabou.pixeldungeon.ui.RedButton;
-import com.watabou.pixeldungeon.ui.Toolbar;
 import com.watabou.pixeldungeon.ui.Window;
 
 public class WndSettings extends Window {
@@ -149,19 +148,8 @@ public class WndSettings extends Window {
 			btnBrightness.setRect( 0, btnSound.bottom() + GAP, WIDTH, BTN_HEIGHT );
 			btnBrightness.checked( PixelDungeon.brightness() );
 			add( btnBrightness );
-			
-			CheckBox btnQuickslot = new CheckBox( TXT_QUICKSLOT ) {
-				@Override
-				protected void onClick() {
-					super.onClick();
-					Toolbar.secondQuickslot( checked() );
-				}
-			};
-			btnQuickslot.setRect( 0, btnBrightness.bottom() + GAP, WIDTH, BTN_HEIGHT );
-			btnQuickslot.checked( Toolbar.secondQuickslot() );
-			add( btnQuickslot );
-			
-			resize( WIDTH, (int)btnQuickslot.bottom() );
+
+			resize( WIDTH, (int)btnBrightness.bottom() );
 			
 		} else {
 			
