@@ -33,7 +33,7 @@ import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundle;
 
-public class QuickSlot extends Button implements WndBag.Listener {
+public class QuickSlot extends Button implements WndBag.Listener {  //it  is client only. We  need not  save quicslot. I think...
 
 	private static final String TXT_SELECT_ITEM = "Select an item for the quickslot";
 	
@@ -241,7 +241,6 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	public static void target( Item item, Char target ) {
 		if (!(target instanceof Hero)) {
 			lastTarget = target;
-			HealthIndicator.instance.target( target );
 		}
 	}
 	

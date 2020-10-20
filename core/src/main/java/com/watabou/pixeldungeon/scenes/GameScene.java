@@ -51,8 +51,6 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.potions.Potion;
 import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.levels.RegularLevel;
-import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
@@ -63,17 +61,13 @@ import com.watabou.pixeldungeon.ui.AttackIndicator;
 import com.watabou.pixeldungeon.ui.Banner;
 import com.watabou.pixeldungeon.ui.BusyIndicator;
 import com.watabou.pixeldungeon.ui.GameLog;
-import com.watabou.pixeldungeon.ui.HealthIndicator;
 import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Toast;
 import com.watabou.pixeldungeon.ui.Window;
-import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndBag.Mode;
 import com.watabou.pixeldungeon.windows.WndGame;
 import com.watabou.pixeldungeon.windows.WndBag;
-import com.watabou.pixeldungeon.windows.WndStory;
-import com.watabou.utils.Random;
 
 public class GameScene extends PixelScene {     //only client, exclude static
 	
@@ -201,8 +195,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		hero.place( Dungeon.hero.pos );
 		hero.updateArmor();
 		mobs.add( hero );
-
-		add( new HealthIndicator() );
 		
 		add( cellSelector = new CellSelector( tiles ) );
 		
@@ -301,13 +293,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			add( new WndGame() );
 		}
 	}
-	
-	@Override
-	protected void onMenuPressed() {
-		if (Dungeon.hero.ready) {
-			selectItem( null, WndBag.Mode.ALL, null );
-		}
-	}
+
 	
 	public void brightness( boolean value ) {
 		water.rm = water.gm = water.bm = 
