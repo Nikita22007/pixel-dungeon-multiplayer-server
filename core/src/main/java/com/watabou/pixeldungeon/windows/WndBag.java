@@ -418,10 +418,6 @@ public class WndBag extends WndTabbed { //client only
 				hide();
 				listener.onSelect( item );
 				
-			} else {
-				
-				WndBag.this.add( new WndItem( WndBag.this, item ) );
-				
 			}
 		}
 		

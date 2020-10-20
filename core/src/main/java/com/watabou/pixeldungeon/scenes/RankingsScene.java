@@ -34,7 +34,6 @@ import com.watabou.pixeldungeon.ui.ExitButton;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndError;
-import com.watabou.pixeldungeon.windows.WndRanking;
 
 public class RankingsScene extends PixelScene {
 	
@@ -238,7 +237,6 @@ public class RankingsScene extends PixelScene {
 		@Override
 		protected void onClick() {
 			if (rec.gameFile.length() > 0) {
-				parent.add( new WndRanking( rec.gameFile ) );
 			} else {
 				parent.add( new WndError( TXT_NO_INFO ) );
 			}
