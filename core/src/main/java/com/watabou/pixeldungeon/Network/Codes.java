@@ -85,6 +85,8 @@ class Codes {
     public static final int CELL_SELECT   = 0x60;   //client->server; when client touch cell
 
     public static final int RESUME_BUTTON = 0x61;   //server->client: set visiblity state; visible:bool;  //client -> server:button pressed;
+    public static final int WAIT          = 0x62;   //client->server;  When pressed WAIT button
+    public static final int SEARCH        = 0x63;   //client->server;  When pressed SEARCH  button
 
     //Badges block 0x70-0x8F  //server->client; param(if need)  is level of bage
     public static final int BADGE_MONSTERS_SLAIN      = 0x70;     //param need
