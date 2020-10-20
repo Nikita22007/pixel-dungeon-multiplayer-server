@@ -263,7 +263,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	
 	@SuppressWarnings("unchecked")
 	public static void save( Bundle bundle ) {
-		Belongings stuff = hero.belongings;
+		/*Belongings stuff = hero.belongings;//may  be it was  anti-cheat or anti-bug.
 		
 		if (primaryValue instanceof Class && 
 			stuff.getItem( (Class<? extends Item>)primaryValue ) != null) {
@@ -274,6 +274,12 @@ public class QuickSlot extends Button implements WndBag.Listener {
 			stuff.getItem( (Class<? extends Item>)secondaryValue ) != null &&
 			Toolbar.secondQuickslot()) {
 					
+			bundle.put( QUICKSLOT2, ((Class<?>)secondaryValue).getName() );
+		}*/
+		if (primaryValue instanceof Class) {
+			bundle.put( QUICKSLOT1, ((Class<?>)primaryValue).getName() );
+		}
+		if (QuickSlot.secondaryValue instanceof Class  &&  Toolbar.secondQuickslot()) {
 			bundle.put( QUICKSLOT2, ((Class<?>)secondaryValue).getName() );
 		}
 	}
