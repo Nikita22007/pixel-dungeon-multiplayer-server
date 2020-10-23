@@ -355,9 +355,11 @@ public abstract class Mob extends Char {
 		Dungeon.level.mobs.remove(this);
 
 	}
-
+	public int exp(int level){
+		return level <= maxLvl ? EXP : 0;
+	}
 	public int exp(Hero hero) {
-		return hero.lvl <= maxLvl ? EXP : 0;
+		return exp(hero.lvl);
 	}
 
 	private void die(Hero hero) {
