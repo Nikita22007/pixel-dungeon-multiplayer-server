@@ -117,11 +117,7 @@ public class WndStory extends Window {
 	}
 	
 	public static void showChapter( int id ) {
-		
-		if (Dungeon.chapters.contains( id )) {
-			return;
-		}
-		
+
 		String text = CHAPTERS.get( id );
 		if (text != null) {
 			WndStory wnd = new WndStory( text );
@@ -130,8 +126,7 @@ public class WndStory extends Window {
 			}
 			
 			Game.scene().add( wnd );
-			
-			Dungeon.chapters.add( id );
+
 		}
 	}
 }
