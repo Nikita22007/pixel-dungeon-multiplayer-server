@@ -70,6 +70,9 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class Dungeon {
 	
 	public static int potionOfStrength;
@@ -86,9 +89,7 @@ public class Dungeon {
 	//public static int gold;
 	// Reason of death
 	public static String resultDescription;
-	
-	public static HashSet<Integer> chapters;
-	
+
 	// Hero's field of view
 	public static boolean[] visible = new boolean[Level.LENGTH];
 	
@@ -123,8 +124,6 @@ public class Dungeon {
 		scrollsOfUpgrade = 0;
 		scrollsOfEnchantment = 0;
 		dewVial = true;
-		
-		chapters = new HashSet<Integer>();
 		
 		Ghost.Quest.reset();
 		Wandmaker.Quest.reset();
@@ -238,7 +237,7 @@ public class Dungeon {
 		Arrays.fill( visible, false );
 		
 		level.reset();
-		switchLevel( level, level.entrance );
+		switchLevelToAll( level, level.entrance );
 	}
 	
 	public static boolean shopOnLevel(int depth) {
@@ -256,19 +255,12 @@ public class Dungeon {
 
 	}
 
-	public static void switchLevel( final Level level, int pos, Hero hero ) {
-		//todo rewrite
-		//todo add cheking Hero pos is  clear
-		nightMode = new Date().getHours() < 7;
-		
-		Dungeon.level = level;
-		Actor.init();
-		
-		Actor respawner = level.respawner();
-		if (respawner != null) {
-			Actor.add( level.respawner() );
-		}
-		
+	public static void switchLevelToAll(final Level level,int pos ){
+		switchLevel();
+	}
+
+	public static void switchLevel(final Level level, int pos, @NotNull Hero hero ) {
+		switchLevel(level);
 		hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
 
 		Light light = hero.buff( Light.class );
@@ -276,7 +268,23 @@ public class Dungeon {
 		
 		observe();
 	}
-	
+
+	public static void switchLevel(final Level level) {
+		//todo rewrite
+		//todo add cheking Hero pos is  clear
+		if(Dungeon.level==level){return;}
+
+		nightMode = new Date().getHours() < 7;
+
+		Dungeon.level = level;
+		Actor.init();
+
+		Actor respawner = level.respawner();
+		if (respawner != null) {
+			Actor.add( level.respawner() );
+		}
+	}
+
 	public static void dropToChasm( Item item ) {
 		int depth = Dungeon.depth + 1;
 		ArrayList<Item> dropped = (ArrayList<Item>)Dungeon.droppedItems.get( depth );
@@ -397,14 +405,7 @@ public class Dungeon {
 			bundle.put( SOU, scrollsOfUpgrade );
 			bundle.put( SOE, scrollsOfEnchantment );
 			bundle.put( DV, dewVial );
-			
-			int count = 0;
-			int ids[] = new int[chapters.size()];
-			for (Integer id : chapters) {
-				ids[count++] = id;
-			}
-			bundle.put( CHAPTERS, ids );
-			
+
 			Bundle quests = new Bundle();
 			Ghost		.Quest.storeInBundle( quests );
 			Wandmaker	.Quest.storeInBundle( quests );
@@ -496,13 +497,6 @@ public class Dungeon {
 		dewVial = bundle.getBoolean( DV );
 		
 		if (fullLoad) {
-			chapters = new HashSet<Integer>();
-			int ids[] = bundle.getIntArray( CHAPTERS );
-			if (ids != null) {
-				for (int id : ids) {
-					chapters.add( id );
-				}
-			}
 			
 			Bundle quests = bundle.getBundle( QUESTS );
 			if (!quests.isNull()) {
