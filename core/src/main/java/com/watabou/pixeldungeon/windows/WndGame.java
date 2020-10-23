@@ -48,14 +48,6 @@ public class WndGame extends WndOnlyClient{
 		
 		super();
 		
-		addButton( new RedButton( TXT_SETTINGS ) {
-			@Override
-			protected void onClick() {
-				hide();
-				GameScene.show( new WndSettings( true ) );
-			}
-		} );
-		
 		if (Dungeon.challenges > 0) {
 			addButton( new RedButton( TXT_CHALLEGES ) {
 				@Override
@@ -80,7 +72,7 @@ public class WndGame extends WndOnlyClient{
 				}
 			} );
 			btnStart.icon( Icons.get( Dungeon.hero.heroClass ) );
-			
+
 			addButton( new RedButton( TXT_RANKINGS ) {
 				@Override
 				protected void onClick() {
