@@ -22,15 +22,14 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.mobs.npcs.MirrorImage;
 
-public class MirrorSprite extends MobSprite {
-	
+public class MirrorSprite extends MobSprite {//all sprites client only
 	private static final int FRAME_WIDTH	= 12;
 	private static final int FRAME_HEIGHT	= 15;
 	
 	public MirrorSprite() {
 		super();
 		
-		texture( Dungeon.hero.heroClass.spritesheet() );
+		//texture( Dungeon.hero.heroClass.spritesheet() );
 		updateArmor( 0 );
 		idle();
 	}
