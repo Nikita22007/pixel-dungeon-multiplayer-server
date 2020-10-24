@@ -146,14 +146,13 @@ public class StartScene extends PixelScene {			//client  Scene
 		};
 		add( btnNewGame );
 
-		btnLoad = new GameButton( TXT_LOAD ) {	
+		btnLoad = new GameButton( TXT_LOAD ) {
 			@Override
 			protected void onClick() {
-				InterlevelScene.mode = InterlevelScene.Mode.CONTINUE;
-				Game.switchScene( InterlevelScene.class );
+				InterLevelSceneServer.restore();
 			}
 		};
-		add( btnLoad );	
+		add( btnLoad );
 		
 		float centralHeight = buttonY - title.y - title.height();
 		
@@ -299,15 +298,9 @@ public class StartScene extends PixelScene {			//client  Scene
 	
 	private void startNewGame() {
 
-		Dungeon.hero = null;
-		InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-		
-		if (PixelDungeon.intro()) {
-			PixelDungeon.intro( false );
-			Game.switchScene( IntroScene.class );
-		} else {
-			Game.switchScene( InterlevelScene.class );
-		}	
+		InterLevelSceneServer.descend(null);
+		Game.switchScene( IntroScene.class );
+
 	}
 	
 	@Override

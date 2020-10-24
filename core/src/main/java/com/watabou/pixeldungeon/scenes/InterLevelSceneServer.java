@@ -19,6 +19,9 @@ import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
 import com.watabou.utils.Random;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import static com.watabou.pixeldungeon.Dungeon.heroes;
 import static com.watabou.pixeldungeon.Dungeon.switchLevel;
 import static com.watabou.pixeldungeon.levels.Level.getNearClearCell;
@@ -102,7 +105,7 @@ public class InterLevelSceneServer {
         }
     }
 
-    public static void descend(Hero hero) throws Exception {// спуск
+    public static void descend(@Nullable Hero hero) throws Exception {// спуск
 
         for (int i = 0; i< heroes.length; i++) {
             SendData.sendInterLevelSceneDescend(i);
@@ -114,8 +117,11 @@ public class InterLevelSceneServer {
 
         Level level;
         level=getNextLevel();
-        Dungeon.switchLevel( level, level.entrance, hero );
-
+        if (hero==null){
+            Dungeon.switchLevel(level);
+        } else{
+            Dungeon.switchLevel(level, level.entrance, hero);
+        }
         for (int i = 0; i< heroes.length; i++) {
             SendData.sendInterLevelSceneFadeOut(i);
         }
@@ -200,7 +206,7 @@ public class InterLevelSceneServer {
         WandOfBlink.appear(  hero, hero.pos );
     }
 
-    private void restore() throws Exception { //when loading from save
+    public static void restore() throws Exception { //when loading from save
 
         Actor.fixTime();
 
