@@ -38,6 +38,7 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
@@ -190,12 +191,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		add( statuses );
 		
 		add( emoicons );
-		
-		hero = new HeroSprite();
-		hero.place( Dungeon.hero.pos );
-		hero.updateArmor();
-		mobs.add( hero );
-		
+
 		add( cellSelector = new CellSelector( tiles ) );
 		
 		StatusPane sb = new StatusPane();
@@ -203,16 +199,10 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sb.setSize( uiCamera.width, 0 );
 		add( sb );
 
-		AttackIndicator attack = new AttackIndicator();
-		attack.camera = uiCamera;
-		attack.setPos( 
-			uiCamera.width - attack.width(),
-				uiCamera.height - attack.height() );//toolbar.top() - attack.height() );
-		add( attack );
-		
+
 		log = new GameLog();
 		log.camera = uiCamera;
-		log.setRect( 0, uiCamera.height, attack.left(),  0 );
+		log.setRect( 0, uiCamera.height, uiCamera.width,  0 );
 		add( log );
 		
 		busy = new BusyIndicator();
@@ -220,17 +210,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		busy.x = 1;
 		busy.y = sb.bottom() + 1;
 		add( busy );
-		
-		switch (InterlevelScene.mode) {   //TODO move it to  InterlevelSceneServer
-		case RESURRECT:
-			WandOfBlink.appear( Dungeon.hero, Dungeon.level.entrance );
-			new Flare( 8, 32 ).color( 0xFFFF66, true ).show( hero, 2f ) ;
-			break;
-		case RETURN:
-			WandOfBlink.appear(  Dungeon.hero, Dungeon.hero.pos );
-			break;
-		default:
-		}
 		
 		ArrayList<Item> dropped = Dungeon.droppedItems.get( Dungeon.depth );
 		if (dropped != null) {
@@ -287,14 +266,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		cellSelector.enabled = Dungeon.heroes[0].ready;
 	}
 	
-	@Override
-	protected void onBackPressed() {
-		if (!cancel()) {
-			add( new WndGame() );
-		}
-	}
-
-	
 	public void brightness( boolean value ) {
 		water.rm = water.gm = water.bm = 
 		tiles.rm = tiles.gm = tiles.bm = 
@@ -340,7 +311,8 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	private void prompt( String text ) {
-		
+		// todo  USE OWNER
+		Hero owner;
 		if (prompt != null) {
 			prompt.killAndErase();
 			prompt = null;
@@ -350,7 +322,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			prompt = new Toast( text ) {
 				@Override
 				protected void onClose() {
-					cancel();
+					cancel(owner);
 				}
 			};
 			prompt.camera = uiCamera;
@@ -519,11 +491,11 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		return wnd;
 	}
 
-	static boolean cancel() {
-		if (Dungeon.hero.curAction != null || Dungeon.hero.restoreHealth) {
+	static boolean cancel(final Hero hero) {
+		if (hero.curAction != null || hero.restoreHealth) {
 			
-			Dungeon.hero.curAction = null;
-			Dungeon.hero.restoreHealth = false;
+			hero.curAction = null;
+			hero.restoreHealth = false;
 			return true;
 			
 		} else {

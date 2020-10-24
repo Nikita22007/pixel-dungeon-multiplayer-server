@@ -144,6 +144,7 @@ public class Hero extends Char {
 	private int attackSkill = 10;
 	private int defenseSkill = 5;
 	
+    public static AttackIndicator attackIndicator;
 
 	public boolean ready = false;
 
@@ -173,6 +174,7 @@ public class Hero extends Char {
 	
 	public Hero() {
 		super();
+		attackIndicator=new AttackIndicator(this);
 		name = "you";
 		
 		HP = HT = 20;
@@ -386,7 +388,7 @@ public class Hero extends Char {
 		}
 		
 		checkVisibleMobs();
-		AttackIndicator.updateState();
+		attackIndicator.updateState();
 		
 		if (curAction == null) {
 			
@@ -1257,7 +1259,7 @@ public class Hero extends Char {
 	@Override
 	public void onAttackComplete() {
 		
-		AttackIndicator.target( enemy );
+		attackIndicator.target( enemy );
 		
 		attack( enemy );
 		curAction = null;

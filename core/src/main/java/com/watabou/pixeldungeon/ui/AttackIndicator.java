@@ -21,11 +21,14 @@ import java.util.ArrayList;
 
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class AttackIndicator extends Tag {
 	
@@ -33,17 +36,16 @@ public class AttackIndicator extends Tag {
 	private static final float DISABLED	= 0.3f;
 	public static final int COLOR	= 0xFF4C4C;
 
-	private static AttackIndicator instance;
-	
+	private Hero owner;
 	private CharSprite sprite = null;
 	
 	private static Mob lastTarget = null;
 	private ArrayList<Mob> candidates = new ArrayList<Mob>();
 	
-	public AttackIndicator() {
+	public AttackIndicator(@NotNull Hero owner) {
 		super( COLOR );
-		
-		instance = this;
+
+		this.owner=owner;
 		
 		setSize( 24, 24 );
 		visible( false );
@@ -70,9 +72,9 @@ public class AttackIndicator extends Tag {
 	public void update() {
 		super.update();
 		
-		if (Dungeon.hero.isAlive()) {
+		if (owner.isAlive()) {
 			
-			if (!Dungeon.hero.ready) {
+			if (!owner.ready) {
 				enable( false );
 			}		
 			
@@ -84,11 +86,11 @@ public class AttackIndicator extends Tag {
 	
 	private void checkEnemies() {
 		
-		int heroPos = Dungeon.hero.pos;
+		int heroPos = owner.pos;
 		candidates.clear();
-		int v = Dungeon.hero.visibleEnemies();
+		int v = owner.visibleEnemies();
 		for (int i=0; i < v; i++) {
-			Mob mob = Dungeon.hero.visibleEnemy( i );
+			Mob mob = owner.visibleEnemy( i );
 			if (Level.adjacent( heroPos, mob.pos )) {
 				candidates.add( mob );
 			}
@@ -150,18 +152,16 @@ public class AttackIndicator extends Tag {
 	
 	@Override
 	protected void onClick() {
-		if (enabled) {
-			Dungeon.hero.handle( lastTarget.pos );
-		}
-	}
-	
-	public static void target( Char target ) {
-		lastTarget = (Mob)target;
-		instance.updateImage();
 
 	}
 	
-	public static void updateState() {
-		instance.checkEnemies();
+	public void target( Char target ) {
+		lastTarget = (Mob)target;
+		updateImage();
+
+	}
+	
+	public void updateState() {
+		checkEnemies();
 	}
 }

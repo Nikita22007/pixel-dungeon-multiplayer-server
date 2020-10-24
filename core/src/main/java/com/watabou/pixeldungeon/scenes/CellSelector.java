@@ -21,6 +21,7 @@ import com.watabou.input.Touchscreen.Touch;
 import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 
@@ -29,7 +30,7 @@ public class CellSelector extends TouchArea {//client
 	public Listener listener = null;
 	
 	public boolean enabled;
-	
+	public Hero owner; //todo USE OWNER
 	private float dragThreshold;
 	
 	public CellSelector( DungeonTilemap map ) {
@@ -61,7 +62,7 @@ public class CellSelector extends TouchArea {//client
 			
 		} else {
 			
-			GameScene.cancel();
+			GameScene.cancel(owner);
 			
 		}
 	}
