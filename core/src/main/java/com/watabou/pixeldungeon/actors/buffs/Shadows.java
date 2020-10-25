@@ -48,7 +48,7 @@ public class Shadows extends Invisibility {
 	public boolean attachTo( Char target ) {
 		if (super.attachTo( target )) {
 			Sample.INSTANCE.play( Assets.SND_MELD );
-			Dungeon.observe();
+			Dungeon.observeAll();
 			return true;
 		} else {
 			return false;
@@ -58,7 +58,7 @@ public class Shadows extends Invisibility {
 	@Override
 	public void detach() {
 		super.detach();
-		Dungeon.observe();
+		Dungeon.observeAll();
 	}
 	
 	@Override

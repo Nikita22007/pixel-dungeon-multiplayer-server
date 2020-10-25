@@ -180,7 +180,7 @@ public class HallsBossLevel extends Level {
 			doMagic( entrance );
 			GameScene.updateMap();
 
-			Dungeon.observe();
+			Dungeon.observeAll();
 			
 			Yog boss = new Yog();
 			do {

@@ -77,7 +77,7 @@ public class Fire extends Blob {
 		}
 		
 		if (observe) {
-			Dungeon.observe();
+			Dungeon.observeAll();
 		}
 	}
 	

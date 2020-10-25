@@ -66,7 +66,7 @@ public class WaterOfAwareness extends WellWater {
 		}
 		
 		Buff.affect( hero, Awareness.class, Awareness.DURATION );
-		Dungeon.observe();
+		Dungeon.observeAll();
 
 		hero.interrupt();
 	

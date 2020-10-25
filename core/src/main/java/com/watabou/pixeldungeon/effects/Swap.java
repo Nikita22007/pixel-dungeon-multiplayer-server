@@ -89,7 +89,7 @@ public class Swap extends Actor {
 			}
 			
 			if (ch1 instanceof Hero || ch2 instanceof Hero) {
-				Dungeon.observe();
+				Dungeon.observeAll();
 			}
 		}
 	}

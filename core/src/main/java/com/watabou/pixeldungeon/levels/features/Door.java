@@ -29,7 +29,7 @@ public class Door {
 	public static void enter( int pos ) {
 		Level.set( pos, Terrain.OPEN_DOOR );
 		GameScene.updateMap( pos );
-		Dungeon.observe();
+		Dungeon.observeAll();
 		
 		if (Dungeon.visible[pos]) {
 			Sample.INSTANCE.play( Assets.SND_OPEN );
@@ -40,7 +40,7 @@ public class Door {
 		if (Dungeon.level.heaps.get( pos ) == null) {
 			Level.set( pos, Terrain.DOOR );
 			GameScene.updateMap( pos );
-			Dungeon.observe();
+			Dungeon.observeAll();
 		}
 	}
 }

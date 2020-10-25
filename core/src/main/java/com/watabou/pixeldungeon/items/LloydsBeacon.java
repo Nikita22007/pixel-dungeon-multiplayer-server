@@ -19,7 +19,6 @@ package com.watabou.pixeldungeon.items;
 
 import java.util.ArrayList;
 
-import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
@@ -133,7 +132,7 @@ public class LloydsBeacon extends Item {
 				reset();
 				WandOfBlink.appear( hero, returnPos );
 				Dungeon.level.press( returnPos, hero );
-				Dungeon.observe();
+				Dungeon.observeAll();
 			} else {
 				InterLevelSceneServer.returnTo(returnDepth, returnPos, hero );
 				reset();

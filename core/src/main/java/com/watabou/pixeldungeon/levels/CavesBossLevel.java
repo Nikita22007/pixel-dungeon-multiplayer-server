@@ -232,7 +232,7 @@ public class CavesBossLevel extends Level {
 			
 			set( arenaDoor, Terrain.WALL );
 			GameScene.updateMap( arenaDoor );
-			Dungeon.observe();
+			Dungeon.observeAll();
 			
 			CellEmitter.get( arenaDoor ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
 			Camera.main.shake( 3, 0.7f );
@@ -251,7 +251,7 @@ public class CavesBossLevel extends Level {
 			
 			set( arenaDoor, Terrain.EMPTY_DECO );
 			GameScene.updateMap( arenaDoor );
-			Dungeon.observe();
+			Dungeon.observeAll();
 		}
 		
 		return super.drop( item, cell );

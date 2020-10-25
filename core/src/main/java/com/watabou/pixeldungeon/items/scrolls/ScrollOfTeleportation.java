@@ -68,7 +68,7 @@ public class ScrollOfTeleportation extends Scroll {
 
 			WandOfBlink.appear( hero, pos );
 			Dungeon.level.press( pos, hero );
-			Dungeon.observe();
+			Dungeon.observeAll();
 			
 			GLog.i( TXT_TELEPORTED );
 			

@@ -49,7 +49,7 @@ public class Displacement extends Glyph {
 				
 				WandOfBlink.appear( defender, pos );
 				Dungeon.level.press( pos, defender );
-				Dungeon.observe();
+				Dungeon.observeAll();
 
 				break;
 			}

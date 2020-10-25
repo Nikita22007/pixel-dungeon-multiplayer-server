@@ -80,7 +80,7 @@ public class WandOfDisintegration extends Wand {
 		}
 		
 		if (terrainAffected) {
-			Dungeon.observe();
+			Dungeon.observeAll();
 		}
 		
 		int lvl = level + chars.size();

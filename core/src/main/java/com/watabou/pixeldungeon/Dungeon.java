@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -264,14 +263,14 @@ public class Dungeon {
         }
 	}
 
-	private static void swichLevelChangePosition(int pos, Hero hero)
+	private static void swichLevelChangePosition(int pos, @NotNull Hero hero)
     {
         hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
 
         Light light = hero.buff( Light.class );
         hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
 
-        observe();
+        observe(hero);
     }
 	public static void switchLevel(final Level level, int pos, @NotNull Hero hero ) {
 		switchLevel(level);
@@ -631,18 +630,28 @@ public class Dungeon {
 		Rankings.INSTANCE.submit( true );
 	}
 	
-	public static void observe() {
+	public static void observeAll() {
+		for (Hero hero:heroes) {
+			if (hero!=null){
+				observe(hero);
+			}
+
+		}
+	}
+
+	public static void observe(@NotNull Hero hero){
 
 		if (level == null) {
 			return;
 		}
-		
+
 		level.updateFieldOfView( hero );
 		System.arraycopy( Level.fieldOfView, 0, visible, 0, visible.length );
-		
+
 		BArray.or( level.visited, visible, level.visited );
-		
+
 		GameScene.afterObserve();
+
 	}
 	
 	private static boolean[] passable = new boolean[Level.LENGTH];

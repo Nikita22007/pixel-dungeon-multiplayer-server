@@ -102,7 +102,7 @@ public class RogueArmor extends ClassArmor {
 				CellEmitter.get( target ).burst( Speck.factory( Speck.WOOL ), 10 );
 				Sample.INSTANCE.play( Assets.SND_PUFF );
 				Dungeon.level.press( target, curUser );
-				Dungeon.observe();
+				Dungeon.observeAll();
 				
 				curUser.spendAndNext( Actor.TICK );
 			}

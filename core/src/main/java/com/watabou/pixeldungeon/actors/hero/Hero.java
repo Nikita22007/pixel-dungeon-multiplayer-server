@@ -1198,7 +1198,7 @@ public class Hero extends Char {
 		
 		Bones.leave(this);
 		
-		Dungeon.observe();
+		Dungeon.observeAll();
 				
 		this.belongings.identify();
 		
@@ -1250,7 +1250,7 @@ public class Hero extends Char {
 	
 	@Override
 	public void onMotionComplete() {
-		Dungeon.observe();
+		Dungeon.observeAll();
 		search( false );
 			
 		super.onMotionComplete();
