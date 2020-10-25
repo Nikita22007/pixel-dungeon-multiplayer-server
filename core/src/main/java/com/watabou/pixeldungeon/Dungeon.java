@@ -619,8 +619,11 @@ public class Dungeon {
 	}
 	
 	public static void win( String desc ) {
-		
-		hero.belongings.identify();
+		for (Hero hero:heroes) {
+		if  (hero!=null){
+				hero.belongings.identify();
+			}
+		}
 		
 		if (challenges != 0) {
 			Badges.validateChampion();
