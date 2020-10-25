@@ -22,6 +22,7 @@ import java.util.HashSet;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
+import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
@@ -31,7 +32,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Bee extends NPC {
-	
+	private Hero owner;
+	public Bee(Hero owner)
 	{
 		name = "golden bee";
 		spriteClass = BeeSprite.class;
@@ -39,7 +41,9 @@ public class Bee extends NPC {
 		viewDistance = 4;
 		
 		WANDERING = new Wandering();
-		
+
+		this.owner=owner;
+
 		flying = true;
 		state = WANDERING;
 	}
@@ -164,7 +168,7 @@ public class Bee extends NPC {
 				enemySeen = false;
 				
 				int oldPos = pos;
-				if (getCloser( Dungeon.hero.pos )) {
+				if (getCloser( owner.pos )) {
 					spend( 1 / speed() );
 					return moveSprite( oldPos, pos );
 				} else {

@@ -25,6 +25,8 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 
+import org.jetbrains.annotations.Nullable;
+
 public class CellSelector extends TouchArea {//client
 
 	public Listener listener = null;
@@ -152,7 +154,7 @@ public class CellSelector extends TouchArea {//client
 	}
 	
 	public interface Listener {
-		void onSelect( Integer cell );
-		String prompt();
+		void onSelect( @Nullable Integer cellz );
+		@Nullable String prompt();
 	}
 }

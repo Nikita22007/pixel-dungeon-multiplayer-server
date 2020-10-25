@@ -94,3 +94,9 @@ Goal:
 Secondary goals:
     put texts in a separate class
     uploading texts from files with localizations
+
+
+;Listeners:
+CellSelector: onSelect (Integer cell)
+WndBag: OnSelect (Item)
+Tweener: OnComplete (Tweener)
