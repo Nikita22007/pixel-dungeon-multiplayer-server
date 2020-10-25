@@ -443,7 +443,7 @@ public class Item implements Bundlable {
 		return info();
 	}
 
-	protected String info() {
+	public String info() {
 		return desc();
 	}
 	

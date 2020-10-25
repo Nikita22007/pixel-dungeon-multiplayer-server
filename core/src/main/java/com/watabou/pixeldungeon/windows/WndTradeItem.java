@@ -193,17 +193,15 @@ public class WndTradeItem extends Window {
 	}
 	
 	private void sell( Item item ) {
-		
-		Hero hero = Dungeon.hero;
-		
-		if (item.isEquipped( hero ) && !((EquipableItem)item).doUnequip( hero, false )) {
+
+		if (item.isEquipped( ownerHero ) && !((EquipableItem)item).doUnequip( ownerHero, false )) {
 			return;
 		}
-		item.detachAll( hero.belongings.backpack );
+		item.detachAll( ownerHero.belongings.backpack );
 		
 		int price = item.price();
 		
-		new Gold( price ).doPickUp( hero );
+		new Gold( price ).doPickUp( ownerHero );
 		GLog.i( TXT_SOLD, item.name(), price );
 	}
 	
@@ -212,13 +210,10 @@ public class WndTradeItem extends Window {
 		if (item.quantity() <= 1) {
 			sell( item );
 		} else {
-			
-			Hero hero = Dungeon.hero;
-			
-			item = item.detach( hero.belongings.backpack );
+			item = item.detach( ownerHero.belongings.backpack );
 			int price = item.price();
 			
-			new Gold( price ).doPickUp( hero );
+			new Gold( price ).doPickUp( ownerHero);
 			GLog.i( TXT_SOLD, item.name(), price );
 		}
 	}
@@ -226,23 +221,22 @@ public class WndTradeItem extends Window {
 	private int price( Item item ) {
 
 		int price = item.price() * 5 * (Dungeon.depth / 5 + 1);
-		if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && price >= 2) {
+		if (ownerHero.buff( RingOfHaggler.Haggling.class ) != null && price >= 2) {
 			price /= 2;
 		}
 		return price;
 	}
 	
 	private void buy( Heap heap ) {
-		
-		Hero hero = Dungeon.hero;
+
 		Item item = heap.pickUp();
 		
 		int price = price( item );
-		Dungeon.hero.gold -= price;
+		ownerHero.gold -= price;
 		
 		GLog.i( TXT_BOUGHT, item.name(), price );
 		
-		if (!item.doPickUp( hero )) {
+		if (!item.doPickUp( ownerHero )) {
 			Dungeon.level.drop( item, heap.pos ).sprite.drop();
 		}
 	}
