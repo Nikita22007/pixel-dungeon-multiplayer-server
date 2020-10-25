@@ -256,17 +256,26 @@ public class Dungeon {
 	}
 
 	public static void switchLevelToAll(final Level level,int pos ){
-		switchLevel();
+        switchLevel(level);
+        for (Hero hero:heroes) {
+            if (hero!=null){
+                swichLevelChangePosition(pos,hero);
+            }
+        }
 	}
 
+	private static void swichLevelChangePosition(int pos, Hero hero)
+    {
+        hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
+
+        Light light = hero.buff( Light.class );
+        hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
+
+        observe();
+    }
 	public static void switchLevel(final Level level, int pos, @NotNull Hero hero ) {
 		switchLevel(level);
-		hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
-
-		Light light = hero.buff( Light.class );
-		hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
-		
-		observe();
+        swichLevelChangePosition(pos,hero);
 	}
 
 	public static void switchLevel(final Level level) {
