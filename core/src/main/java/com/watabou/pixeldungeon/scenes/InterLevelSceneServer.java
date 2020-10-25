@@ -22,6 +22,8 @@ import com.watabou.utils.Random;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
 import static com.watabou.pixeldungeon.Dungeon.heroes;
 import static com.watabou.pixeldungeon.Dungeon.switchLevel;
 import static com.watabou.pixeldungeon.levels.Level.getNearClearCell;
@@ -105,28 +107,32 @@ public class InterLevelSceneServer {
         }
     }
 
-    public static void descend(@Nullable Hero hero) throws Exception {// спуск
+    public static void descend(@Nullable Hero hero)  {// спуск
 
-        for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneDescend(i);
-        }
-        Actor.fixTime();
-        if (Dungeon.depth>0) {
-            Dungeon.saveLevel();
-        }
+        try {
+            for (int i = 0; i < heroes.length; i++) {
+                SendData.sendInterLevelSceneDescend(i);
+            }
+            Actor.fixTime();
+            if (Dungeon.depth > 0) {
+                Dungeon.saveLevel();
+            }
 
-        Level level;
-        level=getNextLevel();
-        if (hero==null){
-            Dungeon.switchLevel(level);
-        } else{
-            Dungeon.switchLevel(level, level.entrance, hero);
+            Level level;
+            level = getNextLevel();
+            if (hero == null) {
+                Dungeon.switchLevel(level);
+            } else {
+                Dungeon.switchLevel(level, level.entrance, hero);
+            }
+            for (int i = 0; i < heroes.length; i++) {
+                SendData.sendInterLevelSceneFadeOut(i);
+            }
+            ShowStoryIfNeed(Dungeon.depth);
+            sendMessage(false);
+        }catch (IOException e){
+            throw new RuntimeException(e);
         }
-        for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneFadeOut(i);
-        }
-        ShowStoryIfNeed(Dungeon.depth);
-        sendMessage(false);
     }
     public static  void  fall(Hero  hero)throws Exception {
      fall(hero,false);
@@ -155,7 +161,7 @@ public class InterLevelSceneServer {
         ShowStoryIfNeed(Dungeon.depth);
         sendMessage(false);
     }
-    private static Level getNextLevel()throws Exception {
+    private static Level getNextLevel()throws IOException {
 
         if (Dungeon.depth >= Statistics.deepestFloor) {
             return  Dungeon.newLevel();
@@ -165,22 +171,26 @@ public class InterLevelSceneServer {
         }
     };
 
-    public static void ascend(Hero hero) throws Exception {
+    public static void ascend(Hero hero) {
 
-        for (int i = 0; i< heroes.length; i++) {
+        try {
+        for (int i = 0; i < heroes.length; i++) {
             SendData.sendInterLevelSceneAscend(i);
         }
         Actor.fixTime();
 
-        Dungeon.saveLevel();
-        Dungeon.depth--;
-        Level level = Dungeon.loadLevel();
-        Dungeon.switchLevel( level, level.exit, hero );
+            Dungeon.saveLevel();
+            Dungeon.depth--;
+            Level level = Dungeon.loadLevel();
+            Dungeon.switchLevel(level, level.exit, hero);
 
-        for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneFadeOut(i);
+            for (int i = 0; i < heroes.length; i++) {
+                SendData.sendInterLevelSceneFadeOut(i);
+            }
+            sendMessage(true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        sendMessage(true);
     }
 
     public static void returnTo(int  depth, int pos, Hero  hero) throws Exception {
