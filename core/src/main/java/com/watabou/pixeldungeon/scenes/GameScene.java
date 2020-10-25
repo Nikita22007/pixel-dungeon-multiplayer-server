@@ -310,27 +310,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sprite.link( mob );
 	}
 	
-	private void prompt( String text ) {
-		// todo  USE OWNER
-		Hero owner;
-		if (prompt != null) {
-			prompt.killAndErase();
-			prompt = null;
-		}
-		
-		if (text != null) {
-			prompt = new Toast( text ) {
-				@Override
-				protected void onClose() {
-					cancel(owner);
-				}
-			};
-			prompt.camera = uiCamera;
-			prompt.setPos( (uiCamera.width - prompt.width()) / 2, uiCamera.height - 60 );
-			add( prompt );
-		}
-	}
-	
 	private void showBanner( Banner banner ) {
 		banner.camera = uiCamera;
 		banner.x = align( uiCamera, (uiCamera.width - banner.width) / 2 );
@@ -468,7 +447,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	public static void selectCell( CellSelector.Listener listener ) {
 		cellSelector.listener = listener;
-		scene.prompt( listener.prompt() );
 	}
 	
 	private static boolean cancelCellSelector() {
