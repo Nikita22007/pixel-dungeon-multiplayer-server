@@ -611,10 +611,14 @@ public class Dungeon {
 		Hero.preview( info, bundle.getBundle( HERO ) );
 	}
 	
-	public static void fail( String desc ) {
+	public static void fail( String desc ) { //todo rewritre it
 		resultDescription = desc;
-		if (hero.belongings.getItem( Ankh.class ) == null) { 
-			Rankings.INSTANCE.submit( false );
+		for (Hero hero : heroes) {
+			if (hero!=null &&  !hero.isAlive()) {
+				if (hero.belongings.getItem(Ankh.class) == null) {
+					Rankings.INSTANCE.submit(false);
+				}
+			}
 		}
 	}
 	
