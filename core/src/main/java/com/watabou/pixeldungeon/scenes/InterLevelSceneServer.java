@@ -134,32 +134,36 @@ public class InterLevelSceneServer {
             throw new RuntimeException(e);
         }
     }
-    public static  void  fall(Hero  hero)throws Exception {
+    public static  void  fall(Hero  hero){
      fall(hero,false);
     }
-    public static void fall(Hero hero, boolean fallIntoPit) throws Exception {
+    public static void fall(Hero hero, boolean fallIntoPit) {
 
-        for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneFall(i);
+        try {
+            for (int i = 0; i < heroes.length; i++) {
+                SendData.sendInterLevelSceneFall(i);
             }
-        Actor.fixTime();
-        Dungeon.saveLevel();
+            Actor.fixTime();
+            Dungeon.saveLevel();
 
-        Level level;
-        level=getNextLevel();
-        Dungeon.switchLevel( level, fallIntoPit ? level.pitCell() : level.randomRespawnCell(),hero );
+            Level level;
+            level = getNextLevel();
+            Dungeon.switchLevel(level, fallIntoPit ? level.pitCell() : level.randomRespawnCell(), hero);
 
-        for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneFadeOut(i);
-        }
-        for (Hero hero_ : heroes) {
-            if (hero_!=null &&hero.isAlive()){
-                Chasm.heroLand(hero_);
+            for (int i = 0; i < heroes.length; i++) {
+                SendData.sendInterLevelSceneFadeOut(i);
             }
-        }
+            for (Hero hero_ : heroes) {
+                if (hero_ != null && hero.isAlive()) {
+                    Chasm.heroLand(hero_);
+                }
+            }
 
-        ShowStoryIfNeed(Dungeon.depth);
-        sendMessage(false);
+            ShowStoryIfNeed(Dungeon.depth);
+            sendMessage(false);
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
     }
     private static Level getNextLevel()throws IOException {
 
@@ -193,46 +197,52 @@ public class InterLevelSceneServer {
         }
     }
 
-    public static void returnTo(int  depth, int pos, Hero  hero) throws Exception {
-        if (depth!=Dungeon.depth) {
+    public static void returnTo(int  depth, int pos, Hero  hero) {
+        try {
+            if (depth != Dungeon.depth) {
+                for (int i = 0; i < heroes.length; i++) {
+                    SendData.sendInterLevelSceneReturn(i);
+                }
 
-
-            for (int i = 0; i < heroes.length; i++) {
-                SendData.sendInterLevelSceneReturn(i);
+                Actor.fixTime();
+                Dungeon.saveLevel();
+                Dungeon.depth = depth;
+                Level level = Dungeon.loadLevel();
+                Dungeon.switchLevel(level, pos, hero);
+                for (int i = 0; i < heroes.length; i++) {
+                    SendData.sendInterLevelSceneFadeOut(i);
+                    sendMessage(true);
+                }
+            } else {
+                hero.pos = getNearClearCell(pos);
             }
+            WandOfBlink.appear(hero, hero.pos);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static void restore() { //when loading from save
+
+        try {
             Actor.fixTime();
-            Dungeon.saveLevel();
-            Dungeon.depth = depth;
-            Level level = Dungeon.loadLevel();
-            Dungeon.switchLevel(level, pos, hero);
-            for (int i = 0; i < heroes.length; i++) {
-                SendData.sendInterLevelSceneFadeOut(i);
-             sendMessage(true);
+
+            GameLog.wipe();
+
+            Dungeon.loadGame(StartScene.curClass);
+            if (Dungeon.depth == -1) {
+                Dungeon.depth = Statistics.deepestFloor;
+                Dungeon.switchLevel(Dungeon.loadLevel(StartScene.curClass));
+            } else {
+                Level level = Dungeon.loadLevel(StartScene.curClass);
+                Dungeon.switchLevel(level);
             }
-        }else{
-            hero.pos= getNearClearCell(pos);
-        }
-        WandOfBlink.appear(  hero, hero.pos );
-    }
-
-    public static void restore() throws Exception { //when loading from save
-
-        Actor.fixTime();
-
-        GameLog.wipe();
-
-        Dungeon.loadGame( StartScene.curClass );
-        if (Dungeon.depth == -1) {
-            Dungeon.depth = Statistics.deepestFloor;
-            Dungeon.switchLevel( Dungeon.loadLevel( StartScene.curClass ) );
-        } else {
-            Level level = Dungeon.loadLevel( StartScene.curClass );
-            Dungeon.switchLevel(level);
+        }catch (IOException  e){
+            throw new RuntimeException(e);
         }
     }
 
-    public static void resurrect(Hero hero) throws Exception { //respawn by ankh
+    public static void resurrect(Hero hero)  { //respawn by ankh
 
         for (int i = 0; i< heroes.length; i++) {
             SendData.sendInterLevelSceneResurrect(i);
