@@ -73,11 +73,11 @@ public class Wound extends Image {
 		hit( pos, 0 );
 	}
 	
-	public static void hit( int pos, float angle ) {
-		Group parent = Dungeon.hero.sprite.parent;
+	public static void hit( int pos, float angle ) {//visual only. This wil be  sended to client.
+		/*Group parent = Dungeon.hero.sprite.parent;
 		Wound w = (Wound)parent.recycle( Wound.class );
 		parent.bringToFront( w );
 		w.reset( pos );
-		w.angle = angle;
+		w.angle = angle;*/
 	}
 }
