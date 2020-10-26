@@ -57,7 +57,7 @@ public abstract class InventoryScroll extends Scroll {
 					identifiedByUse = false;
 					break;
 				case 1:
-					GameScene.selectItem( itemSelector, mode, inventoryTitle );
+					GameScene.selectItem( curUser,  itemSelector, mode, inventoryTitle );
 					break;
 				}
 			}
