@@ -34,6 +34,10 @@ import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.security.acl.Owner;
+
 public class WndTradeItem extends Window {
 	
 	private static final float GAP		= 2;
@@ -50,14 +54,11 @@ public class WndTradeItem extends Window {
 	private static final String TXT_SOLD	= "You've sold your %s for %dg";
 	private static final String TXT_BOUGHT	= "You've bought %s for %dg";
 	
-	private WndBag owner;
-	
-	public WndTradeItem( final Item item, WndBag owner ) {
+	public WndTradeItem(final Item item, @NotNull Hero owner) {
 		
 		super();
-		
-		this.owner = owner; 
-		
+
+		ownerHero=owner;
 		float pos = createDescription( item, false );
 		
 		if (item.quantity() == 1) {
@@ -115,7 +116,7 @@ public class WndTradeItem extends Window {
 	public WndTradeItem( final Heap heap, boolean canBuy, Hero hero ) {
 		
 		super();
-		
+		ownerHero=hero;
 		Item item = heap.peek();
 		
 		float pos = createDescription( item, true );
@@ -157,11 +158,8 @@ public class WndTradeItem extends Window {
 	public void hide() {
 		
 		super.hide();
-		
-		if (owner != null) {
-			owner.hide();
-			Shopkeeper.sell();
-		}
+
+		Shopkeeper.sell(ownerHero);
 	}
 	
 	private float createDescription( Item item, boolean forSale ) {

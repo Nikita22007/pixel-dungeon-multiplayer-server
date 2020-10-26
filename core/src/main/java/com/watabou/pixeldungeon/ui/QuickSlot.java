@@ -130,12 +130,12 @@ public class QuickSlot extends Button implements WndBag.Listener {  //it  is cli
 	
 	@Override
 	protected void onClick() {
-		GameScene.selectItem( this, WndBag.Mode.QUICKSLOT, TXT_SELECT_ITEM );
+		GameScene.selectItem( hero, this, WndBag.Mode.QUICKSLOT, TXT_SELECT_ITEM );
 	}
 	
 	@Override
 	protected boolean onLongClick() {
-		GameScene.selectItem( this, WndBag.Mode.QUICKSLOT, TXT_SELECT_ITEM );
+		GameScene.selectItem( hero,this, WndBag.Mode.QUICKSLOT, TXT_SELECT_ITEM );
 		return true;
 	}
 	

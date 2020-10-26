@@ -44,7 +44,7 @@ public abstract class InventoryScroll extends Scroll {
 			identifiedByUse = false;
 		}
 		
-		GameScene.selectItem( itemSelector, mode, inventoryTitle );
+		GameScene.selectItem(curUser, itemSelector, mode, inventoryTitle );
 	}
 	
 	private void confirmCancelation() {

@@ -446,7 +446,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 	}
 	
-	public static WndBag selectItem( WndBag.Listener listener, WndBag.Mode mode, String title ) {
+	public static WndBag selectItem( @NotNull Hero owner,WndBag.Listener listener, WndBag.Mode mode, String title ) {
 		cancelCellSelector(owner);
 		
 		WndBag wnd = 	new WndBag(owner, listener, mode, title );
