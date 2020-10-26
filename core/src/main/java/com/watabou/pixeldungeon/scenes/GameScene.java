@@ -449,9 +449,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	public static WndBag selectItem( WndBag.Listener listener, WndBag.Mode mode, String title ) {
 		cancelCellSelector(owner);
 		
-		WndBag wnd = mode == Mode.SEED ?
-			WndBag.seedPouch( listener, mode, title ) :
-			WndBag.lastBag( listener, mode, title );
+		WndBag wnd = 	new WndBag(owner, listener, mode, title );
 		scene.add( wnd );
 		
 		return wnd;
