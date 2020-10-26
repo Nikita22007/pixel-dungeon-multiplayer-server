@@ -89,7 +89,7 @@ public class QuickSlot extends Button implements WndBag.Listener {  //it  is cli
 			@Override
 			protected void onClick() {
 				if (targeting) {
-					GameScene.handleCell( lastTarget.pos );
+					GameScene.handleCell(hero, lastTarget.pos );
 				} else {
 					useTargeting();
 					select().execute( hero );

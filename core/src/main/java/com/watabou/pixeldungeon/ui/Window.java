@@ -46,7 +46,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 	protected ShadowBox shadow;
 	protected NinePatch chrome;
 
-	protected Hero ownerHero;
+	public Hero ownerHero;
 	public static final int TITLE_COLOR = 0xFFFF44;
 	
 	public Window() {

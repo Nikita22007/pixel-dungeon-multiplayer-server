@@ -59,7 +59,7 @@ public class WarriorArmor extends ClassArmor {
 	
 	@Override
 	public void doSpecial() {
-		GameScene.selectCell( leaper );
+		GameScene.selectCell(curUser, leaper );
 	}
 	
 	@Override

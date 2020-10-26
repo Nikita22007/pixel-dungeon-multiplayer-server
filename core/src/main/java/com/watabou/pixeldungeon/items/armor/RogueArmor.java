@@ -54,7 +54,7 @@ public class RogueArmor extends ClassArmor {
 	
 	@Override
 	public void doSpecial() {			
-		GameScene.selectCell( teleporter );
+		GameScene.selectCell(curUser, teleporter );
 	}
 	
 	@Override

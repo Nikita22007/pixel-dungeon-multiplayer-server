@@ -70,6 +70,8 @@ import com.watabou.pixeldungeon.windows.WndBag.Mode;
 import com.watabou.pixeldungeon.windows.WndGame;
 import com.watabou.pixeldungeon.windows.WndBag;
 
+import org.jetbrains.annotations.NotNull;
+
 public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private static final String TXT_WELCOME			= "Welcome to the level %d of Pixel Dungeon!";
@@ -91,8 +93,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private GameLog log;
 	
 	private BusyIndicator busy;
-	
-	private static CellSelector cellSelector;
 
 	//graphics
 	private Group terrain = new Group();
@@ -191,8 +191,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		add( statuses );
 		
 		add( emoicons );
-
-		add( cellSelector = new CellSelector( tiles ) );
 		
 		StatusPane sb = new StatusPane();
 		sb.camera = uiCamera;
@@ -248,22 +246,12 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	@Override
-	public synchronized void update() { //client
-		if (Dungeon.heroes == null||Dungeon.heroes[0]==null) {
-			return;
-		}
-			
+	public synchronized void update() {
+
 		super.update();
-		
-		water.offset( 0, -5 * Game.elapsed );
-		
+
 		Actor.process();
-		
-		if (Dungeon.heroes[0].ready && !Dungeon.heroes[0].paralysed) {
-			log.newLine();
-		}
-		
-		cellSelector.enabled = Dungeon.heroes[0].ready;
+
 	}
 	
 	public void brightness( boolean value ) {
@@ -411,7 +399,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static void show( Window wnd ) {
-		cancelCellSelector();
+		cancelCellSelector(wnd.ownerHero);
 		scene.add( wnd );
 	}
 	
@@ -441,17 +429,17 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		SendData.sendAllBossSlain();
 	}
 
-	public static void handleCell( int cell ) {
-		cellSelector.select( cell );
+	public static void handleCell(Hero hero, int cell ) {
+		hero.cellSelector.select( cell );
 	}
 	
-	public static void selectCell( CellSelector.Listener listener ) {
-		cellSelector.listener = listener;
+	public static void selectCell( @NotNull Hero hero,  CellSelector.Listener listener ) {
+		hero.cellSelector.listener = listener;
 	}
 	
-	private static boolean cancelCellSelector() {
-		if (cellSelector.listener != null && cellSelector.listener != defaultCellListener) {
-			cellSelector.cancel();
+	private static boolean cancelCellSelector(Hero hero) {
+		if (hero.cellSelector.listener != null && hero.cellSelector.listener != hero.defaultCellListener) {
+			hero.cellSelector.cancel();
 			return true;
 		} else {
 			return false;
@@ -459,7 +447,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static WndBag selectItem( WndBag.Listener listener, WndBag.Mode mode, String title ) {
-		cancelCellSelector();
+		cancelCellSelector(owner);
 		
 		WndBag wnd = mode == Mode.SEED ?
 			WndBag.seedPouch( listener, mode, title ) :
@@ -478,28 +466,19 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			
 		} else {
 			
-			return cancelCellSelector();
+			return cancelCellSelector(hero);
 			
 		}
 	}
 	
-	public static void ready() {
-		selectCell( defaultCellListener );
+	public static void ready(@NotNull Hero hero) {
+		selectCell(hero, hero.defaultCellListener );
 		QuickSlot.cancel();
 	}
-	
-	private static final CellSelector.Listener defaultCellListener = new CellSelector.Listener() { //client
-		@Override
-		public void onSelect( Integer cell ) {
-			if (Dungeon.hero.handle( cell )) {
-				Dungeon.hero.next();
-			}
-		}
-		@Override
+
 		public String prompt() {
 			return null;
 		}
-	};
 
 	//--------------------------- CLIENT
 	public static void ClientBossSlain() {

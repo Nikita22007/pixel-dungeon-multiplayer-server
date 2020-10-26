@@ -96,6 +96,7 @@ import com.watabou.pixeldungeon.levels.features.AlchemyPot;
 import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.levels.features.Sign;
 import com.watabou.pixeldungeon.plants.Earthroot;
+import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.scenes.SurfaceScene;
@@ -174,6 +175,19 @@ public class Hero extends Char {
 	
 	public Hero() {
 		super();
+		final  Hero hero =  this;
+		defaultCellListener= new CellSelector.Listener() { //client
+			@Override
+			public void onSelect( Integer cell ) {
+				if (hero.handle( cell )) {
+					hero.next();
+				}
+			}
+			@Override
+			public String prompt() {
+				return null;
+			}
+		};
 		attackIndicator=new AttackIndicator(this);
 		name = "you";
 		
@@ -474,7 +488,7 @@ public class Hero extends Char {
 		curAction = null;
 		ready = true;
 		
-		GameScene.ready();
+		GameScene.ready(this);
 	}
 	
 	public void interrupt() {
@@ -1427,7 +1441,10 @@ public class Hero extends Char {
 	public void next() {
 		super.next();
 	}
-	
+
+
+	public CellSelector cellSelector;
+	public CellSelector.Listener defaultCellListener;
 	public static interface Doom {
 		public void onDeath();
 	}
