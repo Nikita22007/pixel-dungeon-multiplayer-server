@@ -38,9 +38,7 @@ import com.watabou.pixeldungeon.ui.PrefsButton;
 
 public class TitleScene extends PixelScene {
 
-	private static final String TXT_PLAY		= "Play";
-	private static final String TXT_HIGHSCORES	= "Rankings";
-	private static final String TXT_BADGES		= "Badges";
+	private static final String TXT_PLAY		= "Start";
 	private static final String TXT_ABOUT		= "About";
 	
 	@Override
@@ -90,14 +88,6 @@ public class TitleScene extends PixelScene {
 		signs.y = title.y;
 		add( signs );
 		
-		DashboardItem btnBadges = new DashboardItem( TXT_BADGES, 3 ) {
-			@Override
-			protected void onClick() {
-				PixelDungeon.switchNoFade( BadgesScene.class );
-			}
-		};
-		add( btnBadges );
-		
 		DashboardItem btnAbout = new DashboardItem( TXT_ABOUT, 1 ) {
 			@Override
 			protected void onClick() {
@@ -113,26 +103,15 @@ public class TitleScene extends PixelScene {
 			}
 		};
 		add( btnPlay );
-		
-		DashboardItem btnHighscores = new DashboardItem( TXT_HIGHSCORES, 2 ) {
-			@Override
-			protected void onClick() {
-				PixelDungeon.switchNoFade( RankingsScene.class );
-			}
-		};
-		add( btnHighscores );
+
 		
 		if (PixelDungeon.landscape()) {
 			float y = (h + height) / 2 - DashboardItem.SIZE;
-			btnHighscores	.setPos( w / 2 - btnHighscores.width(), y );
-			btnBadges		.setPos( w / 2, y );
-			btnPlay			.setPos( btnHighscores.left() - btnPlay.width(), y );
-			btnAbout		.setPos( btnBadges.right(), y );
+			btnPlay			.setPos( w / 2 -btnPlay.width(), y );
+			btnAbout		.setPos( w / 2, y );
 		} else {
-			btnBadges.setPos( w / 2 - btnBadges.width(), (h + height) / 2 - DashboardItem.SIZE );
 			btnAbout.setPos( w / 2, (h + height) / 2 - DashboardItem.SIZE );
-			btnPlay.setPos( w / 2 - btnPlay.width(), btnAbout.top() - DashboardItem.SIZE );
-			btnHighscores.setPos( w / 2, btnPlay.top() );
+			btnPlay.setPos( w / 2 - btnPlay.width(), (h + height) / 2  - DashboardItem.SIZE );
 		}
 		
 		BitmapText version = new BitmapText( "v " + Game.version, font1x );
