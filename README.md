@@ -9,18 +9,21 @@ Now we have this branches:
 1. **_master_**: this   branch only for Readme.md and etc
 2. **_Client_**: that's easy - it is client branch
 3. **_Server_**: that's easy - it is server branch
-4. **_NetworkCodes_**: this branch including only one file: codes.java. Еhis file contains codes that indicate various events. If you change this branch, you must merge it with the server and client before building it to avoid conflicts. After the release of a more or less workable version, try not to change the already installed codes.
-5. **_NetworkUpdate_**: This branch contains the main work on creating the server before creating the base (compilable) version. Please don't ask why it's called that. It just happened.
+4. **_NetworkCodes_**: this branch including only one file: `codes.java`. Еhis file contains codes that indicate various events. If you change this branch, you must merge it with the server and client before building it to avoid conflicts. After the release of a more or less workable version, try not to change the already installed codes.
+5. **_NetworkUpdate_ (closed!)** : This branch contains the main work on creating the server before creating the compilable version. Please don't ask why it's called that. It just happened. _(or you can ask this and I say ~~very long~~ story about it)_
 
-Copyrite will be updated after creating base build.
+**UPD 1:** 26 october 2020 we get first compilable verison. 27 october 2020 _NetworkUpdate_ brunch was merged with _Server_ branch
+
+_**Copyrite will be updated after creating base build.**_
 
 ## How to contact me
 
-1. You can write me on my email: 
+1. You can write me on my email: a
     * _game.nikita22007@yandex.ru_ 
 (Please,  write subject as "Pixel Dungeon Multiplayer")
-2. You can write me in VK (https://vk.com/nikita22007)
-3. nothing more...
+2. You can write me in [VK](https://vk.com/nikita22007)
+3. Discord:  `Nikita22007#2980`
+4. nothing more...
 
 # Pixel Dungeon
 
@@ -41,6 +44,8 @@ http://pixeldungeon.watabou.ru/
 Developer's blog:
 http://pixeldungeon.tumblr.com/
 
+# From 00-Evan repository
+(https://github.com/00-Evan/pixel-dungeon-gradle)
 # Compiling Pixel Dungeon
 
 To compile Pixel Dungeon you will need:
