@@ -54,7 +54,7 @@ public class WndBlacksmith extends Window {
 	private static final String TXT_REFORGE =
 		"Reforge them";
 	
-	public WndBlacksmith( Blacksmith troll, Hero hero ) {
+	public WndBlacksmith(Blacksmith troll, final Hero hero ) {
 		
 		super();
 		
@@ -74,7 +74,7 @@ public class WndBlacksmith extends Window {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem1;
-				GameScene.selectItem( itemSelector, WndBag.Mode.UPGRADEABLE, TXT_SELECT );
+				GameScene.selectItem( hero, itemSelector, WndBag.Mode.UPGRADEABLE, TXT_SELECT );
 			}
 		};
 		btnItem1.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.y + message.height() + BTN_GAP, BTN_SIZE, BTN_SIZE );
@@ -84,7 +84,7 @@ public class WndBlacksmith extends Window {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem2;
-				GameScene.selectItem( itemSelector, WndBag.Mode.UPGRADEABLE, TXT_SELECT );
+				GameScene.selectItem( hero, itemSelector, WndBag.Mode.UPGRADEABLE, TXT_SELECT );
 			}
 		};
 		btnItem2.setRect( btnItem1.right() + BTN_GAP, btnItem1.top(), BTN_SIZE, BTN_SIZE );
@@ -93,7 +93,7 @@ public class WndBlacksmith extends Window {
 		btnReforge = new RedButton( TXT_REFORGE ) {
 			@Override
 			protected void onClick() {
-				Blacksmith.upgrade( btnItem1.item, btnItem2.item );
+				Blacksmith.upgrade( btnItem1.item, btnItem2.item, hero );
 				hide();
 			}
 		};

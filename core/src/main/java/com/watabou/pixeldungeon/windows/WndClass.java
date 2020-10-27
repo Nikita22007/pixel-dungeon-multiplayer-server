@@ -26,8 +26,10 @@ import com.watabou.pixeldungeon.actors.hero.HeroSubClass;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.HighlightedText;
 import com.watabou.pixeldungeon.utils.Utils;
-
-public class WndClass extends WndTabbed {
+/*
+You can see  this window when click on cn selected class in "hero class select" scene
+ */
+public class WndClass extends WndTabbed {		//CLIENT
 	
 	private static final String TXT_MASTERY	= "Mastery";
 	

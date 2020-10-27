@@ -59,7 +59,7 @@ public class WarriorArmor extends ClassArmor {
 	
 	@Override
 	public void doSpecial() {
-		GameScene.selectCell( leaper );
+		GameScene.selectCell(curUser, leaper );
 	}
 	
 	@Override
@@ -95,7 +95,7 @@ public class WarriorArmor extends ClassArmor {
 					Buff.affect( curUser, Fury.class );
 				}
 				
-				Invisibility.dispel();
+				Invisibility.dispel(curUser);
 				
 				final int dest = cell;
 				curUser.busy();
@@ -104,7 +104,7 @@ public class WarriorArmor extends ClassArmor {
 					public void call() {
 						curUser.move( dest );
 						Dungeon.level.press( dest, curUser );
-						Dungeon.observe();
+						Dungeon.observeAll();
 						
 						for (int i=0; i < Level.NEIGHBOURS8.length; i++) {
 							Char mob = Actor.findChar( curUser.pos + Level.NEIGHBOURS8[i] );

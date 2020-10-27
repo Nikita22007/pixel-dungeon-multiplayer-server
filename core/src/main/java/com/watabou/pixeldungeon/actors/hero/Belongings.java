@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.KindOfWeapon;
 import com.watabou.pixeldungeon.items.armor.Armor;
@@ -33,11 +34,13 @@ import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.Network.SendData.sendIronKeysCount;
+
 public class Belongings implements Iterable<Item> {
 
 	public static final int BACKPACK_SIZE	= 19;
 	
-	private Hero owner;
+	public Hero owner;
 	
 	public Bag backpack;	
 
@@ -45,7 +48,7 @@ public class Belongings implements Iterable<Item> {
 	public Armor armor = null;
 	public Ring ring1 = null;
 	public Ring ring2 = null;
-	
+	public int IronKeyCount_visual = 0; //this is count keys of  this depth. This  is "IronKey.curDepthQuantity"
 	public Belongings( Hero owner ) {
 		this.owner = owner;
 		
@@ -119,13 +122,17 @@ public class Belongings implements Iterable<Item> {
 	}
 	
 	public void countIronKeys() {
-		
-		IronKey.curDepthQuantity = 0;
+
+		int keyscount =0;
 		
 		for (Item item : backpack) {
 			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				IronKey.curDepthQuantity++;
+				keyscount ++;
 			}
+		}
+		if (keyscount!=IronKeyCount_visual) {
+			IronKeyCount_visual=keyscount;
+			sendIronKeysCount(HeroHelp.getHeroID(owner), keyscount);
 		}
 	}
 	

@@ -22,6 +22,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.npcs.NPC;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.MagicMissile;
@@ -144,7 +145,7 @@ public class WandOfFlock extends Wand {
 		}
 
 		@Override
-		public void interact() {
+		public void interact(Hero hero) {
 			yell( Random.element( QUOTES ) );
 		}
 	}

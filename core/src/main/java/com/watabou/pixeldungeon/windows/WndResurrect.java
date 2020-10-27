@@ -23,7 +23,7 @@ import com.watabou.pixeldungeon.Rankings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Ankh;
-import com.watabou.pixeldungeon.scenes.InterlevelScene;
+import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.ui.RedButton;
@@ -42,7 +42,7 @@ public class WndResurrect extends Window {
 	public static WndResurrect instance;
 	public static Object causeOfDeath;
 	
-	public WndResurrect( final Ankh ankh, Object causeOfDeath ) {
+	public WndResurrect(final Ankh ankh, final Hero hero, Object causeOfDeath ) {
 		
 		super();
 		
@@ -67,9 +67,7 @@ public class WndResurrect extends Window {
 				hide();
 				
 				Statistics.ankhsUsed++;
-				
-				InterlevelScene.mode = InterlevelScene.Mode.RESURRECT;
-				Game.switchScene( InterlevelScene.class );
+				InterLevelSceneServer.resurrect(hero);
 			}
 		};
 		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );
@@ -81,7 +79,7 @@ public class WndResurrect extends Window {
 				hide();
 				
 				Rankings.INSTANCE.submit( false );
-				Hero.reallyDie( WndResurrect.causeOfDeath );
+				hero.reallyDie( WndResurrect.causeOfDeath );
 			}
 		};
 		btnNo.setRect( 0, btnYes.bottom() + GAP, WIDTH, BTN_HEIGHT );

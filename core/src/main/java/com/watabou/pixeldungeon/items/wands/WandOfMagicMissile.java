@@ -95,7 +95,7 @@ public class WandOfMagicMissile extends Wand {
 			}
 			
 			curUser = hero;
-			GameScene.selectItem( itemSelector, WndBag.Mode.WAND, TXT_SELECT_WAND );
+			GameScene.selectItem(curUser, itemSelector, WndBag.Mode.WAND, TXT_SELECT_WAND );
 			
 		} else {
 		

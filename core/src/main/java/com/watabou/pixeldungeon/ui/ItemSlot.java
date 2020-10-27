@@ -29,7 +29,7 @@ import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.Utils;
 
-public class ItemSlot extends Button {
+public class ItemSlot extends Button { //UI  only -> Client  Only
 
 	public static final int DEGRADED	= 0xFF4444;
 	public static final int UPGRADED	= 0x44FF44;
@@ -136,7 +136,7 @@ public class ItemSlot extends Button {
 					
 					int str = isArmor ? ((Armor)item).STR : ((Weapon)item).STR;
 					topRight.text( Utils.format( TXT_STRENGTH, str ) );
-					if (str > Dungeon.hero.STR()) {
+					if (false){//str > Dungeon.hero.STR()) {
 						topRight.hardlight( DEGRADED );
 					} else {
 						topRight.resetColor();

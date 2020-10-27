@@ -21,7 +21,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.windows.WndSettings;
 
 public class PrefsButton extends Button {
 	
@@ -63,6 +62,5 @@ public class PrefsButton extends Button {
 	
 	@Override
 	protected void onClick() {
-		parent.add( new WndSettings( false ) );
 	}
 }

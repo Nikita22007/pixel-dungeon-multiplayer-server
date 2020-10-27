@@ -96,18 +96,7 @@ public class Blob extends Actor {
 				volume += data[i];
 			}
 		}
-		
-		if (Level.resizingNeeded) {
-			int[] cur = new int[Level.LENGTH];
-			Arrays.fill( cur, 0 );
-			
-			int loadedMapSize = Level.loadedMapSize;
-			for (int i=0; i < loadedMapSize; i++) {
-				System.arraycopy( this.cur, i * loadedMapSize, cur, i * Level.WIDTH, loadedMapSize );
-			}
-			
-			this.cur = cur;
-		}
+
 	}
 	
 	@Override

@@ -63,7 +63,7 @@ public class Weightstone extends Item {
 		if (action == AC_APPLY) {
 
 			curUser = hero;
-			GameScene.selectItem( itemSelector, WndBag.Mode.WEAPON, TXT_SELECT_WEAPON );
+			GameScene.selectItem( hero, itemSelector, WndBag.Mode.WEAPON, TXT_SELECT_WEAPON );
 			
 		} else {
 			

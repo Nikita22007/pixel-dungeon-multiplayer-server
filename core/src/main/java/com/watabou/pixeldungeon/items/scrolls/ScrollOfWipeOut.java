@@ -83,7 +83,7 @@ public class ScrollOfWipeOut extends Item {
 	private void doRead() {
 		GameScene.flash( 0xFF6644 );
 		
-		Invisibility.dispel();
+		Invisibility.dispel(curUser);
 		
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
 			if (!Bestiary.isBoss( mob )) {

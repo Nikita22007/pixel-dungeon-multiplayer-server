@@ -44,7 +44,7 @@ public abstract class InventoryScroll extends Scroll {
 			identifiedByUse = false;
 		}
 		
-		GameScene.selectItem( itemSelector, mode, inventoryTitle );
+		GameScene.selectItem(curUser, itemSelector, mode, inventoryTitle );
 	}
 	
 	private void confirmCancelation() {
@@ -57,7 +57,7 @@ public abstract class InventoryScroll extends Scroll {
 					identifiedByUse = false;
 					break;
 				case 1:
-					GameScene.selectItem( itemSelector, mode, inventoryTitle );
+					GameScene.selectItem( curUser,  itemSelector, mode, inventoryTitle );
 					break;
 				}
 			}
@@ -77,7 +77,7 @@ public abstract class InventoryScroll extends Scroll {
 				((InventoryScroll)curItem).readAnimation();
 				
 				Sample.INSTANCE.play( Assets.SND_READ );
-				Invisibility.dispel();
+				Invisibility.dispel(curUser);
 				
 			} else if (identifiedByUse) {
 				

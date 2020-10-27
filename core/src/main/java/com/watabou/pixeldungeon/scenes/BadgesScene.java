@@ -33,7 +33,6 @@ import com.watabou.pixeldungeon.effects.BadgeBanner;
 import com.watabou.pixeldungeon.ui.Archs;
 import com.watabou.pixeldungeon.ui.ExitButton;
 import com.watabou.pixeldungeon.ui.Window;
-import com.watabou.pixeldungeon.windows.WndBadge;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
@@ -159,7 +158,6 @@ public class BadgesScene extends PixelScene {
 		@Override
 		protected void onClick() {
 			Sample.INSTANCE.play( Assets.SND_CLICK, 0.7f, 0.7f, 1.2f );
-			Game.scene().add( new WndBadge( badge ) );
 		}
 	}
 }

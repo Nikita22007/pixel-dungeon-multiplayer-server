@@ -39,6 +39,6 @@ public class MindVision extends FlavourBuff {
 	@Override
 	public void detach() {
 		super.detach();
-		Dungeon.observe();
+		Dungeon.observeAll();
 	}
 }

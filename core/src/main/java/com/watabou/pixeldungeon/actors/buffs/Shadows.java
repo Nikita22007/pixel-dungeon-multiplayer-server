@@ -21,6 +21,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
 
@@ -47,7 +48,7 @@ public class Shadows extends Invisibility {
 	public boolean attachTo( Char target ) {
 		if (super.attachTo( target )) {
 			Sample.INSTANCE.play( Assets.SND_MELD );
-			Dungeon.observe();
+			Dungeon.observeAll();
 			return true;
 		} else {
 			return false;
@@ -57,7 +58,7 @@ public class Shadows extends Invisibility {
 	@Override
 	public void detach() {
 		super.detach();
-		Dungeon.observe();
+		Dungeon.observeAll();
 	}
 	
 	@Override
@@ -65,8 +66,7 @@ public class Shadows extends Invisibility {
 		if (target.isAlive()) {
 			
 			spend( TICK * 2 );
-			
-			if (--left <= 0 || Dungeon.hero.visibleEnemies() > 0) {
+			if (--left <= 0 || (target instanceof  Hero && ((Hero)target).visibleEnemies() > 0)) {
 				detach();
 			}
 			

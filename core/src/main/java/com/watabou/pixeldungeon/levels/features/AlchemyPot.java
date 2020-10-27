@@ -34,7 +34,7 @@ public class AlchemyPot {
 		AlchemyPot.hero = hero;
 		AlchemyPot.pos = pos;
 		
-		GameScene.selectItem( itemSelector, WndBag.Mode.SEED, TXT_SELECT_SEED );
+		GameScene.selectItem(hero, itemSelector, WndBag.Mode.SEED, TXT_SELECT_SEED );
 	}
 	
 	private static final WndBag.Listener itemSelector = new WndBag.Listener() {

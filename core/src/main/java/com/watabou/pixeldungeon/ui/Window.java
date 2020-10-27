@@ -27,25 +27,36 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.Chrome;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.ShadowBox;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
+import com.watabou.pixeldungeon.ui.Window;
 
 public class Window extends Group implements Signal.Listener<Key> {
 
 	protected int width;
 	protected int height;
-	
+
+	public static  int ID(){
+		return -1;
+	}
+
 	protected TouchArea blocker;
 	protected ShadowBox shadow;
 	protected NinePatch chrome;
-	
+
+	public Hero ownerHero;
 	public static final int TITLE_COLOR = 0xFFFF44;
 	
 	public Window() {
 		this( 0, 0, Chrome.get( Chrome.Type.WINDOW ) );
 	}
-	
+
+	public Window(Hero hero) {
+		this();
+		ownerHero=hero;
+	}
 	public Window( int width, int height ) {
 		this( width, height, Chrome.get( Chrome.Type.WINDOW ) );
 	}

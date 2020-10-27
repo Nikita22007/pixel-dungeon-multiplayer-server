@@ -37,29 +37,23 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.windows.WndGame;
-import com.watabou.pixeldungeon.windows.WndHero;
 
-public class StatusPane extends Component {
+public class StatusPane extends Component {    //remove when server is not client
 	
 	private NinePatch shield;
 	private Image avatar;
 	private Emitter blood;
 	
 	private int lastTier = 0;
-	
-	private Image hp;
+
 	private Image exp;
 	
 	private int lastLvl = -1;
-	private int lastKeys = -1;
 	
 	private BitmapText level;
 	private BitmapText depth;
 	private BitmapText keys;
-	
-	private DangerIndicator danger;
-	private LootIndicator loot;
-	private ResumeButton resume;
+
 	private BuffIndicator buffs;
 	private Compass compass;
 	
@@ -74,18 +68,17 @@ public class StatusPane extends Component {
 		add( new TouchArea( 0, 1, 30, 30 ) {
 			@Override
 			protected void onClick( Touch touch ) {
-				Image sprite = Dungeon.hero.sprite;
+				Image sprite = Dungeon.heroes[0].sprite;
 				if (!sprite.isVisible()) {
 					Camera.main.focusOn( sprite );
 				}
-				GameScene.show( new WndHero() );
 			};			
 		} );
 		
 		btnMenu = new MenuButton();
 		add( btnMenu );
 		
-		avatar = HeroSprite.avatar( Dungeon.hero.heroClass, lastTier );
+		avatar = HeroSprite.avatar( Dungeon.heroes[0].heroClass, lastTier );
 		add( avatar );
 		
 		blood = new BitmaskEmitter( avatar );
@@ -96,9 +89,6 @@ public class StatusPane extends Component {
 		
 		compass = new Compass( Dungeon.level.exit );
 		add( compass );
-		
-		hp = new Image( Assets.HP_BAR );	
-		add( hp );
 		
 		exp = new Image( Assets.XP_BAR );
 		add( exp );
@@ -112,21 +102,12 @@ public class StatusPane extends Component {
 		depth.measure();
 		add( depth );
 		
-		Dungeon.hero.belongings.countIronKeys();
+		Dungeon.heroes[0].belongings.countIronKeys();
 		keys = new BitmapText( PixelScene.font1x );
 		keys.hardlight( 0xCACFC2 );
 		add( keys );
-		
-		danger = new DangerIndicator();
-		add( danger );
-		
-		loot = new LootIndicator();
-		add( loot );
-		
-		resume = new ResumeButton();
-		add( resume );
-		
-		buffs = new BuffIndicator( Dungeon.hero );
+
+		buffs = new BuffIndicator( Dungeon.heroes[0] );
 		add( buffs );
 	}
 	
@@ -143,74 +124,23 @@ public class StatusPane extends Component {
 		compass.x = avatar.x + avatar.width / 2 - compass.origin.x;
 		compass.y = avatar.y + avatar.height / 2 - compass.origin.y;
 		
-		hp.x = 30;
-		hp.y = 3;
-		
 		depth.x = width - 24 - depth.width()    - 18;
 		depth.y = 6;
 		
 		keys.y = 6;
-		
-		layoutTags();
-		
+
 		buffs.setPos( 32, 11 );
 		
 		btnMenu.setPos( width - btnMenu.width(), 1 );
 	}
-	
-	private void layoutTags() {
-		
-		float pos = 18;
-		
-		if (tagDanger) {
-			danger.setPos( width - danger.width(), pos );
-			pos = danger.bottom() + 1;
-		}
-		
-		if (tagLoot) {
-			loot.setPos( width - loot.width(), pos );
-			pos = loot.bottom() + 1;
-		}
-		
-		if (tagResume) {
-			resume.setPos( width - resume.width(), pos );
-		}
-	}
-	
-	private boolean tagDanger	= false;
-	private boolean tagLoot		= false;
-	private boolean tagResume	= false;
-	
+
 	@Override
 	public void update() {
 		super.update();
+
+		exp.scale.x = (width / exp.width) * Dungeon.heroes[0].exp / Dungeon.heroes[0].maxExp();
 		
-		if (tagDanger != danger.visible || tagLoot != loot.visible || tagResume != resume.visible) {
-			
-			tagDanger = danger.visible;
-			tagLoot = loot.visible;
-			tagResume = resume.visible;
-			
-			layoutTags();
-		}
-		
-		float health = (float)Dungeon.hero.HP / Dungeon.hero.HT;
-		
-		if (health == 0) {
-			avatar.tint( 0x000000, 0.6f );
-			blood.on = false;
-		} else if (health < 0.25f) {
-			avatar.tint( 0xcc0000, 0.4f );
-			blood.on = true;
-		} else {
-			avatar.resetColor();
-			blood.on = false;
-		}
-		
-		hp.scale.x = health;
-		exp.scale.x = (width / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
-		
-		if (Dungeon.hero.lvl != lastLvl) {
+		if (Dungeon.heroes[0].lvl != lastLvl) {
 			
 			if (lastLvl != -1) {
 				Emitter emitter = (Emitter)recycle( Emitter.class );
@@ -219,25 +149,17 @@ public class StatusPane extends Component {
 				emitter.burst( Speck.factory( Speck.STAR ), 12 );
 			}
 			
-			lastLvl = Dungeon.hero.lvl;
+			lastLvl = Dungeon.heroes[0].lvl;
 			level.text( Integer.toString( lastLvl ) );
 			level.measure();
 			level.x = PixelScene.align( 27.5f - level.width() / 2 );
 			level.y = PixelScene.align( 28.0f - level.baseLine() / 2 );
 		}
 		
-		int k = IronKey.curDepthQuantity;
-		if (k != lastKeys) {
-			lastKeys = k;
-			keys.text( Integer.toString( lastKeys ) );
-			keys.measure();
-			keys.x = width - 8 - keys.width()    - 18;
-		}
-		
-		int tier = Dungeon.hero.tier();
+		int tier = Dungeon.heroes[0].tier();
 		if (tier != lastTier) {
 			lastTier = tier;
-			avatar.copy( HeroSprite.avatar( Dungeon.hero.heroClass, tier ) );
+			avatar.copy( HeroSprite.avatar( Dungeon.heroes[0].heroClass, tier ) );
 		}
 	}
 	

@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.Network.SendData;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Acidic;
 import com.watabou.pixeldungeon.actors.mobs.Albino;
@@ -267,11 +268,11 @@ public class Badges {
 			badge = Badge.MONSTERS_SLAIN_4;
 			local.add( badge );
 		}
-		
+
 		displayBadge( badge );
 	}
 	
-	public static void validateGoldCollected() {
+	public static void validateGoldCollected(Hero hero) {
 		Badge badge = null;
 		
 		if (!local.contains( Badge.GOLD_COLLECTED_1 ) && Statistics.goldCollected >= 100) {
@@ -295,7 +296,7 @@ public class Badges {
 	}
 	
 	public static void validateLevelReached(Hero hero) {
-		Badge badge = null;
+		/*Badge badge = null;
 		
 		if (!local.contains( Badge.LEVEL_REACHED_1 ) && hero.lvl >= 6) {
 			badge = Badge.LEVEL_REACHED_1;
@@ -314,11 +315,14 @@ public class Badges {
 			local.add( badge );
 		}
 		
-		displayBadge( badge );
+		displayBadge( badge );*/
+		if (hero.lvl>=6){
+			SendData.sendBadgeLevelReached(HeroHelp.getHeroID(hero), Math.min(hero.lvl/6,4));
+		}
 	}
 	
 	public static void validateStrengthAttained(Hero hero) {
-		Badge badge = null;
+		/*Badge badge = null;
 		
 		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && hero.STR >= 13) {
 			badge = Badge.STRENGTH_ATTAINED_1;
@@ -338,6 +342,10 @@ public class Badges {
 		}
 		
 		displayBadge( badge );
+		*/
+		if (hero.STR >= 13 && hero.STR%2==1 ){
+			SendData.sendBadgeStrengthAttained(HeroHelp.getHeroID(hero),Math.min((hero.STR-11)/2,4));
+		}
 	}
 	
 	public static void validateFoodEaten() {
@@ -578,7 +586,7 @@ public class Badges {
 	}
 	
 	public static void validateBossSlain() {
-		Badge badge = null;
+		/*Badge badge = null;
 		switch (Dungeon.depth) {
 		case 5:
 			badge = Badge.BOSS_SLAIN_1;
@@ -684,11 +692,14 @@ public class Badges {
 					}
 				}
 			}
+		}*/
+		if (Dungeon.depth % 5 == 0) {
+			SendData.sendAllBadgeBossSlain(Dungeon.depth % 5);
 		}
 	}
 	
 	public static void validateMastery(Hero hero) {
-		
+		/*
 		Badge badge = null;
 		switch (Dungeon.hero.heroClass) {
 		case WARRIOR:
@@ -709,6 +720,8 @@ public class Badges {
 			global.add( badge );
 			saveNeeded = true;
 		}
+		*/
+		SendData.sendBadgeMastery(HeroHelp.getHeroID(hero));
 	}
 	
 	public static void validateMasteryCombo( int n ) {

@@ -23,7 +23,6 @@ import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.HealthBar;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.Utils;
 
@@ -35,9 +34,6 @@ public class IconTitle extends Component {
 	
 	protected Image imIcon;
 	protected BitmapTextMultiline tfLabel;
-	protected HealthBar health;
-	
-	private float healthLvl = Float.NaN;
 	
 	public IconTitle() {
 		super();
@@ -64,15 +60,10 @@ public class IconTitle extends Component {
 		tfLabel = PixelScene.createMultiline( FONT_SIZE );
 		tfLabel.hardlight( Window.TITLE_COLOR );
 		add( tfLabel );
-		
-		health = new HealthBar();
-		add( health );
-	}
+}
 	
 	@Override
 	protected void layout() {
-		
-		health.visible = !Float.isNaN( healthLvl );
 		
 		imIcon.x = x;
 		imIcon.y = y;
@@ -84,13 +75,8 @@ public class IconTitle extends Component {
 			imIcon.height > tfLabel.height() ?
 				imIcon.y + (imIcon.height() - tfLabel.baseLine()) / 2 :
 				imIcon.y );
-		
-		if (health.visible) {
-			health.setRect( tfLabel.x, Math.max( tfLabel.y + tfLabel.height(), imIcon.y + imIcon.height() - health.height() ), tfLabel.maxWidth, 0 );
-			height = health.bottom();
-		} else {
-			height = Math.max( imIcon.y + imIcon.height(), tfLabel.y + tfLabel.height() );
-		}
+
+		height = Math.max( imIcon.y + imIcon.height(), tfLabel.y + tfLabel.height() );
 	}
 	
 	public void icon( Image icon ) {
@@ -112,7 +98,6 @@ public class IconTitle extends Component {
 	}
 	
 	public void health( float value ) {
-		health.level( healthLvl = value );
 		layout();
 	}
 }

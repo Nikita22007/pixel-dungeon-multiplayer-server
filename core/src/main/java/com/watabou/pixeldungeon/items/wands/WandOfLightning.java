@@ -91,7 +91,7 @@ public class WandOfLightning extends Wand {
 	protected void fx( int cell, Callback callback ) {
 		
 		nPoints = 0;
-		points[nPoints++] = Dungeon.hero.pos;
+		points[nPoints++] =curUser.pos;
 		
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {

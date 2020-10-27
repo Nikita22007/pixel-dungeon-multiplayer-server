@@ -59,7 +59,7 @@ public class ArmorKit extends Item {
 		if (action == AC_APPLY) {
 
 			curUser = hero;
-			GameScene.selectItem( itemSelector, WndBag.Mode.ARMOR, TXT_SELECT_ARMOR );
+			GameScene.selectItem(hero, itemSelector, WndBag.Mode.ARMOR, TXT_SELECT_ARMOR );
 			
 		} else {
 			

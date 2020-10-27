@@ -37,6 +37,7 @@ import com.watabou.utils.SystemTime;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.opengl.GLES20;
@@ -51,8 +52,8 @@ import android.view.View;
 
 public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTouchListener {
 	
-	public static Game instance;
-	
+	public static Game instance;  //game inherits context, then we  can use "instance" as a Context
+
 	// Actual size of the screen
 	public static int width;
 	public static int height;
@@ -66,7 +67,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	// Current scene
 	protected Scene scene;
 	// New scene we are going to switch to
-	protected Scene requestedScene;
+	//protected Scene requestedScene;
 	// true if scene switch is requested
 	protected boolean requestedReset = true;
 	// callback to perform logic during scene change
@@ -265,9 +266,9 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	}
 	
 	public static void switchScene(Class<? extends Scene> c, SceneChangeCallback callback) {
+		instance.onChange = callback;
 		instance.sceneClass = c;
 		instance.requestedReset = true;
-		instance.onChange = callback;
 	}
 	
 	public static Scene scene() {
@@ -280,9 +281,10 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 			requestedReset = false;
 			
 			try {
-				requestedScene = sceneClass.newInstance();
-				switchScene();
-			} catch (InstantiationException | IllegalAccessException e) {
+				switchScene( sceneClass.newInstance());
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e){
 				e.printStackTrace();
 			}
 			
@@ -296,7 +298,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		scene.draw();
 	}
 	
-	protected void switchScene() {
+	protected void switchScene(Scene requestedScene) {
 		
 		Camera.reset();
 		

@@ -218,7 +218,31 @@ public abstract class Level implements Bundlable {
 		}
 		createMobs();
 	}
-	
+	public int getSpawnCell(){
+		return getNearClearCell(entrance);
+	}
+	public static int getNearClearCell(int startPos){
+		if (Actor.findChar( startPos ) == null){
+			return startPos;
+		}
+		//need to create random circle
+		else for (int i:NEIGHBOURS8) {
+			if ((Actor.findChar( startPos+i ) == null)&&(passable[startPos+i])){
+				return startPos+i;
+			}
+		}
+
+			int count = 10;
+			int pos;
+			do {
+				pos = Dungeon.level.randomRespawnCell();
+				if (count-- <= 0) {
+					break;
+				}
+			} while (pos == -1);
+			return pos;
+	};
+
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		
@@ -235,24 +259,16 @@ public abstract class Level implements Bundlable {
 		exit		= bundle.getInt( EXIT );
 		
 		weakFloorCreated = false;
-		
-		adjustMapSize();
-		
+				
 		Collection<Bundlable> collection = bundle.getCollection( HEAPS );
 		for (Bundlable h : collection) {
 			Heap heap = (Heap)h;
-			if (resizingNeeded) {
-				heap.pos = adjustPos( heap.pos );
-			}
 			heaps.put( heap.pos, heap );
 		}
 		
 		collection = bundle.getCollection( PLANTS );
 		for (Bundlable p : collection) {
 			Plant plant = (Plant)p;
-			if (resizingNeeded) {
-				plant.pos = adjustPos( plant.pos );
-			}
 			plants.put( plant.pos, plant );
 		}
 		
@@ -260,9 +276,6 @@ public abstract class Level implements Bundlable {
 		for (Bundlable m : collection) {
 			Mob mob = (Mob)m;
 			if (mob != null) {
-				if (resizingNeeded) {
-					mob.pos = adjustPos( mob.pos );
-				}
 				mobs.add( mob );
 			}
 		}
@@ -293,44 +306,7 @@ public abstract class Level implements Bundlable {
 	public int tunnelTile() {
 		return feeling == Feeling.CHASM ? Terrain.EMPTY_SP : Terrain.EMPTY;
 	}
-	
-	private void adjustMapSize() {
-		// For levels saved before 1.6.3
-		if (map.length < LENGTH) {
-			
-			resizingNeeded = true;
-			loadedMapSize = (int)Math.sqrt( map.length );
-			
-			int[] map = new int[LENGTH];
-			Arrays.fill( map, Terrain.WALL );
-			
-			boolean[] visited = new boolean[LENGTH];
-			Arrays.fill( visited, false );
-			
-			boolean[] mapped = new boolean[LENGTH];
-			Arrays.fill( mapped, false );
-			
-			for (int i=0; i < loadedMapSize; i++) {
-				System.arraycopy( this.map, i * loadedMapSize, map, i * WIDTH, loadedMapSize );
-				System.arraycopy( this.visited, i * loadedMapSize, visited, i * WIDTH, loadedMapSize );
-				System.arraycopy( this.mapped, i * loadedMapSize, mapped, i * WIDTH, loadedMapSize );
-			}
-			
-			this.map = map;
-			this.visited = visited;
-			this.mapped = mapped;
-			
-			entrance = adjustPos( entrance );
-			exit = adjustPos( exit ); 
-		} else {
-			resizingNeeded = false;
-		}
-	}
-	
-	public int adjustPos( int pos ) {
-		return (pos / loadedMapSize) * WIDTH + (pos % loadedMapSize);
-	}
-	
+
 	public String tilesTex() {
 		return null;
 	}
@@ -623,7 +599,7 @@ public abstract class Level implements Bundlable {
 	public void press( int cell, Char ch ) {
 
 		if (pit[cell] && ch instanceof Hero) {
-			Chasm.heroFall( cell );
+			Chasm.heroFall( cell, (Hero)ch );
 			return;
 		}
 		

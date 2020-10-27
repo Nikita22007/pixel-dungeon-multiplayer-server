@@ -42,12 +42,12 @@ public class HeroSprite extends CharSprite {
 	private Animation fly;
 	private Animation read;
 	
-	public HeroSprite() {
+	public HeroSprite(Hero hero) {
 		super();
 		
-		link( Dungeon.hero );
+		link( hero );
 		
-		texture( Dungeon.hero.heroClass.spritesheet() );
+		texture( hero.heroClass.spritesheet() );
 		updateArmor();
 		
 		idle();

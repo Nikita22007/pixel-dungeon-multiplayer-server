@@ -166,7 +166,7 @@ public abstract class Wand extends KindOfWeapon {
 			
 			curUser = hero;
 			curItem = this;
-			GameScene.selectCell( zapper );
+			GameScene.selectCell(hero, zapper );
 			
 		} else {
 			
@@ -440,7 +440,7 @@ public abstract class Wand extends KindOfWeapon {
 						}
 					} );
 					
-					Invisibility.dispel();
+					Invisibility.dispel(curUser);
 					
 				} else {
 					

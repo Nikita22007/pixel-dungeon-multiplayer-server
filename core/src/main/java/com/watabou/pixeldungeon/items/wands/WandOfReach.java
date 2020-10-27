@@ -97,7 +97,7 @@ public class WandOfReach extends Wand {
 		}
 		
 		if (mapUpdated) {
-			Dungeon.observe();
+			Dungeon.observeAll();
 		}
 	}
 	

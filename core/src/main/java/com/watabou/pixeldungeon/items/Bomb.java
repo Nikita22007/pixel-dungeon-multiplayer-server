@@ -87,7 +87,7 @@ public class Bomb extends Item {
 			}
 			
 			if (terrainAffected) {
-				Dungeon.observe();
+				Dungeon.observeAll();
 			}
 		}
 	}

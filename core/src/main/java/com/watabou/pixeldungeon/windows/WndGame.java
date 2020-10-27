@@ -23,14 +23,12 @@ import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.RankingsScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.RedButton;
-import com.watabou.pixeldungeon.ui.Window;
 
-public class WndGame extends Window {
+public class WndGame extends WndOnlyClient{
 	
 	private static final String TXT_SETTINGS	= "Settings";
 	private static final String TXT_CHALLEGES	= "Challenges";
@@ -50,14 +48,6 @@ public class WndGame extends Window {
 		
 		super();
 		
-		addButton( new RedButton( TXT_SETTINGS ) {
-			@Override
-			protected void onClick() {
-				hide();
-				GameScene.show( new WndSettings( true ) );
-			}
-		} );
-		
 		if (Dungeon.challenges > 0) {
 			addButton( new RedButton( TXT_CHALLEGES ) {
 				@Override
@@ -67,7 +57,7 @@ public class WndGame extends Window {
 				}
 			} );
 		}
-		
+		/*
 		if (!Dungeon.hero.isAlive()) {
 			
 			RedButton btnStart;
@@ -82,7 +72,7 @@ public class WndGame extends Window {
 				}
 			} );
 			btnStart.icon( Icons.get( Dungeon.hero.heroClass ) );
-			
+
 			addButton( new RedButton( TXT_RANKINGS ) {
 				@Override
 				protected void onClick() {
@@ -90,7 +80,7 @@ public class WndGame extends Window {
 					Game.switchScene( RankingsScene.class );
 				}
 			} );
-		}
+		}*/
 				
 		addButtons( 
 			new RedButton( TXT_MENU ) {

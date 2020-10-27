@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Bones;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.GamesInProgress;
+import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -95,8 +96,9 @@ import com.watabou.pixeldungeon.levels.features.AlchemyPot;
 import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.levels.features.Sign;
 import com.watabou.pixeldungeon.plants.Earthroot;
+import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.scenes.InterlevelScene;
+import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.scenes.SurfaceScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
@@ -108,6 +110,8 @@ import com.watabou.pixeldungeon.windows.WndResurrect;
 import com.watabou.pixeldungeon.windows.WndTradeItem;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import static com.watabou.pixeldungeon.Network.SendData.sendResumeButtonVisible;
 
 public class Hero extends Char {
 	
@@ -141,6 +145,7 @@ public class Hero extends Char {
 	private int attackSkill = 10;
 	private int defenseSkill = 5;
 	
+    public static AttackIndicator attackIndicator;
 
 	public boolean ready = false;
 
@@ -159,7 +164,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
-	public boolean weakened = false;
+	//public boolean weakened = false;
 	
 	public float awareness;
 	
@@ -170,6 +175,20 @@ public class Hero extends Char {
 	
 	public Hero() {
 		super();
+		final  Hero hero =  this;
+		defaultCellListener= new CellSelector.Listener() { //client
+			@Override
+			public void onSelect( Integer cell ) {
+				if (hero.handle( cell )) {
+					hero.next();
+				}
+			}
+			@Override
+			public String prompt() {
+				return null;
+			}
+		};
+		attackIndicator=new AttackIndicator(this);
 		name = "you";
 		
 		HP = HT = 20;
@@ -177,12 +196,12 @@ public class Hero extends Char {
 		awareness = 0.1f;
 		
 		belongings = new Belongings( this );
-		
+
 		visibleEnemies = new ArrayList<Mob>();
 	}
 
 	public int STR() {
-		return weakened ? STR - 2 : STR;
+		return  this.buff(Weakness.class)!=null ? STR - 2 : STR; //it was "weakened", but this is more easy
 	}
 
 	private static final String ATTACK		= "attackSkill";
@@ -383,7 +402,7 @@ public class Hero extends Char {
 		}
 		
 		checkVisibleMobs();
-		AttackIndicator.updateState();
+		attackIndicator.updateState();
 		
 		if (curAction == null) {
 			
@@ -469,20 +488,24 @@ public class Hero extends Char {
 		curAction = null;
 		ready = true;
 		
-		GameScene.ready();
+		GameScene.ready(this);
 	}
 	
 	public void interrupt() {
 		if (isAlive() && curAction != null && curAction.dst != pos) {
 			lastAction = curAction;
+			sendResumeButtonVisible(HeroHelp.getHeroID(this), true);
 		}
 		curAction = null;
 	}
 	
 	public void resume() {
-		curAction = lastAction;
-		lastAction = null;
-		act();
+		if (isAlive() /*&& curAction==null && lastAction != null*/ ) {
+			curAction = lastAction;
+			lastAction = null;
+			act();
+		}
+		sendResumeButtonVisible(HeroHelp.getHeroID(this), false);
 	}
 	
 	private boolean actMove( HeroAction.Move action ) {
@@ -534,7 +557,7 @@ public class Hero extends Char {
 			
 			Heap heap = Dungeon.level.heaps.get( dst );
 			if (heap != null && heap.type == Type.FOR_SALE && heap.size() == 1) {
-				GameScene.show( new WndTradeItem( heap, true ) );
+				GameScene.show( new WndTradeItem( heap, true, this ) );
 			}
 			
 			return false;
@@ -715,8 +738,9 @@ public class Hero extends Char {
 				hunger.satisfy( -Hunger.STARVING / 10 );
 			}
 			
-			InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-			Game.switchScene( InterlevelScene.class );
+			//InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+			InterLevelSceneServer.descend(this);
+			//Game.switchScene( InterlevelScene.class );
 			
 			return false;
 			
@@ -754,8 +778,7 @@ public class Hero extends Char {
 					hunger.satisfy( -Hunger.STARVING / 10 );
 				}
 				
-				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-				Game.switchScene( InterlevelScene.class );
+				InterLevelSceneServer.ascend(this);
 			}
 			
 			return false;
@@ -1161,7 +1184,7 @@ public class Hero extends Char {
 		} else {
 			
 			Dungeon.deleteGame( this.heroClass, false );
-			GameScene.show( new WndResurrect( ankh, cause ) );
+			GameScene.show( new WndResurrect( ankh, this, cause ) );
 			
 		}
 	}
@@ -1189,7 +1212,7 @@ public class Hero extends Char {
 		
 		Bones.leave(this);
 		
-		Dungeon.observe();
+		Dungeon.observeAll();
 				
 		this.belongings.identify();
 		
@@ -1241,7 +1264,7 @@ public class Hero extends Char {
 	
 	@Override
 	public void onMotionComplete() {
-		Dungeon.observe();
+		Dungeon.observeAll();
 		search( false );
 			
 		super.onMotionComplete();
@@ -1250,12 +1273,12 @@ public class Hero extends Char {
 	@Override
 	public void onAttackComplete() {
 		
-		AttackIndicator.target( enemy );
+		attackIndicator.target( enemy );
 		
 		attack( enemy );
 		curAction = null;
 		
-		Invisibility.dispel();
+		Invisibility.dispel(this);
 
 		super.onAttackComplete();
 	}
@@ -1418,7 +1441,10 @@ public class Hero extends Char {
 	public void next() {
 		super.next();
 	}
-	
+
+
+	public CellSelector cellSelector;
+	public CellSelector.Listener defaultCellListener;
 	public static interface Doom {
 		public void onDeath();
 	}

@@ -33,6 +33,8 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Honeypot extends Item {
 	
 	public static final String AC_SHATTER	= "SHATTER";
@@ -56,7 +58,7 @@ public class Honeypot extends Item {
 		if (action.equals( AC_SHATTER )) {
 			
 			hero.sprite.zap( hero.pos );
-			shatter( hero.pos );
+			shatter( hero.pos, hero );
 			
 			detach( hero.belongings.backpack );
 			hero.spendAndNext( TIME_TO_THROW );
@@ -71,11 +73,11 @@ public class Honeypot extends Item {
 		if (Level.pit[cell]) {
 			super.onThrow( cell );
 		} else {
-			shatter( cell );
+			shatter( cell, curUser );
 		}
 	}
 	
-	private void shatter( int pos ) {
+	private void shatter( int pos, Hero owner ) {
 		Sample.INSTANCE.play( Assets.SND_SHATTER );
 		
 		if (Dungeon.visible[pos]) {
@@ -98,7 +100,7 @@ public class Honeypot extends Item {
 		}
 		
 		if (newPos != -1) {
-			Bee bee = new Bee();
+			Bee bee = new Bee(owner);
 			bee.spawn( Dungeon.depth );
 			bee.HP = bee.HT;
 			bee.pos = newPos;

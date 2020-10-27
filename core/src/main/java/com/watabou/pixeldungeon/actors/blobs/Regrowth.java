@@ -66,7 +66,7 @@ public class Regrowth extends Blob {
 			}
 			
 			if (mapUpdated) {
-				Dungeon.observe();
+				Dungeon.observeAll();
 			}
 		}
 	}

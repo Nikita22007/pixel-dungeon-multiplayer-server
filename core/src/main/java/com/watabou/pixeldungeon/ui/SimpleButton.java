@@ -21,7 +21,7 @@ import com.watabou.input.Touchscreen.Touch;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TouchArea;
 import com.watabou.noosa.ui.Component;
-
+//small "X" button in com.watabou.pixeldungeon.ui.Toast
 public class SimpleButton extends Component {
 			
 	private Image image;

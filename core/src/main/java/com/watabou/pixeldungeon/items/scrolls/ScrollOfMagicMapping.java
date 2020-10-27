@@ -68,7 +68,7 @@ public class ScrollOfMagicMapping extends Scroll {
 				}
 			}
 		}
-		Dungeon.observe();
+		Dungeon.observeAll();
 		
 		GLog.i( TXT_LAYOUT );
 		if (noticed) {
@@ -77,7 +77,7 @@ public class ScrollOfMagicMapping extends Scroll {
 		
 		SpellSprite.show( curUser, SpellSprite.MAP );
 		Sample.INSTANCE.play( Assets.SND_READ );
-		Invisibility.dispel();
+		Invisibility.dispel(curUser);
 		
 		setKnown();
 		

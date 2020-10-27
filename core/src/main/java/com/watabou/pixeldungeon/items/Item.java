@@ -123,7 +123,7 @@ public class Item implements Bundlable {
 	}
 	
 	public void doThrow( Hero hero ) {
-		GameScene.selectCell( thrower );
+		GameScene.selectCell( hero,  thrower );
 	}
 	
 	public void execute( Hero hero, String action ) {
@@ -224,7 +224,7 @@ public class Item implements Bundlable {
 			
 			try { 
 				Item detached = getClass().newInstance();
-				detached.onDetach( );
+				detached.onDetach( container);
 				return detached;
 			} catch (Exception e) {
 				return null;
@@ -237,7 +237,7 @@ public class Item implements Bundlable {
 		for (Item item : container.items) {
 			if (item == this) {
 				container.items.remove( this );
-				item.onDetach( );
+				item.onDetach(container );
 				QuickSlot.refresh();
 				return this;
 			} else if (item instanceof Bag) {
@@ -251,9 +251,13 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	protected void onDetach( ) {
+	protected void onDetach( Bag container) {
+		onDetach();
 	}
-	
+
+	protected void onDetach() {
+
+	}
 	public int level() {
 		return level;
 	}
@@ -309,7 +313,7 @@ public class Item implements Bundlable {
 			}
 			if (isBroken()) {
 				getBroken();
-				if (levelKnown) {
+				/*if (levelKnown) {   CLIENT
 					GLog.n( TXT_BROKEN, name() );
 					Dungeon.hero.interrupt();
 					
@@ -325,7 +329,7 @@ public class Item implements Bundlable {
 						sprite.parent.add( Degradation.wand( point ) );
 					}
 					Sample.INSTANCE.play( Assets.SND_DEGRADE );
-				}
+				}*/
 			}
 		}
 	}
@@ -439,7 +443,7 @@ public class Item implements Bundlable {
 		return info();
 	}
 
-	protected String info() {
+	public String info() {
 		return desc();
 	}
 	
@@ -591,7 +595,7 @@ public class Item implements Bundlable {
 			} );
 	}
 	
-	protected static Hero curUser = null;
+	public static Hero curUser = null;
 	protected static Item curItem = null;
 	protected static CellSelector.Listener thrower = new CellSelector.Listener() {	
 		@Override
