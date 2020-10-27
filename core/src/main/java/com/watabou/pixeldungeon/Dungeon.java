@@ -99,6 +99,7 @@ public class Dungeon {
 	public static void init() {
 		//TODO SETTING MENU
 		Settings.maxPlayers=4;//
+		Dungeon.heroes=new Hero[Settings.maxPlayers];
 
 
 		challenges = PixelDungeon.challenges();

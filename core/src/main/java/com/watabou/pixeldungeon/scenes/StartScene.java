@@ -33,7 +33,10 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.GamesInProgress;
+import com.watabou.pixeldungeon.Network.Server;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.Settings;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.Speck;
@@ -256,7 +259,8 @@ public class StartScene extends PixelScene {			//client  Scene
 	}
 	
 	private void startNewGame() {
-
+		Dungeon.init();
+		Server.startServer();
 		InterLevelSceneServer.descend(null);
 		Game.switchScene( IntroScene.class );
 

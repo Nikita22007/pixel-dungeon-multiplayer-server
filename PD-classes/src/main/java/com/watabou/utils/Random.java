@@ -79,7 +79,7 @@ public class Random {
 	@SuppressWarnings("unchecked")
 	public static <K> K chances( HashMap<K,Float> chances ) {
 		
-		int size = chances.size();
+			int size = chances.size();
 
 		Object[] values = chances.keySet().toArray();
 		float[] probs = new float[size];

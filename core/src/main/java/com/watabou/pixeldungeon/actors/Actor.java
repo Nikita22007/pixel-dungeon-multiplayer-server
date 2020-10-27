@@ -33,6 +33,8 @@ import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class Actor implements Bundlable {
 
 	public static final float TICK	= 1f;
@@ -135,7 +137,9 @@ public abstract class Actor implements Bundlable {
 	
 	public static void init() {
 		for (Hero hero:Dungeon.heroes) {
-			addDelayed( hero, -Float.MIN_VALUE );
+			if (hero!=null) {
+				addDelayed(hero, -Float.MIN_VALUE);
+			}
 		}
 		
 		for (Mob mob : Dungeon.level.mobs) {
@@ -210,15 +214,15 @@ public abstract class Actor implements Bundlable {
 		} while (doNext);
 	}
 	
-	public static void add( Actor actor ) {
+	public static void add(@NotNull Actor actor ) {
 		add( actor, now );
 	}
 	
-	public static void addDelayed( Actor actor, float delay ) {
+	public static void addDelayed(@NotNull Actor actor, float delay ) {
 		add( actor, now + delay );
 	}
 	
-	private static void add( Actor actor, float time ) {
+	private static void add( @NotNull Actor actor, float time ) {
 		
 		if (all.contains( actor )) {
 			return;

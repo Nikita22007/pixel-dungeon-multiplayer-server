@@ -10,6 +10,7 @@ import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.RegularLevel;
@@ -110,6 +111,7 @@ public class InterLevelSceneServer {
     public static void descend(@Nullable Hero hero)  {// спуск
 
         try {
+            Generator.reset();
             for (int i = 0; i < heroes.length; i++) {
                 SendData.sendInterLevelSceneDescend(i);
             }
@@ -140,6 +142,7 @@ public class InterLevelSceneServer {
     public static void fall(Hero hero, boolean fallIntoPit) {
 
         try {
+            Generator.reset();
             for (int i = 0; i < heroes.length; i++) {
                 SendData.sendInterLevelSceneFall(i);
             }
@@ -178,6 +181,7 @@ public class InterLevelSceneServer {
     public static void ascend(Hero hero) {
 
         try {
+            Generator.reset();
         for (int i = 0; i < heroes.length; i++) {
             SendData.sendInterLevelSceneAscend(i);
         }
@@ -199,6 +203,7 @@ public class InterLevelSceneServer {
 
     public static void returnTo(int  depth, int pos, Hero  hero) {
         try {
+            Generator.reset();
             if (depth != Dungeon.depth) {
                 for (int i = 0; i < heroes.length; i++) {
                     SendData.sendInterLevelSceneReturn(i);
@@ -225,6 +230,7 @@ public class InterLevelSceneServer {
     public static void restore() { //when loading from save
 
         try {
+            Generator.reset();
             Actor.fixTime();
 
             GameLog.wipe();
@@ -244,6 +250,7 @@ public class InterLevelSceneServer {
 
     public static void resurrect(Hero hero)  { //respawn by ankh
 
+        Generator.reset();
         for (int i = 0; i< heroes.length; i++) {
             SendData.sendInterLevelSceneResurrect(i);
         }
