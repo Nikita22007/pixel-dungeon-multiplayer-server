@@ -65,11 +65,6 @@ public class StartScene extends PixelScene {			//client  Scene
 	private static final String TXT_YES		= "Yes, start new game";
 	private static final String TXT_NO		= "No, return to main menu";
 	
-	private static final String TXT_UNLOCK	= "To unlock this character class, slay the 3rd boss with any other class";
-	
-	private static final String TXT_WIN_THE_GAME = 
-		"To unlock \"Challenges\", win the game with any character class.";
-	
 	private static final float WIDTH_P	= 116;
 	private static final float HEIGHT_P	= 220;
 	
@@ -463,17 +458,15 @@ public class StartScene extends PixelScene {			//client  Scene
 		
 		@Override
 		protected void onClick() {
-			if (Badges.isUnlocked( Badges.Badge.VICTORY )) {
-				StartScene.this.add( new WndChallenges( PixelDungeon.challenges(), true ) {
-					public void onBackPressed() {
-						super.onBackPressed();
-						image.copy( Icons.get( PixelDungeon.challenges() > 0 ? 
-							Icons.CHALLENGE_ON :Icons.CHALLENGE_OFF ) );
-					};
-				} );
-			} else {
-				StartScene.this.add( new WndMessage( TXT_WIN_THE_GAME ) );
-			}
+			StartScene.this.add(new WndChallenges(PixelDungeon.challenges(), true) {
+				public void onBackPressed() {
+					super.onBackPressed();
+					image.copy(Icons.get(PixelDungeon.challenges() > 0 ?
+							Icons.CHALLENGE_ON : Icons.CHALLENGE_OFF));
+				}
+
+				;
+			});
 		}
 		
 		@Override
