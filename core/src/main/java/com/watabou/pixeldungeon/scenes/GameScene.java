@@ -478,16 +478,4 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			return null;
 		}
 
-	//--------------------------- CLIENT
-	public static void ClientBossSlain() {
-
-		if (Dungeon.heroes[0].isAlive()) {
-			Banner bossSlain = new Banner( BannerSprites.get( BannerSprites.Type.BOSS_SLAIN ) );
-			bossSlain.show( 0xFFFFFF, 0.3f, 5f );
-			scene.showBanner( bossSlain );
-
-			Sample.INSTANCE.play( Assets.SND_BOSS );
-		}
-	}
-
 }

@@ -134,13 +134,8 @@ public class Dungeon {
 		QuickSlot.primaryValue = null;
 		QuickSlot.secondaryValue = null;
 
-		heroes=new Hero[Settings.maxPlayers];
-		heroes[0]=new Hero();
-		heroes[0].live();
-		
 		Badges.reset();
 
-		StartScene.curClass.initHero( heroes[0] );
 	}
 	
 	public static boolean isChallenged( int mask ) {
@@ -395,7 +390,7 @@ public class Dungeon {
 		return DEPTH_FILE;
 	}
 	
-	public static void saveGame( String fileName ) throws IOException {
+	public static void saveGame( String fileName ) throws IOException { //TODO FIX IT
 		try {
 			Bundle bundle = new Bundle();
 			

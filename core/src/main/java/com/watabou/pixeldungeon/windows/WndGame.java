@@ -24,8 +24,9 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.ui.RedButton;
+import com.watabou.pixeldungeon.ui.Window;
 
-public class WndGame extends WndOnlyClient{
+public class WndGame extends Window {
 	
 	private static final String TXT_SETTINGS	= "Settings";
 	private static final String TXT_CHALLEGES	= "Challenges";
