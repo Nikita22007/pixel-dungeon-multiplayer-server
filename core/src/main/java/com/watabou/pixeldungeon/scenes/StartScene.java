@@ -84,9 +84,6 @@ public class StartScene extends PixelScene {			//client  Scene
 	private GameButton btnLoad;
 	private GameButton btnNewGame;
 	
-	private boolean huntressUnlocked;
-	private Group unlock;
-	
 	public static HeroClass curClass;
 	
 	@Override
@@ -197,28 +194,7 @@ public class StartScene extends PixelScene {			//client  Scene
 				top + shieldH - challenge.height() / 2 );
 			add( challenge );
 		}
-		
-		unlock = new Group();
-		add( unlock );
-		
-		if (!(huntressUnlocked = Badges.isUnlocked( Badges.Badge.BOSS_SLAIN_3 ))) {
-		
-			BitmapTextMultiline text = PixelScene.createMultiline( TXT_UNLOCK, 9 );
-			text.maxWidth = (int)width;
-			text.measure();
-			
-			float pos = (bottom - BUTTON_HEIGHT) + (BUTTON_HEIGHT - text.height()) / 2;
-			for (BitmapText line : text.new LineSplitter().split()) {
-				line.measure();
-				line.hardlight( 0xFFFF00 );
-				line.x = PixelScene.align( w / 2 - line.width() / 2 );
-				line.y = PixelScene.align( pos );
-				unlock.add( line );
-				
-				pos += line.height(); 
-			}
-		}
-		
+
 		ExitButton btnExit = new ExitButton();
 		btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
 		add( btnExit );
@@ -248,51 +224,39 @@ public class StartScene extends PixelScene {			//client  Scene
 	}
 	
 	private void updateClass( HeroClass cl ) {
-		
+
 		if (curClass == cl) {
-			add( new WndClass( cl ) );
+			add(new WndClass(cl));
 			return;
 		}
-		
+
 		if (curClass != null) {
-			shields.get( curClass ).highlight( false );
+			shields.get(curClass).highlight(false);
 		}
-		shields.get( curClass = cl ).highlight( true );
-		
-		if (cl != HeroClass.HUNTRESS || huntressUnlocked) {
-		
-			unlock.visible = false;
-			
-			GamesInProgress.Info info = GamesInProgress.check( curClass );
-			if (info != null) {
-				
-				btnLoad.visible = true;
-				btnLoad.secondary( Utils.format( TXT_DPTH_LVL, info.depth, info.level ), info.challenges );
-				
-				btnNewGame.visible = true;
-				btnNewGame.secondary( TXT_ERASE, false );
-				
-				float w = (Camera.main.width - GAP) / 2 - buttonX;
-				
-				btnLoad.setRect(
-					buttonX, buttonY, w, BUTTON_HEIGHT );
-				btnNewGame.setRect(
-					btnLoad.right() + GAP, buttonY, w, BUTTON_HEIGHT );
-				
-			} else {
-				btnLoad.visible = false;
-				
-				btnNewGame.visible = true;
-				btnNewGame.secondary( null, false );
-				btnNewGame.setRect( buttonX, buttonY, Camera.main.width - buttonX * 2, BUTTON_HEIGHT );
-			}
-			
+		shields.get(curClass = cl).highlight(true);
+
+		GamesInProgress.Info info = GamesInProgress.check(curClass);
+		if (info != null) {
+
+			btnLoad.visible = true;
+			btnLoad.secondary(Utils.format(TXT_DPTH_LVL, info.depth, info.level), info.challenges);
+
+			btnNewGame.visible = true;
+			btnNewGame.secondary(TXT_ERASE, false);
+
+			float w = (Camera.main.width - GAP) / 2 - buttonX;
+
+			btnLoad.setRect(
+					buttonX, buttonY, w, BUTTON_HEIGHT);
+			btnNewGame.setRect(
+					btnLoad.right() + GAP, buttonY, w, BUTTON_HEIGHT);
+
 		} else {
-			
-			unlock.visible = true;
 			btnLoad.visible = false;
-			btnNewGame.visible = false;
-			
+
+			btnNewGame.visible = true;
+			btnNewGame.secondary(null, false);
+			btnNewGame.setRect(buttonX, buttonY, Camera.main.width - buttonX * 2, BUTTON_HEIGHT);
 		}
 	}
 	
