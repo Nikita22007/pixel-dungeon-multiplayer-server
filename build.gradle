@@ -4,7 +4,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:4.1.0'
     }
 }
 
@@ -29,7 +29,7 @@ allprojects {
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xmaxerrs" << "40000" //<< " -Xmaxwarns" << "1000"
+            options.compilerArgs << "-Xmaxerrs" << "40000" << "-Xlint:deprecation"//<< " -Xmaxwarns" << "1000"
         }
     }
 }
