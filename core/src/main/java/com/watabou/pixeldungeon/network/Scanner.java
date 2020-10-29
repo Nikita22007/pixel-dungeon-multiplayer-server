@@ -8,6 +8,9 @@ import android.net.wifi.WifiManager;
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.utils.GLog;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class Scanner { //Todo write this
     protected static NsdManager.ResolveListener resolveListener;
     protected static NsdManager nsdManager;
 
+    protected static ServicesListener servicesListener;
+
     public  static boolean isWifiConnected(){
         WifiManager  wifiManager = (WifiManager) Game.instance.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return wifiManager.isWifiEnabled();
@@ -31,11 +36,13 @@ public class Scanner { //Todo write this
         return serverList;
     }
 
-    public static boolean start() {
+    public static boolean start( @NotNull ServicesListener listener) {
+        servicesListener=listener;
         initializeNSDManager();
         initializeResolveListener();
         initializeDiscoveryListener();
         state = ListenerState.NULL;
+        serverList= new ArrayList<>();
         nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
         while (state == ListenerState.NULL) {
             //GLog.h(state.toString());
@@ -46,7 +53,7 @@ public class Scanner { //Todo write this
     public static boolean stop() {
         if (nsdManager != null) {
             nsdManager.stopServiceDiscovery(discoveryListener);
-    }
+        }
         return true;
     }
 
@@ -72,13 +79,24 @@ public class Scanner { //Todo write this
             @Override
             public void onServiceResolved(NsdServiceInfo serviceInfo) {
                 GLog.p("Resolve Succeeded. " + serviceInfo);
+                String name = serviceInfo.getServiceName();
+                for (ServerInfo server:serverList) {
+                    if  (server.name.equals(name)){
+                        GLog.p("Already have server: %s",name);
+                        return;
+                    }
+                }
                 ServerInfo server = new ServerInfo(
                         serviceInfo.getServiceName(), //name
                         serviceInfo.getHost(),
                         serviceInfo.getPort(),
                         -1, -1, false
                 );
+
                 serverList.add(server);
+                if (servicesListener!=null){
+                    servicesListener.OnServerConnected(server);
+                }
             }
         };
     }
@@ -135,5 +153,9 @@ public class Scanner { //Todo write this
                 //nsdManager.stopServiceDiscovery(this);//infinity Loop?
             }
         };
+    }
+
+    public interface ServicesListener{
+        public void OnServerConnected(ServerInfo info);
     }
 }

@@ -13,11 +13,11 @@ public class WndConnectServer extends Window {
 
     private String generateMessage(int players, int playersMax,String IP, int port){
         String message="Players: ";
-        message+=(players>-1)?players:'?';
+        message+=(players>-1)?players:"?";
         message+='/';
-        message+=(playersMax>-1)?playersMax:'?';
+        message+=(playersMax>-1)?playersMax:"?";
         message+='\n';
-        message+=IP+':'+port;
+        message+=IP.substring(1)+':'+port;
         return message;
     }
     public WndConnectServer(String serverName, int players, int playersMax, String IP,int port){
@@ -27,6 +27,7 @@ public class WndConnectServer extends Window {
         tfTitle.x = tfTitle.y = MARGIN;
         tfTitle.maxWidth = WIDTH - MARGIN * 2;
         tfTitle.measure();
+        tfTitle.x= (tfTitle.maxWidth-tfTitle.width()) / 2 ;
         add( tfTitle );
 
         BitmapTextMultiline tfMesage = PixelScene.createMultiline( generateMessage(players,playersMax,IP,port), 8 );
@@ -86,6 +87,9 @@ public class WndConnectServer extends Window {
     protected void onSelect( int index ) { //По  идее это  и не нужно, оставил на случай  новых кнопок
         if (index==1){ //
             //TODO connect
+            if (!false){
+
+            }
         }
 
     };

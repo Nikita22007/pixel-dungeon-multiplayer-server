@@ -20,9 +20,8 @@ import com.watabou.pixeldungeon.ui.ExitButton;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndConnectServer;
-import com.watabou.pixeldungeon.windows.WndError;
-import com.watabou.pixeldungeon.windows.WndOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +31,7 @@ import java.util.List;
     * TABLE_SIZE should be calculated based on the height of the screen
 */
 
-public class ConnectScene extends PixelScene {
+public class ConnectScene extends PixelScene implements Scanner.ServicesListener {
 
     private static final int DEFAULT_COLOR	= 0xCCCCCC;
     private static final int TABLE_SIZE=6;
@@ -53,6 +52,10 @@ public class ConnectScene extends PixelScene {
     private Archs archs;
 
     private Group page;
+    private ArrayList<Record> rows  = new ArrayList<>();
+    private BitmapText title;
+    private int width;
+    private int height;
 
     public void CreateCenterText(int cameraWidth, int cameraHeight,String text){
         BitmapText title = PixelScene.createText( text, 8 );
@@ -63,6 +66,58 @@ public class ConnectScene extends PixelScene {
         add( title );
     }
 
+    protected void drawServers(){
+
+        ServerInfo[] serverList;
+        if (title!=null) {
+            title.kill();
+        }
+        for (Record row:rows) {
+            row.kill();
+        }
+        List<ServerInfo> list;
+        list=Scanner.getServerList();
+        serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
+        if (serverList.length > 0) {
+
+            float rowHeight = PixelDungeon.landscape() ? ROW_HEIGHT_L : ROW_HEIGHT_P;
+
+            float left = (width - Math.min(MAX_ROW_WIDTH, width)) / 2 + GAP;
+            float top = align((height - rowHeight * Math.min(serverList.length,TABLE_SIZE)) / 2);
+
+            title = PixelScene.createText(TXT_TITLE, 9);
+            title.hardlight(Window.TITLE_COLOR);
+            title.measure();
+            title.x = align((width - title.width()) / 2);
+            title.y = align(top - title.height() - GAP);
+            add(title);
+
+            int pos = 0;
+
+            for (int i = 0; i < Math.min(serverList.length,TABLE_SIZE); i += 1) {
+                Record row = new Record(pos, false, serverList[i], this);
+                row.setRect(left, top + pos * rowHeight, width - left * 2, rowHeight);
+                add(row);
+                rows.add(row);
+                pos++;
+            }
+
+            if (serverList.length > TABLE_SIZE) {
+                //todo previous/next
+            }
+
+        } else {
+
+            title = PixelScene.createText(TXT_SEARCHING, 8);
+            title.hardlight(DEFAULT_COLOR);
+            title.measure();
+            title.x = align((width - title.width()) / 2);
+            title.y = align((height - title.height()) / 2);
+            add(title);
+
+        }
+
+    }
     @Override
     public void create() {
 
@@ -73,62 +128,20 @@ public class ConnectScene extends PixelScene {
 
         uiCamera.visible = false;
 
-        int w = Camera.main.width;
-        int h = Camera.main.height;
+        width = Camera.main.width;
+        height = Camera.main.height;
 
         archs = new Archs();
-        archs.setSize( w, h );
+        archs.setSize(width, height);
         add( archs );
         if (!Scanner.isWifiConnected()){
-            CreateCenterText(w,h,TXT_WIFI_DISABLED);
+            CreateCenterText(width, height,TXT_WIFI_DISABLED);
         }
         else {
-            if (!Scanner.start()) {
-                CreateCenterText(w,h,TXT_ERROR);
+            if (!Scanner.start(this)) {
+                CreateCenterText(width, height,TXT_ERROR);
             } else {
-                ServerInfo[] serverList;
-
-                List<ServerInfo> list;
-                list=Scanner.getServerList();
-                serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
-                if (serverList.length > 0) {
-
-                    float rowHeight = PixelDungeon.landscape() ? ROW_HEIGHT_L : ROW_HEIGHT_P;
-
-                    float left = (w - Math.min(MAX_ROW_WIDTH, w)) / 2 + GAP;
-                    float top = align((h - rowHeight * serverList.length) / 2);
-
-                    BitmapText title = PixelScene.createText(TXT_TITLE, 9);
-                    title.hardlight(Window.TITLE_COLOR);
-                    title.measure();
-                    title.x = align((w - title.width()) / 2);
-                    title.y = align(top - title.height() - GAP);
-                    add(title);
-
-                    int pos = 0;
-
-                    for (int i = 0; i < Math.min(serverList.length,TABLE_SIZE); i += 1) {
-                        Record row = new Record(pos, false, serverList[i], this);
-                        row.setRect(left, top + pos * rowHeight, w - left * 2, rowHeight);
-                        add(row);
-
-                        pos++;
-                    }
-
-                    if (serverList.length > TABLE_SIZE) {
-                        //todo previous/next
-                    }
-
-                } else {
-
-                    BitmapText title = PixelScene.createText(TXT_SEARCHING, 8);
-                    title.hardlight(DEFAULT_COLOR);
-                    title.measure();
-                    title.x = align((w - title.width()) / 2);
-                    title.y = align((h - title.height()) / 2);
-                    add(title);
-
-                }
+                drawServers();
             }
         }
         ExitButton btnExit = new ExitButton(){
@@ -147,6 +160,11 @@ public class ConnectScene extends PixelScene {
         PixelDungeon.switchNoFade( TitleScene.class );
     }
 
+    @Override
+    public void OnServerConnected(ServerInfo info) {
+        drawServers();
+    }
+
     public static class Record extends Button {
         public Scene ConnectScene;
 
@@ -163,7 +181,6 @@ public class ConnectScene extends PixelScene {
         private Flare flare;
         private BitmapText position;
         private BitmapTextMultiline desc;
-        private Image classIcon;
 
         public Record( int pos, boolean withFlare, ServerInfo rec,Scene scene ) {
             super();
@@ -189,11 +206,10 @@ public class ConnectScene extends PixelScene {
                 position.hardlight( TEXT_WIN );
                 desc.hardlight( TEXT_WIN );
             } else {
+                shield.view( ItemSpriteSheet.CHEST, null );
                 position.hardlight( TEXT_LOSE );
                 desc.hardlight( TEXT_LOSE );
             }
-
-            classIcon.copy( Icons.get( Icons.PREFS ) );
         }
 
         @Override
@@ -210,8 +226,6 @@ public class ConnectScene extends PixelScene {
             desc = createMultiline( 9 );
             add( desc );
 
-            classIcon = new Image();
-            add( classIcon );
         }
 
         @Override
@@ -229,11 +243,8 @@ public class ConnectScene extends PixelScene {
                 flare.point( shield.center() );
             }
 
-            classIcon.x = align( x + width - classIcon.width );
-            classIcon.y = shield.y;
-
             desc.x = shield.x + shield.width + GAP;
-            desc.maxWidth = (int)(classIcon.x - desc.x);
+            desc.maxWidth = (int)(shield.x - desc.x);
             desc.measure();
             desc.y = position.y + position.baseLine() - desc.baseLine();
         }
