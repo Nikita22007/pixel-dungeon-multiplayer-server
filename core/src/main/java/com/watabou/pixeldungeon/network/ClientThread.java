@@ -21,8 +21,8 @@ class ClientThread extends Thread {
     public ClientThread(int ThreadID, Socket clientSocket) {
         this.clientSocket = clientSocket;
         try {
-            readStream = new ObjectInputStream(clientSocket.getInputStream());
             writeStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            readStream = new ObjectInputStream(clientSocket.getInputStream());
             this.threadID = ThreadID;
             this.start(); //auto start
         } catch (IOException e) {
@@ -103,6 +103,6 @@ class ClientThread extends Thread {
         writeStream = null;
         clientSocket = null;
         Server.clients[threadID] = null;
-
+        GLog.n("player "+threadID+" disconnected");
     }
 }
