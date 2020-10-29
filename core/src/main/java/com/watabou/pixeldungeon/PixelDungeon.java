@@ -228,8 +228,7 @@ public class PixelDungeon extends Game {
 	// *** IMMERSIVE MODE ****
 	
 	private static boolean immersiveModeChanged = false;
-	
-	//@SuppressLint("NewApi")
+
 	public static void immerse( boolean value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_IMMERSIVE, value );
 		

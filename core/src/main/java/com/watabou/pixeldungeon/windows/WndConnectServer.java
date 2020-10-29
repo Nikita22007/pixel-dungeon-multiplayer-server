@@ -1,7 +1,11 @@
 package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
+import com.watabou.noosa.Scene;
+import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.network.Client;
 import com.watabou.pixeldungeon.network.ServerInfo;
+import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
@@ -10,6 +14,9 @@ public class WndConnectServer extends Window {
     private static final int WIDTH			= 120;
     private static final int MARGIN 		= 2;
     private static final int BUTTON_HEIGHT	= 20;
+    private String IP;
+    private int port;
+    private Scene scene;
 
     private String generateMessage(int players, int playersMax,String IP, int port){
         String message="Players: ";
@@ -17,12 +24,16 @@ public class WndConnectServer extends Window {
         message+='/';
         message+=(playersMax>-1)?playersMax:"?";
         message+='\n';
-        message+=IP.substring(1)+':'+port;
+        message+=IP+':'+port;
         return message;
     }
-    public WndConnectServer(String serverName, int players, int playersMax, String IP,int port){
+    public WndConnectServer(Scene scene, ServerInfo server){
         super();
-        BitmapTextMultiline tfTitle = PixelScene.createMultiline(serverName, 9 );
+        this.IP=server.IP.getHostAddress();
+        this.port=server.port;
+        this.scene=scene;
+
+        BitmapTextMultiline tfTitle = PixelScene.createMultiline(server.name, 9 );
         tfTitle.hardlight( TITLE_COLOR );
         tfTitle.x = tfTitle.y = MARGIN;
         tfTitle.maxWidth = WIDTH - MARGIN * 2;
@@ -30,7 +41,7 @@ public class WndConnectServer extends Window {
         tfTitle.x= (tfTitle.maxWidth-tfTitle.width()) / 2 ;
         add( tfTitle );
 
-        BitmapTextMultiline tfMesage = PixelScene.createMultiline( generateMessage(players,playersMax,IP,port), 8 );
+        BitmapTextMultiline tfMesage = PixelScene.createMultiline( generateMessage(server.players,server.maxPlayers,IP,port), 8 );
         tfMesage.maxWidth = WIDTH - MARGIN * 2;
         tfMesage.measure();
         tfMesage.x = MARGIN;
@@ -87,8 +98,10 @@ public class WndConnectServer extends Window {
     protected void onSelect( int index ) { //По  идее это  и не нужно, оставил на случай  новых кнопок
         if (index==1){ //
             //TODO connect
-            if (!false){
-
+            if (!Client.connect(IP,port)){
+                scene.add(new WndError("Can't connect"));
+            }else{
+                PixelDungeon.switchScene(InterlevelScene.class);
             }
         }
 

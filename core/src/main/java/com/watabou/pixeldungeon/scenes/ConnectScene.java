@@ -251,7 +251,7 @@ public class ConnectScene extends PixelScene implements Scanner.ServicesListener
 
         @Override
         protected void onClick() {
-            this.ConnectScene.add( new WndConnectServer(rec.name,rec.players,rec.maxPlayers, rec.IP.toString(),rec.port) );
+            this.ConnectScene.add(new WndConnectServer( ConnectScene, rec));
         }
     }
 }
