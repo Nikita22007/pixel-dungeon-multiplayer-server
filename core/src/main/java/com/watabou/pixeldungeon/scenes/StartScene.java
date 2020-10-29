@@ -48,6 +48,7 @@ import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.pixeldungeon.windows.WndChallenges;
 import com.watabou.pixeldungeon.windows.WndClass;
+import com.watabou.pixeldungeon.windows.WndError;
 import com.watabou.pixeldungeon.windows.WndMessage;
 import com.watabou.pixeldungeon.windows.WndOptions;
 import com.watabou.utils.Callback;
@@ -260,7 +261,10 @@ public class StartScene extends PixelScene {			//client  Scene
 	
 	private void startNewGame() {
 		Dungeon.init();
-		Server.startServer();
+		if (!Server.startServer()){
+			StartScene.this.add(new WndError("Server starting error"));
+			return;
+		}
 		InterLevelSceneServer.descend(null);
 		Game.switchScene( IntroScene.class );
 
