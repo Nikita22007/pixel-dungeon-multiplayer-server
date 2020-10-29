@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.watabou.noosa.Game;
-import com.watabou.pixeldungeon.Network.SendData;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Acidic;
 import com.watabou.pixeldungeon.actors.mobs.Albino;

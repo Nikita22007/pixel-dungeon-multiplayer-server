@@ -1,4 +1,4 @@
-package com.watabou.pixeldungeon.Network;
+package com.watabou.pixeldungeon.network;
 
 /*
 Нужно мерджить эти коды в ветки клиента и сервера после каждого изменения.

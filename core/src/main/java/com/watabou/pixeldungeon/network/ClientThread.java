@@ -1,4 +1,4 @@
-package com.watabou.pixeldungeon.Network;
+package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.hero.Hero;

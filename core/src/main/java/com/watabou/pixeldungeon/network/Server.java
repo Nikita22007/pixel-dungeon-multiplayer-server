@@ -1,4 +1,4 @@
-package com.watabou.pixeldungeon.Network;
+package com.watabou.pixeldungeon.network;
 // based on https://developer.android.com/training/connect-devices-wirelessly/nsd.html#java
 
 import android.content.Context;

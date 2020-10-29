@@ -111,7 +111,7 @@ import com.watabou.pixeldungeon.windows.WndTradeItem;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-import static com.watabou.pixeldungeon.Network.SendData.sendResumeButtonVisible;
+import static com.watabou.pixeldungeon.network.SendData.sendResumeButtonVisible;
 
 public class Hero extends Char {
 	

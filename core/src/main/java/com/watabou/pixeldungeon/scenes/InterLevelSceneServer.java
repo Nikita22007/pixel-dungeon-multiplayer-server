@@ -1,11 +1,9 @@
 package com.watabou.pixeldungeon.scenes;
 
-import android.net.Network;
-
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.Network.SendData;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -20,7 +18,6 @@ import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
 import com.watabou.utils.Random;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;

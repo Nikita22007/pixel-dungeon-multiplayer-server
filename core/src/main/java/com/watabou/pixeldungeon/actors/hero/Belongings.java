@@ -34,7 +34,7 @@ import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-import static com.watabou.pixeldungeon.Network.SendData.sendIronKeysCount;
+import static com.watabou.pixeldungeon.network.SendData.sendIronKeysCount;
 
 public class Belongings implements Iterable<Item> {
 

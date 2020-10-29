@@ -1,9 +1,9 @@
-package com.watabou.pixeldungeon.Network;
+package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.windows.WndStory;
 
-import static com.watabou.pixeldungeon.Network.Server.clients;  //I'm too lazy to write "Server.clients". Never do as I do.
+import static com.watabou.pixeldungeon.network.Server.clients;  //I'm too lazy to write "Server.clients". Never do as I do.
 
 public class SendData {
 
