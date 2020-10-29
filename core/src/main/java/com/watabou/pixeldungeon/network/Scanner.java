@@ -42,8 +42,7 @@ public class Scanner { //Todo write this
         }
         return state == ListenerState.STARTED;
     }
-
-
+    
     public static boolean stop() {
         if (nsdManager != null) {
             nsdManager.stopServiceDiscovery(discoveryListener);
