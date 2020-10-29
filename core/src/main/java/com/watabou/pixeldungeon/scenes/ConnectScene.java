@@ -107,7 +107,7 @@ public class ConnectScene extends PixelScene {
 
                     int pos = 0;
 
-                    for (int i = 0; i < TABLE_SIZE; i += 1) {
+                    for (int i = 0; i < Math.min(serverList.length,TABLE_SIZE); i += 1) {
                         Record row = new Record(pos, false, serverList[i], this);
                         row.setRect(left, top + pos * rowHeight, w - left * 2, rowHeight);
                         add(row);
