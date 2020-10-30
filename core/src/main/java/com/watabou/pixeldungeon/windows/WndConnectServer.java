@@ -4,9 +4,11 @@ import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Scene;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.network.Client;
+import com.watabou.pixeldungeon.network.Scanner;
 import com.watabou.pixeldungeon.network.ServerInfo;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
+import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
 
@@ -95,13 +97,14 @@ public class WndConnectServer extends Window {
         resize( WIDTH, (int)pos );
     }
     //Fixme delete this function
-    protected void onSelect( int index ) { //По  идее это  и не нужно, оставил на случай  новых кнопок
+    protected void onSelect( int index ) {
         if (index==1){ //
             //TODO connect
             if (!Client.connect(IP,port)){
                 scene.add(new WndError("Can't connect"));
             }else{
-                PixelDungeon.switchScene(InterlevelScene.class);
+                Scanner.stop();
+                StartScene.startNewGame();
             }
         }
 

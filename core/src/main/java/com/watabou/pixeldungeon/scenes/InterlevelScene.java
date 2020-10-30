@@ -60,10 +60,10 @@ public class InterlevelScene extends PixelScene {
 	
 	public static boolean fallIntoPit;
 	
-	private enum Phase {
+	public enum Phase {
 		FADE_IN, STATIC, FADE_OUT
 	};
-	private Phase phase;
+	public static Phase phase;
 	private float timeLeft;
 	
 	private BitmapText message;
@@ -74,7 +74,8 @@ public class InterlevelScene extends PixelScene {
 	@Override
 	public void create() {
 		super.create();
-		
+
+		phase=Phase.FADE_IN;
 		String text = "";
 		switch (mode) {
 		case DESCEND:
@@ -110,7 +111,6 @@ public class InterlevelScene extends PixelScene {
 		thread = new Thread() {
 			@Override
 			public void run() {
-				
 				try {
 					
 					Generator.reset();
@@ -157,7 +157,7 @@ public class InterlevelScene extends PixelScene {
 				}
 			}
 		};
-		thread.start();
+		//thread.start();
 	}
 	
 	@Override
@@ -170,14 +170,7 @@ public class InterlevelScene extends PixelScene {
 		
 		case FADE_IN:
 			message.alpha( 1 - p );
-			if ((timeLeft -= Game.elapsed) <= 0) {
-				if (!thread.isAlive() && error == null) {
-					phase = Phase.FADE_OUT;
-					timeLeft = TIME_TO_FADE;
-				} else {
-					phase = Phase.STATIC;
-				}
-			}
+
 			break;
 			
 		case FADE_OUT:
@@ -186,6 +179,7 @@ public class InterlevelScene extends PixelScene {
 				Music.INSTANCE.volume( p );
 			}
 			if ((timeLeft -= Game.elapsed) <= 0) {
+				phase=Phase.FADE_IN;
 				Game.switchScene( GameScene.class );
 			}
 			break;

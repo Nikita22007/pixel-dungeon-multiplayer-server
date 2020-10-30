@@ -38,12 +38,12 @@ import com.watabou.utils.Bundle;
 
 public enum HeroClass {
 
-	WARRIOR( "warrior" ), MAGE( "mage" ), ROGUE( "rogue" ), HUNTRESS( "huntress" );
+	WARRIOR( "warrior",1 ), MAGE( "mage",2 ), ROGUE( "rogue",3 ), HUNTRESS( "huntress",4 );
 	
 	private String title;
-	
-	private HeroClass( String title ) {
-		this.title = title;
+	private int ID;
+	private HeroClass( String title, int id ) {
+		this.title = title; ID=id;
 	}
 	
 	public static final String[] WAR_PERKS = {
@@ -178,7 +178,11 @@ public enum HeroClass {
 	public String title() {
 		return title;
 	}
-	
+
+	public int getID() {
+		return ID;
+	}
+
 	public String spritesheet() {
 		
 		switch (this) {

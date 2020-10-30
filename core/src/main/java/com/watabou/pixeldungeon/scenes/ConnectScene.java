@@ -4,7 +4,6 @@ import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
-import com.watabou.noosa.Image;
 import com.watabou.noosa.Scene;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.ui.Button;
@@ -17,7 +16,6 @@ import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.ui.Archs;
 import com.watabou.pixeldungeon.ui.ExitButton;
-import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndConnectServer;
 
