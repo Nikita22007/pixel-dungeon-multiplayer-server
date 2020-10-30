@@ -110,7 +110,7 @@ public class HeroHelp {
     }
     public static boolean haveAliveHero(){
         for (int i=0;i<Settings.maxPlayers;i++){
-             if (Dungeon.heroes[i].isAlive()){
+             if (Dungeon.heroes[i]!=null && Dungeon.heroes[i].isAlive()){
                  return true;
              }
         }
