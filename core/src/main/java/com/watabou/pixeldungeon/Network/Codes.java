@@ -1,4 +1,4 @@
-package com.watabou.pixeldungeon.Network;
+package com.watabou.pixeldungeon.network;
 
 /*
 Нужно мерджить эти коды в ветки клиента и сервера после каждого изменения.
@@ -112,6 +112,19 @@ class Codes {
 
     //Listeners 0x90-0x9F
     public static final int CELL_SELECT_LISTENER   = 0x90;   //client->server; when client touch cell
+
+    //Char block 0xA0-0xAF
+    public static final int CHAR            = 0xA0; //server-> client; send name of class of char with ID. Client inits char with base params of this class. If "Custom" - init's base char
+    // ID:integer; ID of char //Class:String; Class of char;  //client->server; asc char with ID
+    public static final int CHAR_POS        = 0xA1; //server-> client; //ID:integer; ID of char //pos:int; Class of char;  //client->server; asc char with ID
+    public static final int CHAR_NAME       = 0xA2; //server-> client; //ID:integer; ID of char //name:String; Class of char;  //client->server; asc char with ID
+    public static final int CHAR_HT         = 0xA3; //server-> client; //ID:integer; ID of char //HT:int; Class of char;  //client->server; asc char with ID
+    public static final int CHAR_HP         = 0xA4; //server-> client; //ID:integer; ID of char //HP:int; Class of char;  //client->server; asc char with ID
+
+    //custom char  sprite:
+    //ublic static final int CHAR_SPRITE_ASSETS     = 0xA5;
+    //public static final int CHAR_SPRITE_FILM     = 0xA6;
+    //public static final int CHAR_SPRITE     = 0xA7;
 
     //unclassed
 
