@@ -9,8 +9,11 @@ import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.utils.GLog;
 
-import java.io.*;
-import java.net.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 
 public class Server extends Thread {
     public static final String SERVICENAME = "MultiplayerPD"; //any nonzero string
@@ -81,13 +84,13 @@ public class Server extends Thread {
                         break;
                     } else {
                         if (i == clients.length) { //If we test last and it's connected too
-                            new ObjectOutputStream(client.getOutputStream()).writeObject(Codes.SERVER_FULL);
+                            new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
                             client.close();
                         }
                     }
                 }
             } catch (IOException e) {
-                if (!(e.getMessage().equals("Socket is closed"))) {  //"Socket is closed" means  hat client disconnected
+                if (!(e.getMessage().equals("Socket is closed"))) {  //"Socket is closed" means that client disconnected
                     GLog.h("IO exception:".concat(e.getMessage()));
                 }
                 break;

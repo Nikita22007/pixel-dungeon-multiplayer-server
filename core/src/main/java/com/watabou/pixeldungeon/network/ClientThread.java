@@ -110,11 +110,14 @@ class ClientThread extends Thread {
         newHero.live();
         curClass.initHero(newHero);
         newHero.pos = Dungeon.level.entrance;
+        send(Codes.LEVEL_ENTRANCE,Dungeon.level.entrance);
+        send(Codes.LEVEL_EXIT,Dungeon.level.exit); //todo  Send it when exit visible
         Actor.add(newHero);
         Dungeon.observe(newHero);
 
         send(Codes.LEVEL_MAP, Dungeon.level.map);
-
+        send(Codes.LEVEL_VISITED, Dungeon.level.visited);
+        send(Codes.HERO_VISIBLE_AREA, Dungeon.visible);
         //TODO send all  information
         send(Codes.IL_FADE_OUT);
 
