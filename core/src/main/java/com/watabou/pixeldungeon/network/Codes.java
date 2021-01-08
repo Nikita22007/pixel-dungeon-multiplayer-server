@@ -16,6 +16,8 @@ class Codes {
     public static final int LEVEL_MAP     = 0X10;   //client->server:ask; //server->client:answer or  data
     public static final int LEVEL_VISITED = 0X11;   //client->server:ask; //server->client:answer or  data
     public static final int LEVEL_MAPPED  = 0X12;   //client->server:ask; //server->client:answer or  data
+    public static final int LEVEL_ENTRANCE= 0X13;   //client->server:ask; //server->client:answer or  data
+    public static final int LEVEL_EXIT    = 0X14;   //client->server:ask; //server->client:answer or  data
 
     //UI block 0X20-0X3F
     public static final int BOSS_SLAIN    = 0X20;   //server->client
