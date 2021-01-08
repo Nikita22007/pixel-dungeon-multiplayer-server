@@ -4,16 +4,16 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
-import java.io.*;
-import java.net.*;
 
 public class Client extends Thread {
-    public static ObjectInputStream readStream;
-    public static ObjectOutputStream writeStream;
+    public static DataInputStream readStream;
+    public static DataOutputStream writeStream;
     protected static Socket socket = null;
     protected static Client client;
     protected static ParceThread parceThread = null;
@@ -24,8 +24,8 @@ public class Client extends Thread {
         }
         try {
             socket = new Socket(server, port);
-            writeStream = new ObjectOutputStream(socket.getOutputStream());
-            readStream = new ObjectInputStream(socket.getInputStream());
+            writeStream = new DataOutputStream(socket.getOutputStream());
+            readStream = new DataInputStream(socket.getInputStream());
             client = new Client();
             client.start();
             parceThread.start();
@@ -64,7 +64,60 @@ public class Client extends Thread {
     }
 
     //IO
+    //send primitives
+    public static void send(int code) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception. Message: {0}", e.getMessage());
+            disconnect();
+        }
+    }
+    public static void send(int code, byte Data) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.writeByte(Data);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception. Message: {0}", e.getMessage());
+            disconnect();
+        }
+    }
+    public static void send(int code, int Data) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.writeInt(Data);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception. Message: {0}", e.getMessage());
+            disconnect();
+        }
+    }
 
+    public static void send(int code, String message) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.writeInt(message.length());
+            writeStream.writeChars(message);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception. Message: {0}", e.getMessage());
+            disconnect();
+        }
+    }
+    //send_serelliased_data
+    public static void sendData(int code, byte[]  data) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.write(data);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception. Message: {0}", e.getMessage());
+            disconnect();
+        }
+    }
+    /*
     public static <T> void  send(int code, T ...  data) {
         try {
             writeStream.writeObject(code);
@@ -75,5 +128,5 @@ public class Client extends Thread {
         } catch (Exception e) {
             disconnect();
         }
-    }
+    }*/
 }

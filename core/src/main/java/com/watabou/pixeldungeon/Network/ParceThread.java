@@ -18,25 +18,25 @@ public class ParceThread extends Thread {
     public void run() {
         while (!socket.isClosed()){
             try {
-                int code = (Integer) readStream.readObject();
+                int code = (Integer) readStream.readInt();
                 switch (code){
                     //Network block
                     case Codes.NOP: {break;}
                     case Codes.SERVER_FULL:{
                         PixelDungeon.switchScene(TitleScene.class);
-           //             PixelDungeon.scene().add(new WndError("Server full"));
+                        // TODO   PixelDungeon.scene().add(new WndError("Server full"));
                         return;
                        }
                     //level block
                     case Codes.LEVEL_MAP: {
-                        Dungeon.level.map= (int[]) readStream.readObject();break;
+                        Dungeon.level.map= readIntArray();break;
                     }
                     //UI block
                     case Codes.IL_FADE_OUT: {
                         InterlevelScene.phase  = InterlevelScene.Phase.FADE_OUT;break;
                     }
                 }
-            }catch (IOException | ClassNotFoundException e){
+            }catch (IOException e){
                 GLog.n(e.getMessage());
 
                 PixelDungeon.switchScene(TitleScene.class);
@@ -44,5 +44,13 @@ public class ParceThread extends Thread {
                 return;
             }
         }
+    }
+    protected int[] readIntArray()throws IOException{
+        int len =  readStream.readInt();
+        int[] res =new int[len];
+        for  (int i=0;i<len;i++){
+            res[i]=readStream.readInt();
+        }
+        return res;
     }
 }
