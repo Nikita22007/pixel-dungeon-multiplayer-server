@@ -65,11 +65,12 @@ class ClientThread extends Thread {
 
                     default: {
                         GLog.n("BadCode:{0}", code);
-                        break;
+                        throw new IOException(String.format("Bad code:{0}",code));
+                        //break;
                     }
                 }
             } catch (IOException e) {
-                GLog.n(e.getMessage());
+                GLog.n(String.format("ThreadID:{0}; Message:{1}",threadID,e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
                 disconnect();//  need?
 
