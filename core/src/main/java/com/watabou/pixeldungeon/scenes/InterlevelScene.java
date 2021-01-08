@@ -29,7 +29,10 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.items.Generator;
+import com.watabou.pixeldungeon.levels.DeadEndLevel;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.levels.SewerLevel;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.windows.WndError;
 import com.watabou.pixeldungeon.windows.WndStory;
@@ -52,7 +55,9 @@ public class InterlevelScene extends PixelScene {
 		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, NONE
 	};
 	public static Mode mode;
-	
+
+	public static boolean first_decend = false;
+
 	public static int returnDepth;
 	public static int returnPos;
 	
@@ -157,7 +162,7 @@ public class InterlevelScene extends PixelScene {
 				}
 			}
 		};
-		//thread.start();
+		thread.start();
 	}
 	
 	@Override
@@ -202,24 +207,18 @@ public class InterlevelScene extends PixelScene {
 		
 		Actor.fixTime();
 		if (Dungeon.hero == null) {
+			Dungeon.level= new DeadEndLevel();
+			Dungeon.level.create();
 			Dungeon.init();
+			SendData.SendHeroClass(StartScene.curClass);
 			if (noStory) {
 				Dungeon.chapters.add( WndStory.ID_SEWERS );
 				noStory = false;
 			}
 			GameLog.wipe();
 		} else {
-			Dungeon.saveLevel();
 		}
-		
-		Level level;
-		if (Dungeon.depth >= Statistics.deepestFloor) {
-			level = Dungeon.newLevel();
-		} else {
-			Dungeon.depth++;
-			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		}
-		Dungeon.switchLevel( level, level.entrance );
+
 	}
 	
 	private void fall() throws Exception {

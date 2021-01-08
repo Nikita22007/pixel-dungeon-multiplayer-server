@@ -294,9 +294,9 @@ public class StartScene extends PixelScene {
 	public static void startNewGame() {
 
 		Dungeon.hero = null;
-		Dungeon.level = new SewerLevel();
+		PixelDungeon.lastClass(curClass.ordinal());
+		InterlevelScene.first_decend = true;
 		InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-		SendData.SendHeroClass(curClass);
 		Game.switchScene( InterlevelScene.class );
 		//if (PixelDungeon.intro()) {
 		//	PixelDungeon.intro( false );

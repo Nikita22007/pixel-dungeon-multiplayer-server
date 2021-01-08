@@ -119,8 +119,6 @@ public class GameScene extends PixelScene {
 		Music.INSTANCE.play( Assets.TUNE, true );
 		Music.INSTANCE.volume( 1f );
 		
-		PixelDungeon.lastClass( Dungeon.hero.heroClass.ordinal() );
-		
 		super.create();
 		Camera.main.zoom( defaultZoom + PixelDungeon.zoom() );
 		

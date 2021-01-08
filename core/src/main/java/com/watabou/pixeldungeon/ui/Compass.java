@@ -21,6 +21,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
+import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.PointF;
 
 public class Compass extends Image {
@@ -40,6 +41,9 @@ public class Compass extends Image {
 		origin.set( width / 2, RADIUS );
 		
 		this.cell = cell;
+		if (cell==-1) {
+			GLog.h("Compass Cell  is -1");
+		}
 		cellCenter = DungeonTilemap.tileCenterToWorld( cell );
 		visible = false;
 	}
@@ -47,7 +51,10 @@ public class Compass extends Image {
 	@Override
 	public void update() {
 		super.update();
-		
+		if (cell == -1){
+			visible=false;
+			return;
+		}
 		if (!visible) {
 			visible = Dungeon.level.visited[cell] || Dungeon.level.mapped[cell]; 
 		}
