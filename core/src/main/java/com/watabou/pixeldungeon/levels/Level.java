@@ -159,7 +159,7 @@ public abstract class Level implements Bundlable {
 		plants = new SparseArray<Plant>();
 		
 		if (!Dungeon.bossLevel(Dungeon.depth)) {
-			addItemToSpawn( Generator.random( Generator.Category.FOOD ) );
+	/*		addItemToSpawn( Generator.random( Generator.Category.FOOD ) );
 			if (Dungeon.posNeeded()) {
 				addItemToSpawn( new PotionOfStrength() );
 				Dungeon.potionOfStrength++;
@@ -172,7 +172,7 @@ public abstract class Level implements Bundlable {
 				addItemToSpawn( new ScrollOfEnchantment() );
 				Dungeon.scrollsOfEnchantment++;
 			}
-			
+			*/
 			if (Dungeon.depth > 1) {
 				switch (Random.Int( 10 )) {
 				case 0:

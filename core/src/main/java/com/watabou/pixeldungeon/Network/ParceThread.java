@@ -31,9 +31,25 @@ public class ParceThread extends Thread {
                     case Codes.LEVEL_MAP: {
                         Dungeon.level.map= readIntArray();break;
                     }
+                    case Codes.LEVEL_VISITED: {
+                        Dungeon.level.visited= readBooleanArray();break;
+                    }
+                    case  Codes.LEVEL_ENTRANCE:{
+                        Dungeon.level.entrance  = readStream.readInt();break;
+                    }
+                    case  Codes.LEVEL_EXIT:{
+                        Dungeon.level.exit  = readStream.readInt();break;
+                    }
+                    //Hero block
+                    case Codes.HERO_VISIBLE_AREA:{
+                        Dungeon.visible=readBooleanArray();  break;
+                    }
                     //UI block
                     case Codes.IL_FADE_OUT: {
                         InterlevelScene.phase  = InterlevelScene.Phase.FADE_OUT;break;
+                    }
+                    default:{
+                        GLog.h("Bad  code: {0}",code);
                     }
                 }
             }catch (IOException e){
@@ -50,6 +66,14 @@ public class ParceThread extends Thread {
         int[] res =new int[len];
         for  (int i=0;i<len;i++){
             res[i]=readStream.readInt();
+        }
+        return res;
+    }
+    protected boolean[] readBooleanArray()throws IOException{
+        int len =  readStream.readInt();
+        boolean[] res =new boolean[len];
+        for  (int i=0;i<len;i++){
+            res[i]=readStream.readBoolean();
         }
         return res;
     }

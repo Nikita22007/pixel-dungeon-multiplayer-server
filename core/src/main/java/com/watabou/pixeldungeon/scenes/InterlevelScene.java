@@ -119,7 +119,6 @@ public class InterlevelScene extends PixelScene {
 				try {
 					
 					Generator.reset();
-					
 					switch (mode) {
 					case DESCEND:
 						descend();
@@ -156,10 +155,10 @@ public class InterlevelScene extends PixelScene {
 					
 				}
 				
-				if (phase == Phase.STATIC && error == null) {
-					phase = Phase.FADE_OUT;
-					timeLeft = TIME_TO_FADE;
-				}
+				//if (phase == Phase.STATIC && error == null) {
+				//	phase = Phase.FADE_OUT;
+			//		timeLeft = TIME_TO_FADE;
+			//	}
 			}
 		};
 		thread.start();
@@ -183,10 +182,10 @@ public class InterlevelScene extends PixelScene {
 			if (mode == Mode.CONTINUE || (mode == Mode.DESCEND && Dungeon.depth == 1)) {
 				Music.INSTANCE.volume( p );
 			}
-			if ((timeLeft -= Game.elapsed) <= 0) {
-				phase=Phase.FADE_IN;
+		//	if ((timeLeft -= Game.elapsed) <= 0) {
+		//		phase=Phase.FADE_IN;
 				Game.switchScene( GameScene.class );
-			}
+		//	}
 			break;
 			
 		case STATIC:
@@ -220,7 +219,7 @@ public class InterlevelScene extends PixelScene {
 		}
 
 	}
-	
+
 	private void fall() throws Exception {
 		
 		Actor.fixTime();
