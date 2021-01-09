@@ -347,7 +347,7 @@ public class GameScene extends PixelScene {
 		
 		water.offset( 0, -5 * Game.elapsed );
 		
-		Actor.process();
+		//Actor.process();
 		
 		if (Dungeon.hero.ready && !Dungeon.hero.paralysed) {
 			log.newLine();

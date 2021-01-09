@@ -1172,7 +1172,8 @@ public class Hero extends Char {
 		int[] map = Dungeon.level.map;
 		boolean[] visited = Dungeon.level.visited;
 		boolean[] discoverable = Level.discoverable;
-		
+if (Dungeon.hero!=null){ //TODO DEBUG	
+	return;}
 		for (int i=0; i < length; i++) {
 			
 			int terr = map[i];

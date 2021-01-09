@@ -166,7 +166,7 @@ public abstract class Actor implements Bundlable {
 		if (current != null) {
 			return;
 		}
-	
+
 		boolean doNext;
 
 		do {
@@ -239,7 +239,18 @@ public abstract class Actor implements Bundlable {
 			}
 		}
 	}
-	
+
+	public void changeID(int ID){
+		if (this.id > 0) {
+			ids.put( ID,  this );
+		}
+		else{
+			ids.remove(this.id);
+			id=ID;
+			ids.put(ID,this);
+		}
+	}
+
 	public static void remove( Actor actor ) {
 		
 		if (actor != null) {

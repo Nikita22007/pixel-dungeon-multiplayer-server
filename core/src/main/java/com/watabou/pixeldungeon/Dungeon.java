@@ -138,95 +138,14 @@ public class Dungeon {
 		
 		Badges.reset();
 		
-		StartScene.curClass.initHero( hero );
+		//StartScene.curClass.initHero( hero );
 	}
 	
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
 	}
 	
-	public static Level newLevel() {
-		
-		Dungeon.level = null;
-		Actor.clear();
-		
-		depth++;
-		if (depth > Statistics.deepestFloor) {
-			Statistics.deepestFloor = depth;
-			
-			if (Statistics.qualifiedForNoKilling) {
-				Statistics.completedWithNoKilling = true;
-			} else {
-				Statistics.completedWithNoKilling = false;
-			}
-		}
-		
-		Arrays.fill( visible, false );
-		
-		Level level;
-		switch (depth) {
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			level = new SewerLevel();
-			break;
-		case 5:
-			level = new SewerBossLevel();
-			break;
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-			level = new PrisonLevel();
-			break;
-		case 10:
-			level = new PrisonBossLevel();
-			break;
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-			level = new CavesLevel();
-			break;
-		case 15:
-			level = new CavesBossLevel();
-			break;
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-			level = new CityLevel();
-			break;
-		case 20:
-			level = new CityBossLevel();
-			break;
-		case 21:
-			level = new LastShopLevel();
-			break;
-		case 22:
-		case 23:
-		case 24:
-			level = new HallsLevel();
-			break;
-		case 25:
-			level = new HallsBossLevel();
-			break;
-		case 26:
-			level = new LastLevel();
-			break;
-		default:
-			level = new DeadEndLevel();
-			Statistics.deepestFloor--;
-		}
-		
-		level.create();
-		
-		Statistics.qualifiedForNoKilling = !bossLevel(depth);
-		
-		return level;
-	}
-	
+
 	public static void resetLevel() {
 		
 		Actor.clear();

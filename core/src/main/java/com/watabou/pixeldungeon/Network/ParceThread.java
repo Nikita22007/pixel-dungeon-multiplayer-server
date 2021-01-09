@@ -2,6 +2,8 @@ package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -11,7 +13,7 @@ import java.io.IOException;
 
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
-
+import static com.watabou.pixeldungeon.network.Codes.*;
 public class ParceThread extends Thread {
 
     @Override
@@ -28,11 +30,14 @@ public class ParceThread extends Thread {
                         return;
                        }
                     //level block
-                    case Codes.LEVEL_MAP: {
+                    case LEVEL_MAP: {
                         Dungeon.level.map= readIntArray();break;
                     }
-                    case Codes.LEVEL_VISITED: {
+                    case LEVEL_VISITED: {
                         Dungeon.level.visited= readBooleanArray();break;
+                    }
+                    case LEVEL_MAPPED:{
+                        Dungeon.level.mapped = readBooleanArray();break;
                     }
                     case  Codes.LEVEL_ENTRANCE:{
                         Dungeon.level.entrance  = readStream.readInt();break;
@@ -40,13 +45,41 @@ public class ParceThread extends Thread {
                     case  Codes.LEVEL_EXIT:{
                         Dungeon.level.exit  = readStream.readInt();break;
                     }
+                    //UI block
+                    case Codes.IL_FADE_OUT: {
+                        InterlevelScene.phase  = InterlevelScene.Phase.FADE_OUT;break;
+                    }
                     //Hero block
                     case Codes.HERO_VISIBLE_AREA:{
                         Dungeon.visible=readBooleanArray();  break;
                     }
-                    //UI block
-                    case Codes.IL_FADE_OUT: {
-                        InterlevelScene.phase  = InterlevelScene.Phase.FADE_OUT;break;
+                    case HERO_STRENGTH:{
+                        Dungeon.hero.STR =  readStream.readInt();break;
+                    }
+                    case Codes.HERO_ACTOR_ID:{
+                        Dungeon.hero.changeID(readStream.readInt()); break;
+                    }
+                    //Char block
+                    case CHAR_POS:{
+                        int ID =  readStream.readInt();
+                        int pos =  readStream.readInt();
+                        Char chr =(Char)Actor.findById(ID);
+                        chr.pos=pos;
+                        break;
+                    }
+                    case CHAR_HT:{
+                        int ID =  readStream.readInt();
+                        int HT =  readStream.readInt();
+                        Char chr =(Char)Actor.findById(ID);
+                        chr.HT=HT;
+                        break;
+                    }
+                    case CHAR_HP:{
+                        int ID =  readStream.readInt();
+                        int HP =  readStream.readInt();
+                        Char chr =(Char)Actor.findById(ID);
+                        chr.HP=HP;
+                        break;
                     }
                     default:{
                         GLog.h("Bad  code: {0}",code);

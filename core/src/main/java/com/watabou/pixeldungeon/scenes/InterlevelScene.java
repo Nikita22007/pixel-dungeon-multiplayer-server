@@ -174,6 +174,7 @@ public class InterlevelScene extends PixelScene {
 		
 		case FADE_IN:
 			message.alpha( 1 - p );
+			phase = Phase.STATIC;
 
 			break;
 			
@@ -182,10 +183,10 @@ public class InterlevelScene extends PixelScene {
 			if (mode == Mode.CONTINUE || (mode == Mode.DESCEND && Dungeon.depth == 1)) {
 				Music.INSTANCE.volume( p );
 			}
-		//	if ((timeLeft -= Game.elapsed) <= 0) {
-		//		phase=Phase.FADE_IN;
+			if ((timeLeft -= Game.elapsed) <= 0) {
+				phase=Phase.FADE_IN;
 				Game.switchScene( GameScene.class );
-		//	}
+			}
 			break;
 			
 		case STATIC:
@@ -223,17 +224,8 @@ public class InterlevelScene extends PixelScene {
 	private void fall() throws Exception {
 		
 		Actor.fixTime();
-		Dungeon.saveLevel();
-		
-		Level level;
-		if (Dungeon.depth >= Statistics.deepestFloor) {
-			level = Dungeon.newLevel();
-		} else {
-			Dungeon.depth++;
-			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		}
-		Dungeon.switchLevel( level, fallIntoPit ? level.pitCell() : level.randomRespawnCell() );
-	}
+//todo
+}
 	
 	private void ascend() throws Exception {
 		Actor.fixTime();
@@ -274,15 +266,7 @@ public class InterlevelScene extends PixelScene {
 		
 		Actor.fixTime(); 
 		
-		if (Dungeon.bossLevel(Dungeon.depth)) {
-			Dungeon.hero.resurrect( Dungeon.depth );
-			Dungeon.depth--;
-			Level level = Dungeon.newLevel();
-			Dungeon.switchLevel( level, level.entrance );
-		} else {
-			Dungeon.hero.resurrect( -1 );
-			Dungeon.resetLevel();
-		}
+//todo
 	}
 	
 	@Override
