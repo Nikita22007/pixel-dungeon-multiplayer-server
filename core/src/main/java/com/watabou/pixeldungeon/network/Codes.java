@@ -77,8 +77,10 @@ class Codes {
     public static final int HERO_SUBCLASS = 0x41;   //???
 
     public static final int HERO_STRENGTH = 0x42;   //client->server:ask; //server->client; when hero generated or update strength
-    public static final int HERO_HP       = 0x43;   //client->server:ask; //server->client:answer or data
+    /*public static final int HERO_HP       = 0x43;   //client->server:ask; //server->client:answer or data
     public static final int HERO_HT       = 0x44;   //client->server:ask; //server->client:answer or data
+*/
+    public static final int HERO_ACTOR_ID = 0x45;   //client->server:ask; //server->client:answer or data
 
     public static final int HERO_VISIBLE_AREA  = 0x50;   //client->server:ask; //server->client: answer or dara;//Hero's field of view
 
