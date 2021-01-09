@@ -12,6 +12,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import static com.watabou.pixeldungeon.network.Codes.*;
+
 class ClientThread extends Thread {
 
     public DataOutputStream writeStream;
@@ -81,7 +83,7 @@ class ClientThread extends Thread {
     }
 
     //some functions
-    public void InitPlayerHero(int classID) {
+    protected void InitPlayerHero(int classID) {
         HeroClass curClass;
         if (classID < 1 || classID > 4) {
             if (classID != 0) { //classID==0 is random class, so it  is not error
@@ -115,12 +117,22 @@ class ClientThread extends Thread {
         Actor.add(newHero);
         Dungeon.observe(newHero);
 
+        sendHero(newHero);
         send(Codes.LEVEL_MAP, Dungeon.level.map);
         send(Codes.LEVEL_VISITED, Dungeon.level.visited);
         send(Codes.HERO_VISIBLE_AREA, Dungeon.visible);
         //TODO send all  information
         send(Codes.IL_FADE_OUT);
 
+    }
+
+    protected void sendHero(Hero hero){
+        send(HERO_STRENGTH,hero.STR);
+        int id = hero.id();
+        send(HERO_ACTOR_ID,id);
+        send(CHAR_HP,id,hero.HP);
+        send(CHAR_HT,id,hero.HT);
+        send(CHAR_POS,id,hero.pos);
     }
     //thread functions
 
@@ -158,6 +170,17 @@ class ClientThread extends Thread {
         try {
             writeStream.writeInt(code);
             writeStream.writeInt(Data);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
+            disconnect();
+        }
+    }
+    public void send(int code, int var1, int var2) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.writeInt(var1);
+            writeStream.writeInt(var2);
             writeStream.flush();
         } catch (Exception e) {
             GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
