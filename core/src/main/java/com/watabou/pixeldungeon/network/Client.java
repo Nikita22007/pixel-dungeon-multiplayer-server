@@ -67,8 +67,10 @@ public class Client extends Thread {
     //send primitives
     public static void send(int code) {
         try {
-            writeStream.writeInt(code);
-            writeStream.flush();
+            synchronized (writeStream) {
+                writeStream.writeInt(code);
+                writeStream.flush();
+            }
         } catch (Exception e) {
             GLog.h("Exception. Message: {0}", e.getMessage());
             disconnect();
@@ -76,9 +78,11 @@ public class Client extends Thread {
     }
     public static void send(int code, byte Data) {
         try {
-            writeStream.writeInt(code);
-            writeStream.writeByte(Data);
-            writeStream.flush();
+            synchronized (writeStream) {
+                writeStream.writeInt(code);
+                writeStream.writeByte(Data);
+                writeStream.flush();
+            }
         } catch (Exception e) {
             GLog.h("Exception. Message: {0}", e.getMessage());
             disconnect();
@@ -86,9 +90,11 @@ public class Client extends Thread {
     }
     public static void send(int code, int Data) {
         try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(Data);
-            writeStream.flush();
+            synchronized (writeStream) {
+                writeStream.writeInt(code);
+                writeStream.writeInt(Data);
+                writeStream.flush();
+            }
         } catch (Exception e) {
             GLog.h("Exception. Message: {0}", e.getMessage());
             disconnect();
@@ -97,10 +103,12 @@ public class Client extends Thread {
 
     public static void send(int code, String message) {
         try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(message.length());
-            writeStream.writeChars(message);
-            writeStream.flush();
+            synchronized (writeStream) {
+                writeStream.writeInt(code);
+                writeStream.writeInt(message.length());
+                writeStream.writeChars(message);
+                writeStream.flush();
+            }
         } catch (Exception e) {
             GLog.h("Exception. Message: {0}", e.getMessage());
             disconnect();
@@ -109,9 +117,11 @@ public class Client extends Thread {
     //send_serelliased_data
     public static void sendData(int code, byte[]  data) {
         try {
-            writeStream.writeInt(code);
-            writeStream.write(data);
-            writeStream.flush();
+            synchronized (writeStream) {
+                writeStream.writeInt(code);
+                writeStream.write(data);
+                writeStream.flush();
+            }
         } catch (Exception e) {
             GLog.h("Exception. Message: {0}", e.getMessage());
             disconnect();
