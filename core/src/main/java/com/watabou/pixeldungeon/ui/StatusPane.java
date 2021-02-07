@@ -30,6 +30,7 @@ import com.watabou.noosa.ui.Button;
 import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.particles.BloodParticle;
 import com.watabou.pixeldungeon.items.keys.IronKey;
@@ -52,7 +53,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 	
 	private BitmapText level;
 	private BitmapText depth;
-	private BitmapText keys;
 
 	private BuffIndicator buffs;
 	private Compass compass;
@@ -68,17 +68,13 @@ public class StatusPane extends Component {    //remove when server is not clien
 		add( new TouchArea( 0, 1, 30, 30 ) {
 			@Override
 			protected void onClick( Touch touch ) {
-				Image sprite = Dungeon.heroes[0].sprite;
-				if (!sprite.isVisible()) {
-					Camera.main.focusOn( sprite );
-				}
 			};			
 		} );
 		
 		btnMenu = new MenuButton();
 		add( btnMenu );
 		
-		avatar = HeroSprite.avatar( Dungeon.heroes[0].heroClass, lastTier );
+		avatar = HeroSprite.avatar( HeroClass.WARRIOR, lastTier );
 		add( avatar );
 		
 		blood = new BitmaskEmitter( avatar );
@@ -101,14 +97,8 @@ public class StatusPane extends Component {    //remove when server is not clien
 		depth.hardlight( 0xCACFC2 );
 		depth.measure();
 		add( depth );
-		
-		Dungeon.heroes[0].belongings.countIronKeys();
-		keys = new BitmapText( PixelScene.font1x );
-		keys.hardlight( 0xCACFC2 );
-		add( keys );
 
-		buffs = new BuffIndicator( Dungeon.heroes[0] );
-		add( buffs );
+//		Dungeon.heroes[0].belongings.countIronKeys();
 	}
 	
 	@Override
@@ -126,17 +116,16 @@ public class StatusPane extends Component {    //remove when server is not clien
 		
 		depth.x = width - 24 - depth.width()    - 18;
 		depth.y = 6;
-		
-		keys.y = 6;
 
-		buffs.setPos( 32, 11 );
-		
 		btnMenu.setPos( width - btnMenu.width(), 1 );
 	}
 
 	@Override
 	public void update() {
 		super.update();
+		if (Dungeon.heroes[0]==null){
+			return;
+		}
 
 		exp.scale.x = (width / exp.width) * Dungeon.heroes[0].exp / Dungeon.heroes[0].maxExp();
 		

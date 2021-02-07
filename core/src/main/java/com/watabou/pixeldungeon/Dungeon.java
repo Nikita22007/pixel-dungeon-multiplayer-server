@@ -453,6 +453,9 @@ public class Dungeon {
 	}
 	
 	public static void saveAll() throws IOException { //fixme
+		if (heroes[0]==null)  {
+			return;
+		}
 		if (heroes[0].isAlive()) {
 			
 			Actor.fixTime();

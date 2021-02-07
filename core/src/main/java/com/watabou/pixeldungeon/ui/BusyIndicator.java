@@ -33,6 +33,6 @@ public class BusyIndicator extends Image { //client
 	@Override
 	public void update() {
 		super.update();
-		visible = Dungeon.heroes[0].isAlive() && !Dungeon.heroes[0].ready;
+		visible =  false;//Dungeon.heroes[0].isAlive() && !Dungeon.heroes[0].getReady();
 	}
 }

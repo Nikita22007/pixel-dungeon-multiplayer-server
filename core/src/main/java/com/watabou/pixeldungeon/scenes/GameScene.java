@@ -219,6 +219,9 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 		
 		Camera.main.target = hero;
+
+		fadeIn();
+			//todo
 	}
 	
 	public void destroy() {

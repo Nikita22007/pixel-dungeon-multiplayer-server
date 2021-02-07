@@ -53,6 +53,7 @@ import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.levels.features.Door;
 import com.watabou.pixeldungeon.sprites.CharSprite;
+import com.watabou.pixeldungeon.sprites.RatSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -73,7 +74,7 @@ public abstract class Char extends Actor {
 	
 	public int pos = 0;
 	
-	public CharSprite sprite;
+	public CharSprite sprite = new  RatSprite();
 	
 	public String name = "mob";
 	
