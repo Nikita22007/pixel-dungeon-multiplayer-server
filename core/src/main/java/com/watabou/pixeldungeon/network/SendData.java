@@ -59,34 +59,34 @@ public class SendData {
     }
     public static void sendBadgeMastery(int ID){
         if (clients[ID]!=null){
-            clients[ID].send(Codes.BADGE_MASTERY);
+            clients[ID].sendCode(Codes.BADGE_MASTERY);
         }
     }
 
     //-----------------------------Interlevel Scene
     public static void sendInterLevelSceneDescend(int ID){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_DESCEND);
+            clients[ID].sendCode(Codes.IL_DESCEND);
         }
     }
     public static void sendInterLevelSceneAscend(int ID){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_ASCEND);
+            clients[ID].sendCode(Codes.IL_ASCEND);
         }
     }
     public static void sendInterLevelSceneFall(int ID){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_FALL);
+            clients[ID].sendCode(Codes.IL_FALL);
         }
     }
     public static void sendInterLevelSceneResurrect(int ID){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_RESURRECT);
+            clients[ID].sendCode(Codes.IL_RESURRECT);
         }
     }
     public static void sendInterLevelSceneReturn(int ID){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_RETURN);
+            clients[ID].sendCode(Codes.IL_RETURN);
         }
     }
     public static void sendInterLevelSceneOther(int ID,String data){
@@ -96,7 +96,7 @@ public class SendData {
     }
     public static void sendInterLevelSceneFadeOut(int ID) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_FADE_OUT);
+            clients[ID].sendCode(Codes.IL_FADE_OUT);
         }
     }
 

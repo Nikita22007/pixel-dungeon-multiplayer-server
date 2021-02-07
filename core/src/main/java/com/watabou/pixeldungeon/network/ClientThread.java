@@ -2,8 +2,12 @@ package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
+import com.watabou.pixeldungeon.actors.mobs.Bestiary;
+import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
@@ -110,19 +114,31 @@ class ClientThread extends Thread {
 
         Hero newHero = new Hero();
         newHero.live();
+
+/*        if (true ){
+            Mob mob = Bestiary.mutable( Dungeon.depth );
+            mob.state = mob.WANDERING;
+            mob.pos = Dungeon.level.entrance+1;
+            GameScene.add(mob);
+        }*///cheking that mobs sends correctly
         curClass.initHero(newHero);
-        newHero.pos = Dungeon.level.entrance;
+
+        newHero.pos = Dungeon.level.entrance; //todo  FIXME
         send(Codes.LEVEL_ENTRANCE,Dungeon.level.entrance);
         send(Codes.LEVEL_EXIT,Dungeon.level.exit); //todo  Send it when exit visible
         Actor.add(newHero);
+        Actor.occupyCell(newHero);
         Dungeon.observe(newHero);
 
         sendHero(newHero);
+
+        sendAllChars();
+
         send(Codes.LEVEL_MAP, Dungeon.level.map);
         send(Codes.LEVEL_VISITED, Dungeon.level.visited);
         send(Codes.HERO_VISIBLE_AREA, Dungeon.visible);
         //TODO send all  information
-        send(Codes.IL_FADE_OUT);
+        sendCode(Codes.IL_FADE_OUT);
 
     }
 
@@ -134,10 +150,30 @@ class ClientThread extends Thread {
         send(CHAR_HT,id,hero.HT);
         send(CHAR_POS,id,hero.pos);
     }
+
+    protected void sendNewChar(Char ch) { //all Heroes (that is not current player hero) are  nobs
+        send(CHAR,ch.id());
+        sendChar(ch);
+    }
+    protected void sendChar(Char ch){
+        int id = ch.id();
+        send(CHAR_HP,id,ch.HP);
+        send(CHAR_HT,id,ch.HT);
+        send(CHAR_POS,id,ch.pos);
+        send(CHAR_NAME,id, ch.name);
+        //todo SEND TEXTURE
+    }
+    protected void sendAllChars(){
+        for (Actor  actor:Actor.all()) {
+            if (actor  instanceof Char){
+                sendNewChar((Char)actor);
+            }
+        }
+    }
     //thread functions
 
     //send primitives
-    public void send(int code) {
+    public void sendCode(int code) {
         try {
             writeStream.writeInt(code);
             writeStream.flush();
@@ -227,6 +263,19 @@ class ClientThread extends Thread {
             disconnect();
         }
     }
+
+    public void send(int code,  int var1, String message) {
+        try {
+            writeStream.writeInt(code);
+            writeStream.writeInt(var1);
+            writeStream.writeInt(message.length());
+            writeStream.writeChars(message);
+            writeStream.flush();
+        } catch (Exception e) {
+            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
+            disconnect();
+        }
+    }
     public void send(int code, String message) {
         try {
             writeStream.writeInt(code);
@@ -252,7 +301,7 @@ class ClientThread extends Thread {
     //send to all
     public static <T> void sendAll(int code){
         for  (int i=0;i<Server.clients.length;i++){
-            Server.clients[i].send(code);
+            Server.clients[i].sendCode(code);
         }
     }
 

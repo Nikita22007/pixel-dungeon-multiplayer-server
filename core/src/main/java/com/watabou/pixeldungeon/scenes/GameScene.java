@@ -330,7 +330,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		Dungeon.level.mobs.add( mob );
 		Actor.add( mob );
 		Actor.occupyCell( mob );
-		scene.addMobSprite( mob );
+	//	scene.addMobSprite( mob );
 	}
 	
 	public static void add( Mob mob, float delay ) {
