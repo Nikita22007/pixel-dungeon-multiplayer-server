@@ -106,7 +106,7 @@ public class HeroHelp {
         // Dungeon.heroes[i]==depth?  return  Dungeon.heroes[i];
     };
     public static int getHeroID(Hero hero){
-        return Arrays.asList(Dungeon.heroes).indexOf(hero);
+        return hero.networkID;//Arrays.asList(Dungeon.heroes).indexOf(hero);
     }
     public static boolean haveAliveHero(){
         for (int i=0;i<Settings.maxPlayers;i++){

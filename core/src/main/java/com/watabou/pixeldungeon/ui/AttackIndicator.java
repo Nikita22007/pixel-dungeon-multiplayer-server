@@ -74,7 +74,7 @@ public class AttackIndicator extends Tag {
 		
 		if (owner.isAlive()) {
 			
-			if (!owner.ready) {
+			if (!owner.getReady()) {
 				enable( false );
 			}		
 			

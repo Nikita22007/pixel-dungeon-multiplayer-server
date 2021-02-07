@@ -1,6 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
@@ -87,7 +88,7 @@ class ClientThread extends Thread {
     }
 
     //some functions
-    protected void InitPlayerHero(int classID) {
+    protected void InitPlayerHero(int classID) throws Exception {
         HeroClass curClass;
         if (classID < 1 || classID > 4) {
             if (classID != 0) { //classID==0 is random class, so it  is not error
@@ -131,7 +132,16 @@ class ClientThread extends Thread {
         Dungeon.observe(newHero);
 
         sendHero(newHero);
-
+        for (int i  = 0; i<Settings.maxPlayers; i++){
+            if (Dungeon.heroes[i]==null){
+                Dungeon.heroes[i]=newHero;
+                newHero.networkID = i;
+                break;
+            }
+        }
+        if (newHero.networkID ==-1) {
+            throw new Exception("Can nopt find  place  for hero");
+        }
         sendAllChars();
 
         send(Codes.LEVEL_MAP, Dungeon.level.map);

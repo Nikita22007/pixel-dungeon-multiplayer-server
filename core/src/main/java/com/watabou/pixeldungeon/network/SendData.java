@@ -40,7 +40,12 @@ public class SendData {
             clients[ID].send(Codes.IRON_KEYS_COUNT,count);
         }
     }
-
+    //--------------------------Control
+    public static void sendHeroReady(int  ID, boolean ready){
+        if (clients[ID] != null) {
+            clients[ID].send(Codes.READY, ready);
+        }
+    }
     //---------------------------Badges
     //public static void sendBadge
     public static void sendBadgeLevelReached(int ID, int bLevel){//bLevel=BadgeLevel

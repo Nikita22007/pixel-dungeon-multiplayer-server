@@ -95,6 +95,7 @@ import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.levels.features.AlchemyPot;
 import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.levels.features.Sign;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Earthroot;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
@@ -147,7 +148,7 @@ public class Hero extends Char {
 	
     public static AttackIndicator attackIndicator;
 
-	public boolean ready = false;
+	private boolean ready = false;
 
 	public HeroAction curAction = null;
 	public HeroAction lastAction = null;
@@ -171,7 +172,9 @@ public class Hero extends Char {
 	public int lvl = 1;
 	public int exp = 0;
 	
-	private ArrayList<Mob> visibleEnemies; 
+	public int networkID = -1;
+
+	private ArrayList<Mob> visibleEnemies;
 	
 	public Hero() {
 		super();
@@ -198,6 +201,7 @@ public class Hero extends Char {
 		belongings = new Belongings( this );
 
 		visibleEnemies = new ArrayList<Mob>();
+		cellSelector = new CellSelector(this);
 	}
 
 	public int STR() {
@@ -422,7 +426,7 @@ public class Hero extends Char {
 			
 			restoreHealth = false;
 			
-			ready = false;
+			setReady(false);
 			
 			if (curAction instanceof HeroAction.Move) {
 				
@@ -480,17 +484,26 @@ public class Hero extends Char {
 	}
 	
 	public void busy() {
-		ready = false;
+		setReady(ready);
 	}
 	
 	private void ready() {
 		sprite.idle();
 		curAction = null;
-		ready = true;
+		setReady(true);
 		
 		GameScene.ready(this);
 	}
-	
+
+	private void setReady(boolean ready){
+		this.ready = ready;
+		SendData.sendHeroReady(HeroHelp.getHeroID(this),ready);
+	}
+
+	public boolean getReady(){
+		return ready;
+	}
+
 	public void interrupt() {
 		if (isAlive() && curAction != null && curAction.dst != pos) {
 			lastAction = curAction;
