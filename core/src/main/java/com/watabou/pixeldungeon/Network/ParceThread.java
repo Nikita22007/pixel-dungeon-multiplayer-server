@@ -1,5 +1,6 @@
 package com.watabou.pixeldungeon.network;
 
+import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -13,6 +14,7 @@ import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.IOException;
 
+import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
 import static com.watabou.pixeldungeon.network.Codes.*;
@@ -56,10 +58,24 @@ public class ParceThread extends Thread {
                         Dungeon.visible=readBooleanArray();  break;
                     }
                     case HERO_STRENGTH:{
-                        Dungeon.hero.STR =  readStream.readInt();break;
+                        hero.STR =  readStream.readInt();break;
                     }
                     case Codes.HERO_ACTOR_ID:{
-                        Dungeon.hero.changeID(readStream.readInt()); break;
+                        hero.changeID(readStream.readInt()); break;
+                    }
+                    // Control block
+                    case READY: {
+                        if (readStream.readBoolean()) {
+                            hero.ready();
+                        }
+                        else
+                        {
+                            hero.busy();
+                        }
+                    }
+                    case RESUME_BUTTON:
+                    {
+                            hero.resume_button_visible =readStream.readBoolean();
                     }
                     //Char block
                     case CHAR:{ //all Heroes (that is not current player hero) are  nobs

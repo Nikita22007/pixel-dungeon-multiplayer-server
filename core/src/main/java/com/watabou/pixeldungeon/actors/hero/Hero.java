@@ -464,7 +464,7 @@ public class Hero extends Char {
 		ready = false;
 	}
 	
-	private void ready() {
+	public void ready() {
 		sprite.idle();
 		curAction = null;
 		ready = true;
@@ -1423,4 +1423,7 @@ if (Dungeon.hero!=null){ //TODO DEBUG
 	public static interface Doom {
 		public void onDeath();
 	}
+
+	//UI
+	public boolean resume_button_visible =false;
 }
