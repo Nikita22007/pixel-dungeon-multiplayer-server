@@ -94,6 +94,8 @@ class Codes {
 
     public static final int CANCEL        = 0x64;   //client->server; cancel/back_button. //server-> client ->  resulf of trying cancel
 
+    public static final int READY         = 0x65;  //server-> client: when heroe ready/unready; ready:bool; // client -> server: ask
+
     //Badges block 0x70-0x8F  //server->client; param(if need)  is level of bage
     public static final int BADGE_MONSTERS_SLAIN      = 0x70;     //param need
     public static final int BADGE_GOLD_COLLECTED      = 0x71;     //param need
@@ -118,8 +120,7 @@ class Codes {
     public static final int CELL_SELECT_LISTENER   = 0x90;   //client->server; when client touch cell
 
     //Char block 0xA0-0xAF
-    public static final int CHAR            = 0xA0; //server-> client; send name of class of char with ID. Client inits char with base params of this class. If "Custom" - init's base char
-    // ID:integer; ID of char //Class:String; Class of char;  //client->server; asc char with ID
+    public static final int CHAR            = 0xA0; //server-> client; Create new char with ID  //ID:integer;
     public static final int CHAR_POS        = 0xA1; //server-> client; //ID:integer; ID of char //pos:int; Class of char;  //client->server; asc char with ID
     public static final int CHAR_NAME       = 0xA2; //server-> client; //ID:integer; ID of char //name:String; Class of char;  //client->server; asc char with ID
     public static final int CHAR_HT         = 0xA3; //server-> client; //ID:integer; ID of char //HT:int; Class of char;  //client->server; asc char with ID
