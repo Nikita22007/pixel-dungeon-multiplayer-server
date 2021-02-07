@@ -4,10 +4,12 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.mobs.CustomMob;
+import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
-import com.watabou.pixeldungeon.windows.WndError;
 
 import java.io.IOException;
 
@@ -60,6 +62,16 @@ public class ParceThread extends Thread {
                         Dungeon.hero.changeID(readStream.readInt()); break;
                     }
                     //Char block
+                    case CHAR:{ //all Heroes (that is not current player hero) are  nobs
+                        int ID =  readStream.readInt();
+                        //boolean erase_old =  readStream.readBoolean();
+                        boolean erase_old  = false;
+                        if (erase_old || Actor.findById(ID)==null) {
+                            Mob chr = new CustomMob(ID);
+                            GameScene.add_without_adding_sprite(chr);
+                        }
+                        break;
+                    }
                     case CHAR_POS:{
                         int ID =  readStream.readInt();
                         int pos =  readStream.readInt();
@@ -79,6 +91,13 @@ public class ParceThread extends Thread {
                         int HP =  readStream.readInt();
                         Char chr =(Char)Actor.findById(ID);
                         chr.HP=HP;
+                        break;
+                    }
+                    case CHAR_NAME:{
+                        int ID =  readStream.readInt();
+                        String  name = readString();
+                        Char chr =(Char)Actor.findById(ID);
+                        chr.name=name;
                         break;
                     }
                     default:{
@@ -101,6 +120,14 @@ public class ParceThread extends Thread {
             res[i]=readStream.readInt();
         }
         return res;
+    }
+    protected String readString()throws IOException{
+        int len =  readStream.readInt();
+        char[] chars =new char[len];
+        for  (int i=0;i<len;i++){
+            chars[i]=readStream.readChar();
+        }
+        return new String(chars);
     }
     protected boolean[] readBooleanArray()throws IOException{
         int len =  readStream.readInt();

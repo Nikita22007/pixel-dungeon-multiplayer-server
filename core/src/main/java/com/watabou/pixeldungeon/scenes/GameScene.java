@@ -467,7 +467,13 @@ public class GameScene extends PixelScene {
 			scene.addDiscardedSprite( heap );
 		}
 	}
-	
+
+	public static void add_without_adding_sprite( Mob mob ) {
+		Dungeon.level.mobs.add( mob );
+		Actor.add( mob );
+		Actor.occupyCell( mob );
+	}
+
 	public static void add( Mob mob ) {
 		Dungeon.level.mobs.add( mob );
 		Actor.add( mob );
