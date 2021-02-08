@@ -248,6 +248,10 @@ public class Dungeon {
 	public  static void GetPosNear(int pos)
 	{
 
+	public static void removeHero(int ID){
+		Actor.remove(heroes[ID]);
+		Actor.freeCell(heroes[ID].pos);
+		heroes[ID].die(null);
 	}
 
 	public static void switchLevelToAll(final Level level,int pos ){

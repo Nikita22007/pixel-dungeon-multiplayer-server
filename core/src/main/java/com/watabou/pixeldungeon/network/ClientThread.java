@@ -23,7 +23,7 @@ class ClientThread extends Thread {
 
     public DataOutputStream writeStream;
     public DataInputStream readStream;
-    public int threadID;
+    private int threadID;
     protected Socket clientSocket = null;
 
     public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
@@ -330,6 +330,7 @@ class ClientThread extends Thread {
         writeStream = null;
         clientSocket = null;
         Server.clients[threadID] = null;
+        Dungeon.removeHero(threadID);
         GLog.n("player "+threadID+" disconnected");
     }
 }
