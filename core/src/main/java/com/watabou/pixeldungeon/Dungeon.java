@@ -95,7 +95,7 @@ public class Dungeon {
 	public static boolean nightMode;
 	
 	public static SparseArray<ArrayList<Item>> droppedItems;
-	
+
 	public static void init() {
 		//TODO SETTING MENU
 		Settings.maxPlayers=4;//
@@ -245,8 +245,15 @@ public class Dungeon {
 	
 	//@SuppressWarnings("deprecation")
 
-	public  static void GetPosNear(int pos)
+	public static int GetPosNear(int pos)
 	{
+		for (int step:level.NEIGHBOURS9) {
+			if (Actor.findChar(pos+step)==null){
+				return pos+step;
+			}
+		}
+		return -1;
+	}
 
 	public static void removeHero(int ID){
 		Actor.remove(heroes[ID]);

@@ -124,7 +124,10 @@ class ClientThread extends Thread {
         }*///cheking that mobs sends correctly
         curClass.initHero(newHero);
 
-        newHero.pos = Dungeon.level.entrance; //todo  FIXME
+        newHero.pos = Dungeon.GetPosNear(Dungeon.level.entrance);
+        if (newHero.pos==-1){
+            newHero.pos= Dungeon.level.entrance; //todo  FIXME
+        }
         send(Codes.LEVEL_ENTRANCE,Dungeon.level.entrance);
         send(Codes.LEVEL_EXIT,Dungeon.level.exit); //todo  Send it when exit visible
         Actor.add(newHero);
