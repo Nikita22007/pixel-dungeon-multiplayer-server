@@ -12,7 +12,7 @@ allprojects {
 
     ext {
         appName = 'Pixel Dungeon'
-        appPackageName = 'com.watabou.pixeldungeon'
+        appPackageName = 'com.watabou.pixeldungeontest'
 
         appVersionCode = 74
         appVersionName = '1.9.1'
