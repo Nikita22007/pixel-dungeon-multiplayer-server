@@ -6,32 +6,48 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
-import com.watabou.pixeldungeon.actors.mobs.Bestiary;
-import com.watabou.pixeldungeon.actors.mobs.Mob;
-import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import static com.watabou.pixeldungeon.network.Codes.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.Scanner;
 
 class ClientThread extends Thread {
 
-    public DataOutputStream writeStream;
-    public DataInputStream readStream;
-    private int threadID;
+    public static final String CHARSET = "UTF-8";
+
+    protected OutputStreamWriter writeStream;
+    protected InputStreamReader readStream;
+    private Scanner scanner;
+
+    protected int threadID;
+
     protected Socket clientSocket = null;
+
+    protected NetworkPacket packet = new NetworkPacket();
 
     public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
         this.clientSocket = clientSocket;
         try {
-            writeStream = new DataOutputStream(clientSocket.getOutputStream());
-            readStream = new DataInputStream(clientSocket.getInputStream());
+            writeStream = new OutputStreamWriter(
+                    clientSocket.getOutputStream(),
+                    Charset.forName(CHARSET).newEncoder()
+            );
+            readStream = new InputStreamReader(
+                    clientSocket.getInputStream(),
+                    Charset.forName(CHARSET).newDecoder()
+            );
             this.threadID = ThreadID;
+            scanner = new Scanner(readStream);
             if (autostart) {
                 this.start(); //auto start
             }
@@ -48,32 +64,24 @@ class ClientThread extends Thread {
         }
         while (clientSocket != null && !clientSocket.isClosed()) {
             try {
-                int code = (int) readStream.readInt();
-                switch (code) {
-                    //Level block
-                    case (Codes.LEVEL_MAP): {
-                        SendData.sendLevelMap(Dungeon.level, threadID);
-                        break;
-                    }
-                    case (Codes.LEVEL_VISITED): {
-                        SendData.sendLevelVisited(Dungeon.level, threadID);
-                        break;
-                    }
-                    case (Codes.LEVEL_MAPPED): {
-                        SendData.sendLevelMapped(Dungeon.level, threadID);
-                        break;
-                    }
-                    //hero block
-                    case (Codes.HERO_CLASS): { //create new Hero
-                        int classID = (int) readStream.readInt();
-                        InitPlayerHero(classID);
-                        break;
-                    }
-
-                    default: {
-                        GLog.n("BadCode:{0}", code);
-                        throw new IOException(String.format("Bad code:{0}",code));
-                        //break;
+                String json = scanner.nextLine();
+                JSONObject data = new JSONObject(json);
+                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                    String token = it.next();
+                    try {
+                        switch (token) {
+                            //Level block
+                            case ("hero_class"): {
+                                InitPlayerHero(data.getString(token));
+                                break;
+                            }
+                            default: {
+                                GLog.n("Bad token:{0}", token);
+                               break;
+                            }
+                        }
+                    } catch (JSONException e){
+                        GLog.n(String.format("JSONException in ThreadID:{0}; Message:{1}",threadID,e.getMessage()));
                     }
                 }
             } catch (IOException e) {
@@ -87,30 +95,32 @@ class ClientThread extends Thread {
         }
     }
 
-    //some functions
-    protected void InitPlayerHero(int classID) throws Exception {
-        HeroClass curClass;
-        if (classID < 1 || classID > 4) {
-            if (classID != 0) { //classID==0 is random class, so it  is not error
-                GLog.w("Incorrect classID:{0}; threadID:{1}", classID, threadID);
+    //network functions
+    protected void flush(){
+        try {
+
+        synchronized (packet){
+            synchronized (writeStream) {
+                writeStream.write(packet.data.toString());
+                writeStream.write('\n');
             }
-            classID = Random.Int(1, 4);
         }
-        switch (classID) {
-            default:
-                GLog.h("ClassID incorrect (in switch):{0}; threadID:{1}", classID, threadID);
-            case (1):
-                curClass = HeroClass.WARRIOR;
-                break;
-            case (2):
-                curClass = HeroClass.MAGE;
-                break;
-            case (3):
-                curClass = HeroClass.ROGUE;
-                break;
-            case (4):
-                curClass = HeroClass.HUNTRESS;
-                break;
+        } catch (IOException e){
+            GLog.h("IOException in threadID {0}. Message: {1}", threadID,e.getMessage());
+            disconnect();
+        }
+    }
+
+    //some functions
+    protected void InitPlayerHero(String className) throws Exception {
+        HeroClass curClass;
+        try {
+            curClass = HeroClass.valueOf(className.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            if (!className.equals("random")) { //classID==0 is random class, so it  is not error
+                GLog.w("Incorrect class:{0}; threadID:{1}", className, threadID);
+            }
+            curClass = Random.element(HeroClass.values());
         }
 
         Hero newHero = new Hero();
@@ -128,196 +138,120 @@ class ClientThread extends Thread {
         if (newHero.pos==-1){
             newHero.pos= Dungeon.level.entrance; //todo  FIXME
         }
-        send(Codes.LEVEL_ENTRANCE,Dungeon.level.entrance);
-        send(Codes.LEVEL_EXIT,Dungeon.level.exit); //todo  Send it when exit visible
-        Actor.add(newHero);
-        Actor.occupyCell(newHero);
-        Dungeon.observe(newHero);
 
-        sendHero(newHero);
-        for (int i  = 0; i<Settings.maxPlayers; i++){
-            if (Dungeon.heroes[i]==null){
-                Dungeon.heroes[i]=newHero;
-                newHero.networkID = i;
-                break;
+        packet.packAndAddLevel(Dungeon.level);
+        packet.pack_and_add_hero(newHero);
+
+        synchronized (Dungeon.heroes) {
+            for (int i = 0; i < Settings.maxPlayers; i++) {
+                if (Dungeon.heroes[i] == null) {
+                    Dungeon.heroes[i] = newHero;
+                    newHero.networkID = i;
+                    break;
+                }
             }
-        }
-        if (newHero.networkID ==-1) {
-            throw new Exception("Can nopt find  place  for hero");
-        }
-        sendAllChars();
 
-        send(Codes.LEVEL_MAP, Dungeon.level.map);
-        send(Codes.LEVEL_VISITED, Dungeon.level.visited);
-        send(Codes.HERO_VISIBLE_AREA, Dungeon.visible);
+            if (newHero.networkID ==-1) {
+                throw new Exception("Can not find place for hero");
+            }
+
+            Actor.add(newHero);
+            Actor.occupyCell(newHero);
+            Dungeon.observe(newHero);
+        }
+        addAllCharsToSend();
+        packet.packAndAddVisiblePositions(Dungeon.visible);
         //TODO send all  information
+
+        flush();
+
+
         sendCode(Codes.IL_FADE_OUT);
 
+        flush();
     }
 
-    protected void sendHero(Hero hero){
-        send(HERO_STRENGTH,hero.STR);
-        int id = hero.id();
-        send(HERO_ACTOR_ID,id);
-        send(CHAR_HP,id,hero.HP);
-        send(CHAR_HT,id,hero.HT);
-        send(CHAR_POS,id,hero.pos);
-    }
-
-    protected void sendNewChar(Char ch) { //all Heroes (that is not current player hero) are  nobs
-        send(CHAR,ch.id());
-        sendChar(ch);
-    }
-    protected void sendChar(Char ch){
-        int id = ch.id();
-        send(CHAR_HP,id,ch.HP);
-        send(CHAR_HT,id,ch.HT);
-        send(CHAR_POS,id,ch.pos);
-        send(CHAR_NAME,id, ch.name);
+    protected void addCharToSend(@NotNull Char ch){
+        synchronized (packet) {
+            packet.packAndAddActor(ch);
+        }
         //todo SEND TEXTURE
     }
-    protected void sendAllChars(){
+    protected void addAllCharsToSend(){
         for (Actor  actor:Actor.all()) {
-            if (actor  instanceof Char){
-                sendNewChar((Char)actor);
+            if (actor instanceof Char){
+                addCharToSend((Char)actor);
             }
         }
     }
-    //thread functions
+
+    public void addBadgeToSend(String badgeName, int badgeLevel){
+        packet.packAndAddBadge(badgeName, badgeLevel);
+    }
 
     //send primitives
+    @Deprecated
     public void sendCode(int code) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
+    @Deprecated
     public void send(int code, boolean Data) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeBoolean(Data);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
+    @Deprecated
     public void send(int code, byte Data) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeByte(Data);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
+    @Deprecated
     public void send(int code, int Data) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(Data);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
-    }
-    public void send(int code, int var1, int var2) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(var1);
-            writeStream.writeInt(var2);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
-    }
-    //send arrays
-    public void send(int code, boolean[] DataArray) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(DataArray.length);
-            for (int i = 0; i < DataArray.length; i++) {
-                writeStream.writeBoolean(DataArray[i]);
-            }
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID, e.getMessage());
-            disconnect();
-        }
-    }
-    public void send(int code, byte[] DataArray) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(DataArray.length);
-            for (int i=0;i<DataArray.length;i++){
-                writeStream.writeByte(DataArray[i]);
-            }
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
-    }
-    public void send(int code, int[] DataArray) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(DataArray.length);
-            for (int i=0;i<DataArray.length;i++){
-                writeStream.writeInt(DataArray[i]);
-            }
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
 
-    public void send(int code,  int var1, String message) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(var1);
-            writeStream.writeInt(message.length());
-            writeStream.writeChars(message);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+    //send arrays
+    @Deprecated
+    public void send(int code, boolean[] DataArray) {
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
+    @Deprecated
+    public void send(int code, byte[] DataArray) {
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
+    }
+    @Deprecated
+    public void send(int code, int[] DataArray) {
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
+    }
+    @Deprecated
+    public void send(int code,  int var1, String message) {
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
+    }
+    @Deprecated
     public void send(int code, String message) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.writeInt(message.length());
-            writeStream.writeChars(message);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-           disconnect();
-        }
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
     //send_serelliased_data
+    @Deprecated
     public void sendData(int code, byte[]  data) {
-        try {
-            writeStream.writeInt(code);
-            writeStream.write(data);
-            writeStream.flush();
-        } catch (Exception e) {
-            GLog.h("Exception in threadID {0}. Message: {1}", threadID,e.getMessage());
-            disconnect();
-        }
+        assert false : "removed_code";
+        throw new RuntimeException("removed code");
     }
     //send to all
+    @Deprecated
     public static <T> void sendAll(int code){
         for  (int i=0;i<Server.clients.length;i++){
             Server.clients[i].sendCode(code);
         }
     }
-
+    @Deprecated
     public static void sendAll(int code, int  data){
         for  (int i=0;i<Server.clients.length;i++){
             Server.clients[i].send(code, data);
@@ -327,7 +261,7 @@ class ClientThread extends Thread {
     public void disconnect() {
         try {
             clientSocket.close(); //it creates exception when we will wait client data
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
         readStream = null;
         writeStream = null;

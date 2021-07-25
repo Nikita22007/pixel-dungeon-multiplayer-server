@@ -50,7 +50,7 @@ public class SendData {
     //public static void sendBadge
     public static void sendBadgeLevelReached(int ID, int bLevel){//bLevel=BadgeLevel
         if (clients[ID] != null) {
-            clients[ID].send(Codes.BADGE_LEVEL_REACHED,bLevel);
+            clients[ID].addBadgeToSend("level_reached", bLevel);
         }
     }
 

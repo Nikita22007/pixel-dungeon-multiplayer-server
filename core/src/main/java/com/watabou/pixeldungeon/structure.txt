@@ -1,0 +1,84 @@
+client:
+{
+    "hero_class": "class"
+    "window":
+    {
+        "id": 0
+        "button": 0
+    }
+}
+
+
+server:
+{
+    "action":
+    {
+        "type": "server_full" / "disconnect"/ "custom"
+        "custom_message": "no"
+    }
+
+    "map":
+    {
+        "cells":
+        [
+            {
+                "position": 0000
+                "id": 000
+                "state": "unvisited"/"visited"/"mapped"
+            }
+        ]
+        "entrance": 000
+        "exit": 000
+        "visible_positions": [0,1,2]
+    }
+    "actors":
+    [
+        {
+            "id": 000
+            "hp": 0
+            "max_hp": 1
+            "name": "missingno"
+            "animation_name": "bb"
+        }
+    ]
+    "hero":
+    {
+        "actor_id": 0
+        "class": "random"
+        "subclass_id": 0
+        "strength": 0
+        "lvl": 0
+        "exp": 0
+   }
+    "animations":
+    [
+        {
+            "name": "a"
+            "frames": [0,1,2]
+            "texture": "texture_name"
+        }
+    ]
+    "interlevel_scene":
+    {
+        "type": "RESURRECT"
+    }
+    "window":
+    {
+        "type": "///"
+        "params": []
+        "custom_window_structure": //if "type" == "custom"
+        {
+
+        }
+    }
+    "ui":
+    {
+        "resume_button_visible": false
+        "iron_keys_count": -1s
+    }
+    "badge":
+    {
+        "name": "none"
+        "level": 0
+    }
+}

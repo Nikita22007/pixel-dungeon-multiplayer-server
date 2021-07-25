@@ -322,7 +322,7 @@ public class Badges {
 	}
 	
 	public static void validateStrengthAttained(Hero hero) {
-		/*Badge badge = null;
+		Badge badge = null;
 		
 		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && hero.STR >= 13) {
 			badge = Badge.STRENGTH_ATTAINED_1;
@@ -342,10 +342,6 @@ public class Badges {
 		}
 		
 		displayBadge( badge );
-		*/
-		if (hero.STR >= 13 && hero.STR%2==1 ){
-			SendData.sendBadgeStrengthAttained(HeroHelp.getHeroID(hero),Math.min((hero.STR-11)/2,4));
-		}
 	}
 	
 	public static void validateFoodEaten() {

@@ -46,7 +46,8 @@ import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public abstract class Mob extends Char {
+public abstract
+class Mob extends Char {
 
 	private static final String TXT_DIED = "You hear something died in the distance";
 
