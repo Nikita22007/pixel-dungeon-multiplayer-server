@@ -2,11 +2,9 @@ package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.Scene;
-import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.network.Client;
-import com.watabou.pixeldungeon.network.Scanner;
+import com.watabou.pixeldungeon.network.NetworkScanner;
 import com.watabou.pixeldungeon.network.ServerInfo;
-import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.ui.RedButton;
@@ -103,7 +101,7 @@ public class WndConnectServer extends Window {
             if (!Client.connect(IP,port)){
                 scene.add(new WndError("Can't connect"));
             }else{
-                Scanner.stop();
+                NetworkScanner.stop();
                 StartScene.startNewGame();
             }
         }

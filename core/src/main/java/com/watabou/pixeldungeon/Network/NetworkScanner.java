@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Scanner { //Todo write this
+public class NetworkScanner { //Todo write this
     protected static final String SERVICE_TYPE = "_mppd._tcp."; // _name._protocol //mppd=MultiPlayerPixelDungeon
 
     protected static List<ServerInfo> serverList = new ArrayList<>();

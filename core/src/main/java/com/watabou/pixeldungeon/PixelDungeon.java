@@ -19,7 +19,6 @@ package com.watabou.pixeldungeon;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -29,7 +28,7 @@ import android.view.View;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.pixeldungeon.network.Scanner;
+import com.watabou.pixeldungeon.network.NetworkScanner;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -202,7 +201,7 @@ public class PixelDungeon extends Game {
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		Scanner.stop();
+		NetworkScanner.stop();
 	}
 
 	public static void switchNoFade( Class<? extends PixelScene> c ) {

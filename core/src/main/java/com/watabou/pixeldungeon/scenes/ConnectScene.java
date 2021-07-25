@@ -10,7 +10,7 @@ import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.effects.Flare;
-import com.watabou.pixeldungeon.network.Scanner;
+import com.watabou.pixeldungeon.network.NetworkScanner;
 import com.watabou.pixeldungeon.network.ServerInfo;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
@@ -29,7 +29,7 @@ import java.util.List;
     * TABLE_SIZE should be calculated based on the height of the screen
 */
 
-public class ConnectScene extends PixelScene implements Scanner.ServicesListener {
+public class ConnectScene extends PixelScene implements NetworkScanner.ServicesListener {
 
     private static final int DEFAULT_COLOR	= 0xCCCCCC;
     private static final int TABLE_SIZE=6;
@@ -74,7 +74,7 @@ public class ConnectScene extends PixelScene implements Scanner.ServicesListener
             row.kill();
         }
         List<ServerInfo> list;
-        list=Scanner.getServerList();
+        list= NetworkScanner.getServerList();
         serverList=list.toArray(new ServerInfo[list.size()]); //Todo use only List<?>
         if (serverList.length > 0) {
 
@@ -132,11 +132,11 @@ public class ConnectScene extends PixelScene implements Scanner.ServicesListener
         archs = new Archs();
         archs.setSize(width, height);
         add( archs );
-        if (!Scanner.isWifiConnected()){
+        if (!NetworkScanner.isWifiConnected()){
             CreateCenterText(width, height,TXT_WIFI_DISABLED);
         }
         else {
-            if (!Scanner.start(this)) {
+            if (!NetworkScanner.start(this)) {
                 CreateCenterText(width, height,TXT_ERROR);
             } else {
                 drawServers();
@@ -154,7 +154,7 @@ public class ConnectScene extends PixelScene implements Scanner.ServicesListener
 
     @Override
     protected void onBackPressed() {
-        Scanner.stop();
+        NetworkScanner.stop();
         PixelDungeon.switchNoFade( TitleScene.class );
     }
 
