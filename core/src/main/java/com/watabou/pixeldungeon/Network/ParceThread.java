@@ -1,5 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
+import android.util.JsonToken;
+
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
@@ -12,115 +14,91 @@ import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Scanner;
 
 import static com.watabou.pixeldungeon.Dungeon.hero;
+import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
 import static com.watabou.pixeldungeon.network.Codes.*;
+
 public class ParceThread extends Thread {
+
+    private Scanner scanner;
+    private BufferedReader reader;
 
     @Override
     public void run() {
+        if (readStream != null){
+            scanner = new Scanner(readStream);
+            reader = new BufferedReader(readStream);
+        }
         while (!socket.isClosed()){
             try {
-                int code = (Integer) readStream.readInt();
-                switch (code){
-                    //Network block
-                    case Codes.NOP: {break;}
-                    case Codes.SERVER_FULL:{
-                        PixelDungeon.switchScene(TitleScene.class);
-                        // TODO   PixelDungeon.scene().add(new WndError("Server full"));
-                        return;
-                       }
-                    //level block
-                    case LEVEL_MAP: {
-                        Dungeon.level.map= readIntArray();break;
-                    }
-                    case LEVEL_VISITED: {
-                        Dungeon.level.visited= readBooleanArray();break;
-                    }
-                    case LEVEL_MAPPED:{
-                        Dungeon.level.mapped = readBooleanArray();break;
-                    }
-                    case  Codes.LEVEL_ENTRANCE:{
-                        Dungeon.level.entrance  = readStream.readInt();break;
-                    }
-                    case  Codes.LEVEL_EXIT:{
-                        Dungeon.level.exit  = readStream.readInt();break;
-                    }
-                    //UI block
-                    case Codes.IL_FADE_OUT: {
-                        InterlevelScene.phase  = InterlevelScene.Phase.FADE_OUT;break;
-                    }
-                    //Hero block
-                    case Codes.HERO_VISIBLE_AREA:{
-                        Dungeon.visible=readBooleanArray();  break;
-                    }
-                    case HERO_STRENGTH:{
-                        hero.STR =  readStream.readInt();break;
-                    }
-                    case Codes.HERO_ACTOR_ID:{
-                        hero.changeID(readStream.readInt()); break;
-                    }
-                    // Control block
-                    case READY: {
-                        if (readStream.readBoolean()) {
-                            hero.ready();
+                String json = reader.readLine();
+                if (json == null)
+                    throw new IOException("EOF");
+                JSONObject data = new JSONObject(json);
+                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                    String token = it.next();
+                    switch (token) {
+                        /*case Codes.SERVER_FULL: {
+                            PixelDungeon.switchScene(TitleScene.class);
+                            // TODO   PixelDungeon.scene().add(new WndError("Server full"));
+                            return;
+                        }*/
+                        //level block
+                        case "map": {
+                            parseLevel(data.getJSONObject(token));
+                            break;
                         }
-                        else
-                        {
-                            hero.busy();
+                        //UI block
+                        case "interlevel_scene": {
+                            //todo can cause crash
+                            InterlevelScene.phase = InterlevelScene.Phase.valueOf(data.getJSONObject(token).getString("type").toUpperCase());
+                            break;
                         }
-                    }
-                    case RESUME_BUTTON:
-                    {
-                            hero.resume_button_visible =readStream.readBoolean();
-                    }
-                    //Char block
-                    case CHAR:{ //all Heroes (that is not current player hero) are  nobs
-                        int ID =  readStream.readInt();
-                        //boolean erase_old =  readStream.readBoolean();
-                        boolean erase_old  = false;
-                        if (erase_old || Actor.findById(ID)==null) {
-                            Mob chr = new CustomMob(ID);
-                            GameScene.add_without_adding_sprite(chr);
+                        //Hero block
+                        case "actors": {
+                            parseActors(data.getJSONArray(token));
+                            break;
                         }
-                        break;
-                    }
-                    case CHAR_POS:{
-                        int ID =  readStream.readInt();
-                        int pos =  readStream.readInt();
-                        Char chr =(Char)Actor.findById(ID);
-                        chr.pos=pos;
-                        break;
-                    }
-                    case CHAR_HT:{
-                        int ID =  readStream.readInt();
-                        int HT =  readStream.readInt();
-                        Char chr =(Char)Actor.findById(ID);
-                        chr.HT=HT;
-                        break;
-                    }
-                    case CHAR_HP:{
-                        int ID =  readStream.readInt();
-                        int HP =  readStream.readInt();
-                        Char chr =(Char)Actor.findById(ID);
-                        chr.HP=HP;
-                        break;
-                    }
-                    case CHAR_NAME:{
-                        int ID =  readStream.readInt();
-                        String  name = readString();
-                        Char chr =(Char)Actor.findById(ID);
-                        chr.name=name;
-                        break;
-                    }
-                    default:{
-                        GLog.h("Bad  code: {0}",code);
+                        case "hero": {
+                            parseHero(data.getJSONObject(token));
+                            break;
+                        }
+                        // Control block
+                       /* case READY: {
+                            if (readStream.readBoolean()) {
+                                hero.ready();
+                            } else {
+                                hero.busy();
+                            }
+                        }*/
+                        case "ui": {
+                            JSONObject uiObj = data.getJSONObject(token);
+                            if (uiObj.has("resume_button_visible")) {
+                                hero.resume_button_visible = uiObj.getBoolean("resume_button_visible");
+                            }
+                            break;
+                        }
+                        default: {
+                            GLog.h("Incorrect packet token: \"{0}\". Ignored", token);
+                            continue;
+                        }
                     }
                 }
-            }catch (IOException e){
+            } catch (JSONException e) {
+                GLog.n(e.getMessage());
+            } catch(IOException e) {
                 GLog.n(e.getMessage());
 
                 PixelDungeon.switchScene(TitleScene.class);
@@ -129,28 +107,155 @@ public class ParceThread extends Thread {
             }
         }
     }
-    protected int[] readIntArray()throws IOException{
-        int len =  readStream.readInt();
-        int[] res =new int[len];
-        for  (int i=0;i<len;i++){
-            res[i]=readStream.readInt();
+
+    protected void parseCell(JSONObject cell) throws JSONException{
+        int pos = cell.getInt("position");
+        if ((pos<0) || (pos >= level.LENGTH)){
+            GLog.n("incorrect cell position: \"{0}\". Ignored.", pos);
+            return;
         }
-        return res;
-    }
-    protected String readString()throws IOException{
-        int len =  readStream.readInt();
-        char[] chars =new char[len];
-        for  (int i=0;i<len;i++){
-            chars[i]=readStream.readChar();
+        for (Iterator<String> it = cell.keys(); it.hasNext(); ) {
+            String token = it.next();
+            switch (token){
+                case "position": {
+                    continue;
+                }
+                case "id":{
+                    level.map[pos] = cell.getInt(token);
+                    break;
+                }
+                case "state":{
+                    String state = cell.getString("state");
+                    level.visited[pos] = state.equals("visited");
+                    level.mapped[pos] = state.equals("mapped");
+                    break;
+                }
+                default: {
+                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    break;
+                }
+            }
         }
-        return new String(chars);
     }
-    protected boolean[] readBooleanArray()throws IOException{
-        int len =  readStream.readInt();
-        boolean[] res =new boolean[len];
-        for  (int i=0;i<len;i++){
-            res[i]=readStream.readBoolean();
+
+    protected void parseLevel(JSONObject levelObj) throws JSONException{
+        for (Iterator<String> it = levelObj.keys(); it.hasNext(); ) {
+            String token = it.next();
+            switch (token) {
+                case ("cells"):{
+                    JSONArray cells = levelObj.getJSONArray(token);
+                    for (int i = 0; i < cells.length(); i++){
+                        JSONObject cell = cells.getJSONObject(i);
+                        parseCell(cell);
+                    }
+                }
+                case "entrance":{
+                    level.entrance = levelObj.getInt("entrance");
+                    break;
+                }
+
+                case "exit":{
+                    level.entrance = levelObj.getInt("exit");
+                    break;
+                }
+                case "visible_positions":{
+                    JSONArray positions = levelObj.getJSONArray(token);
+                    Arrays.fill(Dungeon.visible, false);
+                    for (int i = 0; i < positions.length(); i++){
+                        int cell = positions.getInt(i);
+                        if ((cell<0) || (cell >= level.LENGTH)){
+                            GLog.n("incorrect visible position: \"{0}\". Ignored.", cell);
+                            continue;
+                        }
+                        Dungeon.visible[cell] = true;
+                    }
+                    Dungeon.observe();
+                    break;
+                }
+                default: {
+                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    break;
+                }
+            }
         }
-        return res;
     }
+
+    protected void parseActors(JSONArray actors) throws JSONException{
+        for (int i = 0; i < actors.length(); i++) {
+            JSONObject actor = actors.getJSONObject(i);
+            int ID = actor.getInt("id");
+            boolean erase_old = false;
+            if (actor.has("erase_old")) {
+                erase_old = actor.getBoolean("erase_old");
+            }
+            //boolean erase_old =  readStream.readBoolean();
+            Char chr;
+            if (erase_old || Actor.findById(ID) == null) {
+                chr = new CustomMob(ID); //todo
+                GameScene.add_without_adding_sprite((Mob)chr);
+            } else {
+              chr = (Char) Actor.findById(ID); //fixme
+            }
+            for (Iterator<String> it = actor.keys(); it.hasNext(); ) {
+                String token = it.next();
+                switch (token){
+                    case "id": continue;
+                    case "erase_old": continue;
+                    case "position":{
+                        chr.pos = actor.getInt(token);
+                        break;
+                    }
+                    case "hp":{
+                        chr.HP = actor.getInt(token);
+                        break;
+                    }
+                    case "max_hp":{
+                        chr.HT = actor.getInt(token);
+                        break;
+                    }
+                    case "name":{
+                        chr.name = actor.getString(token);
+                        break;
+                    }
+                    case "animation_name":{
+                        assert false;
+                        //todo
+                        break;
+                    }
+                    default: {
+                        GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    protected void parseHero(JSONObject heroObj) throws JSONException {
+        for (Iterator<String> it = heroObj.keys(); it.hasNext(); ) {
+            String token = it.next();
+            switch (token) {
+                case "actor_id": {
+                    hero.changeID(heroObj.getInt(token));
+                    break;
+                }
+                case "strength":{
+                    hero.STR = heroObj.getInt(token);
+                    break;
+                }
+                case "lvl":{
+                    hero.lvl = heroObj.getInt(token);
+                    break;
+                }
+                case "exp":{
+                    hero.exp = heroObj.getInt(token);
+                    break;
+                }
+                default: {
+                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    break;
+                }
+            }
+        }
+    }
+
 }
