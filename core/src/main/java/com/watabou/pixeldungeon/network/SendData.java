@@ -3,6 +3,8 @@ package com.watabou.pixeldungeon.network;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.windows.WndStory;
 
+import org.json.JSONObject;
+
 import static com.watabou.pixeldungeon.network.Server.clients;  //I'm too lazy to write "Server.clients". Never do as I do.
 
 public class SendData {
@@ -43,7 +45,11 @@ public class SendData {
     //--------------------------Control
     public static void sendHeroReady(int  ID, boolean ready){
         if (clients[ID] != null) {
-            clients[ID].send(Codes.READY, ready);
+            synchronized (clients[ID].packet.dataRef){
+                JSONObject data = clients[ID].packet.dataRef.get();
+                //todo
+            }
+            clients[ID].flush();
         }
     }
     //---------------------------Badges
