@@ -33,7 +33,7 @@ class ClientThread extends Thread {
 
     protected Socket clientSocket = null;
 
-    protected NetworkPacket packet = new NetworkPacket();
+    protected final NetworkPacket packet = new NetworkPacket();
 
     public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
         this.clientSocket = clientSocket;
@@ -80,15 +80,15 @@ class ClientThread extends Thread {
                             }
                             default: {
                                 GLog.n("Bad token:{0}", token);
-                               break;
+                                break;
                             }
                         }
-                    } catch (JSONException e){
-                        GLog.n(String.format("JSONException in ThreadID:{0}; Message:{1}",threadID,e.getMessage()));
+                    } catch (JSONException e) {
+                        GLog.n(String.format("JSONException in ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
                     }
                 }
             } catch (IOException e) {
-                GLog.n(String.format("ThreadID:{0}; Message:{1}",threadID,e.getMessage()));
+                GLog.n(String.format("ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
                 disconnect();//  need?
 
@@ -99,17 +99,18 @@ class ClientThread extends Thread {
     }
 
     //network functions
-    protected void flush(){
+    protected void flush() {
         try {
-
-        synchronized (packet){
-            synchronized (writeStream) {
-                writeStream.write(packet.data.toString());
-                writeStream.write('\n');
+            synchronized (packet.dataRef) {
+                synchronized (writeStream) {
+                    writeStream.write(packet.dataRef.get().toString());
+                    writeStream.write('\n');
+                    writeStream.flush();
+                }
+                packet.clearData();
             }
-        }
-        } catch (IOException e){
-            GLog.h("IOException in threadID {0}. Message: {1}", threadID,e.getMessage());
+        } catch (IOException e) {
+            GLog.h("IOException in threadID {0}. Message: {1}", threadID, e.getMessage());
             disconnect();
         }
     }
@@ -138,8 +139,8 @@ class ClientThread extends Thread {
         curClass.initHero(newHero);
 
         newHero.pos = Dungeon.GetPosNear(Dungeon.level.entrance);
-        if (newHero.pos==-1){
-            newHero.pos= Dungeon.level.entrance; //todo  FIXME
+        if (newHero.pos == -1) {
+            newHero.pos = Dungeon.level.entrance; //todo  FIXME
         }
 
         packet.packAndAddLevel(Dungeon.level);
@@ -154,7 +155,7 @@ class ClientThread extends Thread {
                 }
             }
 
-            if (newHero.networkID ==-1) {
+            if (newHero.networkID == -1) {
                 throw new Exception("Can not find place for hero");
             }
 
@@ -169,26 +170,27 @@ class ClientThread extends Thread {
         flush();
 
 
-        sendCode(Codes.IL_FADE_OUT);
+        packet.packAndAddInterlevelSceneState("fade_out", null);
 
         flush();
     }
 
-    protected void addCharToSend(@NotNull Char ch){
+    protected void addCharToSend(@NotNull Char ch) {
         synchronized (packet) {
             packet.packAndAddActor(ch);
         }
         //todo SEND TEXTURE
     }
-    protected void addAllCharsToSend(){
-        for (Actor  actor:Actor.all()) {
-            if (actor instanceof Char){
-                addCharToSend((Char)actor);
+
+    protected void addAllCharsToSend() {
+        for (Actor actor : Actor.all()) {
+            if (actor instanceof Char) {
+                addCharToSend((Char) actor);
             }
         }
     }
 
-    public void addBadgeToSend(String badgeName, int badgeLevel){
+    public void addBadgeToSend(String badgeName, int badgeLevel) {
         packet.packAndAddBadge(badgeName, badgeLevel);
     }
 
@@ -198,17 +200,20 @@ class ClientThread extends Thread {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, boolean Data) {
 
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, byte Data) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, int Data) {
         assert false : "removed_code";
@@ -221,42 +226,49 @@ class ClientThread extends Thread {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, byte[] DataArray) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, int[] DataArray) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
-    public void send(int code,  int var1, String message) {
+    public void send(int code, int var1, String message) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     @Deprecated
     public void send(int code, String message) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     //send_serelliased_data
     @Deprecated
-    public void sendData(int code, byte[]  data) {
+    public void sendData(int code, byte[] data) {
         assert false : "removed_code";
         throw new RuntimeException("removed code");
     }
+
     //send to all
     @Deprecated
-    public static <T> void sendAll(int code){
-        for  (int i=0;i<Server.clients.length;i++){
+    public static <T> void sendAll(int code) {
+        for (int i = 0; i < Server.clients.length; i++) {
             Server.clients[i].sendCode(code);
         }
     }
+
     @Deprecated
-    public static void sendAll(int code, int  data){
-        for  (int i=0;i<Server.clients.length;i++){
+    public static void sendAll(int code, int data) {
+        for (int i = 0; i < Server.clients.length; i++) {
             Server.clients[i].send(code, data);
         }
     }
@@ -271,6 +283,6 @@ class ClientThread extends Thread {
         clientSocket = null;
         Server.clients[threadID] = null;
         Dungeon.removeHero(threadID);
-        GLog.n("player "+threadID+" disconnected");
+        GLog.n("player " + threadID + " disconnected");
     }
 }

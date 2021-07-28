@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class NetworkPacket {
     public static final String CELLS = "cells";
     public static String MAP = "map";
@@ -25,14 +27,17 @@ public class NetworkPacket {
         }
     }
 
-    public JSONObject data;
+    public volatile AtomicReference<JSONObject> dataRef;
 
     public NetworkPacket() {
-        data = new JSONObject();
+        dataRef = new AtomicReference<>();
+        dataRef.set(new JSONObject());
     }
 
     public synchronized void clearData() {
-        data = new JSONObject();
+        synchronized (dataRef) {
+            dataRef.set(new JSONObject());
+        }
     }
 
     protected CellState getCellState(boolean visited, boolean mapped) {
@@ -43,12 +48,15 @@ public class NetworkPacket {
         return CellState.UNVISITED;
     }
 
-    protected synchronized void addActor(JSONObject actor) {
+    protected void addActor(JSONObject actor) {
         try {
-            if (!data.has(ACTORS)) {
-                data.put(ACTORS, new JSONArray());
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                if (!data.has(ACTORS)) {
+                    data.put(ACTORS, new JSONArray());
+                }
+                data.accumulate(ACTORS, actor);
             }
-            data.accumulate(ACTORS, actor);
         } catch (JSONException e) {
         }
     }
@@ -71,7 +79,7 @@ public class NetworkPacket {
             object.put("id", id);
             object.put("hp", hp);
             object.put("max_hp", ht);
-            object.put("pos", pos);
+            object.put("position", pos);
             object.put("name", name);
         } catch (JSONException e) {
 
@@ -84,9 +92,13 @@ public class NetworkPacket {
         addActor(packActor(actor));
     }
 
-    protected synchronized void addHero(JSONObject hero) {
+    protected void addHero(JSONObject hero) {
         try {
-            data.put("hero", hero);
+            synchronized (dataRef) {
+
+                JSONObject data = dataRef.get();
+                data.put("hero", hero);
+            }
         } catch (JSONException e) {
         }
     }
@@ -118,36 +130,45 @@ public class NetworkPacket {
         addHero(packHero(hero));
     }
 
-    public synchronized void packAndAddLevelEntrance(int pos) {
+    public void packAndAddLevelEntrance(int pos) {
         try {
-            if (!data.has(MAP)) {
-                data.put(MAP, new JSONObject());
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                if (!data.has(MAP)) {
+                    data.put(MAP, new JSONObject());
+                }
+                data.getJSONObject(MAP).put("entrance", pos);
             }
-            data.getJSONObject(MAP).put("entrance", pos);
         } catch (JSONException ignored) {
         }
     }
 
-    public synchronized void packAndAddLevelExit(int pos) {
+    public void packAndAddLevelExit(int pos) {
         try {
-            if (!data.has(MAP)) {
-                data.put(MAP, new JSONObject());
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                if (!data.has(MAP)) {
+                    data.put(MAP, new JSONObject());
+                }
+                data.getJSONObject("map").put("exit", pos);
             }
-            data.getJSONObject("map").put("exit", pos);
         } catch (JSONException ignored) {
         }
     }
 
-    protected synchronized void addCell(JSONObject cell) {
+    protected void addCell(JSONObject cell) {
         try {
-            if (!data.has(MAP)) {
-                data.put(MAP, new JSONObject());
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                if (!data.has(MAP)) {
+                    data.put(MAP, new JSONObject());
+                }
+                JSONObject map = data.getJSONObject(MAP);
+                if (!map.has(CELLS)) {
+                    map.put(CELLS, new JSONArray());
+                }
+                map.accumulate(CELLS, cell);
             }
-            JSONObject map = data.getJSONObject(MAP);
-            if (!map.has(CELLS)) {
-                map.put(CELLS, new JSONArray());
-            }
-            map.accumulate(CELLS, cell);
         } catch (JSONException ignored) {
         }
     }
@@ -183,12 +204,15 @@ public class NetworkPacket {
         packAndAddLevelCells(level);
     }
 
-    protected synchronized void addVisiblePositions(@NotNull JSONArray visiblePositionsArray) {
+    protected void addVisiblePositions(@NotNull JSONArray visiblePositionsArray) {
         try {
-            if (!data.has(CELLS)) {
-                data.put(CELLS, new JSONObject());
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                if (!data.has(CELLS)) {
+                    data.put(CELLS, new JSONObject());
+                }
+                data.getJSONObject(CELLS).put("visible_positions", visiblePositionsArray);
             }
-            data.getJSONObject(CELLS).put("visible_positions", visiblePositionsArray);
         } catch (JSONException ignore) {
         }
     }
@@ -210,11 +234,32 @@ public class NetworkPacket {
             badge.put("level", badgeLevel);
         } catch (Exception ignored) {
         }
-        synchronized (data) {
+        synchronized (dataRef) {
             try {
+                JSONObject data = dataRef.get();
                 data.put("badge", badge);
             } catch (Exception ignored) {
             }
         }
+    }
+
+    public void packAndAddInterlevelSceneState(String state, String customMessage) {
+        try {
+            JSONObject stateObj = new JSONObject();
+            stateObj.put("state", state);
+            if (customMessage != null) {
+                stateObj.put("custom_message", customMessage);
+            }
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                data.put("interlevel_scene", stateObj);
+            }
+        } catch (JSONException ignored) {
+
+        }
+    }
+
+    public void packAndAddInterlevelSceneState(String state) {
+        packAndAddInterlevelSceneState(state, null);
     }
 }
