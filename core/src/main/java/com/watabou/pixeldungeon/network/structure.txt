@@ -38,6 +38,7 @@ server:
             "hp": 0
             "max_hp": 1
             "name": "missingno"
+            "position": 000
             "animation_name": "bb"
         }
     ]
@@ -61,6 +62,7 @@ server:
     "interlevel_scene":
     {
         "type": "RESURRECT"
+        "custom_message": "missingno"
     }
     "window":
     {

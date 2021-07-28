@@ -13,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Iterator;
-import java.util.Scanner;
 
 class ClientThread extends Thread {
 
@@ -27,7 +27,7 @@ class ClientThread extends Thread {
 
     protected OutputStreamWriter writeStream;
     protected InputStreamReader readStream;
-    private Scanner scanner;
+    private BufferedReader reader;
 
     protected int threadID;
 
@@ -47,7 +47,7 @@ class ClientThread extends Thread {
                     Charset.forName(CHARSET).newDecoder()
             );
             this.threadID = ThreadID;
-            scanner = new Scanner(readStream);
+            reader = new BufferedReader(readStream);
             if (autostart) {
                 this.start(); //auto start
             }
@@ -64,7 +64,10 @@ class ClientThread extends Thread {
         }
         while (clientSocket != null && !clientSocket.isClosed()) {
             try {
-                String json = scanner.nextLine();
+                String json = reader.readLine();
+                if (json == null) {
+                    disconnect();
+                }
                 JSONObject data = new JSONObject(json);
                 for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                     String token = it.next();
