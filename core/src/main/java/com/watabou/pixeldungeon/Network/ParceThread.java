@@ -1,8 +1,5 @@
 package com.watabou.pixeldungeon.network;
 
-import android.util.JsonToken;
-
-import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -28,7 +25,6 @@ import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
-import static com.watabou.pixeldungeon.network.Codes.*;
 
 public class ParceThread extends Thread {
 
@@ -37,11 +33,11 @@ public class ParceThread extends Thread {
 
     @Override
     public void run() {
-        if (readStream != null){
+        if (readStream != null) {
             scanner = new Scanner(readStream);
             reader = new BufferedReader(readStream);
         }
-        while (!socket.isClosed()){
+        while (!socket.isClosed()) {
             try {
                 String json = reader.readLine();
                 if (json == null)
@@ -63,7 +59,9 @@ public class ParceThread extends Thread {
                         //UI block
                         case "interlevel_scene": {
                             //todo can cause crash
-                            InterlevelScene.phase = InterlevelScene.Phase.valueOf(data.getJSONObject(token).getString("type").toUpperCase());
+                            String stateName = data.getJSONObject(token).getString("type").toUpperCase();
+                            InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
+                            InterlevelScene.phase = phase;
                             break;
                         }
                         //Hero block
@@ -98,7 +96,7 @@ public class ParceThread extends Thread {
                 }
             } catch (JSONException e) {
                 GLog.n(e.getMessage());
-            } catch(IOException e) {
+            } catch (IOException e) {
                 GLog.n(e.getMessage());
 
                 PixelDungeon.switchScene(TitleScene.class);
@@ -108,23 +106,23 @@ public class ParceThread extends Thread {
         }
     }
 
-    protected void parseCell(JSONObject cell) throws JSONException{
+    protected void parseCell(JSONObject cell) throws JSONException {
         int pos = cell.getInt("position");
-        if ((pos<0) || (pos >= level.LENGTH)){
+        if ((pos < 0) || (pos >= level.LENGTH)) {
             GLog.n("incorrect cell position: \"%s\". Ignored.", pos);
             return;
         }
         for (Iterator<String> it = cell.keys(); it.hasNext(); ) {
             String token = it.next();
-            switch (token){
+            switch (token) {
                 case "position": {
                     continue;
                 }
-                case "id":{
+                case "id": {
                     level.map[pos] = cell.getInt(token);
                     break;
                 }
-                case "state":{
+                case "state": {
                     String state = cell.getString("state");
                     level.visited[pos] = state.equals("visited");
                     level.mapped[pos] = state.equals("mapped");
@@ -138,32 +136,32 @@ public class ParceThread extends Thread {
         }
     }
 
-    protected void parseLevel(JSONObject levelObj) throws JSONException{
+    protected void parseLevel(JSONObject levelObj) throws JSONException {
         for (Iterator<String> it = levelObj.keys(); it.hasNext(); ) {
             String token = it.next();
             switch (token) {
-                case ("cells"):{
+                case ("cells"): {
                     JSONArray cells = levelObj.getJSONArray(token);
-                    for (int i = 0; i < cells.length(); i++){
+                    for (int i = 0; i < cells.length(); i++) {
                         JSONObject cell = cells.getJSONObject(i);
                         parseCell(cell);
                     }
                 }
-                case "entrance":{
+                case "entrance": {
                     level.entrance = levelObj.getInt("entrance");
                     break;
                 }
 
-                case "exit":{
+                case "exit": {
                     level.entrance = levelObj.getInt("exit");
                     break;
                 }
-                case "visible_positions":{
+                case "visible_positions": {
                     JSONArray positions = levelObj.getJSONArray(token);
                     Arrays.fill(Dungeon.visible, false);
-                    for (int i = 0; i < positions.length(); i++){
+                    for (int i = 0; i < positions.length(); i++) {
                         int cell = positions.getInt(i);
-                        if ((cell<0) || (cell >= level.LENGTH)){
+                        if ((cell < 0) || (cell >= level.LENGTH)) {
                             GLog.n("incorrect visible position: \"%s\". Ignored.", cell);
                             continue;
                         }
@@ -180,7 +178,7 @@ public class ParceThread extends Thread {
         }
     }
 
-    protected void parseActors(JSONArray actors) throws JSONException{
+    protected void parseActors(JSONArray actors) throws JSONException {
         for (int i = 0; i < actors.length(); i++) {
             JSONObject actor = actors.getJSONObject(i);
             int ID = actor.getInt("id");
@@ -192,32 +190,34 @@ public class ParceThread extends Thread {
             Char chr;
             if (erase_old || Actor.findById(ID) == null) {
                 chr = new CustomMob(ID); //todo
-                GameScene.add_without_adding_sprite((Mob)chr);
+                GameScene.add_without_adding_sprite((Mob) chr);
             } else {
-              chr = (Char) Actor.findById(ID); //fixme
+                chr = (Char) Actor.findById(ID); //fixme
             }
             for (Iterator<String> it = actor.keys(); it.hasNext(); ) {
                 String token = it.next();
-                switch (token){
-                    case "id": continue;
-                    case "erase_old": continue;
-                    case "position":{
+                switch (token) {
+                    case "id":
+                        continue;
+                    case "erase_old":
+                        continue;
+                    case "position": {
                         chr.pos = actor.getInt(token);
                         break;
                     }
-                    case "hp":{
+                    case "hp": {
                         chr.HP = actor.getInt(token);
                         break;
                     }
-                    case "max_hp":{
+                    case "max_hp": {
                         chr.HT = actor.getInt(token);
                         break;
                     }
-                    case "name":{
+                    case "name": {
                         chr.name = actor.getString(token);
                         break;
                     }
-                    case "animation_name":{
+                    case "animation_name": {
                         assert false;
                         //todo
                         break;
@@ -230,6 +230,7 @@ public class ParceThread extends Thread {
             }
         }
     }
+
     protected void parseHero(JSONObject heroObj) throws JSONException {
         for (Iterator<String> it = heroObj.keys(); it.hasNext(); ) {
             String token = it.next();
@@ -238,15 +239,15 @@ public class ParceThread extends Thread {
                     hero.changeID(heroObj.getInt(token));
                     break;
                 }
-                case "strength":{
+                case "strength": {
                     hero.STR = heroObj.getInt(token);
                     break;
                 }
-                case "lvl":{
+                case "lvl": {
                     hero.lvl = heroObj.getInt(token);
                     break;
                 }
-                case "exp":{
+                case "exp": {
                     hero.exp = heroObj.getInt(token);
                     break;
                 }
