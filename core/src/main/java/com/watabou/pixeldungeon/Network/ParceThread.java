@@ -91,7 +91,7 @@ public class ParceThread extends Thread {
                             break;
                         }
                         default: {
-                            GLog.h("Incorrect packet token: \"{0}\". Ignored", token);
+                            GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                             continue;
                         }
                     }
@@ -111,7 +111,7 @@ public class ParceThread extends Thread {
     protected void parseCell(JSONObject cell) throws JSONException{
         int pos = cell.getInt("position");
         if ((pos<0) || (pos >= level.LENGTH)){
-            GLog.n("incorrect cell position: \"{0}\". Ignored.", pos);
+            GLog.n("incorrect cell position: \"%s\". Ignored.", pos);
             return;
         }
         for (Iterator<String> it = cell.keys(); it.hasNext(); ) {
@@ -131,7 +131,7 @@ public class ParceThread extends Thread {
                     break;
                 }
                 default: {
-                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
                     break;
                 }
             }
@@ -164,7 +164,7 @@ public class ParceThread extends Thread {
                     for (int i = 0; i < positions.length(); i++){
                         int cell = positions.getInt(i);
                         if ((cell<0) || (cell >= level.LENGTH)){
-                            GLog.n("incorrect visible position: \"{0}\". Ignored.", cell);
+                            GLog.n("incorrect visible position: \"%s\". Ignored.", cell);
                             continue;
                         }
                         Dungeon.visible[cell] = true;
@@ -173,7 +173,7 @@ public class ParceThread extends Thread {
                     break;
                 }
                 default: {
-                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
                     break;
                 }
             }
@@ -223,7 +223,7 @@ public class ParceThread extends Thread {
                         break;
                     }
                     default: {
-                        GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                        GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
                         break;
                     }
                 }
@@ -251,7 +251,7 @@ public class ParceThread extends Thread {
                     break;
                 }
                 default: {
-                    GLog.n("Unexpected token \"{0}\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
                     break;
                 }
             }
