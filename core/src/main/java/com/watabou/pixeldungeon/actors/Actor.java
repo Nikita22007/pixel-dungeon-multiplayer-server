@@ -116,10 +116,10 @@ public abstract class Actor implements Bundlable {
 		
 		ids.clear();
 	}
-	
+
+	// because "time: int32, we can have overflow of time counter
 	public static void fixTime() {
-		//But for what  need next? delete it for some time
-		/*if (Dungeon.hero != null && all.contains( Dungeon.hero )) {//it is  need
+		/*if (Dungeon.hero != null && all.contains( Dungeon.hero )) {
 			Statistics.duration += now;
 		}*/
 		
