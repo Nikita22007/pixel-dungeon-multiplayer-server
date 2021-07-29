@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class NetworkPacket {
     public static final String CELLS = "cells";
-    public static String MAP = "map";
-    public static String ACTORS = "actors";
+    public static final String MAP = "map";
+    public static final String ACTORS = "actors";
 
     enum CellState {
         VISITED,
@@ -208,10 +208,10 @@ public class NetworkPacket {
         try {
             synchronized (dataRef) {
                 JSONObject data = dataRef.get();
-                if (!data.has(CELLS)) {
-                    data.put(CELLS, new JSONObject());
+                if (!data.has(MAP)) {
+                    data.put(MAP, new JSONObject());
                 }
-                data.getJSONObject(CELLS).put("visible_positions", visiblePositionsArray);
+                data.getJSONObject(MAP).put("visible_positions", visiblePositionsArray);
             }
         } catch (JSONException ignore) {
         }
