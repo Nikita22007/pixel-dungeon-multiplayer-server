@@ -1,31 +1,46 @@
 package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 
 
 public class Client extends Thread {
-    public static DataInputStream readStream;
-    public static DataOutputStream writeStream;
+    public static final String CHARSET = "UTF-8";
+
+    protected static OutputStreamWriter writeStream;
+    protected static InputStreamReader readStream;
     protected static Socket socket = null;
     protected static Client client;
     protected static ParceThread parceThread = null;
+    protected static NetworkPacket packet = new NetworkPacket();
+
 
     public static boolean connect(String server, int port) {
+        packet.clearData();
         if (parceThread==null){
             parceThread=new ParceThread();
         }
         try {
             socket = new Socket(server, port);
-            writeStream = new DataOutputStream(socket.getOutputStream());
-            readStream = new DataInputStream(socket.getInputStream());
+            writeStream = new OutputStreamWriter(
+                    socket.getOutputStream(),
+                    Charset.forName(CHARSET).newEncoder()
+            );
+            readStream = new InputStreamReader(
+                    socket.getInputStream(),
+                    Charset.forName(CHARSET).newDecoder()
+            );
             client = new Client();
             client.start();
             parceThread.start();
@@ -56,87 +71,31 @@ public class Client extends Thread {
             return;
         }
         try {
-            while (!socket.isClosed()) ;
+            while (!socket.isClosed()) sleep(1000);
         } catch (Exception e) {
             GLog.n(e.getStackTrace().toString());
         }
         disconnect();
     }
 
-    //IO
-    //send primitives
-    public static void send(int code) {
+    public static void flush(){
         try {
-            synchronized (writeStream) {
-                writeStream.writeInt(code);
-                writeStream.flush();
+            synchronized (packet){
+                synchronized (writeStream) {
+                    writeStream.write(packet.data.toString());
+                    writeStream.write('\n');
+                    writeStream.flush();
+                    packet.clearData();
+                }
             }
-        } catch (Exception e) {
-            GLog.h("Exception. Message: {0}", e.getMessage());
+        } catch (IOException e){
+            GLog.h("IOException. Message: {0}", e.getMessage());
             disconnect();
         }
     }
-    public static void send(int code, byte Data) {
-        try {
-            synchronized (writeStream) {
-                writeStream.writeInt(code);
-                writeStream.writeByte(Data);
-                writeStream.flush();
-            }
-        } catch (Exception e) {
-            GLog.h("Exception. Message: {0}", e.getMessage());
-            disconnect();
-        }
+    //methods
+    public static void sendHeroClass(HeroClass heroClass){
+        packet.packAndAddHeroClass(heroClass.name().toLowerCase());
+        flush();
     }
-    public static void send(int code, int Data) {
-        try {
-            synchronized (writeStream) {
-                writeStream.writeInt(code);
-                writeStream.writeInt(Data);
-                writeStream.flush();
-            }
-        } catch (Exception e) {
-            GLog.h("Exception. Message: {0}", e.getMessage());
-            disconnect();
-        }
-    }
-
-    public static void send(int code, String message) {
-        try {
-            synchronized (writeStream) {
-                writeStream.writeInt(code);
-                writeStream.writeInt(message.length());
-                writeStream.writeChars(message);
-                writeStream.flush();
-            }
-        } catch (Exception e) {
-            GLog.h("Exception. Message: {0}", e.getMessage());
-            disconnect();
-        }
-    }
-    //send_serelliased_data
-    public static void sendData(int code, byte[]  data) {
-        try {
-            synchronized (writeStream) {
-                writeStream.writeInt(code);
-                writeStream.write(data);
-                writeStream.flush();
-            }
-        } catch (Exception e) {
-            GLog.h("Exception. Message: {0}", e.getMessage());
-            disconnect();
-        }
-    }
-    /*
-    public static <T> void  send(int code, T ...  data) {
-        try {
-            writeStream.writeObject(code);
-            for (int i=0; i<data.length;i++){
-                writeStream.writeObject(data[i]);
-            };
-            writeStream.flush();
-        } catch (Exception e) {
-            disconnect();
-        }
-    }*/
 }

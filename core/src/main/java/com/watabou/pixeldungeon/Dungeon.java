@@ -518,12 +518,13 @@ public class Dungeon {
 		if (level == null) {
 			return;
 		}
-		
+
+		/*
 		level.updateFieldOfView( hero );
 		System.arraycopy( Level.fieldOfView, 0, visible, 0, visible.length );
 		
 		BArray.or( level.visited, visible, level.visited );
-		
+		*/
 		GameScene.afterObserve();
 	}
 	
