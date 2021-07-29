@@ -57,7 +57,7 @@ public class ParceThread extends Thread {
                         //UI block
                         case "interlevel_scene": {
                             //todo can cause crash
-                            String stateName = data.getJSONObject(token).getString("type").toUpperCase();
+                            String stateName = data.getJSONObject(token).getString("state").toUpperCase();
                             InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
                             InterlevelScene.phase = phase;
                             break;
