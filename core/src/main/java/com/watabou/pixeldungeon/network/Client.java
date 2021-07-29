@@ -71,7 +71,7 @@ public class Client extends Thread {
             return;
         }
         try {
-            while (!socket.isClosed()) ;
+            while (!socket.isClosed()) sleep(1000);
         } catch (Exception e) {
             GLog.n(e.getStackTrace().toString());
         }
