@@ -28,13 +28,11 @@ import static com.watabou.pixeldungeon.network.Client.socket;
 
 public class ParceThread extends Thread {
 
-    private Scanner scanner;
     private BufferedReader reader;
 
     @Override
     public void run() {
         if (readStream != null) {
-            scanner = new Scanner(readStream);
             reader = new BufferedReader(readStream);
         }
         while (!socket.isClosed()) {
