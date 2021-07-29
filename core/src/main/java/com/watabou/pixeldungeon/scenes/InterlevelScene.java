@@ -184,12 +184,13 @@ public class InterlevelScene extends PixelScene {
 				Music.INSTANCE.volume( p );
 			}
 			if ((timeLeft -= Game.elapsed) <= 0) {
-				phase=Phase.FADE_IN;
+				phase = Phase.FADE_IN;
 				Game.switchScene( GameScene.class );
 			}
 			break;
 			
 		case STATIC:
+			message.alpha( 1 );
 			if (error != null) {
 				add( new WndError( error ) {
 					public void onBackPressed() {
