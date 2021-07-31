@@ -34,12 +34,15 @@ server:
     "actors":
     [
         {
-            "id": 000
+            "type": "blob"/"character"/"hero"
+            "id": 0
+            // char/hero:
             "hp": 0
             "max_hp": 1
             "name": "missingno"
-            "position": 000
-            "animation_name": "bb"
+            "position": 0
+            "sprite_name": "rat_sprite"
+            "animation_name": "idle"
         }
     ]
     "hero":
@@ -51,12 +54,36 @@ server:
         "lvl": 0
         "exp": 0
    }
-    "animations":
+
+   "inventory":
+   {
+    "bags":
     [
         {
-            "name": "a"
-            "frames": [0,1,2]
-            "texture": "texture_name"
+            "name": "backpack"
+            "texure": ??
+            "size": 0
+            "items":
+            [
+                item
+            ]
+        }
+    ]
+   }
+   "sprites":
+    [
+        {
+            "name": "rat_sprite"
+            "texture": "rat" //in client -> texture + ".png"
+            animations:
+            [
+                {
+                    "name": "idle"
+                    "fps": 2
+                    "looped": true
+                    "frames": [0,0,0,1]
+                }
+            ]
         }
     ]
     "interlevel_scene":
@@ -83,4 +110,41 @@ server:
         "name": "none"
         "level": 0
     }
+
+}
+
+
+
+item:
+{
+    "actions":
+    [
+        {
+            "name": "Drop"
+            "code": "DROP"
+        }
+    ]
+    "image": ???
+    "glowing": ???
+
+    "name": "smth"
+    "info": "missingno"
+
+    "stackable": false
+    "quantity": 1
+
+    "durability": 0
+    "max_durability": 0
+
+    "known": true //for scrolls/rings/etc
+
+    "level": 0
+    "level_known": false
+
+    "cursed": false
+    "cursed_known": false
+    //"unique": false
+
+
+
 }
