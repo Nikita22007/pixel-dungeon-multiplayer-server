@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.levels.Level;
 
@@ -62,25 +63,32 @@ public class NetworkPacket {
     }
 
     protected JSONObject packActor(@NotNull Actor actor) {
-        int id = actor.id();
-        String name = "no-name";
-        int hp = 1;
-        int ht = 1;
-        int pos = 0;
-        if (actor instanceof Char) {
-            Char character = (Char) actor;
-            name = character.name;
-            hp = character.HP;
-            ht = character.HT;
-            pos = character.pos;
-        }
+
         JSONObject object = new JSONObject();
         try {
+            int id = actor.id();
             object.put("id", id);
-            object.put("hp", hp);
-            object.put("max_hp", ht);
-            object.put("position", pos);
-            object.put("name", name);
+
+            if (actor instanceof Char) {
+                if (actor instanceof Hero) {
+                    object.put("type", "hero");
+                } else {
+                    object.put("type", "character");
+                }
+                Char character = (Char) actor;
+                String name = character.name;
+                int hp = character.HP;
+                int ht = character.HT;
+                int pos = character.pos;
+                object.put("hp", hp);
+                object.put("max_hp", ht);
+                object.put("position", pos);
+                object.put("name", name);
+            } else if (actor instanceof Blob) {
+                object.put("type", "blob");
+                assert false : "Does not released sending blobs";
+                return new JSONObject();
+            }
         } catch (JSONException e) {
 
         }

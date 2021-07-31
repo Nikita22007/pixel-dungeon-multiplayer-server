@@ -6,8 +6,8 @@ client:
         "id": 0
         "button": 0
     }
+    "cell_listener": 00 //pos
 }
-
 
 server:
 {
@@ -43,6 +43,9 @@ server:
             "position": 0
             "sprite_name": "rat_sprite"
             "animation_name": "idle"
+            //blob:
+            "positions": [0,1,2]
+            "type": "class_name"
         }
     ]
     "hero":
