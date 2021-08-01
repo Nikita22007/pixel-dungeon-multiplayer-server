@@ -21,8 +21,11 @@ import com.watabou.input.Touchscreen.Touch;
 import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.network.Client;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
+
+import static com.watabou.pixeldungeon.network.SendData.SendCellListenerCell;
 
 public class CellSelector extends TouchArea {
 
@@ -55,8 +58,8 @@ public class CellSelector extends TouchArea {
 	
 	public void select( int cell ) {
 		if (enabled && listener != null && cell != -1) {
-			
-			listener.onSelect( cell );
+			SendCellListenerCell(cell);
+			//listener.onSelect( cell );
 			GameScene.ready();
 			
 		} else {
@@ -144,7 +147,8 @@ public class CellSelector extends TouchArea {
 	
 	public void cancel() {
 		if (listener != null) {
-			listener.onSelect( null );
+			SendCellListenerCell(null);
+			//listener.onSelect( null );
 		}
 		
 		GameScene.ready();

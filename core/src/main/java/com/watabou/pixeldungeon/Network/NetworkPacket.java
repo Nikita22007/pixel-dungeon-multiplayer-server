@@ -1,13 +1,5 @@
 package com.watabou.pixeldungeon.network;
 
-import com.watabou.pixeldungeon.actors.Actor;
-import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.pixeldungeon.levels.Level;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,10 +33,23 @@ public class NetworkPacket {
 
     public void packAndAddHeroClass(String heroClass) {
         synchronized (dataRef) {
-        try {
-            dataRef.get().put("hero_class", heroClass);
-        } catch (Exception ignored) {
+            try {
+                dataRef.get().put("hero_class", heroClass);
+            } catch (Exception ignored) {
+            }
         }
+    }
+
+    public void packAndAddCellListenerCell(Integer cell) {
+        synchronized (dataRef) {
+            try {
+                if (cell == null) {
+                    dataRef.get().put("cell_listener", -1);
+                } else {
+                    dataRef.get().put("cell_listener", cell.intValue());
+                }
+            } catch (Exception ignored) {
+            }
         }
     }
 }
