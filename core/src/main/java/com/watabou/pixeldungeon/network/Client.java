@@ -23,7 +23,7 @@ public class Client extends Thread {
     protected static Socket socket = null;
     protected static Client client;
     protected static ParceThread parceThread = null;
-    protected static NetworkPacket packet = new NetworkPacket();
+    protected static final NetworkPacket packet = new NetworkPacket();
 
 
     public static boolean connect(String server, int port) {
@@ -80,9 +80,9 @@ public class Client extends Thread {
 
     public static void flush(){
         try {
-            synchronized (packet){
+            synchronized (packet.dataRef){
                 synchronized (writeStream) {
-                    writeStream.write(packet.data.toString());
+                    writeStream.write(packet.dataRef.get().toString());
                     writeStream.write('\n');
                     writeStream.flush();
                     packet.clearData();

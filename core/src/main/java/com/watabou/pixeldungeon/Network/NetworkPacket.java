@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class NetworkPacket {
     public static final String CELLS = "cells";
     public static String MAP = "map";
@@ -25,20 +27,22 @@ public class NetworkPacket {
         }
     }
 
-    public JSONObject data;
+    public AtomicReference<JSONObject> dataRef;
 
     public NetworkPacket() {
-        data = new JSONObject();
+        dataRef = new AtomicReference<>(new JSONObject());
     }
 
-    public synchronized void clearData() {
-        data = new JSONObject();
+    public void clearData() {
+        synchronized (dataRef) {
+            dataRef.set(new JSONObject());
+        }
     }
 
     public void packAndAddHeroClass(String heroClass) {
-        synchronized (data) {
+        synchronized (dataRef) {
         try {
-            data.put("hero_class", heroClass);
+            dataRef.get().put("hero_class", heroClass);
         } catch (Exception ignored) {
         }
         }
