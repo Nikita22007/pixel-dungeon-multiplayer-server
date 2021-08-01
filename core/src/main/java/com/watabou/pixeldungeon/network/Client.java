@@ -5,8 +5,6 @@ import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -28,8 +26,8 @@ public class Client extends Thread {
 
     public static boolean connect(String server, int port) {
         packet.clearData();
-        if (parceThread==null){
-            parceThread=new ParceThread();
+        if (parceThread == null) {
+            parceThread = new ParceThread();
         }
         try {
             socket = new Socket(server, port);
@@ -60,7 +58,7 @@ public class Client extends Thread {
         socket = null;
         readStream = null;
         writeStream = null;
-        if ( !(PixelDungeon.scene() instanceof TitleScene)){
+        if (!(PixelDungeon.scene() instanceof TitleScene)) {
             PixelDungeon.switchScene(TitleScene.class);
         }
     }
@@ -78,9 +76,9 @@ public class Client extends Thread {
         disconnect();
     }
 
-    public static void flush(){
+    public static void flush() {
         try {
-            synchronized (packet.dataRef){
+            synchronized (packet.dataRef) {
                 synchronized (writeStream) {
                     writeStream.write(packet.dataRef.get().toString());
                     writeStream.write('\n');
@@ -88,13 +86,14 @@ public class Client extends Thread {
                     packet.clearData();
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             GLog.h("IOException. Message: {0}", e.getMessage());
             disconnect();
         }
     }
+
     //methods
-    public static void sendHeroClass(HeroClass heroClass){
+    public static void sendHeroClass(HeroClass heroClass) {
         packet.packAndAddHeroClass(heroClass.name().toLowerCase());
         flush();
     }
