@@ -43,6 +43,7 @@ server:
             "position": 0
             "sprite_name": "rat_sprite"
             "animation_name": "idle"
+            "description": "unknown creature" //if mob
             //blob:
             "positions": [0,1,2]
             "type": "class_name"

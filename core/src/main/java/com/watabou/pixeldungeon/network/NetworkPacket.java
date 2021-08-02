@@ -4,6 +4,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
 
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +85,10 @@ public class NetworkPacket {
                 object.put("max_hp", ht);
                 object.put("position", pos);
                 object.put("name", name);
+                if (actor instanceof Mob) {
+                    String desc = ((Mob) actor).description();
+                    object.put("description", desc);
+                }
             } else if (actor instanceof Blob) {
                 object.put("type", "blob");
                 assert false : "Does not released sending blobs";
