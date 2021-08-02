@@ -4,6 +4,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.scenes.GameScene;
@@ -19,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
@@ -176,54 +176,98 @@ public class ParceThread extends Thread {
         }
     }
 
+
+    protected void parseActorChar(JSONObject actorObj, int ID, Actor actor) throws JSONException {
+        Char chr;
+        if (actor == null) {
+            chr = new CustomMob(ID);
+            GameScene.add_without_adding_sprite((Mob) chr);
+        } else {
+            chr = (Char) actor;
+        }
+        for (Iterator<String> it = actorObj.keys(); it.hasNext(); ) {
+            String token = it.next();
+            switch (token) {
+                case "id":
+                    continue;
+                case "erase_old":
+                    continue;
+                case "position": {
+                    chr.pos = actorObj.getInt(token);
+                    break;
+                }
+                case "hp": {
+                    chr.HP = actorObj.getInt(token);
+                    break;
+                }
+                case "max_hp": {
+                    chr.HT = actorObj.getInt(token);
+                    break;
+                }
+                case "name": {
+                    chr.name = actorObj.getString(token);
+                    break;
+                }
+                case "sprite_name": {
+                    assert false : "sprite_name";
+                    //todo
+                    break;
+                }
+                case "animation_name": {
+                    assert false : "animation_name";
+                    //todo
+                    break;
+                }
+                case "description": {
+                    ((Mob) chr).setDesc(actorObj.getString(token));
+                    assert false : "animation_name";
+                    //todo
+                    break;
+                }
+                default: {
+                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
+                    break;
+                }
+            }
+        }
+    }
+
+    protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) {
+        GLog.n("Can't parse BLOB");
+        assert false : "Can't parse BLOB";
+    }
+
+    protected void parseActorHero(JSONObject actorObj, int id, Actor actor) throws JSONException {
+        if ((actor == null) || (actor instanceof Hero)) {
+            actor = hero != null ? hero : new Hero();
+            parseActorChar(actorObj, id, actor);
+        } else {
+            assert false : "resolved other actor, but waited Hero";
+        }
+    }
+
+
     protected void parseActors(JSONArray actors) throws JSONException {
         for (int i = 0; i < actors.length(); i++) {
-            JSONObject actor = actors.getJSONObject(i);
-            int ID = actor.getInt("id");
+            JSONObject actorObj = actors.getJSONObject(i);
+            int ID = actorObj.getInt("id");
             boolean erase_old = false;
-            if (actor.has("erase_old")) {
-                erase_old = actor.getBoolean("erase_old");
+            if (actorObj.has("erase_old")) {
+                erase_old = actorObj.getBoolean("erase_old");
             }
-            //boolean erase_old =  readStream.readBoolean();
-            Char chr;
-            if (erase_old || Actor.findById(ID) == null) {
-                chr = new CustomMob(ID); //todo
-                GameScene.add_without_adding_sprite((Mob) chr);
-            } else {
-                chr = (Char) Actor.findById(ID); //fixme
-            }
-            for (Iterator<String> it = actor.keys(); it.hasNext(); ) {
-                String token = it.next();
-                switch (token) {
-                    case "id":
-                        continue;
-                    case "erase_old":
-                        continue;
-                    case "position": {
-                        chr.pos = actor.getInt(token);
-                        break;
-                    }
-                    case "hp": {
-                        chr.HP = actor.getInt(token);
-                        break;
-                    }
-                    case "max_hp": {
-                        chr.HT = actor.getInt(token);
-                        break;
-                    }
-                    case "name": {
-                        chr.name = actor.getString(token);
-                        break;
-                    }
-                    case "animation_name": {
-                        assert false;
-                        //todo
-                        break;
-                    }
-                    default: {
-                        GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
-                        break;
-                    }
+            Actor actor = (erase_old ? null : Actor.findById(ID));
+            switch (actorObj.getString("type")) {
+                case "char": {
+                    parseActorChar(actorObj, ID, actor);
+                    break;
+                }
+                case "hero": {
+                    parseActorHero(actorObj, ID, actor);
+                    break;
+                }
+                case "blob": {
+                    parseActorBlob(actorObj, ID, actor);
+                    break;
                 }
             }
         }

@@ -78,7 +78,9 @@ public abstract class Mob extends Char {
 	
 	private static final String STATE	= "state";
 	private static final String TARGET	= "target";
-	
+
+	private String desc = "A creature unknown to science.";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		
@@ -407,9 +409,13 @@ public abstract class Mob extends Char {
 	}
 	
 	public String description() {
-		return "Real description is coming soon!";
+		return desc;
 	}
-	
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
 	public void notice() {
 		sprite.showAlert();
 	}
