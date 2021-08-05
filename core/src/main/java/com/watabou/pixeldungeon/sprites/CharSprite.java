@@ -149,7 +149,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		motion = new PosTweener( this, worldToCamera( to ), MOVE_INTERVAL );
 		motion.listener = this;
-		parent.add( motion );
+		//parent.add( motion );
 
 		isMoving = true;
 
@@ -220,7 +220,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		int distance = Level.distance( from, to );
 		jumpTweener = new JumpTweener( this, worldToCamera( to ), distance * 4, distance * 0.1f );
 		jumpTweener.listener = this;
-		parent.add( jumpTweener );
+		//parent.add( jumpTweener );
 
 		turnTo( from, to );
 	}

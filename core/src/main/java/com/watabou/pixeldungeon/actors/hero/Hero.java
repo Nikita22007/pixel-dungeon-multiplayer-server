@@ -202,6 +202,7 @@ public class Hero extends Char {
 
 		visibleEnemies = new ArrayList<Mob>();
 		cellSelector = new CellSelector(this);
+		sprite = new HeroSprite(this);
 	}
 
 	public int STR() {

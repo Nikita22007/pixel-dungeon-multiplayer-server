@@ -1,6 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -97,16 +98,21 @@ class ClientThread extends Thread {
                             }
                         }
                     } catch (JSONException e) {
+                        assert false;
                         GLog.n(String.format("JSONException in ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
                     }
                 }
             } catch (IOException e) {
+                assert false;
+                PixelDungeon.reportException(e);
                 GLog.n(String.format("ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
                 disconnect();//  need?
 
             } catch (Exception e) {
+                PixelDungeon.reportException(e);
                 GLog.n(e.getStackTrace().toString());
+                disconnect();
             }
         }
     }
