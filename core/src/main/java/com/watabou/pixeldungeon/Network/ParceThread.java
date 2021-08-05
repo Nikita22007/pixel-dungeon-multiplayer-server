@@ -10,6 +10,7 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import org.json.JSONArray;
@@ -71,19 +72,15 @@ public class ParceThread extends Thread {
                             parseHero(data.getJSONObject(token));
                             break;
                         }
-                        // Control block
-                       /* case READY: {
-                            if (readStream.readBoolean()) {
-                                hero.ready();
-                            } else {
-                                hero.busy();
-                            }
-                        }*/
                         case "ui": {
                             JSONObject uiObj = data.getJSONObject(token);
                             if (uiObj.has("resume_button_visible")) {
                                 hero.resume_button_visible = uiObj.getBoolean("resume_button_visible");
                             }
+                            break;
+                        }
+                        case "actions": {
+                            parseActions(data.getJSONArray(token));
                             break;
                         }
                         default: {
@@ -100,6 +97,63 @@ public class ParceThread extends Thread {
                 PixelDungeon.switchScene(TitleScene.class);
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
                 return;
+            }
+        }
+    }
+
+    protected void parseSpriteAction(JSONObject actionObj) throws JSONException{
+        String action = actionObj.getString("action");
+        int actorID = actionObj.getInt("actor_id");
+        Actor actor = Actor.findById(actorID);
+        if (actor == null){
+            GLog.h("can't resolve actor");
+            return;
+        }
+        CharSprite sprite = ((Char) actor).sprite;
+        switch (action){
+            case "idle": {
+                sprite.idle();
+                break;
+            }
+            case "run":
+            case "move": {
+                sprite.move(actionObj.getInt("from"), actionObj.getInt("to"));
+                break;
+            }
+            case "operate": {
+                sprite.operate(actionObj.getInt("to"));
+                break;
+            }
+            case "attack": {
+                sprite.attack(actionObj.getInt("to"));
+                break;
+            }
+            case "zap": {
+                sprite.zap(actionObj.getInt("to"));
+                break;
+            }
+            case "jump": {
+                sprite.jump(actionObj.getInt("from"), actionObj.getInt("to"), () -> {});
+                break;
+            }
+            case "die": {
+                sprite.die();
+                break;
+            }
+        }
+    }
+
+    protected void parseActions(JSONArray actions) throws JSONException {
+        for (int i = 0; i < actions.length(); i++) {
+            JSONObject actionObj = actions.getJSONObject(i);
+            String type = actionObj.getString("type");
+            switch (type) {
+                case ("sprite_action"): {
+                    parseSpriteAction(actionObj);
+                    break;
+                }
+                default:
+                    GLog.h("unknown action type %s. Ignored", type);
             }
         }
     }
