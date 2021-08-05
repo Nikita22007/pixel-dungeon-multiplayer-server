@@ -33,6 +33,8 @@ class ClientThread extends Thread {
 
     protected Socket clientSocket = null;
 
+    protected Hero clientHero;
+
     protected final NetworkPacket packet = new NetworkPacket();
 
     public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
@@ -78,6 +80,17 @@ class ClientThread extends Thread {
                                 InitPlayerHero(data.getString(token));
                                 break;
                             }
+                            case ("cell_listener"):{
+                                Integer cell = data.getInt(token);
+                                if (cell < 0){
+                                    cell = null;
+                                }
+                                if (clientHero.cellSelector != null){
+                                    if (clientHero.cellSelector.listener != null) {
+                                        clientHero.cellSelector.listener.onSelect(cell);
+                                    }
+                                }
+                           }
                             default: {
                                 GLog.n("Bad token:{0}", token);
                                 break;
@@ -128,6 +141,7 @@ class ClientThread extends Thread {
         }
 
         Hero newHero = new Hero();
+        clientHero = newHero;
         newHero.live();
 
 /*        if (true ){
