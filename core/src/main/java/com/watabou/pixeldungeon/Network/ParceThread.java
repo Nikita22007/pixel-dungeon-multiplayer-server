@@ -127,7 +127,7 @@ public class ParceThread extends Thread {
                     break;
                 }
                 default: {
-                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in cell. Ignored.", token);
                     break;
                 }
             }
@@ -225,7 +225,7 @@ public class ParceThread extends Thread {
                     break;
                 }
                 default: {
-                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in Actor Char. Ignored.", token);
                     break;
                 }
             }
@@ -293,8 +293,16 @@ public class ParceThread extends Thread {
                     hero.exp = heroObj.getInt(token);
                     break;
                 }
+                case "ready": {
+                    if (heroObj.getBoolean(token)) {
+                        hero.ready();
+                    } else {
+                        hero.busy();
+                    }
+                    break;
+                }
                 default: {
-                    GLog.n("Unexpected token \"%s\" in level. Ignored.", token);
+                    GLog.n("Unexpected token \"%s\" in Hero. Ignored.", token);
                     break;
                 }
             }

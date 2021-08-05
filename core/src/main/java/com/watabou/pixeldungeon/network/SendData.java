@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.network;
 
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 
+import static com.watabou.pixeldungeon.network.Client.flush;
 import static com.watabou.pixeldungeon.network.Client.packet;
 
 public class SendData {
@@ -12,5 +13,6 @@ public class SendData {
 
     public static void SendCellListenerCell(Integer cell) {
         packet.packAndAddCellListenerCell(cell);
+        flush();
     }
 }
