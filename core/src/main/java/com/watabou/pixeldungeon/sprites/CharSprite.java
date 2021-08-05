@@ -135,12 +135,16 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void idle() {
-		sendCharSpriteAction(ch.id(), "idle", null, null);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "idle", null, null);
+		}
 		play( idle );
 	}
 
 	public void move( int from, int to ) {
-		sendCharSpriteAction(ch.id(), "run", from,to);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "run", from, to);
+		}
 		play( run );
 
 		motion = new PosTweener( this, worldToCamera( to ), MOVE_INTERVAL );
@@ -165,26 +169,34 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void attack( int cell ) {
-		sendCharSpriteAction(ch.id(), "attack", null, cell);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "attack", null, cell);
+		}
 		turnTo( ch.pos, cell );
 		play( attack );
 	}
 
 	public void attack( int cell, Callback callback ) {
-		sendCharSpriteAction(ch.id(), "attack", null, cell);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "attack", null, cell);
+		}
 		animCallback = callback;
 		turnTo( ch.pos, cell );
 		play( attack );
 	}
 
 	public void operate( int cell ) {
-		sendCharSpriteAction(ch.id(), "operate", null, cell);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "operate", null, cell);
+		}
 		turnTo( ch.pos, cell );
 		play( operate );
 	}
 
 	public void zap( int cell ) {
-		sendCharSpriteAction(ch.id(), "zap", null, cell);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "zap", null, cell);
+		}
 		turnTo( ch.pos, cell );
 		play( zap );
 	}
@@ -200,7 +212,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void jump( int from, int to, Callback callback ) {
-		sendCharSpriteAction(ch.id(), "jump", from, to);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "jump", from, to);
+		}
 		jumpCallback = callback;
 
 		int distance = Level.distance( from, to );
@@ -212,7 +226,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void die() {
-		sendCharSpriteAction(ch.id(), "die",null, null);
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "die", null, null);
+		}
 		sleeping = false;
 		play( die );
 
