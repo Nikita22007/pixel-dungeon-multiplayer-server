@@ -1053,8 +1053,13 @@ public class Hero extends Char {
 
 		return act();
 	}
-	
-	public void earnExp( int exp ) {
+
+	@Override
+	public void updateSpriteState() {
+		super.updateSpriteState();
+	}
+
+	public void earnExp(int exp ) {
 		
 		this.exp += exp;
 		
