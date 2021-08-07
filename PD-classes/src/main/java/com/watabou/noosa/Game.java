@@ -200,21 +200,30 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		}
 		return true;
 	}
-	
+
+	public void server_step(){
+		SystemTime.tick();
+		long rightNow = SystemTime.now;
+		step = (now == 0 ? 0 : rightNow - now);
+		now = rightNow;
+
+		step();
+	}
+
 	@Override
 	public void onDrawFrame( GL10 gl ) {
 		
 		if (width == 0 || height == 0) {
 			return;
 		}
-		
+
 		SystemTime.tick();
 		long rightNow = SystemTime.now;
 		step = (now == 0 ? 0 : rightNow - now);
 		now = rightNow;
-		
+
 		step();
-		
+
 		NoosaScript.get().resetCamera();
 		GLES20.glScissor( 0, 0, width, height );
 		GLES20.glClear( GLES20.GL_COLOR_BUFFER_BIT );

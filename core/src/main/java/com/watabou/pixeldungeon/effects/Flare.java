@@ -110,7 +110,7 @@ public class Flare extends Visual {
 	
 	public Flare show( Visual visual, float duration ) {
 		point( visual.center() );
-		visual.parent.addToBack( this );
+//		visual.parent.addToBack( this );
 		
 		lifespan = this.duration = duration;
 		

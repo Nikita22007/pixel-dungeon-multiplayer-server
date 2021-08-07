@@ -58,6 +58,22 @@ public class Server extends Thread {
         }
 
         serverThread.start();
+
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        Game.instance.server_step();
+                        sleep(200);
+                    }
+                } catch (InterruptedException ignored) {
+
+                }
+            }
+        };
+        thread.start();
+
         return started;
     }
 
