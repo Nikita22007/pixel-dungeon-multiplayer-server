@@ -91,21 +91,22 @@ class ClientThread extends Thread {
                                         clientHero.cellSelector.listener.onSelect(cell);
                                     }
                                 }
+                                break;
                            }
                             default: {
-                                GLog.n("Bad token:{0}", token);
+                                GLog.n("Bad token: %s", token);
                                 break;
                             }
                         }
                     } catch (JSONException e) {
                         assert false;
-                        GLog.n(String.format("JSONException in ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
+                        GLog.n(String.format("JSONException in ThreadID:%s; Message:%s", threadID, e.getMessage()));
                     }
                 }
             } catch (IOException e) {
                 assert false;
                 PixelDungeon.reportException(e);
-                GLog.n(String.format("ThreadID:{0}; Message:{1}", threadID, e.getMessage()));
+                GLog.n(String.format("ThreadID:%s; Message:%s", threadID, e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
                 disconnect();//  need?
 
@@ -129,7 +130,7 @@ class ClientThread extends Thread {
                 packet.clearData();
             }
         } catch (IOException e) {
-            GLog.h("IOException in threadID {0}. Message: {1}", threadID, e.getMessage());
+            GLog.h("IOException in threadID %s. Message: %s", threadID, e.getMessage());
             disconnect();
         }
     }
@@ -141,7 +142,7 @@ class ClientThread extends Thread {
             curClass = HeroClass.valueOf(className.toUpperCase());
         } catch (IllegalArgumentException e) {
             if (!className.equals("random")) { //classID==0 is random class, so it  is not error
-                GLog.w("Incorrect class:{0}; threadID:{1}", className, threadID);
+                GLog.w("Incorrect class:%s; threadID:%s", className, threadID);
             }
             curClass = Random.element(HeroClass.values());
         }
@@ -166,7 +167,7 @@ class ClientThread extends Thread {
         packet.packAndAddLevel(Dungeon.level);
         packet.pack_and_add_hero(newHero);
 
-        synchronized (Dungeon.heroes) {
+        synchronized (Dungeon.heroes) { //todo fix it. It is not work
             for (int i = 0; i < Settings.maxPlayers; i++) {
                 if (Dungeon.heroes[i] == null) {
                     Dungeon.heroes[i] = newHero;
@@ -181,7 +182,7 @@ class ClientThread extends Thread {
 
             Actor.add(newHero);
             Actor.occupyCell(newHero);
-            Dungeon.observe(newHero);
+            Dungeon.observe(newHero, false);
         }
         addAllCharsToSend();
         packet.packAndAddVisiblePositions(Dungeon.visible);

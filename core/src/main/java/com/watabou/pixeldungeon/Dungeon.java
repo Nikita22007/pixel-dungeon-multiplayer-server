@@ -57,6 +57,7 @@ import com.watabou.pixeldungeon.levels.PrisonLevel;
 import com.watabou.pixeldungeon.levels.Room;
 import com.watabou.pixeldungeon.levels.SewerBossLevel;
 import com.watabou.pixeldungeon.levels.SewerLevel;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.ui.QuickSlot;
@@ -71,6 +72,10 @@ import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
+import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
+import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
 
 public class Dungeon {
 	
@@ -656,7 +661,11 @@ public class Dungeon {
 		}
 	}
 
-	public static void observe(@NotNull Hero hero){
+	public static void observe(@NotNull Hero hero) {
+	observe(hero, true);
+	}
+
+	public static void observe(@NotNull Hero hero, boolean send){
 
 		if (level == null) {
 			return;
@@ -667,7 +676,13 @@ public class Dungeon {
 
 		BArray.or( level.visited, visible, level.visited );
 
-		GameScene.afterObserve();
+		if (send) {
+			int networkID = getHeroID(hero);
+			addToSendLevelVisitedState(level,networkID);
+			addToSendHeroVisibleCells(visible,networkID);
+			SendData.flush(networkID);
+		}
+		//GameScene.afterObserve(); // todo client only
 
 	}
 	

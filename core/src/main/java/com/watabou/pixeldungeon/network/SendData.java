@@ -14,24 +14,19 @@ import static com.watabou.pixeldungeon.network.Server.clients;
 public class SendData {
 
     //---------------------------Level
-    public static void sendLevelMap(Level level, int ID) {
+
+    public static void addToSendLevelVisitedState(Level level, int ID) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.LEVEL_MAP, level.map);
+            clients[ID].packet.packAndAddLevelCells(level); //todo optimize this
         }
     }
 
-    public static void sendLevelVisited(Level level, int ID) {
+    //---------------------------Hero
+    public static void addToSendHeroVisibleCells(boolean[] visible, int ID) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.LEVEL_VISITED, level.visited);
+            clients[ID].packet.packAndAddVisiblePositions(visible);
         }
     }
-
-    public static void sendLevelMapped(Level level, int ID) {
-        if (clients[ID] != null) {
-            clients[ID].send(Codes.LEVEL_MAPPED, level.mapped);
-        }
-    }
-
     //---------------------------UI  and mechanics
     public static void sendAllBossSlain() {
         ClientThread.sendAll(Codes.BOSS_SLAIN);
@@ -189,5 +184,11 @@ public class SendData {
 
         }
         GLog.w("can't send char sprite state");
+    }
+
+    public static void flush(int networkID) {
+        if (clients[networkID] != null){
+            clients[networkID].flush();
+        }
     }
 }
