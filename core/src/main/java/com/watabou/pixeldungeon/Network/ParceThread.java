@@ -31,6 +31,7 @@ import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
+import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
 public class ParceThread extends Thread {
 
@@ -47,7 +48,7 @@ public class ParceThread extends Thread {
                 if (json == null)
                     throw new IOException("EOF");
                 JSONObject data = new JSONObject(json);
-                Log.w("data",  data.toString(4));
+                Log.w("data", data.toString(4));
                 for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                     String token = it.next();
                     switch (token) {
@@ -67,8 +68,8 @@ public class ParceThread extends Thread {
                             String stateName = data.getJSONObject(token).getString("state").toUpperCase();
                             InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
                             InterlevelScene.phase = phase;
-                            if (phase == InterlevelScene.Phase.FADE_OUT){
-                                while (InterlevelScene.phase != InterlevelScene.Phase.FADE_IN){
+                            if (phase == InterlevelScene.Phase.FADE_OUT) {
+                                while (InterlevelScene.phase != InterlevelScene.Phase.FADE_IN) {
                                     sleep(100);
                                 }
                                 sleep(2000);
@@ -115,20 +116,20 @@ public class ParceThread extends Thread {
         }
     }
 
-    protected void parseSpriteAction(JSONObject actionObj) throws JSONException{
+    protected void parseSpriteAction(JSONObject actionObj) throws JSONException {
         String action = actionObj.getString("action");
         int actorID = actionObj.getInt("actor_id");
         Actor actor = Actor.findById(actorID);
-        if (actor == null){
+        if (actor == null) {
             GLog.h("can't resolve actor");
             return;
         }
         CharSprite sprite = ((Char) actor).sprite;
-        if (sprite == null){
+        if (sprite == null) {
             GLog.h("actor has not sprite");
             return;
         }
-        switch (action){
+        switch (action) {
             case "idle": {
                 sprite.idle();
                 break;
@@ -151,7 +152,8 @@ public class ParceThread extends Thread {
                 break;
             }
             case "jump": {
-                sprite.jump(actionObj.getInt("from"), actionObj.getInt("to"), () -> {});
+                sprite.jump(actionObj.getInt("from"), actionObj.getInt("to"), () -> {
+                });
                 break;
             }
             case "die": {
@@ -207,6 +209,7 @@ public class ParceThread extends Thread {
     }
 
     protected void parseLevel(JSONObject levelObj) throws JSONException {
+        boolean need_observe = false;
         for (Iterator<String> it = levelObj.keys(); it.hasNext(); ) {
             String token = it.next();
             switch (token) {
@@ -216,6 +219,7 @@ public class ParceThread extends Thread {
                         JSONObject cell = cells.getJSONObject(i);
                         parseCell(cell);
                     }
+                    updateMap();
                     break;
                 }
                 case "entrance": {
@@ -366,7 +370,7 @@ public class ParceThread extends Thread {
                     hero.exp = heroObj.getInt(token);
                     break;
                 }
-                case "class":{
+                case "class": {
                     String className = heroObj.getString(token);
                     className = className.toUpperCase();
                     hero.heroClass = HeroClass.valueOf(className);
