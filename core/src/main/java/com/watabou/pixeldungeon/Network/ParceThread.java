@@ -1,16 +1,20 @@
 package com.watabou.pixeldungeon.network;
 
+import android.util.Log;
+
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
+import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import org.json.JSONArray;
@@ -21,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Locale;
 
 import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
@@ -42,6 +47,7 @@ public class ParceThread extends Thread {
                 if (json == null)
                     throw new IOException("EOF");
                 JSONObject data = new JSONObject(json);
+                Log.w("data",  data.toString(4));
                 for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                     String token = it.next();
                     switch (token) {
@@ -61,6 +67,12 @@ public class ParceThread extends Thread {
                             String stateName = data.getJSONObject(token).getString("state").toUpperCase();
                             InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
                             InterlevelScene.phase = phase;
+                            if (phase == InterlevelScene.Phase.FADE_OUT){
+                                while (InterlevelScene.phase != InterlevelScene.Phase.FADE_IN){
+                                    sleep(100);
+                                }
+                                sleep(2000);
+                            }
                             break;
                         }
                         //Hero block
@@ -97,6 +109,8 @@ public class ParceThread extends Thread {
                 PixelDungeon.switchScene(TitleScene.class);
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
                 return;
+            } catch (InterruptedException e) {
+                break;
             }
         }
     }
@@ -110,6 +124,10 @@ public class ParceThread extends Thread {
             return;
         }
         CharSprite sprite = ((Char) actor).sprite;
+        if (sprite == null){
+            GLog.h("actor has not sprite");
+            return;
+        }
         switch (action){
             case "idle": {
                 sprite.idle();
@@ -198,6 +216,7 @@ public class ParceThread extends Thread {
                         JSONObject cell = cells.getJSONObject(i);
                         parseCell(cell);
                     }
+                    break;
                 }
                 case "entrance": {
                     level.entrance = levelObj.getInt("entrance");
@@ -345,6 +364,13 @@ public class ParceThread extends Thread {
                 }
                 case "exp": {
                     hero.exp = heroObj.getInt(token);
+                    break;
+                }
+                case "class":{
+                    String className = heroObj.getString(token);
+                    className = className.toUpperCase();
+                    hero.heroClass = HeroClass.valueOf(className);
+                    hero.sprite = new HeroSprite();
                     break;
                 }
                 case "ready": {
