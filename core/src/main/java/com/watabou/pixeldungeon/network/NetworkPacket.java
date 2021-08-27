@@ -119,14 +119,14 @@ public class NetworkPacket {
     protected JSONObject packHero(@NotNull Hero hero) {
         int id = hero.id();
         JSONObject object = new JSONObject();
-        int class_id = 1;
+        String class_name = hero.heroClass.name();
         int subclass_id = 0;
         int strength = hero.STR;
         int lvl = hero.lvl;
         int exp = hero.exp;
         try {
             object.put("actor_id", id);
-            object.put("class_id", class_id);
+            object.put("class", class_name);
             object.put("subclass_id", subclass_id);
             object.put("strength", strength);
             object.put("lvl", lvl);
