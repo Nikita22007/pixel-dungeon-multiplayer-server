@@ -126,7 +126,7 @@ public class ParceThread extends Thread {
         }
         CharSprite sprite = ((Char) actor).sprite;
         if (sprite == null) {
-            GLog.h("actor has not sprite");
+            GLog.h("actor has null sprite");
             return;
         }
         switch (action) {
@@ -260,7 +260,7 @@ public class ParceThread extends Thread {
         Char chr;
         if (actor == null) {
             chr = new CustomMob(ID);
-            GameScene.add_without_adding_sprite((Mob) chr);
+            GameScene.add((Mob) chr);
         } else {
             chr = (Char) actor;
         }
@@ -333,7 +333,7 @@ public class ParceThread extends Thread {
                 erase_old = actorObj.getBoolean("erase_old");
             }
             if (!actorObj.has("type")) {
-                GLog.n("Actor has not type. Ignored");
+                GLog.n("Actor does not have type. Ignored");
                 continue;
             }
             Actor actor = (erase_old ? null : Actor.findById(ID));

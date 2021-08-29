@@ -468,17 +468,13 @@ public class GameScene extends PixelScene {
 		}
 	}
 
-	public static void add_without_adding_sprite( Mob mob ) {
-		Dungeon.level.mobs.add( mob );
-		Actor.add( mob );
-		Actor.occupyCell( mob );
-	}
-
 	public static void add( Mob mob ) {
 		Dungeon.level.mobs.add( mob );
 		Actor.add( mob );
 		Actor.occupyCell( mob );
-		scene.addMobSprite( mob );
+		if (scene != null) {
+			scene.addMobSprite( mob );
+		}
 	}
 	
 	public static void add( Mob mob, float delay ) {
@@ -552,6 +548,10 @@ public class GameScene extends PixelScene {
 			scene.fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
 			
 			for (Mob mob : Dungeon.level.mobs) {
+				if (mob.sprite ==  null){
+					GLog.n("Mob sprite is null. ID:" + mob.id());
+					continue;
+				}
 				mob.sprite.visible = Dungeon.visible[mob.pos];
 			}
 		}
