@@ -1,5 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
+import android.util.Log;
+
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
@@ -51,6 +53,9 @@ public class NetworkPacket {
     }
 
     protected void addActor(JSONObject actor) {
+        if (actor.length() == 0) {
+            return;
+        }
         try {
             synchronized (dataRef) {
                 JSONObject data = dataRef.get();
@@ -63,15 +68,14 @@ public class NetworkPacket {
         }
     }
 
-    protected JSONObject packActor(@NotNull Actor actor) {
+    protected JSONObject packActor(@NotNull Actor actor, boolean heroAsHero) {
 
         JSONObject object = new JSONObject();
         try {
-            int id = actor.id();
-            object.put("id", id);
-
             if (actor instanceof Char) {
-                if (actor instanceof Hero) {
+                int id = actor.id();
+                object.put("id", id);
+                if (heroAsHero && (actor instanceof Hero)) {
                     object.put("type", "hero");
                 } else {
                     object.put("type", "character");
@@ -90,9 +94,13 @@ public class NetworkPacket {
                     object.put("description", desc);
                 }
             } else if (actor instanceof Blob) {
+                int id = actor.id();
+                object.put("id", id);
                 object.put("type", "blob");
                 assert false : "Does not released sending blobs";
                 return new JSONObject();
+            } else {
+                Log.w("NetworkPacket:", "pack actor. Actor class: " + actor.getClass().toString());
             }
         } catch (JSONException e) {
 
@@ -101,8 +109,8 @@ public class NetworkPacket {
         return object;
     }
 
-    public void packAndAddActor(Actor actor) {
-        addActor(packActor(actor));
+    public void packAndAddActor(Actor actor,  boolean heroAsHero) {
+        addActor(packActor(actor, heroAsHero));
     }
 
     protected void addHero(JSONObject hero) {
@@ -139,7 +147,7 @@ public class NetworkPacket {
     }
 
     public void pack_and_add_hero(@NotNull Hero hero) {
-        addActor(packActor(hero));
+        addActor(packActor(hero, true));
         addHero(packHero(hero));
     }
 

@@ -1,5 +1,6 @@
 package com.watabou.pixeldungeon.network;
 
+import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -144,6 +145,16 @@ public class SendData {
     }
 
     //----------
+    public static void sendActor(Actor actor) {
+        for (ClientThread client : clients) {
+            if (client == null) {
+                continue;
+            }
+            client.packet.packAndAddActor(actor, actor == client.clientHero);
+            client.flush();
+        }
+    }
+
     public static void sendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to) {
         JSONObject actionObj = new JSONObject();
         try {

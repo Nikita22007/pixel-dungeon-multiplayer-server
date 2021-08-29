@@ -1,5 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
+import android.util.Log;
+
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
@@ -81,18 +83,18 @@ class ClientThread extends Thread {
                                 InitPlayerHero(data.getString(token));
                                 break;
                             }
-                            case ("cell_listener"):{
+                            case ("cell_listener"): {
                                 Integer cell = data.getInt(token);
-                                if (cell < 0){
+                                if (cell < 0) {
                                     cell = null;
                                 }
-                                if (clientHero.cellSelector != null){
+                                if (clientHero.cellSelector != null) {
                                     if (clientHero.cellSelector.listener != null) {
                                         clientHero.cellSelector.listener.onSelect(cell);
                                     }
                                 }
                                 break;
-                           }
+                            }
                             default: {
                                 GLog.n("Bad token: %s", token);
                                 break;
@@ -122,6 +124,12 @@ class ClientThread extends Thread {
     protected void flush() {
         try {
             synchronized (packet.dataRef) {
+                if (packet.dataRef.get().length() == 0) {
+                    return;
+                }
+                try {
+                    Log.i("flush", "clientID: " + threadID + " data:" + packet.dataRef.get().toString(4));
+                }catch (JSONException  ignored){}
                 synchronized (writeStream) {
                     writeStream.write(packet.dataRef.get().toString());
                     writeStream.write('\n');
@@ -198,7 +206,7 @@ class ClientThread extends Thread {
 
     protected void addCharToSend(@NotNull Char ch) {
         synchronized (packet) {
-            packet.packAndAddActor(ch);
+            packet.packAndAddActor(ch, ch == clientHero);
         }
         //todo SEND TEXTURE
     }

@@ -448,6 +448,7 @@ public abstract class Char extends Actor {
 		for (Buff buff : buffs.toArray( new Buff[0] )) {
 			buff.detach();
 		}
+		super.onRemove();
 	}
 	
 	public void updateSpriteState() {

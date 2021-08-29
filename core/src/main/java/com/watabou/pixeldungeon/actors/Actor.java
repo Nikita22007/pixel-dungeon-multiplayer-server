@@ -30,6 +30,7 @@ import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
@@ -62,9 +63,11 @@ public abstract class Actor implements Bundlable {
 	protected void diactivate() {
 		time = Float.MAX_VALUE;
 	}
-	
-	protected void onAdd() {}
-	
+
+	protected void onAdd() {
+		SendData.sendActor(this);
+	}
+
 	protected void onRemove() {}
 	
 	private static final String TIME	= "time";
