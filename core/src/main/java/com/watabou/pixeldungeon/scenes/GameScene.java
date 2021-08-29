@@ -37,6 +37,7 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
@@ -314,6 +315,10 @@ public class GameScene extends PixelScene {
 			}
 
 			InterlevelScene.mode = InterlevelScene.Mode.NONE;
+
+			if(Dungeon.hero != null && Dungeon.hero.ready){
+				ready();
+			}
 
 			fadeIn();
 		}
@@ -623,6 +628,9 @@ public class GameScene extends PixelScene {
 	}
 	
 	public static void ready() {
+		if (scene == null){
+			return;
+		}
 		selectCell( defaultCellListener );
 		QuickSlot.cancel();
 	}
