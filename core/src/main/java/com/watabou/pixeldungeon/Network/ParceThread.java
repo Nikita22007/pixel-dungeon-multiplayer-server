@@ -103,7 +103,7 @@ public class ParceThread extends Thread {
                     }
                 }
             } catch (JSONException e) {
-                GLog.n(e.getMessage());
+                GLog.n("JsonException: " + e.getMessage());
             } catch (IOException e) {
                 GLog.n(e.getMessage());
 
@@ -160,6 +160,8 @@ public class ParceThread extends Thread {
                 sprite.die();
                 break;
             }
+            default:
+                GLog.n("Unexpected action: " + action + "ID: " + actorID);
         }
     }
 
@@ -297,8 +299,6 @@ public class ParceThread extends Thread {
                 }
                 case "description": {
                     ((Mob) chr).setDesc(actorObj.getString(token));
-                    assert false : "animation_name";
-                    //todo
                     break;
                 }
                 default: {
@@ -332,9 +332,15 @@ public class ParceThread extends Thread {
             if (actorObj.has("erase_old")) {
                 erase_old = actorObj.getBoolean("erase_old");
             }
+            if (!actorObj.has("type")) {
+                GLog.n("Actor has not type. Ignored");
+                continue;
+            }
             Actor actor = (erase_old ? null : Actor.findById(ID));
-            switch (actorObj.getString("type")) {
-                case "char": {
+            String type = actorObj.getString("type");
+            switch (type) {
+                case "char":
+                case "character": {
                     parseActorChar(actorObj, ID, actor);
                     break;
                 }
@@ -345,6 +351,9 @@ public class ParceThread extends Thread {
                 case "blob": {
                     parseActorBlob(actorObj, ID, actor);
                     break;
+                }
+                default: {
+                    GLog.n("can't resolve actor type: \"" + type + "\". ID: " + ID);
                 }
             }
         }
