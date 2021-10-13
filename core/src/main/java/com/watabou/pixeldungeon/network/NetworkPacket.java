@@ -45,7 +45,7 @@ public class NetworkPacket {
         }
     }
 
-    public void sychronizedPut(String key, JSONObject data) throws JSONException {
+    public void synchronizedPut(String key, JSONObject data) throws JSONException {
         synchronized (dataRef) {
             dataRef.get().put(key, data);
         }
