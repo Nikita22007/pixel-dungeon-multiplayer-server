@@ -28,6 +28,7 @@ public class SendData {
             clients[ID].packet.packAndAddVisiblePositions(visible);
         }
     }
+
     //---------------------------UI  and mechanics
     public static void sendAllBossSlain() {
         ClientThread.sendAll(Codes.BOSS_SLAIN);
@@ -35,7 +36,7 @@ public class SendData {
 
     public static void sendResumeButtonVisible(int ID, boolean visible) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.RESUME_BUTTON, visible);
+          //  clients[ID].send(Codes.RESUME_BUTTON, visible);
         }
     }
 
@@ -198,7 +199,7 @@ public class SendData {
     }
 
     public static void flush(int networkID) {
-        if (clients[networkID] != null){
+        if (clients[networkID] != null) {
             clients[networkID].flush();
         }
     }
