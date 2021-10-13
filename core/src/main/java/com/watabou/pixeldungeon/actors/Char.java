@@ -130,7 +130,7 @@ public abstract class Char extends Actor {
 	}
 	
 	public boolean attack( Char enemy ) {
-		
+
 		boolean visibleFight = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];
 		
 		if (hit( this, enemy, false )) {
@@ -472,23 +472,8 @@ public abstract class Char extends Actor {
 	}
 	
 	public void move( int step ) {
-		
-		if (Level.adjacent( step, pos ) && buff( Vertigo.class ) != null) {
-			step = pos + Level.NEIGHBOURS8[Random.Int( 8 )];
-			if (!(Level.passable[step] || Level.avoid[step]) || Actor.findChar( step ) != null) {
-				return;
-			}
-		}
-		
-		if (Dungeon.level.map[pos] == Terrain.OPEN_DOOR) {
-			Door.leave( pos );
-		}
-		
+
 		pos = step;
-		
-		if (flying && Dungeon.level.map[pos] == Terrain.DOOR) {
-			Door.enter( pos );
-		}
 		
 		if (this != Dungeon.hero) {
 			sprite.visible = Dungeon.visible[pos];

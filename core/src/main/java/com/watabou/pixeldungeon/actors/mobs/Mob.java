@@ -184,7 +184,7 @@ public abstract class Mob extends Char {
 		return enemy != null && enemy.isAlive() ? enemy : Dungeon.hero;
 	}
 	
-	protected boolean moveSprite( int from, int to ) {
+	public boolean moveSprite(int from, int to) {
 
 		if (sprite.isVisible() && (Dungeon.visible[from] || Dungeon.visible[to])) {
 			sprite.move( from, to );

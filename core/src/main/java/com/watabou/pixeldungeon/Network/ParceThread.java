@@ -136,7 +136,19 @@ public class ParceThread extends Thread {
             }
             case "run":
             case "move": {
-                sprite.move(actionObj.getInt("from"), actionObj.getInt("to"));
+                int from = actionObj.getInt("from");
+                int to = actionObj.getInt("to");
+                Char ch = (Char) actor;
+                if (ch.pos == from) {
+                    ch.move(to);
+                } else {
+                    GLog.h("from != pos. ID:" + actorID);
+                }
+                if (ch instanceof Mob) {
+                    ((Mob) ch).moveSprite(from, to);
+                }else {
+                    sprite.move(from, to);
+                }
                 break;
             }
             case "operate": {

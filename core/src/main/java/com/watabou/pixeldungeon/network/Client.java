@@ -58,6 +58,7 @@ public class Client extends Thread {
         socket = null;
         readStream = null;
         writeStream = null;
+        parceThread.stop();
         if (!(PixelDungeon.scene() instanceof TitleScene)) {
             PixelDungeon.switchScene(TitleScene.class);
         }
