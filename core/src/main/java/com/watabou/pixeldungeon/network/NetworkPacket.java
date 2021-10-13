@@ -8,6 +8,7 @@ import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
 
 import org.jetbrains.annotations.NotNull;
@@ -339,5 +340,42 @@ public class NetworkPacket {
             Log.e("Packet", "JSONException inside packItem. " + e.toString());
         }
         return itemObj;
+    }
+
+    @NotNull
+    public JSONObject packBag(Bag bag) {
+        if ((bag.owner != null) && (bag.owner instanceof Hero)) {
+            return packBag(bag, (Hero) bag.owner);
+        } else {
+            return packBag(bag, null);
+        }
+    }
+
+    @NotNull
+    public JSONObject packBag(Bag bag, Hero hero) {
+        if ((bag.owner != null) && (bag.owner != hero)) {
+            Log.w("Packet", "bag.owner != gotten_hero");
+        }
+
+        JSONObject bagObj = new JSONObject();
+        JSONArray bagItems = new JSONArray();
+
+        for (Item item : bag.items) {
+            JSONObject serializedItem = packItem(item, hero);
+            if (serializedItem.length() == 0){
+                Log.w("Packet", "item hadn't serialized");
+            }
+            bagItems.put(serializedItem);
+        }
+
+        try {
+            bagObj = packItem(bag, hero);
+            bagObj.put("size", bag.name());
+            bagObj.put("items", bagItems);
+        } catch (JSONException e) {
+            Log.e("Packet", "JSONException inside packBag. " + e.toString());
+        }
+
+        return bagObj;
     }
 }

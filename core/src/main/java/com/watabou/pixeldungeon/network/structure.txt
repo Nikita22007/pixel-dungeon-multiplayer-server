@@ -65,8 +65,8 @@ server:
     "bags":
     [
         {
-            "name": "backpack"
-            "texure": ??
+            //itemFields must be added
+
             "size": 0
             "items":
             [
