@@ -20,7 +20,6 @@ package com.watabou.pixeldungeon.items.rings;
 import java.util.ArrayList;
 
 import com.watabou.pixeldungeon.Badges;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
