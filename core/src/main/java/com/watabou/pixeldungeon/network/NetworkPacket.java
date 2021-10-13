@@ -45,6 +45,11 @@ public class NetworkPacket {
         }
     }
 
+    public void sychronizedPut(String key, JSONObject data) throws JSONException {
+        synchronized (dataRef) {
+            dataRef.get().put(key, data);
+        }
+    }
 
     protected static JSONArray put_to_JSONArray(Object[] array) throws JSONException {
         JSONArray jsonArray = new JSONArray();
