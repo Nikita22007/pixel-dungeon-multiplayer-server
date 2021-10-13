@@ -363,7 +363,7 @@ public class NetworkPacket {
 
         for (Item item : bag.items) {
             JSONObject serializedItem = packItem(item, hero);
-            if (serializedItem.length() == 0){
+            if (serializedItem.length() == 0) {
                 Log.w("Packet", "item hadn't serialized");
             }
             bagItems.put(serializedItem);
@@ -393,26 +393,53 @@ public class NetworkPacket {
         return bagsObj;
     }
 
-    public JSONObject packInventory(@NotNull Belongings belongings){
+    @NotNull
+    public JSONObject packHeroBags(@NotNull Belongings belongings) {
         Bag[] bags = belongings.getBags();
         JSONObject inv = new JSONObject();
-        if (bags.length != 0){
-            try {
-                JSONArray bagsArr = packBags(bags);
-                inv.put("bags",bagsArr);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            JSONArray bagsArr = packBags(bags);
+            inv.put("bags", bagsArr);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return inv;
     }
 
     @NotNull
-    public JSONObject packInventory(@NotNull Hero hero){
-        if (hero.belongings == null){
+    public JSONObject packHeroBags(@NotNull Hero hero) {
+        if (hero.belongings == null) {
             return new JSONObject();
         }
-        return packInventory(hero.belongings);
+        return packHeroBags(hero.belongings);
     }
 
+    protected static final String INVENTORY = "inventory";
+
+    public void addHeroBags(Hero hero) {
+
+        JSONObject bagsObj = packHeroBags(hero);
+        try {
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                JSONObject inv;
+                if (data.has(INVENTORY)) {
+                    inv = data.getJSONObject(INVENTORY);
+                } else {
+                    inv = new JSONObject();
+                    data.put(INVENTORY, inv);
+                }
+                inv.put("bags", bagsObj);
+            }
+        } catch (JSONException e) {
+            Log.e("Packet", "JSONException inside addInventory. " + e.toString());
+        }
+    }
+
+    public void addInventoryFull(@NotNull Hero hero) {
+        if (hero == null) {
+            throw new IllegalArgumentException("hero is null");
+        }
+        addHeroBags(hero);
+    }
 }
