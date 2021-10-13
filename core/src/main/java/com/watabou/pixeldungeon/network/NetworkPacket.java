@@ -32,7 +32,7 @@ public class NetworkPacket {
         }
     }
 
-    public volatile AtomicReference<JSONObject> dataRef;
+    public final AtomicReference<JSONObject> dataRef;
 
     public NetworkPacket() {
         dataRef = new AtomicReference<>();
