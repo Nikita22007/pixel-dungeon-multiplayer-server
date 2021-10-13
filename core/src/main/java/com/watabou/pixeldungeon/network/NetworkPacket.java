@@ -378,4 +378,18 @@ public class NetworkPacket {
 
         return bagObj;
     }
+
+    public JSONArray packBags(Bag[] bags) {
+        JSONArray bagsObj = new JSONArray();
+        for (Bag bag : bags) {
+            JSONObject bagObj = packBag(bag);
+            if (bagObj.length() == 0) {
+                Log.w("Packet", "bag hadn't serialized");
+            } else {
+                bagsObj.put(bagObj);
+            }
+        }
+        return bagsObj;
+    }
+
 }

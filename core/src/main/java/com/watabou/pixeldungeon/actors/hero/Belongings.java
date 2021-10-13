@@ -26,6 +26,10 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.KindOfWeapon;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.bags.Bag;
+import com.watabou.pixeldungeon.items.bags.Keyring;
+import com.watabou.pixeldungeon.items.bags.ScrollHolder;
+import com.watabou.pixeldungeon.items.bags.SeedPouch;
+import com.watabou.pixeldungeon.items.bags.WandHolster;
 import com.watabou.pixeldungeon.items.keys.IronKey;
 import com.watabou.pixeldungeon.items.keys.Key;
 import com.watabou.pixeldungeon.items.rings.Ring;
@@ -96,7 +100,17 @@ public class Belongings implements Iterable<Item> {
 			ring2.activate( owner );
 		}
 	}
-	
+
+	public Bag[] getBags() {
+        return new Bag[]{
+                backpack,
+                getItem(SeedPouch.class),
+                getItem(ScrollHolder.class),
+                getItem(WandHolster.class),
+                getItem(Keyring.class)
+        };
+    }
+
 	@SuppressWarnings("unchecked")
 	public<T extends Item> T getItem( Class<T> itemClass ) {
 
