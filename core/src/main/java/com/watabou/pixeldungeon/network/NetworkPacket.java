@@ -5,6 +5,7 @@ import android.util.Log;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
@@ -390,6 +391,28 @@ public class NetworkPacket {
             }
         }
         return bagsObj;
+    }
+
+    public JSONObject packInventory(@NotNull Belongings belongings){
+        Bag[] bags = belongings.getBags();
+        JSONObject inv = new JSONObject();
+        if (bags.length != 0){
+            try {
+                JSONArray bagsArr = packBags(bags);
+                inv.put("bags",bagsArr);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return inv;
+    }
+
+    @NotNull
+    public JSONObject packInventory(@NotNull Hero hero){
+        if (hero.belongings == null){
+            return new JSONObject();
+        }
+        return packInventory(hero.belongings);
     }
 
 }

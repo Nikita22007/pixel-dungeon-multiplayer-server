@@ -62,18 +62,18 @@ server:
 
    "inventory":
    {
-    "bags":
-    [
-        {
-            //itemFields must be added
+        "bags":
+        [
+            {
+                //itemFields must be added
 
-            "size": 0
-            "items":
-            [
-                item
-            ]
-        }
-    ]
+                "size": 0
+                "items":
+                [
+                    item
+                ]
+            }
+        ]
    }
    "sprites":
     [
