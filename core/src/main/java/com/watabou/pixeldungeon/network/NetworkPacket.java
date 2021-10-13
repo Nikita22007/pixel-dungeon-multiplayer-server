@@ -321,11 +321,13 @@ public class NetworkPacket {
     public JSONObject packItem(Item item, Hero hero) {
         JSONObject itemObj = new JSONObject();
         try {
-            itemObj.put("actions", packActions(item, hero));
+            if (hero != null) {
+                itemObj.put("actions", packActions(item, hero));
+                itemObj.put("info", item.info(hero));
+            }
             //itemObj.put("sprite_sheet")
             itemObj.put("image", item.image());
             itemObj.put("name", item.name());
-            itemObj.put("info", item.info(hero));
             itemObj.put("stackable", item.stackable);
             itemObj.put("quantity", item.quantity());
             itemObj.put("durability", item.durability());
