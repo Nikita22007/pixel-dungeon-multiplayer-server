@@ -174,6 +174,7 @@ class ClientThread extends Thread {
 
         packet.packAndAddLevel(Dungeon.level);
         packet.pack_and_add_hero(newHero);
+        packet.addInventoryFull(newHero);
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work
             for (int i = 0; i < Settings.maxPlayers; i++) {
