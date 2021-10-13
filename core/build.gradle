@@ -20,7 +20,6 @@ android {
 
 dependencies {
     implementation project(':PD-classes')
-    implementation 'org.jetbrains:annotations-java5:15.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
