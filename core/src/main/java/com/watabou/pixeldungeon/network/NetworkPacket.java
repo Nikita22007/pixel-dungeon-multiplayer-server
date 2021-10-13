@@ -303,19 +303,9 @@ public class NetworkPacket {
 
     @NotNull
     public JSONArray packActions(@NotNull Item item, @NotNull Hero hero) {
-        String[] actions = (String[]) item.actions(hero).toArray();
-        JSONArray actionsArr = null;
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                actionsArr = new JSONArray(actions);
-            } else {
-                actionsArr = put_to_JSONArray(actions);
-            }
-        } catch (JSONException e) {
-            Log.e("Packet", "JSONException inside packActions. " + e.toString());
-        }
-        if (actionsArr == null) {
-            actionsArr = new JSONArray();
+        JSONArray actionsArr = new JSONArray();
+        for (String action : item.actions(hero)) {
+            actionsArr.put(action);
         }
         return actionsArr;
     }
@@ -383,6 +373,9 @@ public class NetworkPacket {
     public JSONArray packBags(Bag[] bags) {
         JSONArray bagsObj = new JSONArray();
         for (Bag bag : bags) {
+            if (bag == null){
+                continue;
+            }
             JSONObject bagObj = packBag(bag);
             if (bagObj.length() == 0) {
                 Log.w("Packet", "bag hadn't serialized");

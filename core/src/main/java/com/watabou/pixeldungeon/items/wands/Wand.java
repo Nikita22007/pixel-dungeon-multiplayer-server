@@ -216,7 +216,7 @@ public abstract class Wand extends KindOfWeapon {
 		}
 	}
 	
-	protected boolean isKnown() {
+	public boolean isKnown() {
 		return handler.isKnown( this );
 	}
 	
