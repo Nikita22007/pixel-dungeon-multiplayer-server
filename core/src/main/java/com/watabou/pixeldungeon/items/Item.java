@@ -81,8 +81,8 @@ public class Item implements Bundlable {
 	public boolean stackable = false;
 	protected int quantity = 1;
 	
-	private int level = 0;
-	private int durability = maxDurability();
+	protected int level = 0;
+	protected int durability = maxDurability();
 	public boolean levelKnown = false;
 	
 	public boolean cursed;
