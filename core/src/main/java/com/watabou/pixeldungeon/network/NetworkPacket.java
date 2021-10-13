@@ -7,6 +7,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,15 @@ public class NetworkPacket {
         synchronized (dataRef) {
             dataRef.set(new JSONObject());
         }
+    }
+
+
+    protected static JSONArray put_to_JSONArray(Object[] array) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < array.length; i++) {
+            jsonArray.put(i, array[i]);
+        }
+        return jsonArray;
     }
 
     protected CellState getCellState(boolean visited, boolean mapped) {
@@ -109,7 +119,7 @@ public class NetworkPacket {
         return object;
     }
 
-    public void packAndAddActor(Actor actor,  boolean heroAsHero) {
+    public void packAndAddActor(Actor actor, boolean heroAsHero) {
         addActor(packActor(actor, heroAsHero));
     }
 
@@ -282,5 +292,45 @@ public class NetworkPacket {
 
     public void packAndAddInterlevelSceneState(String state) {
         packAndAddInterlevelSceneState(state, null);
+    }
+
+    @NotNull
+    public JSONArray packActions(@NotNull Item item, @NotNull Hero hero) {
+        String[] actions = (String[]) item.actions(hero).toArray();
+        JSONArray actionsArr = null;
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                actionsArr = new JSONArray(actions);
+            } else {
+                actionsArr = put_to_JSONArray(actions);
+            }
+        } catch (JSONException e) {
+            Log.e("Packet", "JSONException inside packActions. " + e.toString());
+        }
+        if (actionsArr == null) {
+            actionsArr = new JSONArray();
+        }
+        return actionsArr;
+    }
+
+    public JSONObject packItem(Item item, Hero hero) {
+        JSONObject itemObj = new JSONObject();
+        try {
+            itemObj.put("actions", packActions(item, hero));
+            //itemObj.put("sprite_sheet")
+            itemObj.put("image", item.image());
+            itemObj.put("name", item.name());
+            itemObj.put("info", item.info(hero));
+            itemObj.put("stackable", item.stackable);
+            itemObj.put("quantity", item.quantity());
+            itemObj.put("durability", item.durability());
+            itemObj.put("max_durability", item.maxDurability());
+            itemObj.put("known", item.isKnown());
+            itemObj.put("cursed", item.visiblyCursed());
+            itemObj.put("level", item.visiblyUpgraded());
+        } catch (JSONException e) {
+            Log.e("Packet", "JSONException inside packItem. " + e.toString());
+        }
+        return itemObj;
     }
 }

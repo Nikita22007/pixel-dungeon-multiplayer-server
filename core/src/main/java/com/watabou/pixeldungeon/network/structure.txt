@@ -132,7 +132,8 @@ item:
             "code": "DROP"
         }
     ]
-    "image": ???
+    "sprite_sheet": "items.png"
+    "image": 0;
     "glowing": ???
 
     "name": "smth"
@@ -145,12 +146,9 @@ item:
     "max_durability": 0
 
     "known": true //for scrolls/rings/etc
+    "level": 0 // uses visiblyUpgraded()
+    "cursed": false // uses  visiblyCursed()
 
-    "level": 0
-    "level_known": false
-
-    "cursed": false
-    "cursed_known": false
     //"unique": false
 
 }
