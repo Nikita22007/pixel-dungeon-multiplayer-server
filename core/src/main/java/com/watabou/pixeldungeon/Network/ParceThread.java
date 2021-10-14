@@ -10,6 +10,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.items.bags.CustomBag;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -96,6 +97,9 @@ public class ParceThread extends Thread {
                             parseActions(data.getJSONArray(token));
                             break;
                         }
+                        case "inventory": {
+                            parseInventory(data.getJSONObject(token));
+                        }
                         default: {
                             GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                             continue;
@@ -112,6 +116,16 @@ public class ParceThread extends Thread {
                 return;
             } catch (InterruptedException e) {
                 break;
+            }
+        }
+    }
+
+    private void parseInventory(JSONObject inv) {
+        if (inv.has("backpack")) {
+            try {
+                hero.belongings.backpack = new CustomBag(inv.getJSONObject("backpack"));
+            } catch (JSONException e) {
+                Log.w("ParceThread",  "Can't parse backpack");
             }
         }
     }

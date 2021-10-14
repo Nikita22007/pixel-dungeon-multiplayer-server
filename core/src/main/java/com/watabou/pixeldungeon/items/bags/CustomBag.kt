@@ -1,55 +1,34 @@
 package com.watabou.pixeldungeon.items.bags
 
+import com.watabou.pixeldungeon.actors.Actor
+import com.watabou.pixeldungeon.actors.Char
 import com.watabou.pixeldungeon.items.CustomItem
+import com.watabou.pixeldungeon.items.Item
 import org.json.JSONArray
 import org.json.JSONObject
 
-class CustomBag(obj: JSONObject) : Bag() {
+class CustomBag(obj: JSONObject) : Bag(obj) {
     init {
+
         cursedKnown = true // todo check it
-        val it = obj.keys()
-        while (it.hasNext()) {
-            val token = it.next()
-            when (token) {
-                "name" -> {
-                    name = obj.getString(token)
-                }
-                "info" -> {
-                //     info = obj.getString(token);
-                }
-                "image" -> {
-                    image = obj.getInt(token);
-                }
-                "stackable" -> {
-                    stackable = obj.getBoolean(token);
-                }
-                "quantity" -> {
-                    quantity = obj.getInt(token)
-                }
-                "durability" -> {
-                    durability = obj.getInt(token)
-                }
-                "level" -> {
-                    durability = obj.getInt(token)
-                }
-                "cursed" -> {
-                    cursed = obj.getBoolean(token)
-                }
-                "size" -> {
-                    size = obj.getInt(token)
-                }
-                "items" -> {
-                    clear()
-                    addItemsFromJSONArray(obj.getJSONArray(token))
-                }
-            }
+        size = obj.getInt("size");
+        if (obj.has("owner")){
+            owner = Actor.findById(obj.getInt("owner")) as Char?
+        }
+        if (obj.has("items")) {
+            addItemsFromJSONArray(obj.getJSONArray("items"))
         }
     }
 
     private fun addItemsFromJSONArray(arr: JSONArray) {
         for (i in 0 until arr.length()) {
             val itemObj = arr.getJSONObject(i);
-            var item = CustomItem(itemObj)
+            val item: Item =
+            if (itemObj.has("size")) {
+                CustomBag(itemObj)
+            } else {
+                CustomItem(itemObj)
+            }
             items.add(item)
         }
     }

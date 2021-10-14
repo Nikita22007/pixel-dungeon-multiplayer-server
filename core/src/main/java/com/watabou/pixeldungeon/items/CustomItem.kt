@@ -2,9 +2,13 @@ package com.watabou.pixeldungeon.items
 
 import org.json.JSONObject
 
-class CustomItem(obj: JSONObject) : Item() {
-    protected var info: String = "IDK";
+open class CustomItem() : Item() {
     init {
+    }
+
+    protected var info: String = "IDK";
+
+    constructor(obj: JSONObject): this(){
         cursedKnown = true // todo check it
         val it = obj.keys()
         while (it.hasNext()) {
@@ -20,7 +24,7 @@ class CustomItem(obj: JSONObject) : Item() {
                     image = obj.getInt(token);
                 }
                 "stackable" -> {
-                    stackable  = obj.getBoolean(token);
+                    stackable = obj.getBoolean(token);
                 }
                 "quantity" -> {
                     quantity = obj.getInt(token)

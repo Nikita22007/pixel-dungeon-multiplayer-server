@@ -87,9 +87,11 @@ public class Item implements Bundlable {
 	
 	public boolean cursed;
 	public boolean cursedKnown;
-	
+
+	protected String descString = "idk?";
+
 	public boolean unique = false;
-	
+
 	private static Comparator<Item> itemComparator = new Comparator<Item>() {	
 		@Override
 		public int compare( Item lhs, Item rhs ) {
@@ -430,7 +432,7 @@ public class Item implements Bundlable {
 	}
 	
 	public String desc() {
-		return "";
+		return descString;
 	}
 	
 	public int quantity() {

@@ -23,28 +23,37 @@ import java.util.Iterator;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
-public class Bag extends Item implements Iterable<Item> {
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+
+public class Bag extends CustomItem implements Iterable<Item> {
 
 	public static final String AC_OPEN	= "OPEN";
 	
-	{
+	public Bag(){
 		image = 11;
 		
 		defaultAction = AC_OPEN;
 	}
-	
+
+
+	public Bag(JSONObject obj){
+		super(obj);
+	}
+
 	public Char owner;
 	
 	public ArrayList<Item> items = new ArrayList<Item>();	
 	
 	public int size = 1;
-	
+
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
