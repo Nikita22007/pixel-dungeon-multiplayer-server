@@ -352,7 +352,12 @@ public class NetworkPacket {
         JSONArray bagItems = new JSONArray();
 
         for (Item item : bag.items) {
-            JSONObject serializedItem = packItem(item, hero);
+            JSONObject serializedItem;
+            if (item instanceof Bag) {
+                serializedItem = packBag((Bag) item, hero);
+            } else {
+                serializedItem = packItem(item, hero);
+            }
             if (serializedItem.length() == 0) {
                 Log.w("Packet", "item hadn't serialized");
             }
@@ -361,8 +366,9 @@ public class NetworkPacket {
 
         try {
             bagObj = packItem(bag, hero);
-            bagObj.put("size", bag.name());
+            bagObj.put("size", bag.size);
             bagObj.put("items", bagItems);
+            bagObj.put("owner",bag.owner!=null?bag.owner.id():null);
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packBag. " + e.toString());
         }
@@ -388,20 +394,14 @@ public class NetworkPacket {
 
     @NotNull
     public JSONObject packHeroBags(@NotNull Belongings belongings) {
-        Bag[] bags = belongings.getBags();
-        JSONObject inv = new JSONObject();
-        try {
-            JSONArray bagsArr = packBags(bags);
-            inv.put("bags", bagsArr);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return inv;
+        Bag backpack = belongings.backpack;
+        return packBag(backpack);
     }
 
     @NotNull
     public JSONObject packHeroBags(@NotNull Hero hero) {
         if (hero.belongings == null) {
+            Log.w("Packet", "Hero belongings is null");
             return new JSONObject();
         }
         return packHeroBags(hero.belongings);
@@ -422,7 +422,7 @@ public class NetworkPacket {
                     inv = new JSONObject();
                     data.put(INVENTORY, inv);
                 }
-                inv.put("bags", bagsObj);
+                inv.put("backpack", bagsObj);
             }
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside addInventory. " + e.toString());

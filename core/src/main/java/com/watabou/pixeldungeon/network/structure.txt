@@ -62,18 +62,8 @@ server:
 
    "inventory":
    {
-        "bags":
-        [
-            {
-                //itemFields must be added
+        "backpack": bag
 
-                "size": 0
-                "items":
-                [
-                    item
-                ]
-            }
-        ]
    }
    "sprites":
     [
@@ -151,6 +141,13 @@ item:
 
     //"unique": false
 
+    //bag elements
+    "bag_size": 0  //if message  has  thi field and it !=null, create a bag
+    "items":
+    [
+       item  //it is recursive structure. May be we should to move bags in other place
+    ]
+    owner: char_id
 }
 
 action move char:
