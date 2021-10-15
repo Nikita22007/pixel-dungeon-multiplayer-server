@@ -88,8 +88,6 @@ public class Item implements Bundlable {
 	public boolean cursed;
 	public boolean cursedKnown;
 
-	protected String descString = "idk?";
-
 	public boolean unique = false;
 
 	private static Comparator<Item> itemComparator = new Comparator<Item>() {	
@@ -432,7 +430,7 @@ public class Item implements Bundlable {
 	}
 	
 	public String desc() {
-		return descString;
+		return "idk?";
 	}
 	
 	public int quantity() {
