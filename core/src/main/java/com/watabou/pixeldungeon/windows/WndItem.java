@@ -86,7 +86,7 @@ public class WndItem extends Window {
 				btn.setPos( x, y );
 				add( btn );
 				
-				if (action == item.defaultAction) {
+				if (action.equals(item.defaultAction)) {
 					btn.textColor( TITLE_COLOR );
 				}
 				
