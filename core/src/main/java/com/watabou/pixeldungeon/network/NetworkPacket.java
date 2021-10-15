@@ -315,6 +315,7 @@ public class NetworkPacket {
         try {
             if (hero != null) {
                 itemObj.put("actions", packActions(item, hero));
+                itemObj.put("default_action", item.defaultAction == null ? "null" : item.defaultAction);
                 itemObj.put("info", item.info(hero));
             }
             //itemObj.put("sprite_sheet")
@@ -368,7 +369,7 @@ public class NetworkPacket {
             bagObj = packItem(bag, hero);
             bagObj.put("size", bag.size);
             bagObj.put("items", bagItems);
-            bagObj.put("owner",bag.owner!=null?bag.owner.id():null);
+            bagObj.put("owner", bag.owner != null ? bag.owner.id() : null);
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packBag. " + e.toString());
         }
@@ -379,7 +380,7 @@ public class NetworkPacket {
     public JSONArray packBags(Bag[] bags) {
         JSONArray bagsObj = new JSONArray();
         for (Bag bag : bags) {
-            if (bag == null){
+            if (bag == null) {
                 continue;
             }
             JSONObject bagObj = packBag(bag);

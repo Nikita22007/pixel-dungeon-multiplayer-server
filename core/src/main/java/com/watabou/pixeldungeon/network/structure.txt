@@ -122,6 +122,7 @@ item:
             "code": "DROP"
         }
     ]
+    "defaultAction": "give"/ "null" // if "null" then defaultAction == null :)
     "sprite_sheet": "items.png"
     "image": 0;
     "glowing": ???
