@@ -50,6 +50,8 @@ import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.GameMath;
 
+import java.util.ArrayList;
+
 public class WndBag extends WndTabbed {
 	
 	public static enum Mode {
@@ -118,20 +120,16 @@ public class WndBag extends WndTabbed {
 		resize( slotsWidth, slotsHeight + TITLE_HEIGHT );
 		
 		Belongings stuff = Dungeon.hero.belongings;
-		Bag[] bags = {
-			stuff.backpack, 
-			stuff.getItem( SeedPouch.class ), 
-			stuff.getItem( ScrollHolder.class ),
-			stuff.getItem( WandHolster.class ),
-			stuff.getItem( Keyring.class )};
-		
-		for (Bag b : bags) {
-			if (b != null) {
-				BagTab tab = new BagTab( b );
-				tab.setSize( TAB_WIDTH, tabHeight() );
-				add( tab );
-				
-				tab.select( b == bag );
+
+		Object[] bagsObjects = stuff.Bags().toArray();
+		for (Object bagObj : bagsObjects) {
+			if (bagObj != null) {
+				Bag b = (Bag) bagObj;
+				BagTab tab = new BagTab(b);
+				tab.setSize(TAB_WIDTH, tabHeight());
+				add(tab);
+
+				tab.select(b == bag);
 			}
 		}
 	}

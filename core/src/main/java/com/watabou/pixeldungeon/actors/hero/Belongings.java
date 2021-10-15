@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.watabou.pixeldungeon.Badges;
@@ -45,7 +47,14 @@ public class Belongings implements Iterable<Item> {
 	public Armor armor = null;
 	public Ring ring1 = null;
 	public Ring ring2 = null;
-	
+
+	public ArrayList<Bag> Bags(){
+		ArrayList bags = new ArrayList<Bag>(6);
+		bags.add(backpack);
+		bags.add(backpack.bagsInside());
+		return bags;
+	}
+
 	public Belongings( Hero owner ) {
 		this.owner = owner;
 		

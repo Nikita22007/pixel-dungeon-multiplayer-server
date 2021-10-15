@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon.items.bags;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.actors.Char;
@@ -43,6 +44,21 @@ public class Bag extends CustomItem implements Iterable<Item> {
 		defaultAction = AC_OPEN;
 	}
 
+	public List<Bag> bagsInside(){
+
+		List<Bag> bags = new ArrayList<>(0);
+		for (Item item: items) {
+			if (item == null) {
+				continue;
+			}
+			if (item instanceof Bag) {
+				Bag bag = (Bag)item;
+				bags.add(bag);
+				bags.addAll(bag.bagsInside());
+			}
+		}
+		return bags;
+	}
 
 	public Bag(JSONObject obj){
 		super(obj);
