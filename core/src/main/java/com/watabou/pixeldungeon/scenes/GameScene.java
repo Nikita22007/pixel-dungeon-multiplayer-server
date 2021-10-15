@@ -20,9 +20,11 @@ package com.watabou.pixeldungeon.scenes;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
+import com.watabou.noosa.Scene;
 import com.watabou.noosa.SkinnedBlock;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Music;
@@ -114,7 +116,26 @@ public class GameScene extends PixelScene {
 	
 	private Toolbar toolbar;
 	private Toast prompt;
-	
+
+	private static int updateFlags;
+
+	public enum UpdateFlags {
+		AFTER_OBSERVE(1);
+		private int id;
+
+		UpdateFlags(int _id) {
+			id = _id;
+		}
+
+		public int getId() {
+			return id;
+		}
+	}
+
+	public static void setFlag(UpdateFlags flag) {
+		updateFlags = updateFlags | flag.getId();
+	}
+
 	@Override
 	public void create() {
 		Music.INSTANCE.play( Assets.TUNE, true );
@@ -320,6 +341,8 @@ public class GameScene extends PixelScene {
 				ready();
 			}
 
+			//TextureCache.reload();
+
 			fadeIn();
 		}
 	}
@@ -359,6 +382,11 @@ public class GameScene extends PixelScene {
 		}
 		
 		cellSelector.enabled = Dungeon.hero.ready;
+
+		if ((updateFlags & UpdateFlags.AFTER_OBSERVE.getId()) != 0) {
+			updateFlags = updateFlags & (~UpdateFlags.AFTER_OBSERVE.getId());
+			afterObserve();
+		}
 	}
 	
 	@Override

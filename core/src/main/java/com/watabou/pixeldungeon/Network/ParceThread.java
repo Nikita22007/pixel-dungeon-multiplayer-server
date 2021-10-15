@@ -271,6 +271,7 @@ public class ParceThread extends Thread {
                         Dungeon.visible[cell] = true;
                     }
                     Dungeon.observe();
+                    GameScene.setFlag(GameScene.UpdateFlags.AFTER_OBSERVE);
                     break;
                 }
                 default: {
