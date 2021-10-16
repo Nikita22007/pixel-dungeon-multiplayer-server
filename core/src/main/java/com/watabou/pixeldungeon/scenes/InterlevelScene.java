@@ -32,6 +32,7 @@ import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.levels.DeadEndLevel;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.SewerLevel;
+import com.watabou.pixeldungeon.network.ParseThread;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.windows.WndError;
@@ -167,7 +168,9 @@ public class InterlevelScene extends PixelScene {
 	@Override
 	public void update() {
 		super.update();
-		
+		if (ParseThread.getActiveThread() != null) {
+			ParseThread.getActiveThread().parseIfHasData();
+		}
 		float p = timeLeft / TIME_TO_FADE;
 		
 		switch (phase) {
