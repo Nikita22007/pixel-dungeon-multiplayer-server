@@ -21,6 +21,7 @@ import com.watabou.pixeldungeon.windows.WndConnectServer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /* TODO
@@ -134,8 +135,7 @@ public class ConnectScene extends PixelScene implements NetworkScanner.ServicesL
         add( archs );
         if (!NetworkScanner.isWifiConnected()){
             CreateCenterText(width, height,TXT_WIFI_DISABLED);
-        }
-        else {
+        } else {
             if (!NetworkScanner.start(this)) {
                 CreateCenterText(width, height,TXT_ERROR);
             } else {
@@ -158,9 +158,19 @@ public class ConnectScene extends PixelScene implements NetworkScanner.ServicesL
         PixelDungeon.switchNoFade( TitleScene.class );
     }
 
+    private boolean needRedraw = false;
+
+    @Override
+    public void update() {
+        super.update();
+        if (needRedraw){
+            drawServers();
+        }
+    }
+
     @Override
     public void OnServerConnected(ServerInfo info) {
-        drawServers();
+        needRedraw = true;
     }
 
     public static class Record extends Button {
