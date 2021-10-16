@@ -34,7 +34,7 @@ import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
-public class ParceThread extends Thread {
+public class ParseThread extends Thread {
 
     private BufferedReader reader;
 
@@ -125,7 +125,7 @@ public class ParceThread extends Thread {
             try {
                 hero.belongings.backpack = new CustomBag(inv.getJSONObject("backpack"));
             } catch (JSONException e) {
-                Log.w("ParceThread",  "Can't parse backpack");
+                Log.w("ParseThread",  "Can't parse backpack");
             }
         }
     }

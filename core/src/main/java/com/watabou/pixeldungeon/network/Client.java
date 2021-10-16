@@ -20,14 +20,14 @@ public class Client extends Thread {
     protected static InputStreamReader readStream;
     protected static Socket socket = null;
     protected static Client client;
-    protected static ParceThread parceThread = null;
+    protected static ParseThread parceThread = null;
     protected static final NetworkPacket packet = new NetworkPacket();
 
 
     public static boolean connect(String server, int port) {
         packet.clearData();
         if (parceThread == null) {
-            parceThread = new ParceThread();
+            parceThread = new ParseThread();
         }
         try {
             socket = new Socket(server, port);
