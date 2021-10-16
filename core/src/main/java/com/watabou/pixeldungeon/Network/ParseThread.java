@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
@@ -38,76 +39,54 @@ public class ParseThread extends Thread {
 
     private BufferedReader reader;
 
+    protected final AtomicReference<String> data = new AtomicReference<>();
+
+    private static ParseThread activeThread;
+
+    public static ParseThread getActiveThread() {
+        if (activeThread == null) {
+            return activeThread;
+        }
+        if (!activeThread.isAlive() || activeThread.isInterrupted()) {
+            return null;
+        }
+        return activeThread;
+    }
+
     @Override
     public void run() {
+        activeThread = this;
         if (readStream != null) {
             reader = new BufferedReader(readStream);
         }
         while (!socket.isClosed()) {
             try {
-                String json = reader.readLine();
-                if (json == null)
-                    throw new IOException("EOF");
-                JSONObject data = new JSONObject(json);
-                Log.w("data", data.toString(4));
-                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
-                    String token = it.next();
-                    switch (token) {
-                        /*case Codes.SERVER_FULL: {
-                            PixelDungeon.switchScene(TitleScene.class);
-                            // TODO   PixelDungeon.scene().add(new WndError("Server full"));
-                            return;
-                        }*/
-                        //level block
-                        case "map": {
-                            parseLevel(data.getJSONObject(token));
-                            break;
-                        }
-                        //UI block
-                        case "interlevel_scene": {
-                            //todo can cause crash
-                            String stateName = data.getJSONObject(token).getString("state").toUpperCase();
-                            InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
-                            InterlevelScene.phase = phase;
-                            if (phase == InterlevelScene.Phase.FADE_OUT) {
-                                while (InterlevelScene.phase != InterlevelScene.Phase.FADE_IN) {
-                                    sleep(100);
-                                }
-                                sleep(2000);
-                            }
-                            break;
-                        }
-                        //Hero block
-                        case "actors": {
-                            parseActors(data.getJSONArray(token));
-                            break;
-                        }
-                        case "hero": {
-                            parseHero(data.getJSONObject(token));
-                            break;
-                        }
-                        case "ui": {
-                            JSONObject uiObj = data.getJSONObject(token);
-                            if (uiObj.has("resume_button_visible")) {
-                                hero.resume_button_visible = uiObj.getBoolean("resume_button_visible");
-                            }
-                            break;
-                        }
-                        case "actions": {
-                            parseActions(data.getJSONArray(token));
-                            break;
-                        }
-                        case "inventory": {
-                            parseInventory(data.getJSONObject(token));
-                        }
-                        default: {
-                            GLog.h("Incorrect packet token: \"%s\". Ignored", token);
-                            continue;
-                        }
+                synchronized (data) {
+                    if (data.get() == null) {
+                        data.set(reader.readLine());
                     }
                 }
-            } catch (JSONException e) {
-                GLog.n("JsonException: " + e.getMessage());
+            } catch (IOException e) {
+                GLog.n(e.getMessage());
+
+                PixelDungeon.switchScene(TitleScene.class);
+//                PixelDungeon.scene().add(new WndError("Disconnected"));
+                return;
+            }
+        }
+    }
+
+    private void parse() throws IOException, JSONException, InterruptedException {
+        String json = reader.readLine();
+        parse(json);
+    }
+
+    public void parseIfHasData() {
+        if (data.get() != null) {
+            String json = data.get();
+            data.set(null);
+            try {
+                parse(json);
             } catch (IOException e) {
                 GLog.n(e.getMessage());
 
@@ -115,9 +94,69 @@ public class ParseThread extends Thread {
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
                 return;
             } catch (InterruptedException e) {
-                break;
+                return;
+            } catch (JSONException e) {
+                Log.w("parsing", e.getMessage());
             }
         }
+    }
+
+    private void parse(String json) throws IOException, JSONException, InterruptedException {
+        if (json == null)
+            throw new IOException("EOF");
+        JSONObject data = new JSONObject(json);
+        Log.w("data", data.toString(4));
+        for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+            String token = it.next();
+            switch (token) {
+                        /*case Codes.SERVER_FULL: {
+                            PixelDungeon.switchScene(TitleScene.class);
+                            // TODO   PixelDungeon.scene().add(new WndError("Server full"));
+                            return;
+                        }*/
+                //level block
+                case "map": {
+                    parseLevel(data.getJSONObject(token));
+                    break;
+                }
+                //UI block
+                case "interlevel_scene": {
+                    //todo can cause crash
+                    String stateName = data.getJSONObject(token).getString("state").toUpperCase();
+                    InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
+                    InterlevelScene.phase = phase;
+                    break;
+                }
+                //Hero block
+                case "actors": {
+                    parseActors(data.getJSONArray(token));
+                    break;
+                }
+                case "hero": {
+                    parseHero(data.getJSONObject(token));
+                    break;
+                }
+                case "ui": {
+                    JSONObject uiObj = data.getJSONObject(token);
+                    if (uiObj.has("resume_button_visible")) {
+                        hero.resume_button_visible = uiObj.getBoolean("resume_button_visible");
+                    }
+                    break;
+                }
+                case "actions": {
+                    parseActions(data.getJSONArray(token));
+                    break;
+                }
+                case "inventory": {
+                    parseInventory(data.getJSONObject(token));
+                }
+                default: {
+                    GLog.h("Incorrect packet token: \"%s\". Ignored", token);
+                    continue;
+                }
+            }
+        }
+
     }
 
     private void parseInventory(JSONObject inv) {
@@ -125,7 +164,7 @@ public class ParseThread extends Thread {
             try {
                 hero.belongings.backpack = new CustomBag(inv.getJSONObject("backpack"));
             } catch (JSONException e) {
-                Log.w("ParseThread",  "Can't parse backpack");
+                Log.w("ParseThread", "Can't parse backpack");
             }
         }
     }
@@ -160,7 +199,7 @@ public class ParseThread extends Thread {
                 }
                 if (ch instanceof Mob) {
                     ((Mob) ch).moveSprite(from, to);
-                }else {
+                } else {
                     sprite.move(from, to);
                 }
                 break;

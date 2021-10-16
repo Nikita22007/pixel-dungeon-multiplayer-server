@@ -55,6 +55,7 @@ import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.RegularLevel;
 import com.watabou.pixeldungeon.levels.features.Chasm;
+import com.watabou.pixeldungeon.network.ParseThread;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
@@ -376,6 +377,7 @@ public class GameScene extends PixelScene {
 		water.offset( 0, -5 * Game.elapsed );
 		
 		//Actor.process();
+		ParseThread.getActiveThread().parseIfHasData();
 		
 		if (Dungeon.hero.ready && !Dungeon.hero.paralysed) {
 			log.newLine();
