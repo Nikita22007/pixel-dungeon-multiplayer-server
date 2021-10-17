@@ -112,6 +112,10 @@ class ClientThread extends Thread {
                 GLog.n(e.getStackTrace().toString());
                 disconnect();//  need?
 
+            } catch (NullPointerException e) {
+                PixelDungeon.reportException(e);
+                GLog.n(e.getStackTrace().toString());
+                disconnect();
             } catch (Exception e) {
                 PixelDungeon.reportException(e);
                 GLog.n(e.getStackTrace().toString());
