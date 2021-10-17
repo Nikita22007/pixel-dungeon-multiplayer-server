@@ -118,6 +118,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void place( int cell ) {
+		sendCharSpriteAction(ch.id(), "place", null, cell);
 		point( worldToCamera( cell ) );
 	}
 

@@ -18,14 +18,11 @@
 package com.watabou.pixeldungeon.actors.mobs;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Challenges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.HeroHelp;
-import com.watabou.pixeldungeon.NotImplementedException;
-import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -188,14 +185,8 @@ class Mob extends Char {
 	}
 
 	protected boolean moveSprite(int from, int to) {
-
-		if (sprite.isVisible() && (Dungeon.visible[from] || Dungeon.visible[to])) {
-			sprite.move(from, to);
-			return true;
-		} else {
-			sprite.place(to);
-			return true;
-		}
+		sprite.move(from, to);
+		return true;
 	}
 
 	@Override
