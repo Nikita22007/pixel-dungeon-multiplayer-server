@@ -109,6 +109,13 @@ server:
     [
         action
     ]
+    "messages":
+    [
+        {
+            "text": "hello world!"
+            "color": 0xFF0000
+        }
+    ]
 }
 
 
@@ -159,4 +166,14 @@ action move char:
     "to": 1
     "actor_id" 0
     "animation_state_after_move": "idle" // ...
+}
+
+action show_status
+{
+    "type": "show_status"
+    "x": 0.0f
+    "y": 0.0f
+    "key": 123 //may be missing
+    "text": "invisible"
+    "color": 0xFFFF00
 }
