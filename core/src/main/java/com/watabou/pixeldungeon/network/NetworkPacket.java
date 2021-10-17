@@ -11,6 +11,7 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.utils.GLog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -18,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.watabou.pixeldungeon.network.Server.clients;
 
 public class NetworkPacket {
     public static final String CELLS = "cells";
@@ -41,9 +44,43 @@ public class NetworkPacket {
         dataRef.set(new JSONObject());
     }
 
-    public synchronized void clearData() {
+    public void clearData() {
         synchronized (dataRef) {
             dataRef.set(new JSONObject());
+        }
+    }
+
+    public void addAction(JSONObject actionObj) {
+        synchronized (dataRef) {
+            try {
+
+                JSONObject data = dataRef.get();
+                if (!data.has("actions")) {
+                    data.put("actions", new JSONArray());
+                }
+                data.getJSONArray("actions").put(actionObj);
+            } catch (JSONException e) {
+                Log.w("NetworkPacket", "Failed to add action. " + e.toString());
+            }
+        }
+    }
+
+    public void addToArray(JSONObject storage, String token, JSONObject data) throws JSONException {
+        if (!storage.has(token)) {
+            storage.put(token, new JSONArray());
+        }
+        storage.getJSONArray(token).put(data);
+    }
+
+    public void addChatMessage(JSONObject message) {
+        final String token = "messages";
+        synchronized (dataRef) {
+            try {
+                JSONObject storage = dataRef.get();
+                addToArray(storage, token, message);
+            } catch (JSONException e) {
+                Log.w("NetworkPacket", "Failed to add message. " + e.toString());
+            }
         }
     }
 

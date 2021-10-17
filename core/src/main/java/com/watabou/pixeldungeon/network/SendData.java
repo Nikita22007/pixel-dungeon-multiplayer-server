@@ -36,7 +36,7 @@ public class SendData {
 
     public static void sendResumeButtonVisible(int ID, boolean visible) {
         if (clients[ID] != null) {
-          //  clients[ID].send(Codes.RESUME_BUTTON, visible);
+            //  clients[ID].send(Codes.RESUME_BUTTON, visible);
         }
     }
 
@@ -201,6 +201,21 @@ public class SendData {
     public static void flush(int networkID) {
         if (clients[networkID] != null) {
             clients[networkID].flush();
+        }
+    }
+
+    public static void sendMessageToAll(String message, int color) {
+        JSONObject messageObj;
+        try {
+            messageObj = new JSONObject().put("text", message).put("color", color);
+        } catch (JSONException e) {
+            return;
+        }
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i] == null) {
+                continue;
+            }
+            clients[i].packet.addChatMessage(messageObj);
         }
     }
 }

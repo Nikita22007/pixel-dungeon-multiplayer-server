@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.noosa.ui.Component;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -81,7 +82,9 @@ public class GameLog extends Component implements Signal.Listener<String> {
 		
 		text = Utils.capitalize( text ) + 
 			(PUNCTUATION.matcher( text ).matches() ? "" : ".");
-		
+
+		SendData.		sendMessageToAll(text,color);
+
 		if (lastEntry != null && color == lastColor && lastEntry.nLines < MAX_LINES) {
 			
 			String lastMessage = lastEntry.text();
