@@ -137,6 +137,10 @@ public class GameScene extends PixelScene {
 		updateFlags = updateFlags | flag.getId();
 	}
 
+	public GameLog getGameLog(){
+		return log;
+	}
+
 	@Override
 	public void create() {
 		Music.INSTANCE.play( Assets.TUNE, true );

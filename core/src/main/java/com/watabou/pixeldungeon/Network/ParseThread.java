@@ -2,6 +2,8 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import com.watabou.noosa.Game;
+import com.watabou.noosa.Scene;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -16,6 +18,7 @@ import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
+import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import org.json.JSONArray;
@@ -105,7 +108,7 @@ public class ParseThread extends Thread {
         if (json == null)
             throw new IOException("EOF");
         JSONObject data = new JSONObject(json);
-        Log.w("data", data.toString(4));
+        //Log.w("data", data.toString(4));
         for (Iterator<String> it = data.keys(); it.hasNext(); ) {
             String token = it.next();
             switch (token) {
@@ -147,6 +150,9 @@ public class ParseThread extends Thread {
                     parseActions(data.getJSONArray(token));
                     break;
                 }
+                case "messages": {
+                    parseMessages(data.getJSONArray(token));
+                }
                 case "inventory": {
                     parseInventory(data.getJSONObject(token));
                 }
@@ -157,6 +163,26 @@ public class ParseThread extends Thread {
             }
         }
 
+    }
+
+    private void parseMessages(JSONArray messages) {
+        Scene scene = Game.scene();
+        if (!(scene instanceof GameScene)) {
+            return;
+        }
+        GameLog log = ((GameScene) scene).getGameLog();
+        for (int i = 0; i < messages.length(); i++) {
+            try {
+                JSONObject messageObj = messages.getJSONObject(i);
+                if (messageObj.has("color")) {
+                    log.WriteMessage(messageObj.getString("text"), messageObj.getInt("coloe"));
+                } else {
+                    log.WriteMessageAutoColor(messageObj.getString("text"));
+                }
+            } catch (JSONException e) {
+                Log.w("ParseThread", "Incorrect message");
+            }
+        }
     }
 
     private void parseInventory(JSONObject inv) {
@@ -187,16 +213,20 @@ public class ParseThread extends Thread {
                 sprite.idle();
                 break;
             }
+            case "place": {
+                int to = actionObj.getInt("to");
+                sprite.place(to);
+                break;
+            }
             case "run":
             case "move": {
                 int from = actionObj.getInt("from");
                 int to = actionObj.getInt("to");
                 Char ch = (Char) actor;
-                if (ch.pos == from) {
-                    ch.move(to);
-                } else {
+                if (ch.pos != from) {
                     GLog.h("from != pos. ID:" + actorID);
                 }
+                ch.move(to);
                 if (ch instanceof Mob) {
                     ((Mob) ch).moveSprite(from, to);
                 } else {
