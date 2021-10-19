@@ -133,9 +133,10 @@ public class ConnectScene extends PixelScene implements NetworkScanner.ServicesL
         archs = new Archs();
         archs.setSize(width, height);
         add( archs );
-        if (!NetworkScanner.isWifiConnected()){
-            CreateCenterText(width, height,TXT_WIFI_DISABLED);
-        } else {
+      //  if (!NetworkScanner.isWifiConnected()){
+        //    CreateCenterText(width, height,TXT_WIFI_DISABLED);
+        //} else
+        {
             if (!NetworkScanner.start(this)) {
                 CreateCenterText(width, height,TXT_ERROR);
             } else {
