@@ -49,6 +49,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.potions.Potion;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
@@ -185,7 +186,18 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		add( statuses );
 		
 		add( emoicons );
-		
+
+		for ( Hero heroobj:Dungeon.heroes) {
+			if (heroobj == null){
+				continue;
+			}
+			HeroSprite hero;
+			hero = new HeroSprite(heroobj);
+			hero.place( heroobj.pos );
+			hero.updateArmor();
+			mobs.add( hero );
+		}
+
 		StatusPane sb = new StatusPane();
 		sb.camera = uiCamera;
 		sb.setSize( uiCamera.width, 0 );
@@ -219,6 +231,8 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 		
 		Camera.main.target = hero;
+
+		Server.startServerStepLoop();
 
 		fadeIn();
 			//todo
@@ -294,7 +308,14 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		mobs.add( sprite );
 		sprite.link( mob );
 	}
-	
+
+	public void addHeroSprite(Hero hero){
+		CharSprite sprite  = hero.sprite;
+		sprite.visible = true;
+		mobs.add(sprite);
+		sprite.link(hero);
+	}
+
 	private void showBanner( Banner banner ) {
 		banner.camera = uiCamera;
 		banner.x = align( uiCamera, (uiCamera.width - banner.width) / 2 );
@@ -328,7 +349,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			scene.addDiscardedSprite( heap );
 		}
 	}
-	
+
 	public static void add( Mob mob ) {
 		Dungeon.level.mobs.add( mob );
 		Actor.add( mob );

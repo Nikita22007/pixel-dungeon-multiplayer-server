@@ -1,5 +1,7 @@
 package com.watabou.pixeldungeon.network;
 
+import android.util.Log;
+
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.CharSprite;
@@ -10,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
 import static com.watabou.pixeldungeon.network.Server.clients;
 
 public class SendData {
@@ -216,6 +221,36 @@ public class SendData {
                 continue;
             }
             clients[i].packet.addChatMessage(messageObj);
+            clients[i].flush();
+        }
+    }
+
+    public static void addToSendShowStatus(float x, float y, Integer key, String text, int color) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("action_type", "show_status");
+            data.put("x", x);
+            data.put("y", y);
+            data.put("key", key);
+            data.put("text", text);
+            data.put("color", color);
+        } catch (JSONException e) {
+            Log.wtf("SendData", "Exception while adding showstatus", e);
+            return;
+        }
+        for (ClientThread client:clients) {
+            if (client == null){
+                continue;
+            }
+            AtomicReference<JSONObject> ref = client.packet.dataRef;
+            synchronized (ref) {
+                try {
+                    addToArray(ref.get(),"actions",data);
+                } catch (JSONException e) {
+                    Log.w("SendData","failed to send \"Show_status\"");
+                    continue;
+                }
+            }
         }
     }
 }

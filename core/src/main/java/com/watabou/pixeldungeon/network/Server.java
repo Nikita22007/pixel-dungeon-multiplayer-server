@@ -34,9 +34,34 @@ public class Server extends Thread {
     protected static NsdManager nsdManager;
     protected static NsdManager.RegistrationListener registrationListener;
 
+    protected static Thread serverStepThread;
+
+    public static boolean startServerStepLoop() {
+        if (serverStepThread != null) {
+            return false;
+        }
+        if (serverStepThread == null) {
+            serverStepThread = new Thread() {
+                @Override
+                public void run() {
+                    //setDaemon(true);
+                    try {
+                        while (true) {
+                            Game.instance.server_step();
+                            sleep(0);
+                        }
+                    } catch (InterruptedException ignored) {
+
+                    }
+                }
+            };
+        }
+        serverStepThread.start();
+        return true;
+    }
 
     public static boolean startServer() {
-        clients=new ClientThread[Settings.maxPlayers];
+        clients = new ClientThread[Settings.maxPlayers];
         if (started) {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;
@@ -50,45 +75,32 @@ public class Server extends Thread {
             initializeRegistrationListener();
         }
         registerService(localPort);
-        while (regListenerState == RegListenerState.NONE) {}//should  we use  Sleep?
+        while (regListenerState == RegListenerState.NONE) {
+        }//should  we use  Sleep?
 
         started = (regListenerState == RegListenerState.REGISTERED);
-        if (serverThread==null){
-            serverThread=new Server();
+        if (serverThread == null) {
+            serverThread = new Server();
         }
 
         serverThread.start();
-
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        Game.instance.server_step();
-                        sleep(200);
-                    }
-                } catch (InterruptedException ignored) {
-
-                }
-            }
-        };
-        thread.start();
 
         return started;
     }
 
     public static boolean stopServer() {
-        if (!started){
+        if (!started) {
             return true;
         }
         ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
-        while (regListenerState!=RegListenerState.UNREGISTERED  || regListenerState!=RegListenerState.UNREGISTRATION_FAILED){}//should  we use  Sleep?
+        while (regListenerState != RegListenerState.UNREGISTERED || regListenerState != RegListenerState.UNREGISTRATION_FAILED) {
+        }//should  we use  Sleep?
         return true;
     }
 
     //Server thread
-        public void run() {
+    public void run() {
         while (started) { //clients  listener
             Socket client;
             try {
@@ -96,7 +108,7 @@ public class Server extends Thread {
 
                 for (int i = 0; i < clients.length; i++) {   //search not connected
                     if (clients[i] == null) {
-                        clients[i] = new ClientThread(i, client,true); //found
+                        clients[i] = new ClientThread(i, client, true); //found
                         break;
                     } else {
                         if (i == clients.length) { //If we test last and it's connected too
@@ -180,8 +192,6 @@ public class Server extends Thread {
             }
         };
     }
-
-
 
 
     public static enum RegListenerState {NONE, UNREGISTERED, REGISTERED, REGISTRATION_FAILED, UNREGISTRATION_FAILED}

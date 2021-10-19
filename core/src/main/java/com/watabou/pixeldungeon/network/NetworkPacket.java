@@ -65,7 +65,7 @@ public class NetworkPacket {
         }
     }
 
-    public void addToArray(JSONObject storage, String token, JSONObject data) throws JSONException {
+    public static void addToArray(JSONObject storage, String token, JSONObject data) throws JSONException {
         if (!storage.has(token)) {
             storage.put(token, new JSONArray());
         }

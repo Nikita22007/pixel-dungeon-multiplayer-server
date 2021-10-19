@@ -2,6 +2,8 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import com.watabou.noosa.Game;
+import com.watabou.noosa.Scene;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
@@ -9,6 +11,8 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
+import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
@@ -196,6 +200,10 @@ class ClientThread extends Thread {
             Actor.add(newHero);
             Actor.occupyCell(newHero);
             Dungeon.observe(newHero, false);
+        }
+        Scene scene = Game.scene();
+        if (scene instanceof GameScene) {
+            ((GameScene) scene).addHeroSprite(newHero);
         }
         addAllCharsToSend();
         packet.packAndAddVisiblePositions(Dungeon.visible);
