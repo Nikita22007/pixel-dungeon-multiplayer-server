@@ -152,9 +152,11 @@ public class ParseThread extends Thread {
                 }
                 case "messages": {
                     parseMessages(data.getJSONArray(token));
+                    break;
                 }
                 case "inventory": {
                     parseInventory(data.getJSONObject(token));
+                    break;
                 }
                 default: {
                     GLog.h("Incorrect packet token: \"%s\". Ignored", token);
@@ -175,7 +177,7 @@ public class ParseThread extends Thread {
             try {
                 JSONObject messageObj = messages.getJSONObject(i);
                 if (messageObj.has("color")) {
-                    log.WriteMessage(messageObj.getString("text"), messageObj.getInt("coloe"));
+                    log.WriteMessage(messageObj.getString("text"), messageObj.getInt("color"));
                 } else {
                     log.WriteMessageAutoColor(messageObj.getString("text"));
                 }

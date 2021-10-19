@@ -161,7 +161,7 @@ public abstract class Actor implements Bundlable {
 
 	/*protected*/public void next() {
 		if (current == this) {
-			current = null;
+			//current = null;
 		}
 	}
 
