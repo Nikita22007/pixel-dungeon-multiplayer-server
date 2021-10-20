@@ -50,8 +50,8 @@ public class InterlevelScene extends PixelScene {
 	private static final String TXT_FALLING		= "Falling...";
 	
 	private static final String ERR_FILE_NOT_FOUND	= "File not found. For some reason.";
-	private static final String ERR_GENERIC			= "Something went wrong..."	;	
-	
+	private static final String ERR_GENERIC			= "Something went wrong..."	;
+
 	public static enum Mode {
 		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, NONE
 	};
@@ -65,7 +65,8 @@ public class InterlevelScene extends PixelScene {
 	public static boolean noStory = false;
 	
 	public static boolean fallIntoPit;
-	
+	public static String customMessage;
+
 	public enum Phase {
 		FADE_IN, STATIC, FADE_OUT
 	};
@@ -104,7 +105,12 @@ public class InterlevelScene extends PixelScene {
 			break;
 		default:
 		}
-		
+
+		if (customMessage != null) {
+			text = customMessage;
+			customMessage = null;
+		}
+
 		message = PixelScene.createText( text, 9 );
 		message.measure();
 		message.x = (Camera.main.width - message.width()) / 2; 

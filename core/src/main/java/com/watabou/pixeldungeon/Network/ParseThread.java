@@ -125,9 +125,27 @@ public class ParseThread extends Thread {
                 //UI block
                 case "interlevel_scene": {
                     //todo can cause crash
-                    String stateName = data.getJSONObject(token).getString("state").toUpperCase();
-                    InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
-                    InterlevelScene.phase = phase;
+                    JSONObject ilsObj = data.getJSONObject(token);
+                    if (ilsObj.has("state")) {
+                        String stateName = data.getJSONObject(token).getString("state").toUpperCase();
+                        InterlevelScene.Phase phase = InterlevelScene.Phase.valueOf(stateName);
+                        InterlevelScene.phase = phase;
+                    }
+                    if (ilsObj.has("type")) {
+                        String modeName = ilsObj.getString("type").toUpperCase(Locale.ENGLISH);
+                        if (modeName.equals("CUSTOM")) {
+                            modeName = "NONE";
+                        }
+                        InterlevelScene.Mode mode = InterlevelScene.Mode.valueOf(modeName);
+                        InterlevelScene.mode = mode;
+                    }
+
+                    if (ilsObj.has("message")) {
+                        InterlevelScene.customMessage = ilsObj.getString("message");
+                    }
+                    if (!(Game.scene() instanceof InterlevelScene)) {
+                        Game.switchScene(InterlevelScene.class);
+                    }
                     break;
                 }
                 //Hero block
