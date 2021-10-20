@@ -7,6 +7,7 @@ import android.net.nsd.NsdServiceInfo;
 
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Settings;
+import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.DataOutputStream;
@@ -44,17 +45,26 @@ public class Server extends Thread {
             serverStepThread = new Thread() {
                 @Override
                 public void run() {
-                    //setDaemon(true);
+                    //
                     try {
                         while (true) {
-                            Game.instance.server_step();
-                            sleep(0);
+                            if (Game.instance != null) {
+                                if (Game.scene() instanceof GameScene) {
+                                    Game.instance.server_step();
+                                    sleep(0);
+                                } else {
+                                    sleep(500);
+                                }
+                            } else {
+                                sleep(500);
+                            }
                         }
                     } catch (InterruptedException ignored) {
 
                     }
                 }
             };
+            serverStepThread.setDaemon(true);
         }
         serverStepThread.start();
         return true;
@@ -92,6 +102,7 @@ public class Server extends Thread {
         if (!started) {
             return true;
         }
+        serverStepThread.interrupt();
         ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
         while (regListenerState != RegListenerState.UNREGISTERED || regListenerState != RegListenerState.UNREGISTRATION_FAILED) {

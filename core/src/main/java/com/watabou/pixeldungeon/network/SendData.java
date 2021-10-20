@@ -97,45 +97,19 @@ public class SendData {
     }
 
     //-----------------------------Interlevel Scene
-    public static void sendInterLevelSceneDescend(int ID) {
+    public static void sendInterLevelScene(int ID, String type) {
         if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_DESCEND);
-        }
-    }
-
-    public static void sendInterLevelSceneAscend(int ID) {
-        if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_ASCEND);
-        }
-    }
-
-    public static void sendInterLevelSceneFall(int ID) {
-        if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_FALL);
-        }
-    }
-
-    public static void sendInterLevelSceneResurrect(int ID) {
-        if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_RESURRECT);
-        }
-    }
-
-    public static void sendInterLevelSceneReturn(int ID) {
-        if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_RETURN);
-        }
-    }
-
-    public static void sendInterLevelSceneOther(int ID, String data) {
-        if (clients[ID] != null) {
-            clients[ID].send(Codes.IL_OTHER, data);
+            clients[ID].flush();
+            clients[ID].packet.packAndAddInterLevelSceneType(type);
+            clients[ID].flush();
         }
     }
 
     public static void sendInterLevelSceneFadeOut(int ID) {
         if (clients[ID] != null) {
-            clients[ID].sendCode(Codes.IL_FADE_OUT);
+            clients[ID].flush();
+            clients[ID].packet.packAndAddInterlevelSceneState("fade_out");
+            clients[ID].flush();
         }
     }
 

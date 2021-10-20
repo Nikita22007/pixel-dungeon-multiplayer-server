@@ -20,8 +20,6 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.watabou.pixeldungeon.network.Server.clients;
-
 public class NetworkPacket {
     public static final String CELLS = "cells";
     public static final String MAP = "map";
@@ -151,7 +149,8 @@ public class NetworkPacket {
                 int id = actor.id();
                 object.put("id", id);
                 object.put("type", "blob");
-                assert false : "Does not released sending blobs";
+//                assert false : "Does not released sending blobs";
+                Log.e("NetworkPacket", "Does not released sending blobs");
                 return new JSONObject();
             } else {
                 Log.w("NetworkPacket:", "pack actor. Actor class: " + actor.getClass().toString());
@@ -315,6 +314,25 @@ public class NetworkPacket {
                 data.put("badge", badge);
             } catch (Exception ignored) {
             }
+        }
+    }
+
+    public void packAndAddInterLevelSceneType(String type){
+        packAndAddInterLevelSceneType(type, null);
+    }
+    public void packAndAddInterLevelSceneType(String type, String customMessage){
+        try {
+            JSONObject stateObj = new JSONObject();
+            stateObj.put("type", type);
+            if (customMessage != null) {
+                stateObj.put("custom_message", customMessage);
+            }
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                data.put("interlevel_scene", stateObj);
+            }
+        } catch (JSONException ignored) {
+
         }
     }
 

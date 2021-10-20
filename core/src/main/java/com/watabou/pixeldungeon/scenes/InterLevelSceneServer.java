@@ -110,7 +110,7 @@ public class InterLevelSceneServer {
         try {
             Generator.reset();
             for (int i = 0; i < heroes.length; i++) {
-                SendData.sendInterLevelSceneDescend(i);
+                SendData.sendInterLevelScene(i,"DESCEND");
             }
             Actor.fixTime();
             if (Dungeon.depth > 0) {
@@ -141,7 +141,7 @@ public class InterLevelSceneServer {
         try {
             Generator.reset();
             for (int i = 0; i < heroes.length; i++) {
-                SendData.sendInterLevelSceneFall(i);
+                SendData.sendInterLevelScene(i, "FALL");
             }
             Actor.fixTime();
             Dungeon.saveLevel();
@@ -180,7 +180,7 @@ public class InterLevelSceneServer {
         try {
             Generator.reset();
         for (int i = 0; i < heroes.length; i++) {
-            SendData.sendInterLevelSceneAscend(i);
+            SendData.sendInterLevelScene(i,"ASCEND");
         }
         Actor.fixTime();
 
@@ -203,7 +203,7 @@ public class InterLevelSceneServer {
             Generator.reset();
             if (depth != Dungeon.depth) {
                 for (int i = 0; i < heroes.length; i++) {
-                    SendData.sendInterLevelSceneReturn(i);
+                    SendData.sendInterLevelScene(i,"RETURN");
                 }
 
                 Actor.fixTime();
@@ -249,7 +249,7 @@ public class InterLevelSceneServer {
 
         Generator.reset();
         for (int i = 0; i< heroes.length; i++) {
-            SendData.sendInterLevelSceneResurrect(i);
+            SendData.sendInterLevelScene(i, "RESURRECT");
         }
         Actor.fixTime();
         switch (Settings.resurrectMode){
