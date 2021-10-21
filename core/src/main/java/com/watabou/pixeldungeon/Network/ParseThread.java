@@ -330,7 +330,7 @@ public class ParseThread extends Thread {
             JSONObject actionObj;
             try {
                 actionObj = actions.getJSONObject(i);
-            }  catch (JSONException e) {
+            } catch (JSONException e) {
                 Log.wtf("ParseActions", "can't action from array. " + e.toString());
                 e.printStackTrace();
                 continue;
@@ -342,7 +342,7 @@ public class ParseThread extends Thread {
                     break;
                 }
                 default:
-                    GLog.h("unknown action type "+type+". Ignored");
+                    GLog.h("unknown action type " + type + ". Ignored");
             }
         }
     }
@@ -437,8 +437,11 @@ public class ParseThread extends Thread {
             switch (token) {
                 case "id":
                     continue;
-                case "erase_old":
+                case "erase_old": //todo
                     continue;
+                case "type": {
+                    continue; // it parsed before
+                }
                 case "position": {
                     chr.pos = actorObj.getInt(token);
                     break;
