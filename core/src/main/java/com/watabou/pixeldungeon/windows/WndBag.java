@@ -47,6 +47,7 @@ import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.ItemSlot;
 import com.watabou.pixeldungeon.ui.QuickSlot;
+import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.GameMath;
 
@@ -159,10 +160,12 @@ public class WndBag extends WndTabbed {
 		
 		// Equipped items
 		Belongings stuff = Dungeon.hero.belongings;
-		placeItem( stuff.weapon != null ? stuff.weapon : new Placeholder( ItemSpriteSheet.WEAPON ) );
-		placeItem( stuff.armor != null ? stuff.armor : new Placeholder( ItemSpriteSheet.ARMOR ) );
-		placeItem( stuff.ring1 != null ? stuff.ring1 : new Placeholder( ItemSpriteSheet.RING ) );
-		placeItem( stuff.ring2 != null ? stuff.ring2 : new Placeholder( ItemSpriteSheet.RING ) );
+		for (SpecialSlot slot : stuff.specialSlots) {
+			if (slot == null) {
+				continue;
+			}
+			placeItem(slot.item != null ? slot.item : new Placeholder(slot.image_id));
+		}
 		
 		boolean backpack = (container == Dungeon.hero.belongings.backpack);
 		if (!backpack) {

@@ -12,6 +12,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
@@ -19,6 +20,7 @@ import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
+import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 
 import org.json.JSONArray;
@@ -213,6 +215,40 @@ public class ParseThread extends Thread {
                 Log.w("ParseThread", "Can't parse backpack");
             }
         }
+        if (inv.has("special_slots")) {
+            JSONArray slotsArr;
+            try {
+                slotsArr = inv.getJSONArray("special_slots");
+            } catch (JSONException ignored) {
+                assert false : "wtf";
+                slotsArr = new JSONArray();
+            }
+            try {
+                for (int i = 0; i < slotsArr.length(); i++) {
+                    JSONObject slotObj = slotsArr.getJSONObject(i);
+                    SpecialSlot slot = new SpecialSlot();
+                    if (slotObj.has("id")) {
+                        slot.id = slotObj.getInt("id");
+                    }
+                    if (slotObj.has("sprite")) {
+                        slot.sprite = slotObj.getString("sprite");
+                    }
+                    if (slotObj.has("image_id")) {
+                        slot.image_id = slotObj.getInt("image_id");
+                    }
+                    if (slotObj.has("item")) {
+                        if (slotObj.isNull("item")) {
+                            slot.item = null;
+                        } else {
+                            slot.item = new CustomItem(slotObj.getJSONObject("item"));
+                        }
+                    }
+                    hero.belongings.updateSpecialSlot(slot);
+                }
+            } catch (JSONException e) {
+                Log.w("ParseThread", "Can't parse slot");
+            }
+        }
     }
 
     protected void parseSpriteAction(JSONObject actionObj) throws JSONException {
@@ -225,7 +261,7 @@ public class ParseThread extends Thread {
         }
         CharSprite sprite = ((Char) actor).sprite;
         if (sprite == null) {
-            GLog.h("actor has null sprite");
+            GLog.h("actor " + actorID + "has null sprite");
             return;
         }
         switch (action) {

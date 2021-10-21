@@ -17,7 +17,6 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -32,21 +31,24 @@ import com.watabou.pixeldungeon.items.keys.Key;
 import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.watabou.pixeldungeon.items.wands.Wand;
+import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Belongings implements Iterable<Item> {
 
 	public static final int BACKPACK_SIZE	= 19;
-	
+
 	private Hero owner;
-	
-	public Bag backpack;	
+
+	public Bag backpack;
 
 	public KindOfWeapon weapon = null;
 	public Armor armor = null;
 	public Ring ring1 = null;
 	public Ring ring2 = null;
+
+	public ArrayList<SpecialSlot> specialSlots = new ArrayList<SpecialSlot>(4);
 
 	public ArrayList<Bag> Bags(){
 		ArrayList bags = new ArrayList<Bag>(6);
@@ -57,52 +59,52 @@ public class Belongings implements Iterable<Item> {
 
 	public Belongings( Hero owner ) {
 		this.owner = owner;
-		
+
 		backpack = new Bag() {{
 			name = "backpack";
 			size = BACKPACK_SIZE;
 		}};
 		backpack.owner = owner;
 	}
-	
+
 	private static final String WEAPON		= "weapon";
 	private static final String ARMOR		= "armor";
 	private static final String RING1		= "ring1";
 	private static final String RING2		= "ring2";
-	
+
 	public void storeInBundle( Bundle bundle ) {
-		
+
 		backpack.storeInBundle( bundle );
-		
+
 		bundle.put( WEAPON, weapon );
 		bundle.put( ARMOR, armor );
 		bundle.put( RING1, ring1 );
 		bundle.put( RING2, ring2 );
 	}
-	
+
 	public void restoreFromBundle( Bundle bundle ) {
-		
+
 		backpack.clear();
 		backpack.restoreFromBundle( bundle );
-		
+
 		weapon = (KindOfWeapon)bundle.get( WEAPON );
 		if (weapon != null) {
 			weapon.activate( owner );
 		}
-		
+
 		armor = (Armor)bundle.get( ARMOR );
-		
+
 		ring1 = (Ring)bundle.get( RING1 );
 		if (ring1 != null) {
 			ring1.activate( owner );
 		}
-		
+
 		ring2 = (Ring)bundle.get( RING2 );
 		if (ring2 != null) {
 			ring2.activate( owner );
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public<T extends Item> T getItem( Class<T> itemClass ) {
 
@@ -111,39 +113,39 @@ public class Belongings implements Iterable<Item> {
 				return (T)item;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T extends Key> T getKey( Class<T> kind, int depth ) {
-		
+
 		for (Item item : backpack) {
 			if (item.getClass() == kind && ((Key)item).depth == depth) {
 				return (T)item;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public void countIronKeys() {
-		
+
 		IronKey.curDepthQuantity = 0;
-		
+
 		for (Item item : backpack) {
 			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
 				IronKey.curDepthQuantity++;
 			}
 		}
 	}
-	
+
 	public void identify() {
 		for (Item item : this) {
 			item.identify();
 		}
 	}
-	
+
 	public void observe() {
 		if (weapon != null) {
 			weapon.identify();
@@ -165,15 +167,35 @@ public class Belongings implements Iterable<Item> {
 			item.cursedKnown = true;
 		}
 	}
-	
+
 	public void uncurseEquipped() {
 		ScrollOfRemoveCurse.uncurse( owner, armor, weapon, ring1, ring2 );
 	}
-	
+
 	public Item randomUnequipped() {
 		return Random.element( backpack.items );
 	}
-	
+
+	public void setSpecialSlot(SpecialSlot specialSlot) {
+        for (int i = 0; i < specialSlots.size(); i++) {
+            if (specialSlots.get(i).id == specialSlot.id) {
+                specialSlots.set(i, specialSlot);
+                return;
+            }
+        }
+        specialSlots.add(specialSlot);
+    }
+
+    public void updateSpecialSlot(SpecialSlot specialSlot) {
+        for (int i = 0; i < specialSlots.size(); i++) {
+            if (specialSlots.get(i).id == specialSlot.id) {
+                specialSlots.get(i).updateWith(specialSlot);
+                return;
+            }
+        }
+        specialSlots.add(specialSlot);
+    }
+
 	public void resurrect( int depth ) {
 		for (Item item : backpack.items.toArray( new Item[0])) {
 			if (item instanceof Key) {
@@ -186,16 +208,16 @@ public class Belongings implements Iterable<Item> {
 				item.detachAll( backpack );
 			}
 		}
-		
+
 		if (weapon != null) {
 			weapon.cursed = false;
 			weapon.activate( owner );
 		}
-		
+
 		if (armor != null) {
 			armor.cursed = false;
 		}
-		
+
 		if (ring1 != null) {
 			ring1.cursed = false;
 			ring1.activate( owner );
@@ -205,81 +227,81 @@ public class Belongings implements Iterable<Item> {
 			ring2.activate( owner );
 		}
 	}
-	
+
 	public int charge( boolean full) {
-		
+
 		int count = 0;
-		
+
 		for (Item item : this) {
 			if (item instanceof Wand) {
 				Wand wand = (Wand)item;
 				if (wand.curCharges < wand.maxCharges) {
 					wand.curCharges = full ? wand.maxCharges : wand.curCharges + 1;
 					count++;
-					
+
 					wand.updateQuickslot();
 				}
 			}
 		}
-		
+
 		return count;
 	}
-	
+
 	public int discharge() {
-		
+
 		int count = 0;
-		
+
 		for (Item item : this) {
 			if (item instanceof Wand) {
 				Wand wand = (Wand)item;
 				if (wand.curCharges > 0) {
 					wand.curCharges--;
 					count++;
-					
+
 					wand.updateQuickslot();
 				}
 			}
 		}
-		
+
 		return count;
 	}
 
 	@Override
 	public Iterator<Item> iterator() {
-		return new ItemIterator(); 
+		return new ItemIterator();
 	}
-	
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;
-		
+
 		private Iterator<Item> backpackIterator = backpack.iterator();
-		
+
 		private Item[] equipped = {weapon, armor, ring1, ring2};
 		private int backpackIndex = equipped.length;
-		
+
 		@Override
 		public boolean hasNext() {
-			
+
 			for (int i=index; i < backpackIndex; i++) {
 				if (equipped[i] != null) {
 					return true;
 				}
 			}
-			
+
 			return backpackIterator.hasNext();
 		}
 
 		@Override
 		public Item next() {
-			
+
 			while (index < backpackIndex) {
 				Item item = equipped[index++];
 				if (item != null) {
 					return item;
 				}
 			}
-			
+
 			return backpackIterator.next();
 		}
 
