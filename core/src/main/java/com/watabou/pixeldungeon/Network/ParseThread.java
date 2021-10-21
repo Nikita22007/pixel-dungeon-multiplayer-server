@@ -38,6 +38,7 @@ import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
+import static com.watabou.pixeldungeon.scenes.GameScene.emitter;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
 public class ParseThread extends Thread {
@@ -102,6 +103,7 @@ public class ParseThread extends Thread {
                 return;
             } catch (JSONException e) {
                 Log.w("parsing", e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -109,7 +111,14 @@ public class ParseThread extends Thread {
     private void parse(String json) throws IOException, JSONException, InterruptedException {
         if (json == null)
             throw new IOException("EOF");
-        JSONObject data = new JSONObject(json);
+        JSONObject data;
+        try {
+            data = new JSONObject(json);
+        } catch (JSONException e) {
+            Log.e("Parsing", "Malformed JSON." + e.toString());
+            e.printStackTrace();
+            return;
+        }
         //Log.w("data", data.toString(4));
         for (Iterator<String> it = data.keys(); it.hasNext(); ) {
             String token = it.next();
@@ -318,15 +327,22 @@ public class ParseThread extends Thread {
 
     protected void parseActions(JSONArray actions) throws JSONException {
         for (int i = 0; i < actions.length(); i++) {
-            JSONObject actionObj = actions.getJSONObject(i);
-            String type = actionObj.getString("type");
+            JSONObject actionObj;
+            try {
+                actionObj = actions.getJSONObject(i);
+            }  catch (JSONException e) {
+                Log.wtf("ParseActions", "can't action from array. " + e.toString());
+                e.printStackTrace();
+                continue;
+            }
+            String type = actionObj.optString("action_type");
             switch (type) {
                 case ("sprite_action"): {
                     parseSpriteAction(actionObj);
                     break;
                 }
                 default:
-                    GLog.h("unknown action type %s. Ignored", type);
+                    GLog.h("unknown action type "+type+". Ignored");
             }
         }
     }
