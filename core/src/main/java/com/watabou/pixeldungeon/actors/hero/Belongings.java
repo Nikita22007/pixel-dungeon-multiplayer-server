@@ -17,7 +17,9 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
@@ -35,6 +37,9 @@ import com.watabou.pixeldungeon.items.keys.Key;
 import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.watabou.pixeldungeon.items.wands.Wand;
+import com.watabou.pixeldungeon.network.SpecialSlot;
+import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -99,6 +104,15 @@ public class Belongings implements Iterable<Item> {
 		if (ring2 != null) {
 			ring2.activate( owner );
 		}
+	}
+
+	public ArrayList<SpecialSlot> getSpecialSlots() {
+		ArrayList<SpecialSlot> slots = new ArrayList<>(4);
+		slots.add(new SpecialSlot(0, "items.png", ItemSpriteSheet.WEAPON, weapon));
+		slots.add(new SpecialSlot(1, "items.png", ItemSpriteSheet.ARMOR, armor));
+		slots.add(new SpecialSlot(2, "items.png", ItemSpriteSheet.RING, ring1));
+		slots.add(new SpecialSlot(3, "items.png", ItemSpriteSheet.RING, ring2));
+		return slots;
 	}
 
 	public Bag[] getBags() {

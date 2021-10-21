@@ -63,8 +63,16 @@ server:
    "inventory":
    {
         "backpack": bag
-
-   }
+        "specials_slots" //note,  that you  can't delete special slots, only add
+        [
+            {
+                "id": 0
+                "sprite": "items.png"
+                "image_id": 127
+                "item": item/"null"
+            }
+        ]
+}
    "sprites":
     [
         {

@@ -11,7 +11,6 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.utils.GLog;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -317,10 +316,11 @@ public class NetworkPacket {
         }
     }
 
-    public void packAndAddInterLevelSceneType(String type){
+    public void packAndAddInterLevelSceneType(String type) {
         packAndAddInterLevelSceneType(type, null);
     }
-    public void packAndAddInterLevelSceneType(String type, String customMessage){
+
+    public void packAndAddInterLevelSceneType(String type, String customMessage) {
         try {
             JSONObject stateObj = new JSONObject();
             stateObj.put("type", type);
@@ -485,10 +485,43 @@ public class NetworkPacket {
         }
     }
 
+    public void addSpecialSlots(Hero hero) {
+
+        JSONArray slotsArr = new JSONArray();
+        for (SpecialSlot slot : hero.belongings.getSpecialSlots()) {
+            JSONObject slotObj = new JSONObject();
+            try {
+                slotObj.put("id", slot.id);
+                slotObj.put("sprite", slot.sprite);
+                slotObj.put("image_id", slot.image_id);
+                slotObj.put("item", (slot.item != null) ? packItem(slot.item, hero) : JSONObject.NULL);
+            } catch (JSONException e) {
+                Log.wtf("NetworkPacket", "JsonException while adding special slot" + e.toString());
+            }
+            slotsArr.put(slotObj);
+        }
+        try {
+            synchronized (dataRef) {
+                JSONObject data = dataRef.get();
+                JSONObject inv;
+                if (data.has(INVENTORY)) {
+                    inv = data.getJSONObject(INVENTORY);
+                } else {
+                    inv = new JSONObject();
+                    data.put(INVENTORY, inv);
+                }
+                inv.put("special_slots", slotsArr);
+            }
+        } catch (JSONException e) {
+            Log.e("Packet", "JSONException inside addSpectialSlots. " + e.toString());
+        }
+    }
+
     public void addInventoryFull(@NotNull Hero hero) {
         if (hero == null) {
             throw new IllegalArgumentException("hero is null");
         }
         addHeroBags(hero);
+        addSpecialSlots(hero);
     }
 }
