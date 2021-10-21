@@ -38,7 +38,7 @@ public class Server extends Thread {
     protected static Thread serverStepThread;
 
     public static boolean startServerStepLoop() {
-        if (serverStepThread != null) {
+        if ((serverStepThread != null) && (serverStepThread.isAlive())) {
             return false;
         }
         if (serverStepThread == null) {
@@ -47,7 +47,7 @@ public class Server extends Thread {
                 public void run() {
                     //
                     try {
-                        while (true) {
+                        while (!interrupted()) {
                             if (Game.instance != null) {
                                 if (Game.scene() instanceof GameScene) {
                                     Game.instance.server_step();

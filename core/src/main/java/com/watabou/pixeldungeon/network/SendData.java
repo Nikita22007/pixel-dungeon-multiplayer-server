@@ -138,7 +138,7 @@ public class SendData {
     public static void sendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to) {
         JSONObject actionObj = new JSONObject();
         try {
-            actionObj.put("type", "sprite_action");
+            actionObj.put("action_type", "sprite_action");
             actionObj.put("action", action);
             actionObj.put("from", cell_from);
             actionObj.put("to", cell_to);
@@ -150,18 +150,8 @@ public class SendData {
             if (clients[i] == null) {
                 continue;
             }
-            try {
-                synchronized (clients[i].packet.dataRef) {
-                    JSONObject data = clients[i].packet.dataRef.get();
-                    if (!data.has("actions")) {
-                        data.put("actions", new JSONArray());
-                    }
-                    data.getJSONArray("actions").put(actionObj);
-                }
-                clients[i].flush();
-            } catch (JSONException ignored) {
-
-            }
+            clients[i].packet.addAction(actionObj);
+            clients[i].flush();
         }
     }
 
@@ -212,16 +202,16 @@ public class SendData {
             Log.wtf("SendData", "Exception while adding showstatus", e);
             return;
         }
-        for (ClientThread client:clients) {
-            if (client == null){
+        for (ClientThread client : clients) {
+            if (client == null) {
                 continue;
             }
             AtomicReference<JSONObject> ref = client.packet.dataRef;
             synchronized (ref) {
                 try {
-                    addToArray(ref.get(),"actions",data);
+                    addToArray(ref.get(), "actions", data);
                 } catch (JSONException e) {
-                    Log.w("SendData","failed to send \"Show_status\"");
+                    Log.w("SendData", "failed to send \"Show_status\"");
                     continue;
                 }
             }
