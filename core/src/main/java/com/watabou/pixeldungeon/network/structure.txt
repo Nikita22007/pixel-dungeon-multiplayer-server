@@ -192,3 +192,17 @@ action show_status
     "text": "invisible"
     "color": 0xFFFF00
 }
+
+action add_item_to_bag
+{
+    "action_type": "add_item_to_bag"
+    "slot":
+    [
+        0,  //bag(A) in slot 0 of inventory
+        3,  //bag(B) in slot 3 of bag(A)
+        2  //slot of bag(B) in which
+        //item will be placed. Other items are moved to the next slot
+    ]
+    "item": item  //can me null
+
+}

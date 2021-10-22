@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon.items.bags;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.actors.Char;
@@ -63,28 +64,34 @@ public class Bag extends Item implements Iterable<Item> {
 			
 		}
 	}
-	
+
 	@Override
-	public boolean collect( Bag container ) {
-		if (super.collect( container )) {	
-			
+	public List<Integer> collect(Bag container, List<Integer> path) {
+		List<Integer> path_copy = new ArrayList<>(path);
+		path = super.collect(container, path);
+		if (path != null) {
 			owner = container.owner;
-			
-			for (Item item : container.items.toArray( new Item[0] )) {
+			for (Item item : container.items) {
 				if (grab( item )) {
 					item.detachAll( container );
-					item.collect( this );
+					List<Integer> loc_path = new ArrayList<>(path_copy);
+					loc_path.add(container.indexOf(this));
+					item.collect( this, loc_path );
 				}
 			}
 			
 			Badges.validateAllBagsBought( this );
 			
-			return true;
+			return path;
 		} else {
-			return false;
+			return null;
 		}
 	}
-	
+
+	private Integer indexOf(Item item) {
+		return items.indexOf(item);
+	}
+
 	@Override
 	public void onDetach( ) {
 		this.owner = null;

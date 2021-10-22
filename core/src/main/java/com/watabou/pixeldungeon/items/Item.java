@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
@@ -40,9 +41,12 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Item implements Bundlable {
 
@@ -149,18 +153,26 @@ public class Item implements Bundlable {
 			heap.sprite.drop( cell );
 		}
 	}
-	
-	public boolean collect( Bag container ) {
-		
+
+	public boolean collect(Bag container) {
+		return collect(container, new ArrayList<Integer>(2)) != null;
+	}
+
+	public List<Integer> collect(Bag container, List<Integer> path) {
+
 		ArrayList<Item> items = container.items;
-		
-		if (items.contains( this )) {
-			return true;
+		{
+			int index = items.indexOf(this);
+			if (index >= 0) {
+				path.add(index);
+				return path;
+			}
 		}
-		
+
 		for (Item item:items) {
 			if (item instanceof Bag && ((Bag)item).grab( this )) {
-				return collect( (Bag)item );
+				path.add(items.indexOf(item) );
+				return collect( (Bag)item, path);
 			}
 		}
 		
@@ -171,7 +183,8 @@ public class Item implements Bundlable {
 				if (item.getClass() == c) {
 					item.quantity += quantity;
 					item.updateQuickslot();
-					return true;
+					path.add(items.indexOf(item));
+					return path;
 				}
 			}	
 		}
@@ -179,19 +192,23 @@ public class Item implements Bundlable {
 		if (items.size() < container.size) {
 			
 			//if (Dungeon.hero != null && Dungeon.hero.isAlive()) {
-			if (container.owner!=null && (container.owner   instanceof Hero)  && container.owner.isAlive()){
-				Badges.validateItemLevelAquired( this );
+			if (container.owner != null && (container.owner instanceof Hero) && container.owner.isAlive()) {
+				Badges.validateItemLevelAquired(this);
 			}
 			
-			items.add( this );	
+			items.add( this );
 			QuickSlot.refresh();
 			Collections.sort( items, itemComparator );
-			return true;
+
+			path.add(items.indexOf(this));
+			SendData.sendNewInventoryItem(container.owner, this, path);
+
+			return path;
 			
 		} else {
 			
 			GLog.n( TXT_PACK_FULL, name() );
-			return false;
+			return null;
 			
 		}
 	}

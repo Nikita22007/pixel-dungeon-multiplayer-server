@@ -3,6 +3,9 @@ package com.watabou.pixeldungeon.network;
 import android.util.Log;
 
 import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -12,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
@@ -215,6 +219,28 @@ public class SendData {
                     continue;
                 }
             }
+        }
+    }
+
+    public static void sendNewInventoryItem(Char owner, Item item, List<Integer> path) {
+        if (!(owner instanceof Hero)) {
+            return;
+        }
+        Hero hero = (Hero) owner;
+        if (hero.networkID < 0) {
+            return;
+        }
+        JSONObject itemObj = NetworkPacket.packItem(item, hero);
+        JSONArray slot = new JSONArray(path);
+        JSONObject action_obj = new JSONObject();
+        try {
+            action_obj.put("action_type", "add_item_to_bag");
+            action_obj.put("slot", slot);
+            action_obj.put("item", itemObj);
+        } catch (JSONException ignored) {
+        }
+        if (clients[hero.networkID] != null) {
+            clients[hero.networkID].packet.addAction(action_obj);
         }
     }
 }

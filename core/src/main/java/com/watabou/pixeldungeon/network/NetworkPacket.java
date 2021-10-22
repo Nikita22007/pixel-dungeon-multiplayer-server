@@ -357,7 +357,7 @@ public class NetworkPacket {
     }
 
     @NotNull
-    public JSONArray packActions(@NotNull Item item, @NotNull Hero hero) {
+    public static JSONArray packActions(@NotNull Item item, @NotNull Hero hero) {
         JSONArray actionsArr = new JSONArray();
         for (String action : item.actions(hero)) {
             actionsArr.put(action);
@@ -365,7 +365,7 @@ public class NetworkPacket {
         return actionsArr;
     }
 
-    public JSONObject packItem(Item item, Hero hero) {
+    public static JSONObject packItem(Item item, Hero hero) {
         JSONObject itemObj = new JSONObject();
         try {
             if (hero != null) {
