@@ -13,6 +13,7 @@ import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.CustomItem;
+import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
@@ -29,8 +30,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -339,6 +342,20 @@ public class ParseThread extends Thread {
             switch (type) {
                 case ("sprite_action"): {
                     parseSpriteAction(actionObj);
+                    break;
+                }
+                case ("add_item_to_bag"): {
+                    if (actionObj.has("slot") && actionObj.has("item")) {
+                        Item item = new CustomItem(actionObj.getJSONObject("item"));
+                        JSONArray slotArr = actionObj.getJSONArray("slot");
+                        List<Integer> slot = new ArrayList<Integer>(2);
+                        for (int j = 0; j < slotArr.length(); j++) {
+                            slot.add(slotArr.getInt(i));
+                        }
+                        item.collect(hero.belongings.backpack, slot);
+                    } else {
+                        Log.w("ParseActions", "bad \"add_item_to_bag\" action");
+                    }
                     break;
                 }
                 default:

@@ -17,9 +17,12 @@
  */
 package com.watabou.pixeldungeon.items;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
@@ -197,7 +200,22 @@ public class Item implements Bundlable {
 			
 		}
 	}
-	
+
+    public boolean collect(Bag bag, List<Integer> path) {
+        for (int i = 0; i < path.size() - 1; i++) {
+            Item bagItem = bag.get(path.get(i));
+            if (bagItem instanceof Bag) {
+                bag = (Bag) bag.get(i);
+            } else {
+                Log.e("Item", "Bagitem is not bag. Path " + path.toArray().toString() + " pos: " + i);
+                return false;
+            }
+        }
+        int slot = path.get(path.size() - 1);
+        bag.items.add(slot, this);
+        return true;
+    }
+
 	public boolean collect() {
 		return collect( Dungeon.hero.belongings.backpack );
 	}

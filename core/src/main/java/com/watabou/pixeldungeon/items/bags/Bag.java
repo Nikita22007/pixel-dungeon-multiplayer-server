@@ -88,7 +88,11 @@ public class Bag extends CustomItem implements Iterable<Item> {
 			
 		}
 	}
-	
+
+	public Item get(int index) {
+		return items.get(index);
+	}
+
 	@Override
 	public boolean collect( Bag container ) {
 		if (super.collect( container )) {	
