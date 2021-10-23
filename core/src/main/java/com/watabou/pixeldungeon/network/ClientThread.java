@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -33,6 +34,7 @@ class ClientThread extends Thread {
     public static final String CHARSET = "UTF-8";
 
     protected OutputStreamWriter writeStream;
+    protected BufferedWriter writer;
     protected InputStreamReader readStream;
     private BufferedReader reader;
 
@@ -57,6 +59,7 @@ class ClientThread extends Thread {
             );
             this.threadID = ThreadID;
             reader = new BufferedReader(readStream);
+            writer = new BufferedWriter(writeStream,16384);
             if (autostart) {
                 this.start(); //auto start
             }
@@ -138,10 +141,10 @@ class ClientThread extends Thread {
                 try {
                     Log.i("flush", "clientID: " + threadID + " data:" + packet.dataRef.get().toString(4));
                 }catch (JSONException  ignored){}
-                synchronized (writeStream) {
-                    writeStream.write(packet.dataRef.get().toString());
-                    writeStream.write('\n');
-                    writeStream.flush();
+                synchronized (writer) {
+                    writer.write(packet.dataRef.get().toString());
+                    writer.write('\n');
+                    writer.flush();
                 }
                 packet.clearData();
             }
