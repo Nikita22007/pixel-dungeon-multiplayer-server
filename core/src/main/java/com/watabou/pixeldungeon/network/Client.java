@@ -5,6 +5,7 @@ import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -17,12 +18,13 @@ public class Client extends Thread {
     public static final String CHARSET = "UTF-8";
 
     protected static OutputStreamWriter writeStream;
+    protected static BufferedWriter writer;
     protected static InputStreamReader readStream;
     protected static Socket socket = null;
     protected static Client client;
     protected static ParseThread parceThread = null;
     protected static final NetworkPacket packet = new NetworkPacket();
-
+    protected static final int BUFFER_SIZE = 16 * 1024; // bytes
 
     public static boolean connect(String server, int port) {
         packet.clearData();
@@ -42,6 +44,7 @@ public class Client extends Thread {
             client = new Client();
             client.start();
             parceThread.start();
+            writer = new BufferedWriter(writeStream, BUFFER_SIZE);
             return socket.isConnected();
         } catch (UnknownHostException e) {
             return false;
@@ -81,9 +84,9 @@ public class Client extends Thread {
         try {
             synchronized (packet.dataRef) {
                 synchronized (writeStream) {
-                    writeStream.write(packet.dataRef.get().toString());
-                    writeStream.write('\n');
-                    writeStream.flush();
+                    writer.write(packet.dataRef.get().toString());
+                    writer.write('\n');
+                    writer.flush();
                     packet.clearData();
                 }
             }
