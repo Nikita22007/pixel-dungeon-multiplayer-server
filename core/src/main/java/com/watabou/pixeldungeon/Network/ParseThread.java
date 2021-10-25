@@ -54,7 +54,7 @@ public class ParseThread extends Thread {
 
     public static ParseThread getActiveThread() {
         if (activeThread == null) {
-            return activeThread;
+            return null;
         }
         if (!activeThread.isAlive() || activeThread.isInterrupted()) {
             return null;
@@ -70,10 +70,8 @@ public class ParseThread extends Thread {
         }
         while (!socket.isClosed()) {
             try {
-                synchronized (data) {
                     if (data.get() == null) {
                         data.set(reader.readLine());
-                    }
                 }
             } catch (IOException e) {
                 GLog.n(e.getMessage());

@@ -10,6 +10,12 @@ buildscript {
     }
 }
 
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd-HH-mm')
+    return formattedDate
+}
+
 allprojects {
 
     ext {
@@ -17,7 +23,7 @@ allprojects {
         appPackageName = 'com.watabou.pixeldungeonClient'
 
         appVersionCode = 74
-        appVersionName = 'Client0.1'
+        appVersionName = 'Client-alpha-'+getDate()
 
         appAndroidCompileSDK = 28
         appAndroidMinSDK = 16
