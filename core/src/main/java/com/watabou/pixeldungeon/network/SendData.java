@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
+import static com.watabou.pixeldungeon.network.NetworkPacket.packItem;
 import static com.watabou.pixeldungeon.network.Server.clients;
 
 public class SendData {
@@ -222,7 +223,31 @@ public class SendData {
         }
     }
 
+    public static void sendRemoveItemFromInventory(Char owner, int count, List<Integer> path) {
+        sendInventoryItemAction(owner, null, path, "remove");
+    }
+
+    public static void sendUpdateItemCount(Char owner, int count, List<Integer> path) {
+        JSONObject item;
+        try {
+            item = (new JSONObject()).put("quantity", count);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+        sendInventoryItemAction(owner, item, path, "update");
+    }
+
     public static void sendNewInventoryItem(Char owner, Item item, List<Integer> path) {
+        if ((owner == null) || !(owner instanceof Hero)) {
+            return;
+        }
+        JSONObject itemObj = (item == null) ? null : packItem(item, (Hero) owner);
+
+        sendInventoryItemAction(owner, itemObj, path, "place");
+    }
+
+    private static void sendInventoryItemAction(Char owner, JSONObject itemObj, List<Integer> path, String action) {
         if (!(owner instanceof Hero)) {
             return;
         }
@@ -230,13 +255,13 @@ public class SendData {
         if (hero.networkID < 0) {
             return;
         }
-        JSONObject itemObj = NetworkPacket.packItem(item, hero);
         JSONArray slot = new JSONArray(path);
         JSONObject action_obj = new JSONObject();
         try {
             action_obj.put("action_type", "add_item_to_bag");
             action_obj.put("slot", slot);
-            action_obj.put("item", itemObj);
+            action_obj.put("item", (itemObj == null) ? JSONObject.NULL : itemObj);
+            action_obj.put("update_mode", action);
         } catch (JSONException ignored) {
         }
         if (clients[hero.networkID] != null) {

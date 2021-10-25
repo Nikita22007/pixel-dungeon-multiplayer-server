@@ -204,5 +204,9 @@ action add_item_to_bag
         //item will be placed. Other items are moved to the next slot
     ]
     "item": item  //can me null
-
+    "update_mode": "place"/"replace"/"update"/"remove"
+    // place: move other items to the next slot
+    // replace: changes item to other. Previous item will be destroyed
+    // update: changes item fields. it is same item in the quickslot. Item field has diff
+    // remove: removes item. item field in action  will be ignored
 }

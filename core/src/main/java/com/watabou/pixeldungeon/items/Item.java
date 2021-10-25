@@ -48,6 +48,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemCount;
+
 public class Item implements Bundlable {
 
 	private static final String TXT_PACK_FULL	= "Your pack is too full for the %s";
@@ -177,13 +179,13 @@ public class Item implements Bundlable {
 		}
 		
 		if (stackable) {
-			
 			Class<?>c = getClass();
 			for (Item item:items) {
 				if (item.getClass() == c) {
 					item.quantity += quantity;
 					item.updateQuickslot();
 					path.add(items.indexOf(item));
+					sendUpdateItemCount(container.owner, item.quantity, path);
 					return path;
 				}
 			}	
@@ -247,7 +249,12 @@ public class Item implements Bundlable {
 	}
 	
 	public final Item detachAll( Bag container ) {
-		
+
+		assert ((container.owner != null)
+				&& (container.owner instanceof Hero)
+				&& (container != ((Hero) container.owner).belongings.backpack)
+		) : "container must be backpack";
+
 		for (Item item : container.items) {
 			if (item == this) {
 				container.items.remove( this );
