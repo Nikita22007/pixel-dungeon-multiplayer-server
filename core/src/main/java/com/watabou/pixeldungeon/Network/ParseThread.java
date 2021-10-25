@@ -14,6 +14,7 @@ import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
@@ -70,8 +71,8 @@ public class ParseThread extends Thread {
         }
         while (!socket.isClosed()) {
             try {
-                    if (data.get() == null) {
-                        data.set(reader.readLine());
+                if (data.get() == null) {
+                    data.set(reader.readLine());
                 }
             } catch (IOException e) {
                 GLog.n(e.getMessage());
@@ -343,22 +344,48 @@ public class ParseThread extends Thread {
                     break;
                 }
                 case ("add_item_to_bag"): {
-                    if (actionObj.has("slot") && actionObj.has("item")) {
-                        Item item = new CustomItem(actionObj.getJSONObject("item"));
-                        JSONArray slotArr = actionObj.getJSONArray("slot");
-                        List<Integer> slot = new ArrayList<Integer>(2);
-                        for (int j = 0; j < slotArr.length(); j++) {
-                            slot.add(slotArr.getInt(i));
-                        }
-                        item.collect(hero.belongings.backpack, slot);
-                    } else {
-                        Log.w("ParseActions", "bad \"add_item_to_bag\" action");
-                    }
+                    parse_update_bag_action(actionObj);
                     break;
                 }
                 default:
                     GLog.h("unknown action type " + type + ". Ignored");
             }
+        }
+    }
+
+    private void parse_update_bag_action(JSONObject actionObj) throws JSONException {
+        if (!actionObj.has("slot") ||
+                !actionObj.has("update_mode") ||
+                (!actionObj.has("item") && actionObj.getString("update_mode").equals("remove"))
+        ) {
+            Log.w("ParseActions", "bad \"add_item_to_bag\" action");
+            return;
+        }
+        List<Integer> slot = new ArrayList<Integer>(2);
+        {
+            JSONArray slotArr = actionObj.getJSONArray("slot");
+            for (int j = 0; j < slotArr.length(); j++) {
+                slot.add(slotArr.getInt(j));
+            }
+        }
+        Bag stuff = hero.belongings.backpack;
+        String update_mode = actionObj.optString("update_mode");
+        switch (update_mode) {
+            case ("replace"):
+            case ("add"):
+            case ("place"): {
+                Item item = new CustomItem(actionObj.getJSONObject("item"));
+
+                item.addTobag(stuff, slot, update_mode.equals("replace"));
+                break;
+            }
+            case ("update"): {
+                stuff.get(slot).update(actionObj.getJSONObject("item"));
+                break;
+            }
+            default:
+                Log.w("ParseThread", "Unexpected item update mode: " + update_mode);
+                return;
         }
     }
 

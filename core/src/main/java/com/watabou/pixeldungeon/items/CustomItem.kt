@@ -14,6 +14,11 @@ open class CustomItem() : Item() {
 
     constructor(obj: JSONObject) : this() {
         cursedKnown = true // todo check it
+        update(obj)
+
+    }
+
+    override fun update(obj: JSONObject) {
         val it = obj.keys()
         while (it.hasNext()) {
             val token = it.next()
@@ -30,7 +35,7 @@ open class CustomItem() : Item() {
                 "stackable" -> {
                     stackable = obj.getBoolean(token);
                 }
-                "quantity" -> {
+                "quantity", "count" -> {
                     quantity = obj.getInt(token)
                 }
                 "durability" -> {

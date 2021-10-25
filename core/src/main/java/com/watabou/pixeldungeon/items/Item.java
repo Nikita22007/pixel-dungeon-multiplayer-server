@@ -54,6 +54,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 
+import org.json.JSONObject;
+
 public class Item implements Bundlable {
 
 	private static final String TXT_PACK_FULL	= "Your pack is too full for the %s";
@@ -99,7 +101,12 @@ public class Item implements Bundlable {
 			return Generator.Category.order( lhs ) - Generator.Category.order( rhs );
 		}
 	};
-	
+
+
+	public void update(JSONObject item) {
+		throw new UnsupportedOperationException("Can't update Item with json object");
+	}
+
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = new ArrayList<String>();
 		actions.add( AC_DROP );
@@ -155,7 +162,26 @@ public class Item implements Bundlable {
 			heap.sprite.drop( cell );
 		}
 	}
-	
+
+	public boolean addTobag(Bag bag, List<Integer> path, boolean replace) {
+		for (int i = 0; i < path.size() - 1; i++) {
+			Item bagItem = bag.get(path.get(i));
+			if (bagItem instanceof Bag) {
+				bag = (Bag) bag.get(i);
+			} else {
+				Log.e("Item", "Bagitem is not bag. Path " + path.toArray().toString() + " pos: " + i);
+				return false;
+			}
+		}
+		int slot = path.get(path.size() - 1);
+		if (replace) {
+			bag.items.set(slot,this);
+		} else {
+			bag.items.add(slot, this);
+		}
+		return true;
+	}
+
 	public boolean collect( Bag container ) {
 		
 		ArrayList<Item> items = container.items;
@@ -200,21 +226,6 @@ public class Item implements Bundlable {
 			
 		}
 	}
-
-    public boolean collect(Bag bag, List<Integer> path) {
-        for (int i = 0; i < path.size() - 1; i++) {
-            Item bagItem = bag.get(path.get(i));
-            if (bagItem instanceof Bag) {
-                bag = (Bag) bag.get(i);
-            } else {
-                Log.e("Item", "Bagitem is not bag. Path " + path.toArray().toString() + " pos: " + i);
-                return false;
-            }
-        }
-        int slot = path.get(path.size() - 1);
-        bag.items.add(slot, this);
-        return true;
-    }
 
 	public boolean collect() {
 		return collect( Dungeon.hero.belongings.backpack );

@@ -37,10 +37,10 @@ import org.json.JSONObject;
 public class Bag extends CustomItem implements Iterable<Item> {
 
 	public static final String AC_OPEN	= "OPEN";
-	
+
 	public Bag(){
 		image = 11;
-		
+
 		defaultAction = AC_OPEN;
 	}
 
@@ -65,9 +65,9 @@ public class Bag extends CustomItem implements Iterable<Item> {
 	}
 
 	public Char owner;
-	
-	public ArrayList<Item> items = new ArrayList<Item>();	
-	
+
+	public ArrayList<Item> items = new ArrayList<Item>();
+
 	public int size = 1;
 
 	@Override
@@ -75,18 +75,26 @@ public class Bag extends CustomItem implements Iterable<Item> {
 		ArrayList<String> actions = super.actions( hero );
 		return actions;
 	}
-	
+
 	@Override
 	public void execute( Hero hero, String action ) {
 		if (action.equals( AC_OPEN )) {
-			
+
 			GameScene.show( new WndBag( this, null, WndBag.Mode.ALL, null ) );
-			
+
 		} else {
-		
+
 			super.execute( hero, action );
-			
+
 		}
+	}
+
+    public Item get(List<Integer> path) {
+		int id = path.remove(0);
+		if (path.isEmpty()) {
+			return get(id);
+		}
+		return ((Bag) get(id)).get(path);
 	}
 
 	public Item get(int index) {
@@ -95,52 +103,52 @@ public class Bag extends CustomItem implements Iterable<Item> {
 
 	@Override
 	public boolean collect( Bag container ) {
-		if (super.collect( container )) {	
-			
+		if (super.collect( container )) {
+
 			owner = container.owner;
-			
+
 			for (Item item : container.items.toArray( new Item[0] )) {
 				if (grab( item )) {
 					item.detachAll( container );
 					item.collect( this );
 				}
 			}
-			
+
 			Badges.validateAllBagsBought( this );
-			
+
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void onDetach( ) {
 		this.owner = null;
 	}
-	
+
 	@Override
 	public boolean isUpgradable() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isIdentified() {
 		return true;
 	}
-	
+
 	public void clear() {
 		items.clear();
 	}
-	
+
 	private static final String ITEMS	= "inventory";
-	
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		bundle.put( ITEMS, items );
 	}
-	
+
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
@@ -148,7 +156,7 @@ public class Bag extends CustomItem implements Iterable<Item> {
 			((Item)item).collect( this );
 		};
 	}
-	
+
 	public boolean contains( Item item ) {
 		for (Item i : items) {
 			if (i == item) {
@@ -159,7 +167,7 @@ public class Bag extends CustomItem implements Iterable<Item> {
 		}
 		return false;
 	}
-	
+
 	public boolean grab( Item item ) {
 		return false;
 	}
@@ -168,12 +176,12 @@ public class Bag extends CustomItem implements Iterable<Item> {
 	public Iterator<Item> iterator() {
 		return new ItemIterator();
 	}
-	
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;
 		private Iterator<Item> nested = null;
-		
+
 		@Override
 		public boolean hasNext() {
 			if (nested != null) {
@@ -186,18 +194,18 @@ public class Bag extends CustomItem implements Iterable<Item> {
 		@Override
 		public Item next() {
 			if (nested != null && nested.hasNext()) {
-				
+
 				return nested.next();
-				
+
 			} else {
-				
+
 				nested = null;
-				
+
 				Item item = items.get( index++ );
 				if (item instanceof Bag) {
 					nested = ((Bag)item).iterator();
 				}
-				
+
 				return item;
 			}
 		}
@@ -209,6 +217,6 @@ public class Bag extends CustomItem implements Iterable<Item> {
 			} else {
 				items.remove( index );
 			}
-		}	
+		}
 	}
 }
