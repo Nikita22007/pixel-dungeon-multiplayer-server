@@ -48,6 +48,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInventory;
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemCount;
 
 public class Item implements Bundlable {
@@ -247,23 +248,32 @@ public class Item implements Bundlable {
 			}
 		}
 	}
-	
-	public final Item detachAll( Bag container ) {
 
+	public List<Integer> getSlot(Hero owner) {
+		return owner.belongings.slotOfItem(owner);
+	}
+
+	public final Item detachAll(Bag container) {
+		Hero owner = null;
+		if (container.owner instanceof Hero) {
+			owner = (Hero) container.owner;
+		}
 		for (Item item : container.items) {
 			if (item == this) {
-				container.items.remove( this );
-				item.onDetach(container );
+				container.items.remove(this);
+				item.onDetach(container);
 				QuickSlot.refresh();
+				if (owner != null) {
+					sendRemoveItemFromInventory(owner, getSlot(owner));
+				}
 				return this;
 			} else if (item instanceof Bag) {
-				Bag bag = (Bag)item;
-				if (bag.contains( this )) {
-					return detachAll( bag );
+				Bag bag = (Bag) item;
+				if (bag.contains(this)) {
+					return detachAll(bag);
 				}
 			}
 		}
-		
 		return this;
 	}
 	

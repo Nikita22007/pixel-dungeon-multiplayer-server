@@ -224,7 +224,7 @@ public class SendData {
         }
     }
 
-    public static void sendRemoveItemFromInventory(Char owner, int count, List<Integer> path) {
+    public static void sendRemoveItemFromInventory(Char owner, List<Integer> path) {
         sendInventoryItemAction(owner, null, path, "remove");
     }
 
