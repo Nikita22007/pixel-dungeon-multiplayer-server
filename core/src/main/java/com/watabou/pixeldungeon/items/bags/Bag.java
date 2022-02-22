@@ -200,6 +200,16 @@ public class Bag extends CustomItem implements Iterable<Item> {
 		return new ItemIterator();
 	}
 
+	public void remove(List<Integer> slot) {
+		int slot_id = slot.get(0);
+		slot.remove(0);
+		if (slot.isEmpty()) {
+			items.remove(slot_id);
+		} else {
+			((Bag) items.get(slot_id)).remove(slot);
+		}
+	}
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;

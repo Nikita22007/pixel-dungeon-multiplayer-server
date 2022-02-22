@@ -8,6 +8,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
@@ -381,6 +382,10 @@ public class ParseThread extends Thread {
             }
             case ("update"): {
                 stuff.get(slot).update(actionObj.getJSONObject("item"));
+                break;
+            }
+            case ("remove"): {
+                stuff.remove(slot);
                 break;
             }
             default:
