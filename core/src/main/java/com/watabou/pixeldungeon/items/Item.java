@@ -250,11 +250,6 @@ public class Item implements Bundlable {
 	
 	public final Item detachAll( Bag container ) {
 
-		assert ((container.owner != null)
-				&& (container.owner instanceof Hero)
-				&& (container != ((Hero) container.owner).belongings.backpack)
-		) : "container must be backpack";
-
 		for (Item item : container.items) {
 			if (item == this) {
 				container.items.remove( this );

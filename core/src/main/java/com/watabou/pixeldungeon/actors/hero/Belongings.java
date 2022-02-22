@@ -20,6 +20,7 @@ package com.watabou.pixeldungeon.actors.hero;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
@@ -124,6 +125,19 @@ public class Belongings implements Iterable<Item> {
                 getItem(Keyring.class)
         };
     }
+
+	public Item getItemInSlot(List<Integer> slot) {
+		if (slot.get(0) < 0) {
+			SpecialSlot spec_slot = getSpecialSlots().get(-slot.get(0) - 1);
+			slot.remove(0);
+			if (slot.isEmpty()) {
+				return spec_slot.item;
+			} else {
+				return ((Bag) spec_slot.item).getItemInSlot(slot);
+			}
+		}
+		return backpack.getItemInSlot(slot);
+	}
 
 	@SuppressWarnings("unchecked")
 	public<T extends Item> T getItem( Class<T> itemClass ) {

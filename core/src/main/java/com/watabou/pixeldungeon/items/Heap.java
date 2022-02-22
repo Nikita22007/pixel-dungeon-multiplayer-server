@@ -50,6 +50,9 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.sendHeap;
+import static com.watabou.pixeldungeon.network.SendData.sendHeapRemoving;
+
 public class Heap implements Bundlable {
 
 	private static final String TXT_MIMIC = "This is a mimic!";
@@ -57,7 +60,7 @@ public class Heap implements Bundlable {
 	private static final int SEEDS_TO_POTION = 3;
 	
 	private static final float FADE_TIME = 0.6f;
-	
+
 	public enum Type {
 		HEAP, 
 		FOR_SALE, 
@@ -76,7 +79,7 @@ public class Heap implements Bundlable {
 	public ItemSprite sprite;
 	
 	public LinkedList<Item> items = new LinkedList<Item>();
-	
+
 	public int image() {
 		switch (type) {
 		case HEAP:
@@ -99,11 +102,19 @@ public class Heap implements Bundlable {
 			return 0;
 		}
 	}
-	
+
+	public boolean showsFirstItem() {
+		return (type == Type.HEAP || type == Type.FOR_SALE);
+	}
+
 	public ItemSprite.Glowing glowing() {
 		return (type == Type.HEAP || type == Type.FOR_SALE) && items.size() > 0 ? items.peek().glowing() : null;
 	}
-	
+
+	public boolean isHidden() {
+		return type == Type.HIDDEN;
+	}
+
 	public void open( Hero hero ) {
 		switch (type) {
 		case MIMIC:
@@ -142,6 +153,7 @@ public class Heap implements Bundlable {
 			sprite.link();
 			sprite.drop();
 		}
+		sendHeap(this);
 	}
 	
 	public int size() {
@@ -155,8 +167,9 @@ public class Heap implements Bundlable {
 			destroy();
 		} else if (sprite != null) {
 			sprite.view( image(), glowing() );
+			sendHeap(this);
 		}
-		
+
 		return item;
 	}
 	
@@ -165,7 +178,7 @@ public class Heap implements Bundlable {
 	}
 	
 	public void drop( Item item ) {
-		
+
 		if (item.stackable) {
 			
 			Class<?> c = item.getClass();
@@ -189,14 +202,16 @@ public class Heap implements Bundlable {
 		if (sprite != null) {
 			sprite.view( image(), glowing() );
 		}
+		sendHeap(this);
 	}
-	
+
 	public void replace( Item a, Item b ) {
 		int index = items.indexOf( a );
 		if (index != -1) {
 			items.remove( index );
 			items.add( index, b );
 		}
+		sendHeap(this);
 	}
 	
 	public void burn() {
@@ -246,6 +261,7 @@ public class Heap implements Bundlable {
 			}
 			
 		}
+		sendHeap(this);
 	}
 	
 	public void freeze() {
@@ -276,6 +292,7 @@ public class Heap implements Bundlable {
 				sprite.view( image(), glowing() );
 			}	
 		}
+		sendHeap(this);
 	}
 	
 	public Item transmute() {
@@ -359,6 +376,7 @@ public class Heap implements Bundlable {
 		}
 		items.clear();
 		items = null;
+		sendHeapRemoving(this);
 	}
 
 	private static final String POS		= "pos";

@@ -146,7 +146,19 @@ public class Bag extends Item implements Iterable<Item> {
 	public Iterator<Item> iterator() {
 		return new ItemIterator();
 	}
-	
+
+	public Item getItemInSlot(List<Integer> slot) {
+		int slot_id = slot.get(0);
+		slot.remove(0);
+		if (slot.isEmpty()){
+			return items.get(slot_id);
+		}
+		else
+		{
+			return ((Bag) items.get(slot_id)).getItemInSlot(slot);
+		}
+	}
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;

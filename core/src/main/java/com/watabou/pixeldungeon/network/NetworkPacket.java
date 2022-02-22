@@ -8,6 +8,7 @@ import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
@@ -523,5 +524,70 @@ public class NetworkPacket {
         }
         addHeroBags(hero);
         addSpecialSlots(hero);
+    }
+
+    public JSONObject packHeapRemoving(int pos) {
+        JSONObject heapObj;
+        heapObj = new JSONObject();
+        try {
+            heapObj.put("pos", pos);
+            JSONArray itemsArr = new JSONArray();
+            heapObj.put("items", itemsArr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return heapObj;
+    }
+
+    public JSONObject packHeap(Heap heap) {
+        JSONObject heapObj;
+        heapObj = new JSONObject();
+        try {
+            heapObj.put("pos", heap.pos);
+            heapObj.put("hidden", heap.isHidden());
+            JSONArray itemsArr = new JSONArray();
+            if (!heap.showsFirstItem()) {
+                //pseudo-item
+                JSONObject itemObj = new JSONObject();
+                itemObj.put("image_id", heap.image());
+                heapObj.put("hidden", heap.isHidden());
+            }
+            if (!heap.isEmpty()) {
+                for (Item item : heap.items) {
+                    //other items
+                    //todo: need it?
+                }
+            }
+            heapObj.put("items", itemsArr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return heapObj;
+    }
+
+    public void addHeapRemoving(Heap heap) {
+        addHeapRemoving(heap.pos);
+    }
+
+    public void addHeapRemoving(int pos) {
+        addHeap(packHeapRemoving(pos));
+    }
+
+    private void addHeap(JSONObject heapObj) {
+        synchronized (dataRef) {
+            try {
+                addToArray(dataRef.get(), "heaps", heapObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void addHeap(Heap heap) {
+        addHeap(packHeap(heap));
+    }
+
+    public void addHeaps() {
+
     }
 }

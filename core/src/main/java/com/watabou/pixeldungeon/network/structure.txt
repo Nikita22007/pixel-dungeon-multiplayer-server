@@ -7,6 +7,10 @@ client:
         "button": 0
     }
     "cell_listener": 00 //pos
+    "action": {
+        "action_name" = "DROP"
+        "slot" = [0,4]
+    }
 }
 
 server:
@@ -31,6 +35,26 @@ server:
         "exit": 000
         "visible_positions": [0,1,2]
     }
+
+    "heaps:"
+    {
+        "pos": 0
+        "hidden": false
+        "action": "add"/"remove"/"update"/"set" //default: "set"
+        //first item is visible sprite. If heam.type != HEAP/FOR_SALE then
+        //first item is pseudoItem (chest,bones,tomb etc)
+        "items":
+        [
+            {
+                "sprite_name": "item_spritesheet" //todo
+                "image_id": 0
+                "quantity": 2
+                "glowing": null //todo
+                "index" : 0  //if action != "set"
+            }
+        ]
+    }
+
     "actors":
     [
         {
@@ -203,6 +227,7 @@ action add_item_to_bag
         2  //slot of bag(B) in which
         //item will be placed. Other items are moved to the next slot
     ]
+    // if slot = [N], where N<0 it means that item in special slot with id (-N-1)
     "item": item  //can me null
     "update_mode": "place"/"replace"/"update"/"remove"
     // place: move other items to the next slot

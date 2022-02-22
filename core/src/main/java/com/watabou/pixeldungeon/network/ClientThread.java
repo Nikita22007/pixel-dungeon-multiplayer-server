@@ -11,12 +11,13 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
+import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +28,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 class ClientThread extends Thread {
 
@@ -59,7 +63,7 @@ class ClientThread extends Thread {
             );
             this.threadID = ThreadID;
             reader = new BufferedReader(readStream);
-            writer = new BufferedWriter(writeStream,16384);
+            writer = new BufferedWriter(writeStream, 16384);
             if (autostart) {
                 this.start(); //auto start
             }
@@ -67,6 +71,19 @@ class ClientThread extends Thread {
             GLog.n(e.getMessage());
             disconnect();
         }
+    }
+
+    public static List<Integer> JsonArrayToListInteger(JSONArray arr) {
+        List<Integer> res = new ArrayList<Integer>(2);
+        try {
+            for (int i = 0; i < arr.length(); i++) {
+                res.add(arr.getInt(i));
+            }
+        } catch (Exception e) {
+            GLog.n(e.getMessage());
+            return null;
+        }
+        return res;
     }
 
     public void run() {
@@ -99,6 +116,42 @@ class ClientThread extends Thread {
                                     if (clientHero.cellSelector.listener != null) {
                                         clientHero.cellSelector.listener.onSelect(cell);
                                     }
+                                }
+                                break;
+                            }
+                            case ("action"): {
+                                JSONObject actionObj = data.getJSONObject(token);
+                                if (actionObj == null) {
+                                    GLog.n("Empty action object");
+                                    break;
+                                }
+                                String action = actionObj.getString("action_name");
+                                if ((action == null) || (action.equals(""))) {
+                                    GLog.n("Empty action");
+                                    break;
+                                }
+                                List<Integer> slot = JsonArrayToListInteger(actionObj.getJSONArray("slot"));
+                                if ((slot == null) || slot.isEmpty()){
+                                        GLog.n("Empty slot: %s", slot);
+                                        break;
+                                }
+                                Item item = clientHero.belongings.getItemInSlot(slot);
+                                if (item == null){
+                                    GLog.n("No item in this slot. Slot: %s", slot);
+                                    break;
+                                }
+                                action = action.toLowerCase(Locale.ROOT);
+                                boolean did_something = false;
+                                for (String item_action: item.actions(clientHero)) {
+                                    if (item_action.toLowerCase(Locale.ROOT).equals(action)){
+                                        did_something = true;
+                                        item.execute(clientHero, item_action);
+                                        break;
+                                    }
+                                }
+                                if (!did_something){
+                                    GLog.n("No such action in actions list. Action: %s", action);
+                                    break;
                                 }
                                 break;
                             }
@@ -140,7 +193,8 @@ class ClientThread extends Thread {
                 }
                 try {
                     Log.i("flush", "clientID: " + threadID + " data:" + packet.dataRef.get().toString(4));
-                }catch (JSONException  ignored){}
+                } catch (JSONException ignored) {
+                }
                 synchronized (writer) {
                     writer.write(packet.dataRef.get().toString());
                     writer.write('\n');
