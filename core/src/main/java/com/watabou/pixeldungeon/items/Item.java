@@ -260,12 +260,12 @@ public class Item implements Bundlable {
 		}
 		for (Item item : container.items) {
 			if (item == this) {
-				container.items.remove(this);
-				item.onDetach(container);
-				QuickSlot.refresh();
 				if (owner != null) {
 					sendRemoveItemFromInventory(owner, getSlot(owner));
 				}
+				container.items.remove(this);
+				item.onDetach(container);
+				QuickSlot.refresh();
 				return this;
 			} else if (item instanceof Bag) {
 				Bag bag = (Bag) item;
