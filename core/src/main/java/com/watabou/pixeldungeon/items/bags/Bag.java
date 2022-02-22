@@ -159,6 +159,29 @@ public class Bag extends Item implements Iterable<Item> {
 		}
 	}
 
+	public List<Integer> pathOfItem(Item item) {
+		assert (item != null) : "path of null item";
+		for (int i = 0; i < items.size(); i++) {
+			Item cur_item = items.get(i);
+			if (cur_item == null) {
+				continue;
+			}
+			if (cur_item == item) {
+				List<Integer> path = new ArrayList<>(2);
+				path.add(i);
+				return path;
+			}
+			if (cur_item instanceof Bag) {
+				List<Integer> path = ((Bag) cur_item).pathOfItem(item);
+				if (path != null) {
+					path.add(0, i);
+					return path;
+				}
+			}
+		}
+		return null;
+	}
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;

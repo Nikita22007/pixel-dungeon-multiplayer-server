@@ -44,6 +44,8 @@ import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import org.jetbrains.annotations.NotNull;
+
 import static com.watabou.pixeldungeon.network.SendData.sendIronKeysCount;
 
 public class Belongings implements Iterable<Item> {
@@ -288,7 +290,30 @@ public class Belongings implements Iterable<Item> {
 	public Iterator<Item> iterator() {
 		return new ItemIterator(); 
 	}
-	
+
+	public List<Integer> pathOfItem(@NotNull Item item) {
+		assert (item != null) : "path of null item";
+		List<SpecialSlot> specialSlots = getSpecialSlots();
+		for (int i = 0; i < specialSlots.size(); i++) {
+			if (specialSlots.get(i) == null) {
+				continue;
+			}
+			if (specialSlots.get(i).item == item) {
+				List<Integer> slot = new ArrayList<>(2);
+				slot.add(-i - 1);
+				return slot;
+			}
+			if (specialSlots.get(i).item instanceof Bag) {
+				List<Integer> path = ((Bag) specialSlots.get(i).item).pathOfItem(item);
+				if (path != null) {
+					path.add(0, -i - 1);
+					return path;
+				}
+			}
+		}
+		return backpack.pathOfItem(item);
+	}
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;

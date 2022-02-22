@@ -250,7 +250,7 @@ public class Item implements Bundlable {
 	}
 
 	public List<Integer> getSlot(Hero owner) {
-		return owner.belongings.slotOfItem(owner);
+		return owner.belongings.pathOfItem(this);
 	}
 
 	public final Item detachAll(Bag container) {
