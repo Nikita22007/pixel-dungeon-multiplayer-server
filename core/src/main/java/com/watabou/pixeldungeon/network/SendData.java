@@ -1,6 +1,8 @@
 package com.watabou.pixeldungeon.network;
 
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
+import com.watabou.pixeldungeon.items.CustomItem;
 
 import static com.watabou.pixeldungeon.network.Client.flush;
 import static com.watabou.pixeldungeon.network.Client.packet;
@@ -13,6 +15,11 @@ public class SendData {
 
     public static void SendCellListenerCell(Integer cell) {
         packet.packAndAddCellListenerCell(cell);
+        flush();
+    }
+
+    public static void SendItemAction(CustomItem item, Hero hero, String action) {
+        packet.packAndAddUsedAction(item, action, hero);
         flush();
     }
 }

@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon.actors.hero;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
@@ -34,6 +35,8 @@ import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class Belongings implements Iterable<Item> {
 
@@ -195,6 +198,28 @@ public class Belongings implements Iterable<Item> {
         }
         specialSlots.add(specialSlot);
     }
+
+	public List<Integer> pathOfItem(@NotNull Item item) {
+		assert (item != null) : "path of null item";
+		for (int i = 0; i < specialSlots.size(); i++) {
+			if (specialSlots.get(i) == null) {
+				continue;
+			}
+			if (specialSlots.get(i).item == item) {
+				List<Integer> slot = new ArrayList<>(2);
+				slot.add(-i - 1);
+				return slot;
+			}
+			if (specialSlots.get(i).item instanceof Bag) {
+				List<Integer> path = ((Bag) specialSlots.get(i).item).pathOfItem(item);
+				if (path != null) {
+					path.add(0, -i - 1);
+					return path;
+				}
+			}
+		}
+		return backpack.pathOfItem(item);
+	}
 
 	public void resurrect( int depth ) {
 		for (Item item : backpack.items.toArray( new Item[0])) {

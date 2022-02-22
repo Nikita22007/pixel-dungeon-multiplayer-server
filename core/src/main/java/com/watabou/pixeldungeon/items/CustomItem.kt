@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.items
 
 import com.watabou.pixeldungeon.actors.hero.Hero
 import com.watabou.pixeldungeon.items.bags.CustomBag
+import com.watabou.pixeldungeon.network.SendData.SendItemAction
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.ArrayList
@@ -77,6 +78,11 @@ open class CustomItem() : Item() {
 
     override fun actions(hero: Hero?): ArrayList<String> {
         return actionsList.clone() as ArrayList<String>
+    }
+
+    override fun execute(hero: Hero, action: String) {
+        SendItemAction(this, hero, action)
+        //super.execute(hero, action)
     }
 
 }
