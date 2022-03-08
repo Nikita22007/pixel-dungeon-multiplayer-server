@@ -12,6 +12,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -272,10 +273,17 @@ public class NetworkPacket {
         }
     }
 
+    public void packAndAddLevelHeaps(SparseArray<Heap> heaps) {
+        for (Heap heap : heaps.values()) {
+            addHeap(heap);
+        }
+    }
+
     public void packAndAddLevel(Level level) {
         packAndAddLevelEntrance(level.entrance);
         packAndAddLevelExit(level.exit);
         packAndAddLevelCells(level);
+        packAndAddLevelHeaps(level.heaps);
     }
 
     protected void addVisiblePositions(@NotNull JSONArray visiblePositionsArray) {
@@ -585,6 +593,9 @@ public class NetworkPacket {
     }
 
     public void addHeap(Heap heap) {
+        if (heap.isEmpty()){
+            return;
+        }
         addHeap(packHeap(heap));
     }
 
