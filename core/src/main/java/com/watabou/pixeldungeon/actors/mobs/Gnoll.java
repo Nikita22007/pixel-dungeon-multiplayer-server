@@ -29,7 +29,7 @@ public class Gnoll extends Mob {
 		name = "gnoll scout";
 		spriteClass = GnollSprite.class;
 		
-		setHP(HT = 12);
+		setHP(setHT(12));
 		defenseSkill = 4;
 		
 		EXP = 2;

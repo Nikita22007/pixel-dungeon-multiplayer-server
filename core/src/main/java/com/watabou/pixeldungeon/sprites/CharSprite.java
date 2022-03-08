@@ -27,7 +27,6 @@ import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.actors.mobs.Senior;
 import com.watabou.pixeldungeon.effects.EmoIcon;
 import com.watabou.pixeldungeon.effects.FloatingText;
 import com.watabou.pixeldungeon.effects.IceBlock;
@@ -270,7 +269,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public void bloodBurstA( PointF from, int damage ) {
 		if (visible) {
 			PointF c = center();
-			int n = (int)Math.min( 9 * Math.sqrt( (double)damage / ch.HT ), 9 );
+			int n = (int)Math.min( 9 * Math.sqrt( (double)damage / ch.getHT()), 9 );
 			Splash.at( c, PointF.angle( from, c ), 3.1415926f / 2, blood(), n );
 		}
 	}

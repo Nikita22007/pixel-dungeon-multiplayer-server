@@ -91,7 +91,7 @@ public class WarriorArmor extends ClassArmor {
 				}
 				
 				curUser.setHP(curUser.getHP() - (curUser.getHP() / 3));
-				if (curUser.subClass == HeroSubClass.BERSERKER && curUser.getHP() <= curUser.HT * Fury.LEVEL) {
+				if (curUser.subClass == HeroSubClass.BERSERKER && curUser.getHP() <= curUser.getHT() * Fury.LEVEL) {
 					Buff.affect( curUser, Fury.class );
 				}
 				

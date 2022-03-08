@@ -35,7 +35,7 @@ public class FetidRat extends Mob {
 		name = "fetid rat";
 		spriteClass = FetidRatSprite.class;
 		
-		setHP(HT = 15);
+		setHP(setHT(15));
 		defenseSkill = 5;
 		
 		EXP = 3;

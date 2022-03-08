@@ -135,7 +135,7 @@ public class NetworkPacket {
                 Char character = (Char) actor;
                 String name = character.name;
                 int hp = character.getHP();
-                int ht = character.HT;
+                int ht = character.getHT();
                 int pos = character.pos;
                 object.put("hp", hp);
                 object.put("max_hp", ht);

@@ -40,7 +40,7 @@ public class Metabolism extends Glyph {
 		int level = Math.max( 0, armor.effectiveLevel() );
 		if (Random.Int( level / 2 + 5 ) >= 4) {
 			
-			int healing = Math.min( defender.HT - defender.getHP(), Random.Int( 1, defender.HT / 5 ) );
+			int healing = Math.min( defender.getHT() - defender.getHP(), Random.Int( 1, defender.getHT() / 5 ) );
 			if (healing > 0) {
 				
 				Hunger hunger = defender.buff( Hunger.class );

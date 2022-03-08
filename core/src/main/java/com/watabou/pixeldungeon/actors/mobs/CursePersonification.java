@@ -38,7 +38,7 @@ public class CursePersonification extends Mob {
 		name = "curse personification";
 		spriteClass = CursePersonificationSprite.class;
 		
-		setHP(HT = 10 + Dungeon.depth * 3);
+		setHP(setHT(10 + Dungeon.depth * 3));
 		defenseSkill = 10 + Dungeon.depth;
 		
 		EXP = 3;
@@ -93,7 +93,7 @@ public class CursePersonification extends Mob {
 	
 	@Override
 	protected boolean act() {
-		if (getHP() > 0 && getHP() < HT) {
+		if (getHP() > 0 && getHP() < getHT()) {
 			setHP(getHP() + 1);
 		}
 		return super.act();

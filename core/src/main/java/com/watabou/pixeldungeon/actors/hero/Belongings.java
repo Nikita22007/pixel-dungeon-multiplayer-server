@@ -17,11 +17,6 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.HeroHelp;
@@ -40,11 +35,14 @@ import com.watabou.pixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.network.SpecialSlot;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.watabou.pixeldungeon.network.SendData.sendIronKeysCount;
 

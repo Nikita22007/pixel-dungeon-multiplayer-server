@@ -78,7 +78,7 @@ public abstract class Char extends Actor {
 	
 	public String name = "mob";
 	
-	public int HT;
+	private int HT;
 	private int HP;
 	
 	protected float baseSpeed	= 1;
@@ -110,7 +110,7 @@ public abstract class Char extends Actor {
 		
 		bundle.put( POS, pos );
 		bundle.put( TAG_HP, getHP());
-		bundle.put( TAG_HT, HT );
+		bundle.put( TAG_HT, getHT());
 		bundle.put( BUFFS, buffs );
 	}
 	
@@ -121,7 +121,7 @@ public abstract class Char extends Actor {
 		
 		pos = bundle.getInt( POS );
 		setHP(bundle.getInt( TAG_HP ));
-		HT = bundle.getInt( TAG_HT );
+		setHT(bundle.getInt( TAG_HT ));
 		
 		for (Bundlable b : bundle.getCollection( BUFFS )) {
 			if (b != null) {
@@ -157,8 +157,8 @@ public abstract class Char extends Actor {
 
 			if (enemy instanceof Hero) {
 				((Hero)enemy).interrupt();
-				if (effectiveDamage > enemy.HT / 4) {
-					Camera.main.shake( GameMath.gate( 1, effectiveDamage / (enemy.HT / 4), 5), 0.3f );
+				if (effectiveDamage > enemy.getHT() / 4) {
+					Camera.main.shake( GameMath.gate( 1, effectiveDamage / (enemy.getHT() / 4), 5), 0.3f );
 				}
 			}
 			
@@ -275,7 +275,7 @@ public abstract class Char extends Actor {
 		
 		setHP(getHP() - dmg);
 		if (dmg > 0 || src instanceof Char) {
-			sprite.showStatus( getHP() > HT / 2 ?
+			sprite.showStatus( getHP() > getHT() / 2 ?
 				CharSprite.WARNING : 
 				CharSprite.NEGATIVE,
 				Integer.toString( dmg ) );
@@ -529,5 +529,14 @@ public abstract class Char extends Actor {
 
 	public void setHP(int HP) {
 		this.HP = HP;
+	}
+
+	public int getHT() {
+		return HT;
+	}
+
+	public int setHT(int HT) {
+		this.HT = HT;
+		return HT;
 	}
 }

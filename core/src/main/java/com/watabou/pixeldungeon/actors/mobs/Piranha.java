@@ -47,7 +47,7 @@ public class Piranha extends Mob {
 	public Piranha() {
 		super();
 		
-		setHP(HT = 10 + Dungeon.depth * 5);
+		setHP(setHT(10 + Dungeon.depth * 5));
 		defenseSkill = 10 + Dungeon.depth * 2;
 	}
 	

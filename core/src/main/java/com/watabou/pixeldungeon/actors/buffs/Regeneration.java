@@ -28,7 +28,7 @@ public class Regeneration extends Buff {
 	public boolean act() {
 		if (target.isAlive()) {
 
-			if (target.getHP() < target.HT && !((Hero)target).isStarving()) {
+			if (target.getHP() < target.getHT() && !((Hero)target).isStarving()) {
 				target.setHP(target.getHP() + 1);
 			}
 			

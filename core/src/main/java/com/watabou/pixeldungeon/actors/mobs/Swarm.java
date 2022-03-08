@@ -41,7 +41,7 @@ public class Swarm extends Mob {
 		name = "swarm of flies";
 		spriteClass = SwarmSprite.class;
 		
-		setHP(HT = 80);
+		setHP(setHT(80));
 		defenseSkill = 5;
 		
 		maxLvl = 10;

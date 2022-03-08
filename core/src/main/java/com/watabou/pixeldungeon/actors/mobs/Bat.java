@@ -32,7 +32,7 @@ public class Bat extends Mob {
 		name = "vampire bat";
 		spriteClass = BatSprite.class;
 		
-		setHP(HT = 30);
+		setHP(setHT(30));
 		defenseSkill = 15;
 		baseSpeed = 2f;
 		
@@ -68,7 +68,7 @@ public class Bat extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		
-		int reg = Math.min( damage, HT - getHP());
+		int reg = Math.min( damage, getHT() - getHP());
 		
 		if (reg > 0) {
 			setHP(getHP() + reg);

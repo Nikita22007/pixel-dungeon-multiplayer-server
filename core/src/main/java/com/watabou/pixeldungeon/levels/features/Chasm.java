@@ -18,7 +18,6 @@
 package com.watabou.pixeldungeon.levels.features;
 
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
@@ -92,7 +91,7 @@ public class Chasm {
 		Camera.main.shake( 4, 0.2f );
 		
 		Buff.prolong( hero, Cripple.class, Cripple.DURATION );
-		hero.damage( Random.IntRange( hero.HT / 3, hero.HT / 2 ), new Hero.Doom() {
+		hero.damage( Random.IntRange( hero.getHT() / 3, hero.getHT() / 2 ), new Hero.Doom() {
 			@Override
 			public void onDeath() {
 				Badges.validateDeathFromFalling();

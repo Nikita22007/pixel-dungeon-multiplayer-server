@@ -166,7 +166,7 @@ public enum HeroClass {
 	
 	private static void initHuntress( Hero hero ) {
 		
-		hero.setHP((hero.HT -= 5));
+		hero.setHP((hero.setHT(hero.getHT() - 5)));
 		
 		(hero.belongings.weapon = new Dagger()).identify();
 		Boomerang boomerang = new Boomerang();

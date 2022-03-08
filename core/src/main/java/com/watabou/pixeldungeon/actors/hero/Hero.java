@@ -194,7 +194,7 @@ public class Hero extends Char {
 		attackIndicator=new AttackIndicator(this);
 		name = "you";
 		
-		setHP(HT = 20);
+		setHP(setHT(20));
 		STR = STARTING_STR;
 		awareness = 0.1f;
 		
@@ -412,7 +412,7 @@ public class Hero extends Char {
 		if (curAction == null) {
 			
 			if (restoreHealth) {
-				if (isStarving() || getHP() >= HT) {
+				if (isStarving() || getHP() >= getHT()) {
 					restoreHealth = false;
 				} else {
 					spend( TIME_TO_REST ); next();
@@ -909,7 +909,7 @@ public class Hero extends Char {
 		restoreHealth = false;
 		super.damage( dmg, src );
 		
-		if (subClass == HeroSubClass.BERSERKER && 0 < getHP() && getHP() <= HT * Fury.LEVEL) {
+		if (subClass == HeroSubClass.BERSERKER && 0 < getHP() && getHP() <= getHT() * Fury.LEVEL) {
 			Buff.affect( this, Fury.class );
 		}
 	}
@@ -1069,7 +1069,7 @@ public class Hero extends Char {
 			this.exp -= maxExp();
 			lvl++;
 			
-			HT += 5;
+			setHT(getHT() + 5);
 			setHP(getHP() + 5);
 			attackSkill++;
 			defenseSkill++;
@@ -1092,7 +1092,7 @@ public class Hero extends Char {
 		
 		if (subClass == HeroSubClass.WARLOCK) {
 			
-			int value = Math.min( HT - getHP(), 1 + (Dungeon.depth - 1) / 5 );
+			int value = Math.min( getHT() - getHP(), 1 + (Dungeon.depth - 1) / 5 );
 			if (value > 0) {
 				setHP(getHP() + value);
 				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
@@ -1435,7 +1435,7 @@ public class Hero extends Char {
 	
 	public void resurrect( int resetLevel ) {
 		
-		setHP(HT);
+		setHP(getHT());
 		gold = 0;
 		exp = 0;
 		

@@ -42,7 +42,7 @@ public class Thief extends Mob {
 		name = "crazy thief";
 		spriteClass = ThiefSprite.class;
 		
-		setHP(HT = 20);
+		setHP(setHT(20));
 		defenseSkill = 12;
 		
 		EXP = 5;

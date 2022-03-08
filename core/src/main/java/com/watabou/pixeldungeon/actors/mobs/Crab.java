@@ -29,7 +29,7 @@ public class Crab extends Mob {
 		name = "sewer crab";
 		spriteClass = CrabSprite.class;
 		
-		setHP(HT = 15);
+		setHP(setHT(15));
 		defenseSkill = 5;
 		baseSpeed = 2f;
 		
