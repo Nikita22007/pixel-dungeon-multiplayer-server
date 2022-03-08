@@ -8,12 +8,12 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.CustomItem;
+import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
@@ -35,15 +35,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.watabou.pixeldungeon.Dungeon.droppedItems;
 import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
-import static com.watabou.pixeldungeon.scenes.GameScene.emitter;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
 public class ParseThread extends Thread {
@@ -190,6 +191,18 @@ public class ParseThread extends Thread {
                     parseInventory(data.getJSONObject(token));
                     break;
                 }
+                case "heaps": {
+                    try {
+                        JSONArray heaps = data.getJSONArray(token);
+                        for (int i = 0; i < heaps.length(); i++) {
+                            parseHeap(heaps.getJSONObject(i));
+                            break;
+                        }
+                    } catch (JSONException e) {
+                        Log.e("parseThread", String.format("incorrect heap array. Ignored. Exception: %s ", e.getMessage()));
+                    }
+                    break;
+                }
                 default: {
                     GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                     continue;
@@ -197,6 +210,25 @@ public class ParseThread extends Thread {
             }
         }
 
+    }
+
+    private void parseHeap(JSONObject heapObj) {
+        try {
+            int pos = heapObj.getInt("pos");
+            Heap heap = level.heaps.get(pos, null);
+            JSONObject visibleItemObj = heapObj.optJSONObject("visible_item");
+            if (heap != null) {
+                level.heaps.remove(pos);
+                heap.destroy();
+            }
+
+            if (visibleItemObj == null) {
+                return;
+            }
+            level.drop(new CustomItem(visibleItemObj), pos);
+        } catch (JSONException e) {
+            Log.e("parse heap", String.format("bad heap. Exception: %s", e.getMessage()));
+        }
     }
 
     private void parseMessages(JSONArray messages) {
@@ -425,7 +457,6 @@ public class ParseThread extends Thread {
     }
 
     protected void parseLevel(JSONObject levelObj) throws JSONException {
-        boolean need_observe = false;
         for (Iterator<String> it = levelObj.keys(); it.hasNext(); ) {
             String token = it.next();
             switch (token) {
