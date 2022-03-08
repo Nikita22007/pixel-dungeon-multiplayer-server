@@ -23,7 +23,12 @@ allprojects {
         appPackageName = 'com.watabou.pixeldungeonClient'
 
         appVersionCode = 74
-        appVersionName = 'Client-alpha-'+getDate()
+        if ( gradle.getStartParameter().getTaskRequests().toString().toLowerCase().contains("debug")){
+            appVersionName = 'Client-debug'
+        }  else {
+            appVersionName = 'Client-alpha-'+getDate()
+
+        }
 
         appAndroidCompileSDK = 28
         appAndroidMinSDK = 16
