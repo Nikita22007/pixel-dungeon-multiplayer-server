@@ -12,6 +12,7 @@ open class CustomItem() : Item() {
 
     protected var actionsList: ArrayList<String> = ArrayList();
 
+    protected var identified = false;
 
     constructor(obj: JSONObject) : this() {
         cursedKnown = true // todo check it
@@ -48,6 +49,9 @@ open class CustomItem() : Item() {
                 "cursed" -> {
                     cursed = obj.getBoolean(token)
                 }
+                "identified" -> {
+                    identified = obj.getBoolean(token)
+                }
                 "actions" -> {
                     parseActions(obj.getJSONArray(token))
                 }
@@ -78,6 +82,10 @@ open class CustomItem() : Item() {
 
     override fun actions(hero: Hero?): ArrayList<String> {
         return actionsList.clone() as ArrayList<String>
+    }
+
+    override fun isIdentified(): Boolean {
+        return identified;
     }
 
     override fun execute(hero: Hero, action: String) {
