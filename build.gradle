@@ -21,7 +21,7 @@ allprojects {
         appPackageName = 'com.watabou.pixeldungeonServer'
 
         appVersionCode = 74
-        if (gradle.getStartParameter().getTaskRequests().toString().toLowerCase().conains("debug")) {
+        if (gradle.getStartParameter().getTaskRequests().toString().toLowerCase().contains("debug")) {
             appVersionName = 'Server-debug'
         } else {
             appVersionName = 'Server-alpfa-' + getDate()
