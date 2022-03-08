@@ -251,7 +251,7 @@ public class ParseThread extends Thread {
         }
     }
 
-    private void parseInventory(JSONObject inv) {
+    private void parseInventory(JSONObject inv)     {
         if (inv.has("backpack")) {
             try {
                 hero.belongings.backpack = new CustomBag(inv.getJSONObject("backpack"));
