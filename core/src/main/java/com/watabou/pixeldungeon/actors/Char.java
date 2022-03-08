@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.actors;
 
-import java.util.HashSet;
-
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
@@ -29,21 +27,21 @@ import com.watabou.pixeldungeon.actors.buffs.Bleeding;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Burning;
 import com.watabou.pixeldungeon.actors.buffs.Charm;
-import com.watabou.pixeldungeon.actors.buffs.Vertigo;
 import com.watabou.pixeldungeon.actors.buffs.Cripple;
 import com.watabou.pixeldungeon.actors.buffs.Frost;
 import com.watabou.pixeldungeon.actors.buffs.Invisibility;
-import com.watabou.pixeldungeon.actors.buffs.Light;
-import com.watabou.pixeldungeon.actors.buffs.Roots;
-import com.watabou.pixeldungeon.actors.buffs.Shadows;
-import com.watabou.pixeldungeon.actors.buffs.Sleep;
-import com.watabou.pixeldungeon.actors.buffs.Speed;
 import com.watabou.pixeldungeon.actors.buffs.Levitation;
+import com.watabou.pixeldungeon.actors.buffs.Light;
 import com.watabou.pixeldungeon.actors.buffs.MindVision;
 import com.watabou.pixeldungeon.actors.buffs.Paralysis;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
+import com.watabou.pixeldungeon.actors.buffs.Roots;
+import com.watabou.pixeldungeon.actors.buffs.Shadows;
+import com.watabou.pixeldungeon.actors.buffs.Sleep;
 import com.watabou.pixeldungeon.actors.buffs.Slow;
+import com.watabou.pixeldungeon.actors.buffs.Speed;
 import com.watabou.pixeldungeon.actors.buffs.Terror;
+import com.watabou.pixeldungeon.actors.buffs.Vertigo;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroSubClass;
 import com.watabou.pixeldungeon.actors.mobs.Bestiary;
@@ -52,6 +50,7 @@ import com.watabou.pixeldungeon.effects.particles.PoisonParticle;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.levels.features.Door;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.RatSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -60,6 +59,8 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
+
+import java.util.HashSet;
 
 public abstract class Char extends Actor {
 
@@ -529,6 +530,7 @@ public abstract class Char extends Actor {
 
 	public void setHP(int HP) {
 		this.HP = HP;
+		sendSelf();
 	}
 
 	public int getHT() {
@@ -537,6 +539,15 @@ public abstract class Char extends Actor {
 
 	public int setHT(int HT) {
 		this.HT = HT;
+		sendSelf();
 		return HT;
 	}
+
+	public void sendSelf(){
+		if ( !all().contains(this) ){
+			return;
+		}
+		SendData.sendActor(this);
+	}
+
 }
