@@ -179,6 +179,7 @@ item:
     "known": true //for scrolls/rings/etc
     "level": 0 // uses visiblyUpgraded()
     "cursed": false // uses  visiblyCursed()
+    "identified": false
 
     //"unique": false
 

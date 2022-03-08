@@ -383,6 +383,7 @@ public class NetworkPacket {
             itemObj.put("max_durability", item.maxDurability());
             itemObj.put("known", item.isKnown());
             itemObj.put("cursed", item.visiblyCursed());
+            itemObj.put("identified", item.isIdentified());
             itemObj.put("level", item.visiblyUpgraded());
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packItem. " + e.toString());
