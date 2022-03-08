@@ -196,8 +196,8 @@ public class ParseThread extends Thread {
                         JSONArray heaps = data.getJSONArray(token);
                         for (int i = 0; i < heaps.length(); i++) {
                             parseHeap(heaps.getJSONObject(i));
-                            break;
                         }
+                        break;
                     } catch (JSONException e) {
                         Log.e("parseThread", String.format("incorrect heap array. Ignored. Exception: %s ", e.getMessage()));
                     }
