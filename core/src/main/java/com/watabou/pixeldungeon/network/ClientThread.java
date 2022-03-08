@@ -315,8 +315,6 @@ class ClientThread extends Thread {
 
     @Deprecated
     public void send(int code, int Data) {
-        assert false : "removed_code";
-        throw new RuntimeException("removed code");
     }
 
     //send arrays

@@ -532,8 +532,6 @@ public class NetworkPacket {
         heapObj = new JSONObject();
         try {
             heapObj.put("pos", pos);
-            JSONArray itemsArr = new JSONArray();
-            heapObj.put("items", itemsArr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -541,25 +539,24 @@ public class NetworkPacket {
     }
 
     public JSONObject packHeap(Heap heap) {
+        if (heap == null) {
+            return null;
+        }
+        if (heap.isEmpty()) {
+            return null;
+        }
         JSONObject heapObj;
         heapObj = new JSONObject();
         try {
             heapObj.put("pos", heap.pos);
             heapObj.put("hidden", heap.isHidden());
-            JSONArray itemsArr = new JSONArray();
             if (!heap.showsFirstItem()) {
                 //pseudo-item
-                JSONObject itemObj = new JSONObject();
-                itemObj.put("image_id", heap.image());
+                heapObj.put("visible_item", packItem(heap.items.getFirst(), null)); //todo
                 heapObj.put("hidden", heap.isHidden());
+            } else {
+                heapObj.put("visible_item", packItem(heap.items.getFirst(), null));
             }
-            if (!heap.isEmpty()) {
-                for (Item item : heap.items) {
-                    //other items
-                    //todo: need it?
-                }
-            }
-            heapObj.put("items", itemsArr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -575,6 +572,9 @@ public class NetworkPacket {
     }
 
     private void addHeap(JSONObject heapObj) {
+        if (heapObj == null) {
+            return;
+        }
         synchronized (dataRef) {
             try {
                 addToArray(dataRef.get(), "heaps", heapObj);

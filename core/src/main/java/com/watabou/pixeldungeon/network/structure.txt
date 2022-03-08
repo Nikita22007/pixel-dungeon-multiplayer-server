@@ -40,19 +40,9 @@ server:
     {
         "pos": 0
         "hidden": false
-        "action": "add"/"remove"/"update"/"set" //default: "set"
-        //first item is visible sprite. If heam.type != HEAP/FOR_SALE then
-        //first item is pseudoItem (chest,bones,tomb etc)
-        "items":
-        [
-            {
-                "sprite_name": "item_spritesheet" //todo
-                "image_id": 0
-                "quantity": 2
-                "glowing": null //todo
-                "index" : 0  //if action != "set"
-            }
-        ]
+        //item is visible sprite. If heap.type != HEAP/FOR_SALE then
+        //item can be pseudoItem (chest,bones,tomb etc)
+        "visible_item": item //  if null: heap removing
     }
 
     "actors":
