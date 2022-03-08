@@ -40,7 +40,7 @@ public class Metabolism extends Glyph {
 		int level = Math.max( 0, armor.effectiveLevel() );
 		if (Random.Int( level / 2 + 5 ) >= 4) {
 			
-			int healing = Math.min( defender.HT - defender.HP, Random.Int( 1, defender.HT / 5 ) );
+			int healing = Math.min( defender.HT - defender.getHP(), Random.Int( 1, defender.HT / 5 ) );
 			if (healing > 0) {
 				
 				Hunger hunger = defender.buff( Hunger.class );
@@ -50,7 +50,7 @@ public class Metabolism extends Glyph {
 					hunger.satisfy( -Hunger.STARVING / 10 );
 					BuffIndicator.refreshHero();
 					
-					defender.HP += healing;
+					defender.setHP(defender.getHP() + healing);
 					defender.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 					defender.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( healing ) );
 				}

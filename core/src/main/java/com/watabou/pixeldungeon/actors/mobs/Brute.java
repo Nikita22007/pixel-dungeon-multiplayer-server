@@ -37,7 +37,7 @@ public class Brute extends Mob {
 		name = "gnoll brute";
 		spriteClass = BruteSprite.class;
 		
-		HP = HT = 40;
+		setHP(HT = 40);
 		defenseSkill = 15;
 		
 		EXP = 8;
@@ -52,7 +52,7 @@ public class Brute extends Mob {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
-		enraged = HP < HT / 4;
+		enraged = getHP() < HT / 4;
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class Brute extends Mob {
 	public void damage( int dmg, Object src ) {
 		super.damage( dmg, src );
 		
-		if (isAlive() && !enraged && HP < HT / 4) {
+		if (isAlive() && !enraged && getHP() < HT / 4) {
 			enraged = true;
 			spend( TICK );
 			if (Dungeon.visible[pos]) {

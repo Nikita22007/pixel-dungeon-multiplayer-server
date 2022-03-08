@@ -40,11 +40,11 @@ public class Leech extends Weapon.Enchantment {
 		// lvl 1 - 43%
 		// lvl 2 - 50%
 		int maxValue = damage * (level + 2) / (level + 6);
-		int effValue = Math.min( Random.IntRange( 0, maxValue ), attacker.HT - attacker.HP );
+		int effValue = Math.min( Random.IntRange( 0, maxValue ), attacker.HT - attacker.getHP());
 		
 		if (effValue > 0) {
 		
-			attacker.HP += effValue;
+			attacker.setHP(attacker.getHP() + effValue);
 			attacker.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 1 );
 			attacker.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( effValue ) );
 			

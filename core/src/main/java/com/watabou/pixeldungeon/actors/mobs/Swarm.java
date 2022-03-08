@@ -41,7 +41,7 @@ public class Swarm extends Mob {
 		name = "swarm of flies";
 		spriteClass = SwarmSprite.class;
 		
-		HP = HT = 80;
+		setHP(HT = 80);
 		defenseSkill = 5;
 		
 		maxLvl = 10;
@@ -75,7 +75,7 @@ public class Swarm extends Mob {
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
 
-		if (HP >= damage + 2) {
+		if (getHP() >= damage + 2) {
 			ArrayList<Integer> candidates = new ArrayList<Integer>();
 			boolean[] passable = Level.passable;
 			
@@ -89,7 +89,7 @@ public class Swarm extends Mob {
 			if (candidates.size() > 0) {
 				
 				Swarm clone = split();
-				clone.HP = (HP - damage) / 2;
+				clone.setHP((getHP() - damage) / 2);
 				clone.pos = Random.element( candidates );
 				clone.state = clone.HUNTING;
 				
@@ -100,7 +100,7 @@ public class Swarm extends Mob {
 				GameScene.add( clone, SPLIT_DELAY );
 				Actor.addDelayed( new Pushing( clone, pos, clone.pos ), -1 );
 				
-				HP -= clone.HP;
+				setHP(getHP() - clone.getHP());
 			}
 		}
 		

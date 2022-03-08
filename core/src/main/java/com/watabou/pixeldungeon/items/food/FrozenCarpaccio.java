@@ -64,8 +64,8 @@ public class FrozenCarpaccio extends Food {
 				break;
 			case 3:
 				GLog.i( "You feel better!" );
-				if (hero.HP < hero.HT) {
-					hero.HP = Math.min( hero.HP + hero.HT / 4, hero.HT );
+				if (hero.getHP() < hero.HT) {
+					hero.setHP(Math.min( hero.getHP() + hero.HT / 4, hero.HT ));
 					hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 				}
 				break;

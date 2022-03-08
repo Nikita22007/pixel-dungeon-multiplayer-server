@@ -17,7 +17,6 @@
  */
 package com.watabou.pixeldungeon.items.potions;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.buffs.Bleeding;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Cripple;
@@ -42,7 +41,7 @@ public class PotionOfHealing extends Potion {
 	
 	public static void heal( Hero hero ) {
 		
-		hero.HP = hero.HT;
+		hero.setHP(hero.HT);
 		Buff.detach( hero, Poison.class );
 		Buff.detach( hero, Cripple.class );
 		Buff.detach( hero, Weakness.class );

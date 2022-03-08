@@ -37,7 +37,7 @@ public class Elemental extends Mob {
 		name = "fire elemental";
 		spriteClass = ElementalSprite.class;
 		
-		HP = HT = 65;
+		setHP(HT = 65);
 		defenseSkill = 20;
 		
 		EXP = 10;
@@ -76,8 +76,8 @@ public class Elemental extends Mob {
 	@Override
 	public void add( Buff buff ) {
 		if (buff instanceof Burning) {
-			if (HP < HT) {
-				HP++;
+			if (getHP() < HT) {
+				setHP(getHP() + 1);
 				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			}
 		} else {

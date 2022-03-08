@@ -33,8 +33,6 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Honeypot extends Item {
 	
 	public static final String AC_SHATTER	= "SHATTER";
@@ -102,7 +100,7 @@ public class Honeypot extends Item {
 		if (newPos != -1) {
 			Bee bee = new Bee(owner);
 			bee.spawn( Dungeon.depth );
-			bee.HP = bee.HT;
+			bee.setHP(bee.HT);
 			bee.pos = newPos;
 			
 			GameScene.add( bee );

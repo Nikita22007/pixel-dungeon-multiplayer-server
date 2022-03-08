@@ -87,7 +87,7 @@ abstract public class ClassArmor extends Armor {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (hero.HP >= 3 && isEquipped( hero )) {
+		if (hero.getHP() >= 3 && isEquipped( hero )) {
 			actions.add( special() );
 		}
 		return actions;
@@ -97,7 +97,7 @@ abstract public class ClassArmor extends Armor {
 	public void execute( Hero hero, String action ) {
 		if (action == special()) {
 			
-			if (hero.HP < 3) {
+			if (hero.getHP() < 3) {
 				GLog.w( TXT_LOW_HEALTH );
 			} else if (!isEquipped( hero )) {
 				GLog.w( TXT_NOT_EQUIPPED );

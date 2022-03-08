@@ -22,7 +22,6 @@ import java.util.HashSet;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
-import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.Level;
@@ -91,8 +90,8 @@ public class Bee extends NPC {
 	
 	@Override
 	protected boolean act() {
-		HP--;
-		if (HP <= 0) {
+		setHP(getHP() - 1);
+		if (getHP() <= 0) {
 			die( null );
 			return true;
 		} else {

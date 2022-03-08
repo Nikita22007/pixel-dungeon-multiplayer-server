@@ -121,7 +121,7 @@ public class WandOfFlock extends Wand {
 		@Override
 		protected boolean act() {
 			if (initialized) {
-				HP = 0;
+				setHP(0);
 
 				destroy();
 				sprite.die();

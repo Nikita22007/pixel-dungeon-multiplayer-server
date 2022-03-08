@@ -88,7 +88,7 @@ public class RogueArmor extends ClassArmor {
 					return;
 				}
 				
-				curUser.HP -= (curUser.HP / 3);
+				curUser.setHP(curUser.getHP() - (curUser.getHP() / 3));
 				
 				for (Mob mob : Dungeon.level.mobs) {
 					if (Level.fieldOfView[mob.pos]) {

@@ -42,16 +42,16 @@ public class Dewdrop extends Item {
 		
 		DewVial vial = hero.belongings.getItem( DewVial.class );
 		
-		if (hero.HP < hero.HT || vial == null || vial.isFull()) {
+		if (hero.getHP() < hero.HT || vial == null || vial.isFull()) {
 			
 			int value = 1 + (Dungeon.depth - 1) / 5;
 			if (hero.heroClass == HeroClass.HUNTRESS) {
 				value++;
 			}
 			
-			int effect = Math.min( hero.HT - hero.HP, value * quantity );
+			int effect = Math.min( hero.HT - hero.getHP(), value * quantity );
 			if (effect > 0) {
-				hero.HP += effect;
+				hero.setHP(hero.getHP() + effect);
 				hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 				hero.sprite.showStatus( CharSprite.POSITIVE, TXT_VALUE, effect );
 			}

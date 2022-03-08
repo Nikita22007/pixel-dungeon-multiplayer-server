@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.buffs.Blindness;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Fury;
@@ -142,7 +141,7 @@ public class TomeOfMastery extends Item {
 		curUser.sprite.emitter().burst( Speck.factory( Speck.MASTERY ), 12 );
 		GLog.w( "You have chosen the way of the %s!", Utils.capitalize( way.title() ) );
 		
-		if (way == HeroSubClass.BERSERKER && curUser.HP <= curUser.HT * Fury.LEVEL) {
+		if (way == HeroSubClass.BERSERKER && curUser.getHP() <= curUser.HT * Fury.LEVEL) {
 			Buff.affect( curUser, Fury.class );
 		}
 	}

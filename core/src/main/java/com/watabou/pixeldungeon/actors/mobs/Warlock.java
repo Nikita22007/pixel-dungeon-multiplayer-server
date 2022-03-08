@@ -46,7 +46,7 @@ public class Warlock extends Mob implements Callback {
 		name = "dwarf warlock";
 		spriteClass = WarlockSprite.class;
 		
-		HP = HT = 70;
+		setHP(HT = 70);
 		defenseSkill = 18;
 		
 		EXP = 11;

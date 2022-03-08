@@ -90,8 +90,8 @@ public class WarriorArmor extends ClassArmor {
 					cell = Ballistica.trace[Ballistica.distance - 2];
 				}
 				
-				curUser.HP -= (curUser.HP / 3);
-				if (curUser.subClass == HeroSubClass.BERSERKER && curUser.HP <= curUser.HT * Fury.LEVEL) {
+				curUser.setHP(curUser.getHP() - (curUser.getHP() / 3));
+				if (curUser.subClass == HeroSubClass.BERSERKER && curUser.getHP() <= curUser.HT * Fury.LEVEL) {
 					Buff.affect( curUser, Fury.class );
 				}
 				
