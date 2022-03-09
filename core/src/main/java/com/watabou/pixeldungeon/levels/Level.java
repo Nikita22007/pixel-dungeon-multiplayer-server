@@ -620,7 +620,7 @@ public abstract class Level implements Bundlable {
 	}
 	
 	public void press( int cell, Char ch ) {
-
+		if (cell >=0) return;
 		if (pit[cell] && ch instanceof Hero) {
 			Chasm.heroFall( cell );
 			return;
