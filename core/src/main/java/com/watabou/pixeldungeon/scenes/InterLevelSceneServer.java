@@ -1,5 +1,6 @@
 package com.watabou.pixeldungeon.scenes;
 
+import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
@@ -132,6 +133,7 @@ public class InterLevelSceneServer {
         }catch (IOException e){
             throw new RuntimeException(e);
         }
+        Game.switchScene( GameScene.class );
     }
     public static  void  fall(Hero  hero){
      fall(hero,false);
@@ -164,6 +166,7 @@ public class InterLevelSceneServer {
         }catch (IOException e){
             throw new RuntimeException(e);
         }
+        Game.switchScene( GameScene.class );
     }
     private static Level getNextLevel()throws IOException {
 
@@ -196,6 +199,7 @@ public class InterLevelSceneServer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Game.switchScene( GameScene.class );
     }
 
     public static void returnTo(int  depth, int pos, Hero  hero) {
@@ -222,6 +226,7 @@ public class InterLevelSceneServer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Game.switchScene( GameScene.class );
     }
 
     public static void restore() { //when loading from save
@@ -243,6 +248,7 @@ public class InterLevelSceneServer {
         }catch (IOException  e){
             throw new RuntimeException(e);
         }
+        Game.switchScene( GameScene.class );
     }
 
     public static void resurrect(Hero hero)  { //respawn by ankh
@@ -275,6 +281,7 @@ public class InterLevelSceneServer {
         }
 
         sendMessage(false);
+        Game.switchScene( GameScene.class );
     }
 
 }

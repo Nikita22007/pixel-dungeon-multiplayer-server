@@ -17,9 +17,6 @@
  */
 package com.watabou.pixeldungeon.scenes;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.SkinnedBlock;
@@ -32,7 +29,6 @@ import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.FogOfWar;
-import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -49,6 +45,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.potions.Potion;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
@@ -66,6 +63,9 @@ import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndBag;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameScene extends PixelScene {     //only client, exclude static
 	
@@ -106,15 +106,24 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	@Override
 	public void create() {
+		super.create();
+		init();
+
+		scene = this;
+
+		Server.startServerStepLoop();
+
+		fadeIn();
+		//todo
+	}
+	public void init() {
 		Music.INSTANCE.play( Assets.TUNE, true );
 		Music.INSTANCE.volume( 1f );
 		
 		//PixelDungeon.lastClass( Dungeon.hero.heroClass.ordinal() );
-		
-		super.create();
+
 		Camera.main.zoom( defaultZoom + PixelDungeon.zoom() );
 		
-		scene = this;
 
 		add( terrain );
 		
@@ -231,11 +240,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 		
 		Camera.main.target = hero;
-
-		Server.startServerStepLoop();
-
-		fadeIn();
-			//todo
 	}
 	
 	public void destroy() {
