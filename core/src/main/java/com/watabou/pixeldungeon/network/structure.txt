@@ -15,11 +15,13 @@ client:
 
 server:
 {
-    "action":
-    {
-        "type": "server_full" / "disconnect"/ "custom"
-        "custom_message": "no"
-    }
+    "server_actions":
+    [
+        {
+            "type": "server_full" / "disconnect"/ "custom"
+            "custom_message": "no"
+        }
+    ]
 
     "map":
     {
@@ -226,3 +228,7 @@ action add_item_to_bag
     // update: changes item fields. it is same item in the quickslot. Item field has diff
     // remove: removes item. item field in action  will be ignored
 }
+
+
+server_actions
+type: "reset_level" -> clears level

@@ -74,6 +74,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
+import static com.watabou.pixeldungeon.network.SendData.SendLevelReset;
 import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
 import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
 
@@ -292,7 +293,9 @@ public class Dungeon {
 	public static void switchLevel(final Level level) {
 		//todo rewrite
 		//todo add cheking Hero pos is  clear
-		if(Dungeon.level==level){return;}
+		if (Dungeon.level == level) {
+			return;
+		}
 
 		nightMode = new Date().getHours() < 7;
 
@@ -301,7 +304,14 @@ public class Dungeon {
 
 		Actor respawner = level.respawner();
 		if (respawner != null) {
-			Actor.add( level.respawner() );
+			Actor.add(level.respawner());
+		}
+		for (Hero hero : heroes) {
+			if (hero != null) {
+				if (hero.networkID >= 0) {
+					SendLevelReset(hero.networkID);
+				}
+			}
 		}
 	}
 

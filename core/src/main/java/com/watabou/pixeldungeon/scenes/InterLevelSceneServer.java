@@ -4,7 +4,6 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -14,6 +13,7 @@ import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.RegularLevel;
 import com.watabou.pixeldungeon.levels.features.Chasm;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 import static com.watabou.pixeldungeon.Dungeon.heroes;
-import static com.watabou.pixeldungeon.Dungeon.switchLevel;
 import static com.watabou.pixeldungeon.levels.Level.getNearClearCell;
 
 public class InterLevelSceneServer {

@@ -33,6 +33,13 @@ public class SendData {
         }
     }
 
+    public static void SendLevelReset(Level level, int ID) {
+        if (clients[ID] != null) {
+            clients[ID].packet.packAndAddServerAction("reset_level");
+            clients[ID].flush();
+        }
+    }
+
     //---------------------------Hero
     public static void addToSendHeroVisibleCells(boolean[] visible, int ID) {
         if (clients[ID] != null) {

@@ -593,13 +593,23 @@ public class NetworkPacket {
     }
 
     public void addHeap(Heap heap) {
-        if (heap.isEmpty()){
+        if (heap.isEmpty()) {
             return;
         }
         addHeap(packHeap(heap));
     }
 
-    public void addHeaps() {
+    public void packAndAddServerAction(String action_type) {
+        try {
+            JSONObject res = new JSONObject();
+            res.put("type", action_type);
+            synchronized (dataRef) {
+                addToArray(dataRef.get(), "server_actions", res);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
+
 }
