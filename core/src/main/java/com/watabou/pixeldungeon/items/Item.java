@@ -167,7 +167,7 @@ public class Item implements Bundlable {
 		for (int i = 0; i < path.size() - 1; i++) {
 			Item bagItem = bag.get(path.get(i));
 			if (bagItem instanceof Bag) {
-				bag = (Bag) bag.get(i);
+				bag = (Bag) bagItem;
 			} else {
 				Log.e("Item", "Bagitem is not bag. Path " + path.toArray().toString() + " pos: " + i);
 				return false;
