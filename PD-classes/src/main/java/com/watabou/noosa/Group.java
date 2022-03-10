@@ -57,17 +57,20 @@ public class Group extends Gizmo {
 	
 	@Override
 	public void update() {
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && g.exists && g.active
-					//functionality for the freezing of emitters(particle effects), effects are given a second
-					//from load to get started so they aren't frozen before anything is generated.
-					&& !(freezeEmitters && Game.timeTotal > 1f && g instanceof Emitter)) {
-				g.update();
-			}
-		}
-	}
-	
+        ArrayList<Gizmo> membersTemp = (ArrayList<Gizmo>) members.clone();
+        for (Gizmo g : membersTemp) {
+            if (!members.contains(g)) {
+                continue;
+            }
+            if (g != null && g.exists && g.active
+                    //functionality for the freezing of emitters(particle effects), effects are given a second
+                    //from load to get started so they aren't frozen before anything is generated.
+                    && !(freezeEmitters && Game.timeTotal > 1f && g instanceof Emitter)) {
+                g.update();
+            }
+        }
+    }
+
 	@Override
 	public void draw() {
 		for (int i=0; i < length; i++) {
