@@ -203,7 +203,7 @@ class ClientThread extends Thread {
                 packet.clearData();
             }
         } catch (IOException e) {
-            GLog.h("IOException in threadID %s. Message: %s", threadID, e.getMessage());
+            Log.e(String.format("ClientThread%d", threadID),String.format("IOException in threadID %s. Message: %s", threadID, e.getMessage()));
             disconnect();
         }
     }
