@@ -157,7 +157,10 @@ public abstract class Level implements Bundlable {
 		heaps = new SparseArray<Heap>();
 		blobs = new HashMap<Class<? extends Blob>,Blob>();
 		plants = new SparseArray<Plant>();
-		
+
+		if  (1<2){
+			return;
+		}
 		if (!Dungeon.bossLevel(Dungeon.depth)) {
 	/*		addItemToSpawn( Generator.random( Generator.Category.FOOD ) );
 			if (Dungeon.posNeeded()) {

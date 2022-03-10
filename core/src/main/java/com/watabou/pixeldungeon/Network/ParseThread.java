@@ -17,6 +17,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
+import com.watabou.pixeldungeon.levels.SewerLevel;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -127,6 +128,10 @@ public class ParseThread extends Thread {
         for (Iterator<String> it = data.keys(); it.hasNext(); ) {
             String token = it.next();
             switch (token) {
+                case "server_actions": {
+                    parseServerActions(data.getJSONArray(token));
+                    break;
+                }
                         /*case Codes.SERVER_FULL: {
                             PixelDungeon.switchScene(TitleScene.class);
                             // TODO   PixelDungeon.scene().add(new WndError("Server full"));
@@ -212,6 +217,42 @@ public class ParseThread extends Thread {
 
     }
 
+    private void parseServerActions(JSONArray server_actions_arr) {
+        JSONObject debug_action = null;
+        for (int i = 0; i < server_actions_arr.length(); i += 1) {
+            try {
+                debug_action = server_actions_arr.getJSONObject(i);
+                parseServerAction(server_actions_arr.getJSONObject(i));
+                debug_action = null;
+            } catch (JSONException e) {
+                String message;
+                if (debug_action == null) {
+                    message = String.format("can't get action with id:  %d", i);
+                } else {
+                    try {
+                        message = String.format("malformed_action:  %s", debug_action.toString(2));
+                    } catch (JSONException e1) {
+                        message = String.format("malformed_action. Can't get string. Exception: %s", e1.getMessage());
+                    }
+                }
+                message += String.format("Exception: %s", e.getMessage());
+                Log.e("parse_server_actions", message);
+            }
+        }
+    }
+
+    private void parseServerAction(JSONObject action_object) throws JSONException {
+        switch (action_object.getString("type")) {
+            case "reset_level": {
+                level = new SewerLevel();
+                level.create();
+                break;
+            }
+            default:
+                Log.e("parse_server_actions", String.format("unknown_action  %s", action_object.getString("type")));
+        }
+    }
+
     private void parseHeap(JSONObject heapObj) {
         try {
             int pos = heapObj.getInt("pos");
@@ -251,7 +292,7 @@ public class ParseThread extends Thread {
         }
     }
 
-    private void parseInventory(JSONObject inv)     {
+    private void parseInventory(JSONObject inv) {
         if (inv.has("backpack")) {
             try {
                 hero.belongings.backpack = new CustomBag(inv.getJSONObject("backpack"));
