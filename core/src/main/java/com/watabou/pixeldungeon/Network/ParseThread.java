@@ -78,7 +78,7 @@ public class ParseThread extends Thread {
                     data.set(reader.readLine());
                 }
             } catch (IOException e) {
-                GLog.n(e.getMessage());
+                Log.e("ParseThread", e.getMessage());
 
                 PixelDungeon.switchScene(TitleScene.class);
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
@@ -164,7 +164,9 @@ public class ParseThread extends Thread {
                         InterlevelScene.customMessage = ilsObj.getString("message");
                     }
                     if (!(Game.scene() instanceof InterlevelScene)) {
-                        Game.switchScene(InterlevelScene.class);
+                        if (!((Game.scene() instanceof GameScene) && (InterlevelScene.phase == InterlevelScene.Phase.FADE_OUT))) {
+                            Game.switchScene(InterlevelScene.class);
+                        }
                     }
                     break;
                 }
@@ -255,6 +257,10 @@ public class ParseThread extends Thread {
 
     private void parseHeap(JSONObject heapObj) {
         try {
+            if (level == null){
+                Log.e("ParceHeap", "level == null");
+                return;
+            }
             int pos = heapObj.getInt("pos");
             Heap heap = level.heaps.get(pos, null);
             JSONObject visibleItemObj = heapObj.optJSONObject("visible_item");
