@@ -530,7 +530,7 @@ public class Hero extends Char {
 			
 		} else {
 			if (Dungeon.level.map[pos] == Terrain.SIGN) {
-				Sign.read( pos );
+				Sign.read(pos, this);
 			}
 			ready();
 			
@@ -775,7 +775,7 @@ public class Hero extends Char {
 			if (Dungeon.depth == 1) {
 				
 				if (belongings.getItem( Amulet.class ) == null) {
-					GameScene.show( new WndMessage( TXT_LEAVE ) );
+					GameScene.show(new WndMessage(TXT_LEAVE, this));
 					ready();
 				} else {
 					Dungeon.win( ResultDescriptions.WIN );

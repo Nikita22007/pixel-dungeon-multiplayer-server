@@ -33,20 +33,24 @@ import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
 import com.watabou.pixeldungeon.ui.Window;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Window extends Group implements Signal.Listener<Key> {
 
 	protected int width;
 	protected int height;
 
-	public static  int ID(){
-		return -1;
-	}
-
 	protected TouchArea blocker;
 	protected ShadowBox shadow;
 	protected NinePatch chrome;
 
+	public static HashMap<Hero, HashMap<Integer, Window>> windows = new HashMap<>(4);
+	public static HashMap<Hero, Integer> ids = new HashMap<>(4);
+
 	public Hero ownerHero;
+	public int id;
+
 	public static final int TITLE_COLOR = 0xFFFF44;
 	
 	public Window() {
@@ -55,8 +59,18 @@ public class Window extends Group implements Signal.Listener<Key> {
 
 	public Window(Hero hero) {
 		this();
-		ownerHero=hero;
+		ownerHero = hero;
+		if (!ids.containsKey(hero)) {
+			ids.put(hero, 0);
+		}
+		if (!windows.containsKey(hero)) {
+			windows.put(hero, new HashMap<>(3));
+		}
+		id = ids.get(hero) + 1;
+		ids.put(hero, id);
+		windows.get(hero).put(id, this);
 	}
+
 	public Window( int width, int height ) {
 		this( width, height, Chrome.get( Chrome.Type.WINDOW ) );
 	}

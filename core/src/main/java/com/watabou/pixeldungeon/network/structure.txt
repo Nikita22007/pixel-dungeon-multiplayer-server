@@ -114,7 +114,10 @@ server:
     "window":
     {
         "type": "///"
-        "params": []
+        "params":
+        {
+            key: val;
+        }  // if "type != custom"
         "custom_window_structure": //if "type" == "custom"
         {
 

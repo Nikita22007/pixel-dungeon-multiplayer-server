@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
@@ -114,7 +115,7 @@ public class SendData {
         if (clients[ID] != null) {
             clients[ID].flush();
             {
-                if (clients[ID].clientHero == null){
+                if (clients[ID].clientHero == null) {
                     return;
                 }
             }
@@ -126,7 +127,7 @@ public class SendData {
     public static void sendInterLevelSceneFadeOut(int ID) {
         if (clients[ID] != null) {
             clients[ID].flush();
-            if (clients[ID].clientHero == null){
+            if (clients[ID].clientHero == null) {
                 return;
             }
             clients[ID].packet.packAndAddInterlevelSceneState("fade_out");
@@ -135,9 +136,10 @@ public class SendData {
     }
 
     //-----------------------------Windows
-    public static void sendWindow(int ID, int WindowID) {
+    public static void sendWindow(int ID, String type, int windowID, Map<String, Object> args) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.SHOW_WINDOW, WindowID);
+            clients[ID].packet.packAndAddWindow(type, windowID, args);
+            clients[ID].flush();
         }
     }
 
@@ -285,7 +287,7 @@ public class SendData {
         }
     }
 
-    public static void sendHeapRemoving(Heap heap){
+    public static void sendHeapRemoving(Heap heap) {
         for (int i = 0; i < clients.length; i++) {
             if (clients[i] == null) {
                 continue;
@@ -294,7 +296,8 @@ public class SendData {
             clients[i].flush();
         }
     }
-    public static void sendHeap(Heap heap){
+
+    public static void sendHeap(Heap heap) {
         for (int i = 0; i < clients.length; i++) {
             if (clients[i] == null) {
                 continue;

@@ -20,6 +20,7 @@ package com.watabou.pixeldungeon.levels.features;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.particles.ElmoParticle;
 import com.watabou.pixeldungeon.levels.DeadEndLevel;
@@ -70,19 +71,19 @@ public class Sign {
 	
 	private static final String TXT_BURN =
 		"As you try to read the sign it bursts into greenish flames.";
-	
-	public static void read( int pos ) {
-		
+
+	public static void read(int pos, Hero owner) {
+
 		if (Dungeon.level instanceof DeadEndLevel) {
-			
-			GameScene.show( new WndMessage( TXT_DEAD_END ) );
+
+			GameScene.show(new WndMessage(TXT_DEAD_END, owner));
 			
 		} else {
 			
 			int index = Dungeon.depth - 1;
 			
 			if (index < TIPS.length) {
-				GameScene.show( new WndMessage( TIPS[index] ) );
+				GameScene.show(new WndMessage(TIPS[index], owner));
 			} else {
 				
 				Dungeon.level.destroy( pos );

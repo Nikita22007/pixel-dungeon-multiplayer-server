@@ -17,14 +17,14 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import java.util.HashMap;
-
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.scenes.GameScene;
+
+import java.util.HashMap;
 
 public class SpellSprite extends Image {
 

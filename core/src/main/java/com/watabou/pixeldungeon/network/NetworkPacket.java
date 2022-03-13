@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class NetworkPacket {
@@ -610,6 +611,20 @@ public class NetworkPacket {
             e.printStackTrace();
         }
 
+    }
+
+    public void packAndAddWindow(String type, int windowID, Map<String, Object> args) {
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("id", windowID);
+            obj.put("type", type);
+            obj.put("args", args);
+            synchronized (dataRef){
+                dataRef.get().put("window", obj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

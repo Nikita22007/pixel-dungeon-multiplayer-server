@@ -19,8 +19,15 @@ package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.Window;
+
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WndMessage extends Window {
 	
@@ -28,11 +35,12 @@ public class WndMessage extends Window {
 	private static final int WIDTH_L = 144;
 	
 	private static final int MARGIN = 4;
-	
-	public WndMessage( String text ) {
-		
-		super();
-		
+
+	public WndMessage(String text, Hero owner) {
+		super(owner);
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("text", text);
+		SendData.sendWindow(owner.networkID, "wnd_message", id, args);
 		BitmapTextMultiline info = PixelScene.createMultiline( text, 6 );
 		info.maxWidth = (PixelDungeon.landscape() ? WIDTH_L : WIDTH_P) - MARGIN * 2;
 		info.measure();
