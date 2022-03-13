@@ -12,6 +12,7 @@ import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -136,7 +137,7 @@ public class SendData {
     }
 
     //-----------------------------Windows
-    public static void sendWindow(int ID, String type, int windowID, Map<String, Object> args) {
+    public static void sendWindow(int ID, String type, int windowID, @Nullable JSONObject args) {
         if (clients[ID] != null) {
             clients[ID].packet.packAndAddWindow(type, windowID, args);
             clients[ID].flush();

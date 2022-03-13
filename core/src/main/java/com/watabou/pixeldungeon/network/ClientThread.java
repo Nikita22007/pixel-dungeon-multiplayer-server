@@ -13,6 +13,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
@@ -163,6 +164,16 @@ class ClientThread extends Thread {
                                     GLog.n("No such action in actions list. Action: %s", action);
                                     break;
                                 }
+                                break;
+                            }
+                            case "window":{
+                                JSONObject resObj = data.getJSONObject(token);
+                                Window.OnButtonPressed(
+                                        clientHero,
+                                        resObj.getInt("id"),
+                                        resObj.getInt("button"),
+                                        resObj.optJSONObject("result")
+                                );
                                 break;
                             }
                             default: {

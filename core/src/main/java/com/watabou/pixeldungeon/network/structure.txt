@@ -5,6 +5,7 @@ client:
     {
         "id": 0
         "button": 0
+        "result": {}
     }
     "cell_listener": 00 //pos
     "action": {

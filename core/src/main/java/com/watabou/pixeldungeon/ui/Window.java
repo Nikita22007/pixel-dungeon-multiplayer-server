@@ -18,6 +18,8 @@
 package com.watabou.pixeldungeon.ui;
 
 
+import android.util.Log;
+
 import com.watabou.input.Keys;
 import com.watabou.input.Keys.Key;
 import com.watabou.input.Touchscreen.Touch;
@@ -26,12 +28,16 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.TouchArea;
+import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.ShadowBox;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
 import com.watabou.pixeldungeon.ui.Window;
+
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,7 +132,21 @@ public class Window extends Group implements Signal.Listener<Key> {
 		
 		Keys.event.add( this );
 	}
-	
+
+	public static void OnButtonPressed(Hero hero, int ID, int button, @Nullable JSONObject res) {
+		try {
+
+		if (button == -1){
+			windows.get(hero).get(ID).onBackPressed();
+		} else  {
+			windows.get(hero).get(ID).onSelect(button, res);
+		}
+		} catch (NullPointerException e){
+			Log.i("Window", "No such window.");
+		}
+
+	}
+
 	public void resize( int w, int h ) {
 		this.width = w;
 		this.height = h;
@@ -174,7 +194,15 @@ public class Window extends Group implements Signal.Listener<Key> {
 	public void onBackPressed() {
 		hide();
 	}
-	
+
 	public void onMenuPressed() {
+	}
+
+	public void onSelect(int button, JSONObject args){
+		onSelect(button);
+	}
+
+	protected void onSelect(int button){
+
 	}
 }

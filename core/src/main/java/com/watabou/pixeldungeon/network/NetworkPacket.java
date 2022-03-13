@@ -15,10 +15,12 @@ import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -613,7 +615,7 @@ public class NetworkPacket {
 
     }
 
-    public void packAndAddWindow(String type, int windowID, Map<String, Object> args) {
+    public void packAndAddWindow(String type, int windowID, @Nullable JSONObject args) {
         try {
             JSONObject obj = new JSONObject();
             obj.put("id", windowID);
