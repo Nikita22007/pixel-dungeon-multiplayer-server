@@ -94,6 +94,14 @@ class ClientThread extends Thread {
             return;
         }
         while (clientSocket != null && !clientSocket.isClosed()) {
+            if ((level == null) || !(Game.scene() instanceof GameScene)) {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                continue;
+            }
             try {
                 String json = reader.readLine();
                 if (json == null) {
