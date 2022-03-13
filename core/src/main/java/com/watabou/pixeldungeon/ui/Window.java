@@ -28,6 +28,8 @@ import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.effects.ShadowBox;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
 
@@ -41,8 +43,9 @@ public class Window extends Group implements Signal.Listener<Key> {
 	protected NinePatch chrome;
 	
 	public static final int TITLE_COLOR = 0xFFFF44;
-	
-	public Window() {
+	protected int id;
+
+    public Window() {
 		this( 0, 0, Chrome.get( Chrome.Type.WINDOW ) );
 	}
 	
@@ -147,6 +150,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 	}
 	
 	public void onBackPressed() {
+		SendData.sendWindowResult(id, -1);
 		hide();
 	}
 	

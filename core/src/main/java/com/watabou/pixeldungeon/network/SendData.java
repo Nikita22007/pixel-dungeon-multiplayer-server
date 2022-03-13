@@ -22,4 +22,9 @@ public class SendData {
         packet.packAndAddUsedAction(item, action, hero);
         flush();
     }
+
+    public static void sendWindowResult(int id, int result) {
+        packet.packAndAddWindowsResult(id, result, null);
+        flush();
+    }
 }

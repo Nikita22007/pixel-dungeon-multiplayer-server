@@ -26,6 +26,7 @@ import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.GLog;
+import com.watabou.pixeldungeon.windows.WndMessage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
+import static com.watabou.pixeldungeon.scenes.GameScene.show;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
 public class ParseThread extends Thread {
@@ -80,7 +82,7 @@ public class ParseThread extends Thread {
             } catch (IOException e) {
                 Log.e("ParseThread", e.getMessage());
 
-                    PixelDungeon.switchScene(TitleScene.class);
+                PixelDungeon.switchScene(TitleScene.class);
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
                 return;
             }
@@ -212,6 +214,10 @@ public class ParseThread extends Thread {
                     }
                     break;
                 }
+                case "window": {
+                    parseWindow(data.getJSONObject(token));
+                    break;
+                }
                 default: {
                     GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                     continue;
@@ -219,6 +225,31 @@ public class ParseThread extends Thread {
             }
         }
 
+    }
+
+    private void parseWindow(JSONObject windowObj) {
+        try {
+            int id = windowObj.getInt("id");
+            String type = windowObj.getString("type");
+            JSONObject args = windowObj.optJSONObject("params");
+            if (args == null) {
+                args = windowObj.optJSONObject("args");
+            }
+            switch (type) {
+                case "message":
+                case "wnd_message": {
+                    GameScene.show(new WndMessage(id, args.getString("text")));
+                    break;
+                }
+                default: {
+                    Log.e("parse_window", String.format("incorrect window type: %s", type));
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("parse_window", String.format("bad_window. %s", e.getMessage()));
+        } catch (NullPointerException e) {
+            Log.e("parse_window", String.format("bad_window. %s", e.getMessage()));
+        }
     }
 
     private void parseServerActions(JSONArray server_actions_arr) {
@@ -259,7 +290,7 @@ public class ParseThread extends Thread {
 
     private void parseHeap(JSONObject heapObj) {
         try {
-            if (level == null){
+            if (level == null) {
                 Log.e("ParceHeap", "level == null");
                 return;
             }

@@ -7,6 +7,7 @@ import com.watabou.pixeldungeon.items.CustomItem
 import com.watabou.pixeldungeon.actors.hero.Hero
 import org.json.JSONArray
 import java.util.*
+import kotlin.collections.HashMap
 
 class NetworkPacket {
     internal enum class CellState {
@@ -69,6 +70,20 @@ class NetworkPacket {
 
         synchronized(dataRef) {
             dataRef.get().put("action", action_obj)
+        }
+    }
+
+    fun packAndAddWindowsResult(
+        id: Int,
+        pressedButton: Int,
+        args: HashMap<String, Object>? = null
+    ) {
+        val obj = JSONObject()
+        obj.put("id", id)
+        obj.put("button", pressedButton)
+        obj.put("result", args)
+        synchronized(dataRef) {
+            dataRef.get().put("window", obj)
         }
     }
 
