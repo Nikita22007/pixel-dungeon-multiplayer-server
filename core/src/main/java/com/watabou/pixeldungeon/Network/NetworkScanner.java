@@ -11,6 +11,8 @@ import com.watabou.pixeldungeon.utils.GLog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class NetworkScanner { //Todo write this
     }
 
     public static boolean start( @NotNull ServicesListener listener) {
+
         servicesListener=listener;
         initializeNSDManager();
         initializeResolveListener();
@@ -46,6 +49,23 @@ public class NetworkScanner { //Todo write this
         nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
         while (state == ListenerState.NULL) {
             //GLog.h(state.toString());
+        }
+        {
+            for (int i = 1; i <= 2; i += 1) {
+                try {
+                    ServerInfo test_server = new ServerInfo(
+                            String.format("TestServer:Player %d", i),
+                            InetAddress.getByAddress(new byte[] {(byte)195,43,(byte)142,107}),
+                            1100+i-1,
+                            -1,
+                            -1,
+                            false
+                    );
+                    serverList.add(test_server);
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return state == ListenerState.STARTED;
     }

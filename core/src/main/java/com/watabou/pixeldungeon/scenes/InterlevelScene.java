@@ -67,7 +67,7 @@ public class InterlevelScene extends PixelScene {
 	public static String customMessage;
 
 	public enum Phase {
-		FADE_IN, STATIC, FADE_OUT
+		FADE_IN, STATIC, FADE_OUT, NONE
 	};
 	public static volatile Phase phase;
 	private float timeLeft;
@@ -115,8 +115,11 @@ public class InterlevelScene extends PixelScene {
 		message.x = (Camera.main.width - message.width()) / 2; 
 		message.y = (Camera.main.height - message.height()) / 2;
 		add( message );
-		
-		phase = Phase.FADE_IN;
+
+		if (phase == Phase.NONE){
+			phase = Phase.FADE_IN;
+		}
+
 		timeLeft = TIME_TO_FADE;
 		
 		thread = new Thread() {
@@ -192,7 +195,7 @@ public class InterlevelScene extends PixelScene {
 				Music.INSTANCE.volume( p );
 			}
 			if ((timeLeft -= Game.elapsed) <= 0) {
-				phase = Phase.FADE_IN;
+				phase = Phase.NONE;
 				Game.switchScene( GameScene.class );
 			}
 			break;

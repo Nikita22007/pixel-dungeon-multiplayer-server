@@ -80,11 +80,13 @@ public class ParseThread extends Thread {
             } catch (IOException e) {
                 Log.e("ParseThread", e.getMessage());
 
-                PixelDungeon.switchScene(TitleScene.class);
+                    PixelDungeon.switchScene(TitleScene.class);
 //                PixelDungeon.scene().add(new WndError("Disconnected"));
                 return;
             }
         }
+        Log.i("ParseThread", "parsing stopped");
+
     }
 
     private void parse() throws IOException, JSONException, InterruptedException {
