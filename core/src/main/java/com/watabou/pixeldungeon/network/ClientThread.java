@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import static com.watabou.pixeldungeon.Dungeon.level;
+
 class ClientThread extends Thread {
 
     public static final String CHARSET = "UTF-8";
@@ -131,25 +133,25 @@ class ClientThread extends Thread {
                                     break;
                                 }
                                 List<Integer> slot = JsonArrayToListInteger(actionObj.getJSONArray("slot"));
-                                if ((slot == null) || slot.isEmpty()){
-                                        GLog.n("Empty slot: %s", slot);
-                                        break;
+                                if ((slot == null) || slot.isEmpty()) {
+                                    GLog.n("Empty slot: %s", slot);
+                                    break;
                                 }
                                 Item item = clientHero.belongings.getItemInSlot(slot);
-                                if (item == null){
+                                if (item == null) {
                                     GLog.n("No item in this slot. Slot: %s", slot);
                                     break;
                                 }
                                 action = action.toLowerCase(Locale.ROOT);
                                 boolean did_something = false;
-                                for (String item_action: item.actions(clientHero)) {
-                                    if (item_action.toLowerCase(Locale.ROOT).equals(action)){
+                                for (String item_action : item.actions(clientHero)) {
+                                    if (item_action.toLowerCase(Locale.ROOT).equals(action)) {
                                         did_something = true;
                                         item.execute(clientHero, item_action);
                                         break;
                                     }
                                 }
-                                if (!did_something){
+                                if (!did_something) {
                                     GLog.n("No such action in actions list. Action: %s", action);
                                     break;
                                 }
@@ -203,7 +205,7 @@ class ClientThread extends Thread {
                 packet.clearData();
             }
         } catch (IOException e) {
-            Log.e(String.format("ClientThread%d", threadID),String.format("IOException in threadID %s. Message: %s", threadID, e.getMessage()));
+            Log.e(String.format("ClientThread%d", threadID), String.format("IOException in threadID %s. Message: %s", threadID, e.getMessage()));
             disconnect();
         }
     }
@@ -232,12 +234,12 @@ class ClientThread extends Thread {
         }*///cheking that mobs sends correctly
         curClass.initHero(newHero);
 
-        newHero.pos = Dungeon.GetPosNear(Dungeon.level.entrance);
+        newHero.pos = Dungeon.GetPosNear(level.entrance);
         if (newHero.pos == -1) {
-            newHero.pos = Dungeon.level.entrance; //todo  FIXME
+            newHero.pos = level.entrance; //todo  FIXME
         }
 
-        packet.packAndAddLevel(Dungeon.level);
+        packet.packAndAddLevel(level);
         packet.pack_and_add_hero(newHero);
         packet.addInventoryFull(newHero);
 

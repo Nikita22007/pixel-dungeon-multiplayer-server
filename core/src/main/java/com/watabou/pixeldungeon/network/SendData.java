@@ -33,7 +33,7 @@ public class SendData {
         }
     }
 
-    public static void SendLevelReset(Level level, int ID) {
+    public static void SendLevelReset(int ID) {
         if (clients[ID] != null) {
             clients[ID].packet.packAndAddServerAction("reset_level");
             clients[ID].flush();
@@ -113,6 +113,11 @@ public class SendData {
     public static void sendInterLevelScene(int ID, String type) {
         if (clients[ID] != null) {
             clients[ID].flush();
+            {
+                if (clients[ID].clientHero == null){
+                    return;
+                }
+            }
             clients[ID].packet.packAndAddInterLevelSceneType(type);
             clients[ID].flush();
         }
@@ -121,6 +126,9 @@ public class SendData {
     public static void sendInterLevelSceneFadeOut(int ID) {
         if (clients[ID] != null) {
             clients[ID].flush();
+            if (clients[ID].clientHero == null){
+                return;
+            }
             clients[ID].packet.packAndAddInterlevelSceneState("fade_out");
             clients[ID].flush();
         }
