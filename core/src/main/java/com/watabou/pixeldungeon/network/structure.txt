@@ -114,6 +114,7 @@ server:
     }
     "window":
     {
+        "id":  1
         "type": "///"
         "params":
         {

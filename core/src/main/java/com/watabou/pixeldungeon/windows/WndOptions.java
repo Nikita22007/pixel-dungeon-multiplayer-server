@@ -18,9 +18,15 @@
 package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
+import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WndOptions extends Window {
 
@@ -28,9 +34,24 @@ public class WndOptions extends Window {
 	private static final int MARGIN 		= 2;
 	private static final int BUTTON_HEIGHT	= 20;
 	
-	public WndOptions( String title, String message, String... options ) {
-		super();
-		
+	public WndOptions(Hero owner, String title, String message, String... options ) {
+		super(owner);
+		init(title, message, options);
+		JSONObject params = new JSONObject();
+		try {
+			JSONArray optionsArr = new JSONArray();
+			for (int i = 0; i < options.length; i += 1) {
+				optionsArr.put(options[i]);
+			}
+			params.put("options", optionsArr);
+		} catch (JSONException ignored) {}
+		SendData.sendWindow(owner.networkID, "wnd_message", id, params);
+	}
+
+	public WndOptions(String title, String message, String... options) {
+		init(title, message, options);
+	}
+	protected void init(String title, String message, String... options ) {
 		BitmapTextMultiline tfTitle = PixelScene.createMultiline( title, 9 );
 		tfTitle.hardlight( TITLE_COLOR );
 		tfTitle.x = tfTitle.y = MARGIN;

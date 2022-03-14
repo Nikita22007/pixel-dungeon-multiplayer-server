@@ -49,7 +49,7 @@ public class Chasm {
 	
 	public static void heroJump( final Hero hero ) {
 		GameScene.show( 
-			new WndOptions( TXT_CHASM, TXT_JUMP, TXT_YES, TXT_NO ) {
+			new WndOptions(hero, TXT_CHASM, TXT_JUMP, TXT_YES, TXT_NO ) {
 				@Override
 				protected void onSelect( int index ) {
 					if (index == 0) {

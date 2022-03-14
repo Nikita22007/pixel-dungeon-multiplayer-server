@@ -48,7 +48,7 @@ public abstract class InventoryScroll extends Scroll {
 	}
 	
 	private void confirmCancelation() {
-		GameScene.show( new WndOptions( name(), TXT_WARNING, TXT_YES, TXT_NO ) {
+		GameScene.show( new WndOptions(curUser, name(), TXT_WARNING, TXT_YES, TXT_NO ) {
 			@Override
 			protected void onSelect( int index ) {
 				switch (index) {

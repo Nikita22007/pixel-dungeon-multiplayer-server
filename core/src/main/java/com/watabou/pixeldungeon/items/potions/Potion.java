@@ -130,7 +130,7 @@ public class Potion extends Item {
 					this instanceof PotionOfParalyticGas)) {
 				
 					GameScene.show( 
-						new WndOptions( TXT_HARMFUL, TXT_R_U_SURE_DRINK, TXT_YES, TXT_NO ) {
+						new WndOptions(hero, TXT_HARMFUL, TXT_R_U_SURE_DRINK, TXT_YES, TXT_NO ) {
 							@Override
 							protected void onSelect(int index) {
 								if (index == 0) {
@@ -164,7 +164,7 @@ public class Potion extends Item {
 			this instanceof PotionOfMight)) {
 		
 			GameScene.show( 
-				new WndOptions( TXT_BENEFICIAL, TXT_R_U_SURE_THROW, TXT_YES, TXT_NO ) {
+				new WndOptions(hero, TXT_BENEFICIAL, TXT_R_U_SURE_THROW, TXT_YES, TXT_NO ) {
 					@Override
 					protected void onSelect(int index) {
 						if (index == 0) {
