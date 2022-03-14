@@ -26,7 +26,7 @@ import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.GLog;
-import com.watabou.pixeldungeon.windows.WndMessage;
+import com.watabou.pixeldungeon.windows.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -239,6 +239,16 @@ public class ParseThread extends Thread {
                 case "message":
                 case "wnd_message": {
                     GameScene.show(new WndMessage(id, args.getString("text")));
+                    break;
+                }
+                case "option":
+                case "wnd_option": {
+                    JSONArray optionsArr = args.getJSONArray("options");
+                    String[] options = new String[optionsArr.length()];
+                    for (int i = 0; i< optionsArr.length(); i+=1){
+                        options[i] = optionsArr.getString(i);
+                    }
+                    GameScene.show(new WndOptions(id, args.getString("title"), args.getString("message"), options));
                     break;
                 }
                 default: {

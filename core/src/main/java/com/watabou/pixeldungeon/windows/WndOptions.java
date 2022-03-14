@@ -27,7 +27,11 @@ public class WndOptions extends Window {
 	private static final int WIDTH			= 120;
 	private static final int MARGIN 		= 2;
 	private static final int BUTTON_HEIGHT	= 20;
-	
+
+	public WndOptions(int id, String title, String message, String... options ) {
+		this(title, message, options);
+		this.id =  id;
+	}
 	public WndOptions( String title, String message, String... options ) {
 		super();
 		
@@ -64,6 +68,6 @@ public class WndOptions extends Window {
 		
 		resize( WIDTH, (int)pos );
 	}
-	
+
 	protected void onSelect( int index ) {};
 }
