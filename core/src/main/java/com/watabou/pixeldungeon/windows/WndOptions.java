@@ -39,6 +39,8 @@ public class WndOptions extends Window {
 		init(title, message, options);
 		JSONObject params = new JSONObject();
 		try {
+			params.put("title", title);
+			params.put("message", message);
 			JSONArray optionsArr = new JSONArray();
 			for (int i = 0; i < options.length; i += 1) {
 				optionsArr.put(options[i]);
