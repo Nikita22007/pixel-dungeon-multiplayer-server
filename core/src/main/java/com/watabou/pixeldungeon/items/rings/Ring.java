@@ -121,10 +121,10 @@ public class Ring extends EquipableItem {
 	@Override
 	public boolean doEquip( final Hero hero ) {
 		
-		if (hero.belongings.ring1 != null && hero.belongings.ring2 != null) {
+		if (hero.belongings.getRing1() != null && hero.belongings.getRing2() != null) {
 			
-			final Ring r1 = hero.belongings.ring1;
-			final Ring r2 = hero.belongings.ring2;
+			final Ring r1 = hero.belongings.getRing1();
+			final Ring r2 = hero.belongings.getRing2();
 			
 			PixelDungeon.scene().add( 
 				new WndOptions(hero, TXT_UNEQUIP_TITLE, TXT_UNEQUIP_MESSAGE,
@@ -149,10 +149,10 @@ public class Ring extends EquipableItem {
 			
 		} else {
 			
-			if (hero.belongings.ring1 == null) {
-				hero.belongings.ring1 = this;
+			if (hero.belongings.getRing1() == null) {
+				hero.belongings.setRing1(this);
 			} else {
-				hero.belongings.ring2 = this;
+				hero.belongings.setRing2(this);
 			}
 			
 			detach( hero.belongings.backpack );
@@ -181,10 +181,10 @@ public class Ring extends EquipableItem {
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 		if (super.doUnequip( hero, collect, single )) {
 			
-			if (hero.belongings.ring1 == this) {
-				hero.belongings.ring1 = null;
+			if (hero.belongings.getRing1() == this) {
+				hero.belongings.setRing1(null);
 			} else {
-				hero.belongings.ring2 = null;
+				hero.belongings.setRing2(null);
 			}
 			
 			hero.remove( buff );
@@ -201,7 +201,7 @@ public class Ring extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.ring1 == this || hero.belongings.ring2 == this;
+		return hero.belongings.getRing1() == this || hero.belongings.getRing2() == this;
 	}
 	
 	@Override

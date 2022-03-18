@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.watabou.pixeldungeon.network.SendData.sendIronKeysCount;
+import static com.watabou.pixeldungeon.network.SendData.sendNewInventoryItem;
 
 public class Belongings implements Iterable<Item> {
 
@@ -54,10 +55,10 @@ public class Belongings implements Iterable<Item> {
 	
 	public Bag backpack;	
 
-	public KindOfWeapon weapon = null;
-	public Armor armor = null;
-	public Ring ring1 = null;
-	public Ring ring2 = null;
+	protected KindOfWeapon weapon = null;
+	protected Armor armor = null;
+	protected Ring ring1 = null;
+	protected Ring ring2 = null;
 	public int IronKeyCount_visual = 0; //this is count keys of  this depth. This  is "IronKey.curDepthQuantity"
 	public Belongings( Hero owner ) {
 		this.owner = owner;
@@ -78,10 +79,10 @@ public class Belongings implements Iterable<Item> {
 		
 		backpack.storeInBundle( bundle );
 		
-		bundle.put( WEAPON, weapon );
-		bundle.put( ARMOR, armor );
-		bundle.put( RING1, ring1 );
-		bundle.put( RING2, ring2 );
+		bundle.put( WEAPON, getWeapon());
+		bundle.put( ARMOR, getArmor());
+		bundle.put( RING1, getRing1());
+		bundle.put( RING2, getRing2());
 	}
 	
 	public void restoreFromBundle( Bundle bundle ) {
@@ -89,30 +90,30 @@ public class Belongings implements Iterable<Item> {
 		backpack.clear();
 		backpack.restoreFromBundle( bundle );
 		
-		weapon = (KindOfWeapon)bundle.get( WEAPON );
-		if (weapon != null) {
-			weapon.activate( owner );
+		setWeapon((KindOfWeapon)bundle.get( WEAPON ));
+		if (getWeapon() != null) {
+			getWeapon().activate( owner );
 		}
 		
-		armor = (Armor)bundle.get( ARMOR );
+		setArmor((Armor)bundle.get( ARMOR ));
 		
-		ring1 = (Ring)bundle.get( RING1 );
-		if (ring1 != null) {
-			ring1.activate( owner );
+		setRing1((Ring)bundle.get( RING1 ));
+		if (getRing1() != null) {
+			getRing1().activate( owner );
 		}
 		
-		ring2 = (Ring)bundle.get( RING2 );
-		if (ring2 != null) {
-			ring2.activate( owner );
+		setRing2((Ring)bundle.get( RING2 ));
+		if (getRing2() != null) {
+			getRing2().activate( owner );
 		}
 	}
 
 	public ArrayList<SpecialSlot> getSpecialSlots() {
 		ArrayList<SpecialSlot> slots = new ArrayList<>(4);
-		slots.add(new SpecialSlot(0, "items.png", ItemSpriteSheet.WEAPON, weapon));
-		slots.add(new SpecialSlot(1, "items.png", ItemSpriteSheet.ARMOR, armor));
-		slots.add(new SpecialSlot(2, "items.png", ItemSpriteSheet.RING, ring1));
-		slots.add(new SpecialSlot(3, "items.png", ItemSpriteSheet.RING, ring2));
+		slots.add(new SpecialSlot(0, "items.png", ItemSpriteSheet.WEAPON, getWeapon()));
+		slots.add(new SpecialSlot(1, "items.png", ItemSpriteSheet.ARMOR, getArmor()));
+		slots.add(new SpecialSlot(2, "items.png", ItemSpriteSheet.RING, getRing1()));
+		slots.add(new SpecialSlot(3, "items.png", ItemSpriteSheet.RING, getRing2()));
 		return slots;
 	}
 
@@ -185,21 +186,21 @@ public class Belongings implements Iterable<Item> {
 	}
 	
 	public void observe() {
-		if (weapon != null) {
-			weapon.identify();
-			Badges.validateItemLevelAquired( weapon );
+		if (getWeapon() != null) {
+			getWeapon().identify();
+			Badges.validateItemLevelAquired(getWeapon());
 		}
-		if (armor != null) {
-			armor.identify();
-			Badges.validateItemLevelAquired( armor );
+		if (getArmor() != null) {
+			getArmor().identify();
+			Badges.validateItemLevelAquired(getArmor());
 		}
-		if (ring1 != null) {
-			ring1.identify();
-			Badges.validateItemLevelAquired( ring1 );
+		if (getRing1() != null) {
+			getRing1().identify();
+			Badges.validateItemLevelAquired(getRing1());
 		}
-		if (ring2 != null) {
-			ring2.identify();
-			Badges.validateItemLevelAquired( ring2 );
+		if (getRing2() != null) {
+			getRing2().identify();
+			Badges.validateItemLevelAquired(getRing2());
 		}
 		for (Item item : backpack) {
 			item.cursedKnown = true;
@@ -207,7 +208,7 @@ public class Belongings implements Iterable<Item> {
 	}
 	
 	public void uncurseEquipped() {
-		ScrollOfRemoveCurse.uncurse( owner, armor, weapon, ring1, ring2 );
+		ScrollOfRemoveCurse.uncurse( owner, getArmor(), getWeapon(), getRing1(), getRing2());
 	}
 	
 	public Item randomUnequipped() {
@@ -227,22 +228,22 @@ public class Belongings implements Iterable<Item> {
 			}
 		}
 		
-		if (weapon != null) {
-			weapon.cursed = false;
-			weapon.activate( owner );
+		if (getWeapon() != null) {
+			getWeapon().cursed = false;
+			getWeapon().activate( owner );
 		}
 		
-		if (armor != null) {
-			armor.cursed = false;
+		if (getArmor() != null) {
+			getArmor().cursed = false;
 		}
 		
-		if (ring1 != null) {
-			ring1.cursed = false;
-			ring1.activate( owner );
+		if (getRing1() != null) {
+			getRing1().cursed = false;
+			getRing1().activate( owner );
 		}
-		if (ring2 != null) {
-			ring2.cursed = false;
-			ring2.activate( owner );
+		if (getRing2() != null) {
+			getRing2().cursed = false;
+			getRing2().activate( owner );
 		}
 	}
 	
@@ -312,13 +313,57 @@ public class Belongings implements Iterable<Item> {
 		return backpack.pathOfItem(item);
 	}
 
+	public KindOfWeapon getWeapon() {
+		return weapon;
+	}
+
+	public KindOfWeapon setWeapon(KindOfWeapon weapon) {
+		List<Integer> path = new ArrayList<Integer>(1);
+		path.add(-1);
+		sendNewInventoryItem(owner, weapon, path);
+		return (this.weapon = weapon);
+	}
+
+	public Armor getArmor() {
+		return armor;
+	}
+
+	public Armor setArmor(Armor armor) {
+		List<Integer> path = new ArrayList<Integer>(1);
+		path.add(-2);
+		sendNewInventoryItem(owner, armor, path);
+		return (this.armor = armor);
+	}
+
+	public Ring getRing1() {
+		return ring1;
+	}
+
+	public Ring setRing1(Ring ring1) {
+		List<Integer> path = new ArrayList<Integer>(1);
+		path.add(-4);
+		sendNewInventoryItem(owner, ring1, path);
+		return (this.ring1 = ring1);
+	}
+
+	public Ring getRing2() {
+		return ring2;
+	}
+
+	public Ring setRing2(Ring ring2) {
+		List<Integer> path = new ArrayList<Integer>(1);
+		path.add(-4);
+		sendNewInventoryItem(owner, ring2, path);
+		return (this.ring2 = ring2);
+	}
+
 	private class ItemIterator implements Iterator<Item> {
 
 		private int index = 0;
 		
 		private Iterator<Item> backpackIterator = backpack.iterator();
 		
-		private Item[] equipped = {weapon, armor, ring1, ring2};
+		private Item[] equipped = {getWeapon(), getArmor(), getRing1(), getRing2()};
 		private int backpackIndex = equipped.length;
 		
 		@Override
@@ -350,16 +395,16 @@ public class Belongings implements Iterable<Item> {
 		public void remove() {
 			switch (index) {
 			case 0:
-				equipped[0] = weapon = null;
+				equipped[0] = setWeapon(null);
 				break;
 			case 1:
-				equipped[1] = armor = null;
+				equipped[1] = setArmor(null);
 				break;
 			case 2:
-				equipped[2] = ring1 = null;
+				equipped[2] = setRing1(null);
 				break;
 			case 3:
-				equipped[3] = ring2 = null;
+				equipped[3] = setRing2(null);
 				break;
 			default:
 				backpackIterator.remove();

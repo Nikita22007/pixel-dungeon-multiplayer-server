@@ -88,10 +88,10 @@ public class Monk extends Mob {
 		if (Random.Int( 6 ) == 0 && enemy instanceof Hero) {
 			
 			Hero hero = (Hero)enemy;
-			KindOfWeapon weapon = hero.belongings.weapon;
+			KindOfWeapon weapon = hero.belongings.getWeapon();
 			
 			if (weapon != null && !(weapon instanceof Knuckles) && !weapon.cursed) {
-				hero.belongings.weapon = null;
+				hero.belongings.setWeapon(null);
 				Dungeon.level.drop( weapon, hero.pos ).sprite.drop();
 				GLog.w( TXT_DISARM, name, weapon.name() );
 			}

@@ -111,7 +111,7 @@ public enum HeroClass {
 	}
 	
 	private static void initCommon( Hero hero ) {
-		(hero.belongings.armor = new ClothArmor()).identify();
+		(hero.belongings.setArmor(new ClothArmor())).identify();
 		new Food().identify().collect(hero);
 		new Keyring().collect(hero);
 	}
@@ -133,7 +133,7 @@ public enum HeroClass {
 	private static void initWarrior( Hero hero ) {
 		hero.STR = hero.STR + 1;
 		
-		(hero.belongings.weapon = new ShortSword()).identify();
+		(hero.belongings.setWeapon(new ShortSword())).identify();
 		new Dart( 8 ).identify().collect(hero);
 		
 		QuickSlot.primaryValue = Dart.class;
@@ -142,7 +142,7 @@ public enum HeroClass {
 	}
 	
 	private static void initMage( Hero hero ) {	
-		(hero.belongings.weapon = new Knuckles()).identify();
+		(hero.belongings.setWeapon(new Knuckles())).identify();
 		
 		WandOfMagicMissile wand = new WandOfMagicMissile();
 		wand.identify().collect(hero);
@@ -153,11 +153,11 @@ public enum HeroClass {
 	}
 	
 	private static void initRogue( Hero hero ) {
-		(hero.belongings.weapon = new Dagger()).identify();
-		(hero.belongings.ring1 = new RingOfShadows()).upgrade().identify();
+		(hero.belongings.setWeapon(new Dagger())).identify();
+		(hero.belongings.setRing1(new RingOfShadows())).upgrade().identify();
 		new Dart( 8 ).identify().collect(hero);
 		
-		hero.belongings.ring1.activate( hero );
+		hero.belongings.getRing1().activate( hero );
 		
 		QuickSlot.primaryValue = Dart.class;
 		
@@ -168,7 +168,7 @@ public enum HeroClass {
 		
 		hero.setHP((hero.setHT(hero.getHT() - 5)));
 		
-		(hero.belongings.weapon = new Dagger()).identify();
+		(hero.belongings.setWeapon(new Dagger())).identify();
 		Boomerang boomerang = new Boomerang();
 		boomerang.identify().collect(hero);
 		

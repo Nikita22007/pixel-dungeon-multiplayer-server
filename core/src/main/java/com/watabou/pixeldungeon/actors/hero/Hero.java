@@ -266,7 +266,7 @@ public class Hero extends Char {
 	}
 	
 	public int tier() {
-		return belongings.armor == null ? 0 : belongings.armor.tier;
+		return belongings.getArmor() == null ? 0 : belongings.getArmor().tier;
 	}
 	
 	public boolean shoot( Char enemy, MissileWeapon wep ) {
@@ -290,7 +290,7 @@ public class Hero extends Char {
 			accuracy *= 0.5f;
 		}
 		
-		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
+		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.getWeapon();
 		if (wep != null) {
 			return (int)(attackSkill * accuracy * wep.acuracyFactor( this ));
 		} else {
@@ -310,7 +310,7 @@ public class Hero extends Char {
 			evasion /= 2;
 		}
 		
-		int aEnc = belongings.armor != null ? belongings.armor.STR - STR() : 0;
+		int aEnc = belongings.getArmor() != null ? belongings.getArmor().STR - STR() : 0;
 		
 		if (aEnc > 0) {
 			return (int)(defenseSkill * evasion / Math.pow( 1.5, aEnc ));
@@ -331,7 +331,7 @@ public class Hero extends Char {
 	
 	@Override
 	public int dr() {
-		int dr = belongings.armor != null ? Math.max( belongings.armor.DR(), 0 ) : 0;
+		int dr = belongings.getArmor() != null ? Math.max( belongings.getArmor().DR(), 0 ) : 0;
 		Barkskin barkskin = buff( Barkskin.class );
 		if (barkskin != null) {
 			dr += barkskin.level();
@@ -341,7 +341,7 @@ public class Hero extends Char {
 	
 	@Override
 	public int damageRoll() {
-		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
+		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.getWeapon();
 		int dmg;
 		if (wep != null) {	
 			dmg = wep.damageRoll( this );
@@ -354,7 +354,7 @@ public class Hero extends Char {
 	@Override
 	public float speed() {
 		
-		int aEnc = belongings.armor != null ? belongings.armor.STR - STR() : 0;
+		int aEnc = belongings.getArmor() != null ? belongings.getArmor().STR - STR() : 0;
 		if (aEnc > 0) {
 			
 			return (float)(super.speed() * Math.pow( 1.3, -aEnc ));
@@ -368,7 +368,7 @@ public class Hero extends Char {
 	}
 	
 	public float attackDelay() {
-		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
+		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.getWeapon();
 		if (wep != null) {
 			
 			return wep.speedFactor( this );
@@ -842,7 +842,7 @@ public class Hero extends Char {
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
+		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.getWeapon();
 		if (wep != null) {
 			
 			wep.proc( this, enemy, damage );
@@ -897,8 +897,8 @@ public class Hero extends Char {
 			damage = armor.absorb( damage );
 		}
 		
-		if (belongings.armor != null) {
-			damage = belongings.armor.proc( enemy, this, damage );
+		if (belongings.getArmor() != null) {
+			damage = belongings.getArmor().proc( enemy, this, damage );
 		}
 		
 		return damage;

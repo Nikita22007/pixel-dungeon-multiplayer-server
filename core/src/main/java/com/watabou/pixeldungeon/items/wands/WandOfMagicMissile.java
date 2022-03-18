@@ -85,9 +85,9 @@ public class WandOfMagicMissile extends Wand {
 	public void execute( Hero hero, String action ) {
 		if (action.equals( AC_DISENCHANT )) {
 			
-			if (hero.belongings.weapon == this) {
+			if (hero.belongings.getWeapon() == this) {
 				disenchantEquipped = true;
-				hero.belongings.weapon = null;
+				hero.belongings.setWeapon(null);
 				updateQuickslot();
 			} else {
 				disenchantEquipped = false;
@@ -141,7 +141,7 @@ public class WandOfMagicMissile extends Wand {
 				
 			} else {
 				if (disenchantEquipped) {
-					curUser.belongings.weapon = WandOfMagicMissile.this;
+					curUser.belongings.setWeapon(WandOfMagicMissile.this);
 					WandOfMagicMissile.this.updateQuickslot();
 				} else {
 					collect( curUser.belongings.backpack );

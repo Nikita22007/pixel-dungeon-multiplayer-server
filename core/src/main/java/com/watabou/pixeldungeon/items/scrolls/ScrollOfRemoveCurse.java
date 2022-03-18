@@ -46,11 +46,11 @@ public class ScrollOfRemoveCurse extends Scroll {
 		Invisibility.dispel(curUser);
 		
 		boolean procced = uncurse( curUser, curUser.belongings.backpack.items.toArray( new Item[0] ) ); 
-		procced = uncurse( curUser, 
-			curUser.belongings.weapon, 
-			curUser.belongings.armor, 
-			curUser.belongings.ring1, 
-			curUser.belongings.ring2 ) || procced;
+		procced = uncurse( curUser,
+                curUser.belongings.getWeapon(),
+                curUser.belongings.getArmor(),
+                curUser.belongings.getRing1(),
+                curUser.belongings.getRing2()) || procced;
 		
 		Weakness.detach( curUser, Weakness.class );
 		

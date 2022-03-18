@@ -20,7 +20,6 @@ package com.watabou.pixeldungeon.items.armor;
 import java.util.ArrayList;
 
 import com.watabou.pixeldungeon.Badges;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.EquipableItem;
@@ -93,9 +92,9 @@ public class Armor extends EquipableItem {
 		
 		detach( hero.belongings.backpack );
 		
-		if (hero.belongings.armor == null || hero.belongings.armor.doUnequip( hero, true, false )) {
+		if (hero.belongings.getArmor() == null || hero.belongings.getArmor().doUnequip( hero, true, false )) {
 			
-			hero.belongings.armor = this;
+			hero.belongings.setArmor(this);
 			
 			cursedKnown = true;
 			if (cursed) {
@@ -125,7 +124,7 @@ public class Armor extends EquipableItem {
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 		if (super.doUnequip( hero, collect, single )) {
 			
-			hero.belongings.armor = null;
+			hero.belongings.setArmor(null);
 			((HeroSprite)hero.sprite).updateArmor();
 			
 			return true;
@@ -139,7 +138,7 @@ public class Armor extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.armor == this;
+		return hero.belongings.getArmor() == this;
 	}
 	
 	public int DR() {

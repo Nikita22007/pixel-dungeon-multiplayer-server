@@ -88,7 +88,7 @@ public class Boomerang extends MissileWeapon {
 			reset( from, curUser.pos, curItem, null );
 		
 		if (throwEquiped) {
-			owner.belongings.weapon = this;
+			owner.belongings.setWeapon(this);
 			owner.spend( -TIME_TO_EQUIP );
 		} else 
 		if (!collect( curUser.belongings.backpack )) {

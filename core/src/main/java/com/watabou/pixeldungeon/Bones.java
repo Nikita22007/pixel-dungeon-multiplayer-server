@@ -44,16 +44,16 @@ public class Bones {
 		item = null;
 		switch (Random.Int( 4 )) {
 		case 0:
-			item = hero.belongings.weapon;
+			item = hero.belongings.getWeapon();
 			break;
 		case 1:
-			item = hero.belongings.armor;
+			item = hero.belongings.getArmor();
 			break;
 		case 2:
-			item = hero.belongings.ring1;
+			item = hero.belongings.getRing1();
 			break;
 		case 3:
-			item = hero.belongings.ring2;
+			item = hero.belongings.getRing2();
 			break;
 		}
 		if (item == null) {

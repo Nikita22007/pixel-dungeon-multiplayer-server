@@ -40,7 +40,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.weapon == this;
+		return hero.belongings.getWeapon() == this;
 	}
 	
 	@Override
@@ -48,9 +48,9 @@ abstract public class KindOfWeapon extends EquipableItem {
 		
 		detachAll( hero.belongings.backpack );
 		
-		if (hero.belongings.weapon == null || hero.belongings.weapon.doUnequip( hero, true )) {
+		if (hero.belongings.getWeapon() == null || hero.belongings.getWeapon().doUnequip( hero, true )) {
 			
-			hero.belongings.weapon = this;
+			hero.belongings.setWeapon(this);
 			activate( hero );
 			
 			QuickSlot.refresh();
@@ -75,7 +75,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 		if (super.doUnequip( hero, collect, single )) {
 			
-			hero.belongings.weapon = null;
+			hero.belongings.setWeapon(null);
 			return true;
 			
 		} else {

@@ -75,9 +75,9 @@ public class ShortSword extends MeleeWeapon {
 	public void execute( Hero hero, String action ) {
 		if (action == AC_REFORGE) {
 			
-			if (hero.belongings.weapon == this) {
+			if (hero.belongings.getWeapon() == this) {
 				equipped = true;
-				hero.belongings.weapon = null;
+				hero.belongings.setWeapon(null);
 			} else {
 				equipped = false;
 				detach( hero.belongings.backpack );
@@ -123,7 +123,7 @@ public class ShortSword extends MeleeWeapon {
 				}
 				
 				if (equipped) {
-					curUser.belongings.weapon = ShortSword.this;
+					curUser.belongings.setWeapon(ShortSword.this);
 				} else {
 					collect( curUser.belongings.backpack );
 				}
