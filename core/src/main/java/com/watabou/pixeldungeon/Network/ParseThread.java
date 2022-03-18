@@ -245,7 +245,7 @@ public class ParseThread extends Thread {
                 case "wnd_option": {
                     JSONArray optionsArr = args.getJSONArray("options");
                     String[] options = new String[optionsArr.length()];
-                    for (int i = 0; i< optionsArr.length(); i+=1){
+                    for (int i = 0; i < optionsArr.length(); i += 1) {
                         options[i] = optionsArr.getString(i);
                     }
                     GameScene.show(new WndOptions(id, args.getString("title"), args.getString("message"), options));
@@ -497,9 +497,17 @@ public class ParseThread extends Thread {
             case ("replace"):
             case ("add"):
             case ("place"): {
-                Item item = new CustomItem(actionObj.getJSONObject("item"));
-
-                item.addTobag(stuff, slot, update_mode.equals("replace"));
+                JSONObject itemObj = actionObj.optJSONObject("item");
+                Item item = itemObj != null? new CustomItem(actionObj.getJSONObject("item")): null;
+                if ((slot.size() == 1) && (slot.get(0) < 0)) {
+                    hero.belongings.specialSlots.get(-slot.get(0) - 1).item = item;
+                } else {
+                    if (item != null) {
+                        item.addTobag(stuff, slot, update_mode.equals("replace"));
+                    } else {
+                        stuff.remove(slot);
+                    }
+                }
                 break;
             }
             case ("update"): {
