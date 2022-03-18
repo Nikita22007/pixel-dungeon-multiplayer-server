@@ -343,20 +343,7 @@ public class Dungeon {
 	}
 	
 	public static void saveAll() throws IOException {
-		if (hero.isAlive()) {
-			
-			Actor.fixTime();
-			saveGame( gameFile( hero.heroClass ) );
-			saveLevel();
-			
-			GamesInProgress.set( hero.heroClass, depth, hero.lvl, challenges != 0 );
-			
-		} else if (WndResurrect.instance != null) {
-			
-			WndResurrect.instance.hide();
-			Hero.reallyDie( WndResurrect.causeOfDeath );
-			
-		}
+		return;
 	}
 	
 	public static void loadGame( HeroClass cl ) throws IOException {

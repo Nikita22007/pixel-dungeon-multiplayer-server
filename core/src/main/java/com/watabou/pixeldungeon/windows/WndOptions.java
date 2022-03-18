@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
@@ -69,5 +70,7 @@ public class WndOptions extends Window {
 		resize( WIDTH, (int)pos );
 	}
 
-	protected void onSelect( int index ) {};
+	protected void onSelect( int index ) {
+		SendData.sendWindowResult(id, index);
+	};
 }
