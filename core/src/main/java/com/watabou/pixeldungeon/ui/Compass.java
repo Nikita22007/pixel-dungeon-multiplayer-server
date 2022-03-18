@@ -47,7 +47,11 @@ public class Compass extends Image {
 	@Override
 	public void update() {
 		super.update();
-		
+
+		if ((Dungeon.level == null) || (Dungeon.level.visited == null) || (Dungeon.level.mapped == null)) {
+			return;
+		}
+
 		if (!visible) {
 			visible = Dungeon.level.visited[cell] || Dungeon.level.mapped[cell]; 
 		}
