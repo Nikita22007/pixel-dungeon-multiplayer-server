@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.levels.DeadEndLevel;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.levels.SewerLevel;
 import com.watabou.pixeldungeon.network.ParseThread;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.ui.GameLog;
@@ -65,6 +66,8 @@ public class InterlevelScene extends PixelScene {
 	
 	public static boolean fallIntoPit;
 	public static String customMessage;
+
+	public static boolean reset_level;
 
 	public enum Phase {
 		FADE_IN, STATIC, FADE_OUT, NONE
@@ -180,7 +183,12 @@ public class InterlevelScene extends PixelScene {
 			ParseThread.getActiveThread().parseIfHasData();
 		}
 		float p = timeLeft / TIME_TO_FADE;
-		
+
+		if (reset_level){
+			resetLevel();
+			reset_level = false;
+		}
+
 		switch (phase) {
 		
 		case FADE_IN:
@@ -214,20 +222,25 @@ public class InterlevelScene extends PixelScene {
 			break;
 		}
 	}
-	
+
+	private void resetLevel(){
+		Actor.fixTime();
+		Dungeon.level = new SewerLevel();
+		Dungeon.level.create();
+		Dungeon.init();
+		GameLog.wipe();
+	}
+
 	private void descend() throws Exception {
-		
+
 		Actor.fixTime();
 		if (Dungeon.hero == null) {
-			Dungeon.level= new DeadEndLevel();
-			Dungeon.level.create();
-			Dungeon.init();
+			resetLevel();
 			SendData.SendHeroClass(StartScene.curClass);
 			if (noStory) {
 				Dungeon.chapters.add( WndStory.ID_SEWERS );
 				noStory = false;
 			}
-			GameLog.wipe();
 		} else {
 		}
 

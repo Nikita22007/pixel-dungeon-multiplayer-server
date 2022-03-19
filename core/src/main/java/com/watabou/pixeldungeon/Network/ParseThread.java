@@ -97,6 +97,9 @@ public class ParseThread extends Thread {
     }
 
     public void parseIfHasData() {
+        if (InterlevelScene.phase == InterlevelScene.Phase.FADE_OUT){
+            return;
+        }
         if (data.get() != null) {
             String json = data.get();
             data.set(null);
@@ -163,6 +166,8 @@ public class ParseThread extends Thread {
                         InterlevelScene.Mode mode = InterlevelScene.Mode.valueOf(modeName);
                         InterlevelScene.mode = mode;
                     }
+
+                    InterlevelScene.reset_level = ilsObj.optBoolean("reset_level");
 
                     if (ilsObj.has("message")) {
                         InterlevelScene.customMessage = ilsObj.getString("message");
@@ -600,7 +605,7 @@ public class ParseThread extends Thread {
     }
 
 
-    protected void parseActorChar(JSONObject actorObj, int ID, Actor actor) throws JSONException {
+    protected Char parseActorChar(JSONObject actorObj, int ID, Actor actor) throws JSONException {
         Char chr;
         if (actor == null) {
             chr = new CustomMob(ID);
@@ -654,6 +659,7 @@ public class ParseThread extends Thread {
                 }
             }
         }
+        return chr;
     }
 
     protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) {
@@ -664,7 +670,8 @@ public class ParseThread extends Thread {
     protected void parseActorHero(JSONObject actorObj, int id, Actor actor) throws JSONException {
         if ((actor == null) || (actor instanceof Hero)) {
             actor = hero != null ? hero : new Hero();
-            parseActorChar(actorObj, id, actor);
+            actor = parseActorChar(actorObj, id, actor);
+            Actor.add(actor); // it has check inside, no more checks
         } else {
             assert false : "resolved other actor, but waited Hero";
         }

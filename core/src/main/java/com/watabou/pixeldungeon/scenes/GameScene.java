@@ -508,6 +508,9 @@ public class GameScene extends PixelScene {
 	}
 
 	public static void add( Mob mob ) {
+		if ((Dungeon.level == null) || Dungeon.level.mobs == null){
+			return;
+		}
 		Dungeon.level.mobs.add( mob );
 		Actor.add( mob );
 		Actor.occupyCell( mob );
