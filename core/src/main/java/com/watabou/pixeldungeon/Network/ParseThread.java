@@ -12,6 +12,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
+import com.watabou.pixeldungeon.effects.FloatingText;
 import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
@@ -97,7 +98,7 @@ public class ParseThread extends Thread {
     }
 
     public void parseIfHasData() {
-        if (InterlevelScene.phase == InterlevelScene.Phase.FADE_OUT){
+        if (InterlevelScene.phase == InterlevelScene.Phase.FADE_OUT) {
             return;
         }
         if (data.get() != null) {
@@ -475,6 +476,10 @@ public class ParseThread extends Thread {
                     parse_update_bag_action(actionObj);
                     break;
                 }
+                case ("show_status"): {
+                    parseShowStatusAction(actionObj);
+                    break;
+                }
                 default:
                     GLog.h("unknown action type " + type + ". Ignored");
             }
@@ -503,7 +508,7 @@ public class ParseThread extends Thread {
             case ("add"):
             case ("place"): {
                 JSONObject itemObj = actionObj.optJSONObject("item");
-                Item item = itemObj != null? new CustomItem(actionObj.getJSONObject("item")): null;
+                Item item = itemObj != null ? new CustomItem(actionObj.getJSONObject("item")) : null;
                 if ((slot.size() == 1) && (slot.get(0) < 0)) {
                     hero.belongings.specialSlots.get(-slot.get(0) - 1).item = item;
                 } else {
@@ -526,6 +531,19 @@ public class ParseThread extends Thread {
             default:
                 Log.w("ParseThread", "Unexpected item update mode: " + update_mode);
                 return;
+        }
+    }
+
+    private void parseShowStatusAction(JSONObject actionObj) throws JSONException {
+        float x = (float) actionObj.getDouble("x");
+        float y = (float) actionObj.getDouble("y");
+        Integer key = actionObj.has("key") ? actionObj.getInt("key") : null;
+        String text = actionObj.getString("text");
+        int color = actionObj.getInt("color");
+        if (key == null) {
+            FloatingText.show(x, y, text, color);
+        } else {
+            FloatingText.show(x, y, key, text, color);
         }
     }
 
