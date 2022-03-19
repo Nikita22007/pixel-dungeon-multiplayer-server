@@ -111,6 +111,7 @@ server:
         "state": "fade_out" //If you switch scenes(from GameScene  to  InterlevelScene,  for  example, do not send state)
         "type": "RESURRECT"
         "custom_message": "missingno"
+        "reset_level" = true //clear level
     }
     "window":
     {
