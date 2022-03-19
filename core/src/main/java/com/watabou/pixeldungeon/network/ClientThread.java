@@ -302,7 +302,7 @@ class ClientThread extends Thread {
         //todo SEND TEXTURE
     }
 
-    protected void addAllCharsToSend() {
+    public void addAllCharsToSend() {
         for (Actor actor : Actor.all()) {
             if (actor instanceof Char) {
                 addCharToSend((Char) actor);

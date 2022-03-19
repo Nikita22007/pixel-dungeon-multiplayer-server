@@ -20,8 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class NetworkPacket {
@@ -181,6 +179,28 @@ public class NetworkPacket {
         }
     }
 
+    public void addNewHeroID(int id){
+        try {
+            synchronized (dataRef) {
+
+                JSONObject data = dataRef.get();
+                data.put("hero", packNewHeroID(id));
+            }
+        } catch (JSONException e) {
+        }
+    }
+
+    protected JSONObject packNewHeroID(int id) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("actor_id", id);
+        } catch (JSONException e) {
+
+        }
+
+        return object;
+    }
+
     protected JSONObject packHero(@NotNull Hero hero) {
         int id = hero.id();
         JSONObject object = new JSONObject();
@@ -328,14 +348,15 @@ public class NetworkPacket {
         }
     }
 
-    public void packAndAddInterLevelSceneType(String type) {
-        packAndAddInterLevelSceneType(type, null);
+    public void packAndAddInterLevelSceneType(String type, boolean reset_level) {
+        packAndAddInterLevelSceneType(type, null, reset_level);
     }
 
-    public void packAndAddInterLevelSceneType(String type, String customMessage) {
+    public void packAndAddInterLevelSceneType(String type, String customMessage, boolean reset_level) {
         try {
             JSONObject stateObj = new JSONObject();
             stateObj.put("type", type);
+            stateObj.put("reset_level", reset_level);
             if (customMessage != null) {
                 stateObj.put("custom_message", customMessage);
             }

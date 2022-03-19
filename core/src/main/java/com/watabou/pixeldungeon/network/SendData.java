@@ -18,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
@@ -32,6 +31,13 @@ public class SendData {
     public static void addToSendLevelVisitedState(Level level, int ID) {
         if (clients[ID] != null) {
             clients[ID].packet.packAndAddLevelCells(level); //todo optimize this
+        }
+    }
+
+    public static void sendLevel(Level level, int ID){
+        if (clients[ID] != null) {
+            clients[ID].packet.packAndAddLevel(level);
+            clients[ID].flush();
         }
     }
 
@@ -113,6 +119,9 @@ public class SendData {
 
     //-----------------------------Interlevel Scene
     public static void sendInterLevelScene(int ID, String type) {
+        sendInterLevelScene(ID, type, true);
+    }
+    public static void sendInterLevelScene(int ID, String type,  boolean reset_level) {
         if (clients[ID] != null) {
             clients[ID].flush();
             {
@@ -120,7 +129,7 @@ public class SendData {
                     return;
                 }
             }
-            clients[ID].packet.packAndAddInterLevelSceneType(type);
+            clients[ID].packet.packAndAddInterLevelSceneType(type, reset_level);
             clients[ID].flush();
         }
     }
@@ -156,6 +165,20 @@ public class SendData {
             }
             client.packet.packAndAddActor(actor, actor == client.clientHero);
             client.flush();
+        }
+    }
+
+    public static void sendAllChars(int ID) {
+        if (clients[ID] != null) {
+            clients[ID].addAllCharsToSend();
+            clients[ID].flush();
+        }
+    }
+
+    public static void sendHeroNewID(Hero hero, int ID){
+        if (clients[ID] != null) {
+            clients[ID].packet.addNewHeroID(hero.id());
+            clients[ID].flush();
         }
     }
 

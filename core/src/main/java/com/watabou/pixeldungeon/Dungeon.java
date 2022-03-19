@@ -17,13 +17,6 @@
  */
 package com.watabou.pixeldungeon;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -33,8 +26,8 @@ import com.watabou.pixeldungeon.actors.buffs.Rage;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Blacksmith;
-import com.watabou.pixeldungeon.actors.mobs.npcs.Imp;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Ghost;
+import com.watabou.pixeldungeon.actors.mobs.npcs.Imp;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.watabou.pixeldungeon.items.Ankh;
 import com.watabou.pixeldungeon.items.Item;
@@ -58,7 +51,6 @@ import com.watabou.pixeldungeon.levels.Room;
 import com.watabou.pixeldungeon.levels.SewerBossLevel;
 import com.watabou.pixeldungeon.levels.SewerLevel;
 import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.BArray;
@@ -71,12 +63,22 @@ import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
 import static com.watabou.pixeldungeon.network.SendData.SendLevelReset;
 import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
 import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
+import static com.watabou.pixeldungeon.network.SendData.sendHeroNewID;
+import static com.watabou.pixeldungeon.network.SendData.sendLevel;
+import static com.watabou.pixeldungeon.network.SendData.sendAllChars;
 
 public class Dungeon {
 	
@@ -306,12 +308,16 @@ public class Dungeon {
 		if (respawner != null) {
 			Actor.add(level.respawner());
 		}
-		for (Hero hero : heroes) {
-			if (hero != null) {
-				if (hero.networkID >= 0) {
-					SendLevelReset(hero.networkID);
-				}
+		for (Hero hero:heroes) {
+			if (hero == null){
+				continue;
 			}
+			if (hero.networkID == -1){
+				continue;
+			}
+			sendLevel(level, hero.networkID);
+			sendAllChars(hero.networkID);
+			sendHeroNewID(hero, hero.networkID);
 		}
 	}
 
