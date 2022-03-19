@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import java.util.ArrayList;
-
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
@@ -26,6 +24,8 @@ import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.SparseArray;
+
+import java.util.ArrayList;
 
 public class FloatingText extends BitmapText {
 

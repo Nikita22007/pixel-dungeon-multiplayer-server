@@ -176,8 +176,17 @@ class ClientThread extends Thread {
                                 );
                                 break;
                             }
+                            case "toolbar_action":{
+                                JSONObject actionObj = data.getJSONObject(token);
+                                switch (actionObj.getString("action_name").toUpperCase(Locale.ENGLISH)) {
+                                    case "SLEEP": {clientHero.rest(true); break;}
+                                    case "WAIT": {clientHero.rest(false); break;}
+                                    case "SEARCH": {clientHero.search(true); break;}
+                                }
+                                break;
+                            }
                             default: {
-                                GLog.n("Bad token: %s", token);
+                                GLog.n("Server: Bad token: %s", token);
                                 break;
                             }
                         }

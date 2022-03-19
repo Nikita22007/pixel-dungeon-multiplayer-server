@@ -12,6 +12,9 @@ client:
         "action_name" = "DROP"
         "slot" = [0,4]
     }
+    "toolbar_action": {
+        action_name: "SLEEP"
+    }
 }
 
 server:
