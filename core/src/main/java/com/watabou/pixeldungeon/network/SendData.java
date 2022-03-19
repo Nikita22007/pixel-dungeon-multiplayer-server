@@ -30,4 +30,9 @@ public class SendData {
         packet.packAndAddWindowsResult(id, result, null);
         flush();
     }
+
+    public static void sendToolbarAction(String action) {
+        packet.packAndAddTollbarAction(action);
+        flush();
+    }
 }

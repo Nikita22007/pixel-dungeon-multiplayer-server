@@ -30,10 +30,12 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
+import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndCatalogus;
 import com.watabou.pixeldungeon.windows.WndHero;
 import com.watabou.pixeldungeon.windows.WndInfoCell;
@@ -43,6 +45,8 @@ import com.watabou.pixeldungeon.windows.WndInfoPlant;
 import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.pixeldungeon.windows.WndMessage;
 import com.watabou.pixeldungeon.windows.WndTradeItem;
+
+import static com.watabou.pixeldungeon.network.SendData.sendToolbarAction;
 
 public class Toolbar extends Component {
 
@@ -73,10 +77,10 @@ public class Toolbar extends Component {
 		add( btnWait = new Tool( 0, 7, 20, 25 ) {
 			@Override
 			protected void onClick() {
-				Dungeon.hero.rest( false );
+				sendToolbarAction("WAIT");
 			};
 			protected boolean onLongClick() {
-				Dungeon.hero.rest( true );
+				sendToolbarAction("SLEEP");
 				return true;
 			};
 		} );
@@ -84,14 +88,15 @@ public class Toolbar extends Component {
 		add( btnSearch = new Tool( 20, 7, 20, 25 ) {
 			@Override
 			protected void onClick() {
-				Dungeon.hero.search( true );
+				sendToolbarAction("SEARCH");
 			}
 		} );
 		
 		add( btnInfo = new Tool( 40, 7, 21, 25 ) {
 			@Override
 			protected void onClick() {
-				GameScene.selectCell( informer );
+				GLog.n("Info is not working now");
+					//GameScene.selectCell( informer );
 			}
 		} );
 		

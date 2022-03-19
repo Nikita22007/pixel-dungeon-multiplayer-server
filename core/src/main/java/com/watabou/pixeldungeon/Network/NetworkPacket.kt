@@ -87,4 +87,12 @@ class NetworkPacket {
         }
     }
 
+    fun packAndAddTollbarAction(action: String) {
+        val obj = JSONObject()
+        obj.put("action_name", action)
+        synchronized(dataRef) {
+            dataRef.get().put("toolbar_action", obj)
+        }
+    }
+
 }
