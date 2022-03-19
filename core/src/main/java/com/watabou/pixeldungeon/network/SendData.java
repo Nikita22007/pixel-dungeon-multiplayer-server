@@ -24,6 +24,9 @@ public class SendData {
     }
 
     public static void sendWindowResult(int id, int result) {
+        if (-1 == id){
+            return; //internal window
+        }
         packet.packAndAddWindowsResult(id, result, null);
         flush();
     }
