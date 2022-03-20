@@ -45,7 +45,7 @@ public class Shopkeeper extends NPC {
 		Hero nearestHero;
 		nearestHero=HeroHelp.GetNearestHero(pos,MAX_HERO_PATH_LENGTH);
 		if (nearestHero!=null) {
-			sprite.turnTo(pos, nearestHero.pos);
+			getSprite().turnTo(pos, nearestHero.pos);
 		}
 		spend( TICK );
 		return true;
@@ -71,7 +71,7 @@ public class Shopkeeper extends NPC {
 		
 		destroy();
 		
-		sprite.killAndErase();
+		getSprite().killAndErase();
 		CellEmitter.get( pos ).burst( ElmoParticle.FACTORY, 6 );
 	}
 	

@@ -59,7 +59,7 @@ public class ScrollOfChallenge extends Scroll {
 		GLog.w( "The scroll emits a challenging roar that echoes throughout the dungeon!" );
 		setKnown();
 		
-		curUser.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );		
+		curUser.getSprite().centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
 		Sample.INSTANCE.play( Assets.SND_CHALLENGE );
 		Invisibility.dispel(curUser);
 		

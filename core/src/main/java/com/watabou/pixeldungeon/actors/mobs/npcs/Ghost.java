@@ -106,7 +106,7 @@ public class Ghost extends NPC {
 	
 	@Override
 	public void interact(Hero hero) {
-		sprite.turnTo( pos, hero.pos );
+		getSprite().turnTo( pos, hero.pos );
 		Sample.INSTANCE.play( Assets.SND_GHOST );
 		
 		Quest.type.handler.interact(hero, this );
@@ -134,9 +134,9 @@ public class Ghost extends NPC {
 		final float FADE_TIME = 0.5f;
 		
 		a.destroy();
-		a.sprite.parent.add( new AlphaTweener( a.sprite, 0, FADE_TIME ) {
+		a.getSprite().parent.add(new AlphaTweener(a.getSprite(), 0, FADE_TIME ) {
 			protected void onComplete() {
-				a.sprite.killAndErase();
+				a.getSprite().killAndErase();
 				parent.erase( this );
 			};
 		} );
@@ -144,9 +144,9 @@ public class Ghost extends NPC {
 		b.pos = a.pos;
 		GameScene.add( b );
 		
-		b.sprite.flipHorizontal = a.sprite.flipHorizontal;
-		b.sprite.alpha( 0 );
-		b.sprite.parent.add( new AlphaTweener( b.sprite, 1, FADE_TIME ) );
+		b.getSprite().flipHorizontal = a.getSprite().flipHorizontal;
+		b.getSprite().alpha( 0 );
+		b.getSprite().parent.add( new AlphaTweener(b.getSprite(), 1, FADE_TIME ) );
 	}
 
 	public static class Quest {
@@ -347,8 +347,8 @@ public class Ghost extends NPC {
 				
 				CellEmitter.get( ghost.pos ).start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );
 				ghost.pos = newPos;
-				ghost.sprite.place( ghost.pos );
-				ghost.sprite.visible = Dungeon.visible[ghost.pos];
+				ghost.getSprite().place( ghost.pos );
+				ghost.getSprite().visible = Dungeon.visible[ghost.pos];
 			}
 		}
 	}
@@ -448,7 +448,7 @@ public class Ghost extends NPC {
 							CursePersonification d = new CursePersonification();
 							Ghost.replace( ghost, d );
 							
-							d.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
+							d.getSprite().emitter().burst( ShadowParticle.CURSE, 5 );
 							Sample.INSTANCE.play( Assets.SND_GHOST );
 							
 							hero.next();

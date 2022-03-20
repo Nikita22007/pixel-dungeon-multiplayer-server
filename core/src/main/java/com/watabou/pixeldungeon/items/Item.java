@@ -41,11 +41,9 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInventory;
@@ -422,7 +420,7 @@ public class Item implements Bundlable {
 	}
 	
 	public static void evoke( Hero hero ) {
-		hero.sprite.emitter().burst( Speck.factory( Speck.EVOKE ), 5 );
+		hero.getSprite().emitter().burst( Speck.factory( Speck.EVOKE ), 5 );
 	}
 	
 	@Override
@@ -587,7 +585,7 @@ public class Item implements Bundlable {
 	public void cast( final Hero user, int dst ) {
 		
 		final int cell = Ballistica.cast( user.pos, dst, false, true );
-		user.sprite.zap( cell );
+		user.getSprite().zap( cell );
 		user.busy();
 		
 		Sample.INSTANCE.play( Assets.SND_MISS, 0.6f, 0.6f, 1.5f );
@@ -611,7 +609,7 @@ public class Item implements Bundlable {
 		}
 		final float finalDelay = delay;
 		
-		((MissileSprite)user.sprite.parent.recycle( MissileSprite.class )).
+		((MissileSprite) user.getSprite().parent.recycle( MissileSprite.class )).
 			reset( user.pos, cell, this, new Callback() {			
 				@Override
 				public void call() {

@@ -58,7 +58,7 @@ public class Viscosity extends Glyph {
 			}
 			debuff.prolong( damage );
 			
-			defender.sprite.showStatus( CharSprite.WARNING, "deferred %d", damage );
+			defender.getSprite().showStatus( CharSprite.WARNING, "deferred %d", damage );
 			
 			return 0;
 			

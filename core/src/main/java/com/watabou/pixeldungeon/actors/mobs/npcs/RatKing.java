@@ -17,7 +17,6 @@
  */
 package com.watabou.pixeldungeon.actors.mobs.npcs;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 
@@ -63,7 +62,7 @@ public class RatKing extends NPC {
 	
 	@Override
 	public void interact(Hero hero) {
-		sprite.turnTo( pos, hero.pos );
+		getSprite().turnTo( pos, hero.pos );
 		if (state == SLEEPEING) {
 			notice();
 			yell( "I'm not sleeping!" );

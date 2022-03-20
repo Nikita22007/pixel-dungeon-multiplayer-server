@@ -83,7 +83,7 @@ public class Goo extends Mob {
 	public boolean act() {
 		
 		if (Level.water[pos] && getHP() < getHT()) {
-			sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+			getSprite().emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			setHP(getHP() + 1);
 		}
 		
@@ -99,7 +99,7 @@ public class Goo extends Mob {
 	public int attackProc( Char enemy, int damage ) {
 		if (Random.Int( 3 ) == 0) {
 			Buff.affect( enemy, Ooze.class );
-			enemy.sprite.burst( 0x000000, 5 );
+			enemy.getSprite().burst( 0x000000, 5 );
 		}
 		
 		return damage;
@@ -133,7 +133,7 @@ public class Goo extends Mob {
 					
 					if (Dungeon.visible[pos] || Dungeon.visible[dest]) {
 						
-						sprite.jump( pos, dest, afterJump );
+						getSprite().jump( pos, dest, afterJump );
 						return false;
 						
 					} else {
@@ -144,7 +144,7 @@ public class Goo extends Mob {
 					}
 				} else {
 					
-					sprite.idle();
+					getSprite().idle();
 					pumpedUp = false;
 					return true;
 				}
@@ -161,10 +161,10 @@ public class Goo extends Mob {
 			pumpedUp = true;
 			spend( PUMP_UP_DELAY );
 			
-			((GooSprite)sprite).pumpUp();
+			((GooSprite) getSprite()).pumpUp();
 			
 			if (Dungeon.visible[pos]) {
-				sprite.showStatus( CharSprite.NEGATIVE, "!!!" );
+				getSprite().showStatus( CharSprite.NEGATIVE, "!!!" );
 				GLog.n( "Goo is pumping itself up!" );
 			}
 				

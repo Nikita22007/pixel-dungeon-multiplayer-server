@@ -99,7 +99,7 @@ public class WarriorArmor extends ClassArmor {
 				
 				final int dest = cell;
 				curUser.busy();
-				curUser.sprite.jump( curUser.pos, cell, new Callback() {
+				curUser.getSprite().jump( curUser.pos, cell, new Callback() {
 					@Override
 					public void call() {
 						curUser.move( dest );

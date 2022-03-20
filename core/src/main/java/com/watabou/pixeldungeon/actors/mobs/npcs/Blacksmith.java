@@ -81,7 +81,7 @@ public class Blacksmith extends NPC {
 	@Override
 	public void interact(final Hero hero) {
 		
-		sprite.turnTo( pos, hero.pos );
+		getSprite().turnTo( pos, hero.pos );
 		
 		if (!Quest.given) {
 			

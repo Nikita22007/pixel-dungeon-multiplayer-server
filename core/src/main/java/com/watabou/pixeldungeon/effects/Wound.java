@@ -18,9 +18,7 @@
 package com.watabou.pixeldungeon.effects;
 
 import com.watabou.noosa.Game;
-import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.levels.Level;
@@ -63,8 +61,8 @@ public class Wound extends Image {
 	}
 	
 	public static void hit( Char ch, float angle ) {
-		Wound w = (Wound)ch.sprite.parent.recycle( Wound.class );
-		ch.sprite.parent.bringToFront( w );
+		Wound w = (Wound) ch.getSprite().parent.recycle( Wound.class );
+		ch.getSprite().parent.bringToFront( w );
 		w.reset( ch.pos );
 		w.angle = angle;
 	}

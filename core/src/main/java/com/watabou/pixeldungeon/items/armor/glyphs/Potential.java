@@ -18,7 +18,6 @@
 package com.watabou.pixeldungeon.items.armor.glyphs;
 
 import com.watabou.noosa.Camera;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.Lightning;
@@ -54,7 +53,7 @@ public class Potential extends Glyph {
 			}
 			
 			int[] points = {attacker.pos, defender.pos};
-			attacker.sprite.parent.add( new Lightning( points, 2, null ) );
+			attacker.getSprite().parent.add( new Lightning( points, 2, null ) );
 
 		}
 		

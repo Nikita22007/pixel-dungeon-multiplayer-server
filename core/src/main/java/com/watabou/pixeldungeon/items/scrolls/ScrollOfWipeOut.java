@@ -111,7 +111,7 @@ public class ScrollOfWipeOut extends Item {
 		
 		curUser.spend( TIME_TO_READ );
 		curUser.busy();
-		((HeroSprite)curUser.sprite).read();
+		((HeroSprite) curUser.getSprite()).read();
 	}
 	
 	@Override

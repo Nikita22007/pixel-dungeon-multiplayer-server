@@ -91,7 +91,7 @@ public class Wandmaker extends NPC {
 	
 	@Override
 	public void interact(Hero  hero) {
-		sprite.turnTo( pos, hero.pos );
+		getSprite().turnTo( pos, hero.pos );
 		Quest.type.handler.interact( hero,this );
 	}
 	

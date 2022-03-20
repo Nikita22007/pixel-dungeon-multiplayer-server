@@ -160,10 +160,10 @@ public class Mimic extends Mob {
 		m.state = m.HUNTING;
 		GameScene.add( m, 1 );
 		if (!(enemy==null)) {
-			m.sprite.turnTo(pos, enemy.pos);
+			m.getSprite().turnTo(pos, enemy.pos);
 		}
 		else{                       //TODO SEARCH MOB AROUND
-			m.sprite.turnTo(pos, Level.NEIGHBOURS8[Random.Int(7)]);
+			m.getSprite().turnTo(pos, Level.NEIGHBOURS8[Random.Int(7)]);
 		}
 
 		if (Dungeon.visible[m.pos]) {

@@ -54,7 +54,7 @@ public class PhantomFish extends Item {
 			
 			detach( hero.belongings.backpack );
 			
-			hero.sprite.operate( hero.pos );
+			hero.getSprite().operate( hero.pos );
 			hero.busy();
 			Sample.INSTANCE.play( Assets.SND_EAT );
 			Sample.INSTANCE.play( Assets.SND_MELD );

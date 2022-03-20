@@ -57,6 +57,9 @@ public class Group extends Gizmo {
 	
 	@Override
 	public void update() {
+		if (members == null)  {
+			return;
+		}
         ArrayList<Gizmo> membersTemp = (ArrayList<Gizmo>) members.clone();
         for (Gizmo g : membersTemp) {
             if (!members.contains(g)) {

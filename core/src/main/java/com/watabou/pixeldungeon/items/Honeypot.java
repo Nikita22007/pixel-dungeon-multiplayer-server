@@ -55,7 +55,7 @@ public class Honeypot extends Item {
 	public void execute( final Hero hero, String action ) {
 		if (action.equals( AC_SHATTER )) {
 			
-			hero.sprite.zap( hero.pos );
+			hero.getSprite().zap( hero.pos );
 			shatter( hero.pos, hero );
 			
 			detach( hero.belongings.backpack );
@@ -106,8 +106,8 @@ public class Honeypot extends Item {
 			GameScene.add( bee );
 			Actor.addDelayed( new Pushing( bee, pos, newPos ), -1 );
 			
-			bee.sprite.alpha( 0 );
-			bee.sprite.parent.add( new AlphaTweener( bee.sprite, 1, 0.15f ) );
+			bee.getSprite().alpha( 0 );
+			bee.getSprite().parent.add( new AlphaTweener(bee.getSprite(), 1, 0.15f ) );
 			
 			Sample.INSTANCE.play( Assets.SND_BEE );
 		}

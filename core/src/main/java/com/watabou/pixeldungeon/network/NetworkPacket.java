@@ -133,6 +133,9 @@ public class NetworkPacket {
                     object.put("type", "hero");
                 } else {
                     object.put("type", "character");
+                    if (((Char) actor).getSprite() != null) {
+                        object.put("sprite_name", ((Char) actor).getSprite().spriteName());
+                    }
                 }
                 Char character = (Char) actor;
                 String name = character.name;

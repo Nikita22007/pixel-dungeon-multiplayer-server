@@ -86,7 +86,7 @@ public class MirrorImage extends NPC {
 		int dmg = super.attackProc( enemy, damage );
 
 		destroy();
-		sprite.die();
+		getSprite().die();
 		
 		return dmg;
 	}
@@ -130,7 +130,7 @@ public class MirrorImage extends NPC {
 		move( hero.pos );
 		hero.move( curPos );
 
-		hero.sprite.move( hero.pos, curPos );
+		hero.getSprite().move( hero.pos, curPos );
 
 		hero.spend( 1 / hero.speed() );
 		hero.busy();

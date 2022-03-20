@@ -87,7 +87,7 @@ public class DM300 extends Mob {
 		if (Dungeon.level.map[step] == Terrain.INACTIVE_TRAP && getHP() < getHT()) {
 			
 			setHP(getHP() + Random.Int( 1, getHT() - getHP()));
-			sprite.emitter().burst( ElmoParticle.FACTORY, 5 );
+			getSprite().emitter().burst( ElmoParticle.FACTORY, 5 );
 			
 			if (Dungeon.visible[step] /*&& Dungeon.hero.isAlive()*/) {//FixMe if anybody on the floor
 				GLog.n( "DM-300 repairs itself!" );

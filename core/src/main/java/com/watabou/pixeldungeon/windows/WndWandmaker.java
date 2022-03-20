@@ -62,7 +62,7 @@ public class WndWandmaker extends WndQuest {
 		wandmaker.yell( Utils.format( TXT_FARAWELL,ownerHero.className() ) );
 		wandmaker.destroy();
 		
-		wandmaker.sprite.die();
+		wandmaker.getSprite().die();
 		
 		Wandmaker.Quest.complete();
 	}

@@ -80,14 +80,14 @@ public class Chasm {
 				InterLevelSceneServer.fall(hero);
 			}
 		} else {
-			hero.sprite.visible = false;
+			hero.getSprite().visible = false;
 		}
 	}
 	
 	public static void heroLand(@org.jetbrains.annotations.NotNull Hero hero) {
 
 		
-		hero.sprite.burst( hero.sprite.blood(), 10 );
+		hero.getSprite().burst( hero.getSprite().blood(), 10 );
 		Camera.main.shake( 4, 0.2f );
 		
 		Buff.prolong( hero, Cripple.class, Cripple.DURATION );
@@ -104,6 +104,6 @@ public class Chasm {
 
 	public static void mobFall( Mob mob ) {
 		mob.destroy();
-		((MobSprite)mob.sprite).fall();
+		((MobSprite) mob.getSprite()).fall();
 	}
 }

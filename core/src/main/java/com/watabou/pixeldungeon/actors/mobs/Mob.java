@@ -138,7 +138,7 @@ class Mob extends Char {
 		boolean justAlerted = alerted;
 		alerted = false;
 
-		sprite.hideAlert();
+		getSprite().hideAlert();
 
 		if (paralysed) {
 			enemySeen = false;
@@ -185,7 +185,7 @@ class Mob extends Char {
 	}
 
 	protected boolean moveSprite(int from, int to) {
-		sprite.move(from, to);
+		getSprite().move(from, to);
 		return true;
 	}
 
@@ -193,15 +193,15 @@ class Mob extends Char {
 	public void add(Buff buff) {
 		super.add(buff);
 		if (buff instanceof Amok) {
-			if (sprite != null) {
-				sprite.showStatus(CharSprite.NEGATIVE, TXT_RAGE);
+			if (getSprite() != null) {
+				getSprite().showStatus(CharSprite.NEGATIVE, TXT_RAGE);
 			}
 			state = HUNTING;
 		} else if (buff instanceof Terror) {
 			state = FLEEING;
 		} else if (buff instanceof Sleep) {
-			if (sprite != null) {
-				new Flare(4, 32).color(0x44ffff, true).show(sprite, 2f);
+			if (getSprite() != null) {
+				new Flare(4, 32).color(0x44ffff, true).show(getSprite(), 2f);
 			}
 			state = SLEEPEING;
 			postpone(Sleep.SWS);
@@ -212,7 +212,7 @@ class Mob extends Char {
 	public void remove(Buff buff) {
 		super.remove(buff);
 		if (buff instanceof Terror) {
-			sprite.showStatus(CharSprite.NEGATIVE, TXT_RAGE);
+			getSprite().showStatus(CharSprite.NEGATIVE, TXT_RAGE);
 			state = HUNTING;
 		}
 	}
@@ -268,7 +268,7 @@ class Mob extends Char {
 		boolean visible = Dungeon.visible[pos];
 
 		if (visible) {
-			sprite.attack(enemy.pos);
+			getSprite().attack(enemy.pos);
 		} else {
 			attack(enemy);
 		}
@@ -333,7 +333,7 @@ class Mob extends Char {
 
 			int exp = exp(hero);
 			if (exp > 0) {
-				hero.sprite.showStatus(CharSprite.POSITIVE, TXT_EXP, exp);
+				hero.getSprite().showStatus(CharSprite.POSITIVE, TXT_EXP, exp);
 				hero.earnExp(exp);
 			}
 		}
@@ -431,7 +431,7 @@ class Mob extends Char {
 	}
 	
 	public void notice() {
-		sprite.showAlert();
+		getSprite().showAlert();
 	}
 	
 	public void yell( String str ) {

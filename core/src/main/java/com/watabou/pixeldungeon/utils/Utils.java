@@ -17,6 +17,7 @@
  */
 package com.watabou.pixeldungeon.utils;
 
+import java.lang.reflect.Array;
 import java.util.Locale;
 
 public class Utils {
@@ -37,5 +38,19 @@ public class Utils {
 		} else {
 			return (VOWELS.indexOf( Character.toLowerCase( noun.charAt( 0 ) ) ) != -1 ? "an " : "a ") + noun;
 		}
+	}
+
+	public static String toSnakeCase(String str) {
+		StringBuilder builder = new StringBuilder();
+		char[] arr = str.toCharArray();
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isUpperCase(arr[i])) {
+				builder.append('_');
+				builder.append(Character.toLowerCase(arr[i]));
+			} else {
+				builder.append(arr[i]);
+			}
+		}
+		return builder.toString();
 	}
 }

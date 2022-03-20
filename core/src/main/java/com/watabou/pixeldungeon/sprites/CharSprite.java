@@ -57,7 +57,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	private static final float MOVE_INTERVAL	= 0.1f;
 	private static final float FLASH_INTERVAL	= 0.05f;
 
-	public enum State {
+    public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED
 	}
 
@@ -96,9 +96,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		listener = this;
 	}
 
+	public String spriteName() {
+		return Utils.toSnakeCase(this.getClass().getSimpleName());
+	}
+
+
 	public void link( Char ch ) {
 		this.ch = ch;
-		ch.sprite = this;
+		ch.setSprite(this);
 
 		place( ch.pos );
 		turnTo( ch.pos, Random.Int( Level.LENGTH ) );

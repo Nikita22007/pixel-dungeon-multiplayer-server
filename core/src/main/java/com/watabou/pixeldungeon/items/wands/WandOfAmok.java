@@ -19,7 +19,6 @@ package com.watabou.pixeldungeon.items.wands;
 
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Amok;
@@ -55,7 +54,7 @@ public class WandOfAmok extends Wand {
 	}
 	
 	protected void fx( int cell, Callback callback ) {
-		MagicMissile.purpleLight( curUser.sprite.parent, curUser.pos, cell, callback );
+		MagicMissile.purpleLight( curUser.getSprite().parent, curUser.pos, cell, callback );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

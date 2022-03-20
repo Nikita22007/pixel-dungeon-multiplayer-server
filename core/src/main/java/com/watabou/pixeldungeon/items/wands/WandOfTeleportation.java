@@ -61,8 +61,8 @@ public class WandOfTeleportation extends Wand {
 			} else {
 			
 				ch.pos = pos;
-				ch.sprite.place( ch.pos );
-				ch.sprite.visible = Dungeon.visible[pos];
+				ch.getSprite().place( ch.pos );
+				ch.getSprite().visible = Dungeon.visible[pos];
 				GLog.i( curUser.name + " teleported " + ch.name + " to somewhere" );
 				
 			}
@@ -75,7 +75,7 @@ public class WandOfTeleportation extends Wand {
 	}
 	
 	protected void fx( int cell, Callback callback ) {
-		MagicMissile.coldLight( curUser.sprite.parent, curUser.pos, cell, callback );
+		MagicMissile.coldLight( curUser.getSprite().parent, curUser.pos, cell, callback );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

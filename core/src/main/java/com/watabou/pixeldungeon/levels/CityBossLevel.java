@@ -192,8 +192,8 @@ public class CityBossLevel extends Level {
 			
 			if (Dungeon.visible[boss.pos]) {
 				boss.notice();
-				boss.sprite.alpha( 0 );
-				boss.sprite.parent.add( new AlphaTweener( boss.sprite, 1, 0.1f ) );
+				boss.getSprite().alpha( 0 );
+				boss.getSprite().parent.add( new AlphaTweener(boss.getSprite(), 1, 0.1f ) );
 			}
 			
 			set( arenaDoor, Terrain.LOCKED_DOOR );

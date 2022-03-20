@@ -17,7 +17,6 @@
  */
 package com.watabou.pixeldungeon.items.scrolls;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.effects.Enchanting;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Item;
@@ -53,7 +52,7 @@ public class ScrollOfEnchantment extends InventoryScroll {
 		
 		item.fix();
 		
-		curUser.sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.1f, 5 );
+		curUser.getSprite().emitter().start( Speck.factory( Speck.LIGHT ), 0.1f, 5 );
 		Enchanting.show( curUser, item );
 		GLog.w( TXT_GLOWS, item.name() );
 	}

@@ -66,7 +66,7 @@ public class SacrificialFire extends Blob {
 		Char ch = Actor.findChar( pos );
 		if (ch != null) {
 			if (Dungeon.visible[pos] && ch.buff( Marked.class ) == null) {
-				ch.sprite.emitter().burst( SacrificialParticle.FACTORY, 20 );
+				ch.getSprite().emitter().burst( SacrificialParticle.FACTORY, 20 );
 				Sample.INSTANCE.play( Assets.SND_BURNING );
 			}
 			Buff.prolong( ch, Marked.class, Marked.DURATION );
@@ -115,7 +115,7 @@ public class SacrificialFire extends Blob {
 					Journal.remove( Feature.SACRIFICIAL_FIRE );
 					
 					GLog.w( TXT_REWARD );
-					GameScene.effect( new Flare( 7, 32 ).color( 0x66FFFF, true ).show( ch.sprite.parent, DungeonTilemap.tileCenterToWorld( fire.pos ), 2f ) );
+					GameScene.effect( new Flare( 7, 32 ).color( 0x66FFFF, true ).show( ch.getSprite().parent, DungeonTilemap.tileCenterToWorld( fire.pos ), 2f ) );
 					Dungeon.level.drop( new ScrollOfWipeOut(), fire.pos ).sprite.drop();
 				}
 			} else {

@@ -341,7 +341,7 @@ public abstract class Wand extends KindOfWeapon {
 	}
 	
 	protected void fx( int cell, Callback callback ) {
-		MagicMissile.blueLight( curUser.sprite.parent, curUser.pos, cell, callback );
+		MagicMissile.blueLight( curUser.getSprite().parent, curUser.pos, cell, callback );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 
@@ -423,7 +423,7 @@ public abstract class Wand extends KindOfWeapon {
 				curWand.setKnown();
 				
 				final int cell = Ballistica.cast( curUser.pos, target, true, curWand.hitChars );
-				curUser.sprite.zap( cell );
+				curUser.getSprite().zap( cell );
 				
 				QuickSlot.target( curItem, Actor.findChar( cell ) );
 				

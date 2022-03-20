@@ -133,7 +133,7 @@ public class Bee extends NPC {
 		moveSprite( pos, hero.pos );
 		move( hero.pos );
 		
-		hero.sprite.move( hero.pos, curPos );
+		hero.getSprite().move( hero.pos, curPos );
 		hero.move( curPos );
 		
 		hero.spend( 1 / hero.speed() );

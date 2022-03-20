@@ -78,7 +78,7 @@ public class Elemental extends Mob {
 		if (buff instanceof Burning) {
 			if (getHP() < getHT()) {
 				setHP(getHP() + 1);
-				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+				getSprite().emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			}
 		} else {
 			if (buff instanceof Frost) {

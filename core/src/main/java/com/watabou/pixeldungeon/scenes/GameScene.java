@@ -314,7 +314,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 
 	public void addHeroSprite(Hero hero){
-		CharSprite sprite  = hero.sprite;
+		CharSprite sprite  = hero.getSprite();
 		sprite.visible = true;
 		mobs.add(sprite);
 		sprite.link(hero);
@@ -430,7 +430,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			scene.fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
 			
 			for (Mob mob : Dungeon.level.mobs) {
-				mob.sprite.visible = Dungeon.visible[mob.pos];
+				mob.getSprite().visible = Dungeon.visible[mob.pos];
 			}
 		}
 	}

@@ -159,7 +159,7 @@ public class Tengu extends Mob {
                         (enemy != null && Level.adjacent(newPos, enemy.pos)) ||
                         Actor.findChar(newPos) != null);
 
-        sprite.move(pos, newPos);
+        getSprite().move(pos, newPos);
         move(newPos);
 
         if (Dungeon.visible[newPos]) {

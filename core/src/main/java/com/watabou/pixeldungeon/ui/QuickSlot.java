@@ -23,7 +23,6 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Item;
@@ -220,7 +219,7 @@ public class QuickSlot extends Button implements WndBag.Listener {  //it  is cli
 		
 		if (targeting) {
 			if (Actor.all().contains( lastTarget )) {
-				lastTarget.sprite.parent.add( crossM );
+				lastTarget.getSprite().parent.add( crossM );
 				crossM.point( DungeonTilemap.tileToWorld( lastTarget.pos ) );
 				crossB.visible = true;
 			} else {

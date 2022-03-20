@@ -71,14 +71,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
-import static com.watabou.pixeldungeon.network.SendData.SendLevelReset;
 import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
 import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
+import static com.watabou.pixeldungeon.network.SendData.sendAllChars;
 import static com.watabou.pixeldungeon.network.SendData.sendHeroNewID;
 import static com.watabou.pixeldungeon.network.SendData.sendLevel;
-import static com.watabou.pixeldungeon.network.SendData.sendAllChars;
 
 public class Dungeon {
 	

@@ -50,7 +50,7 @@ public class Shock extends Weapon.Enchantment {
 			
 			hit( defender, Random.Int( 1, damage / 2 ) );
 			
-			attacker.sprite.parent.add( new Lightning( points, nPoints, null ) );
+			attacker.getSprite().parent.add( new Lightning( points, nPoints, null ) );
 			
 			return true;
 			
@@ -80,8 +80,8 @@ public class Shock extends Weapon.Enchantment {
 		affected.add( ch );
 		ch.damage( Level.water[ch.pos] && !ch.flying ? (int)(damage * 2) : damage, LightningTrap.LIGHTNING  );
 		
-		ch.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
-		ch.sprite.flash();
+		ch.getSprite().centerEmitter().burst( SparkParticle.FACTORY, 3 );
+		ch.getSprite().flash();
 		
 		points[nPoints++] = ch.pos;
 		
