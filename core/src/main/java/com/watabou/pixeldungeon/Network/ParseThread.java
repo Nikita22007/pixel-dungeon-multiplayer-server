@@ -23,6 +23,7 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
+import com.watabou.pixeldungeon.sprites.HeroCustomSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.sprites.RatSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
@@ -307,6 +308,10 @@ public class ParseThread extends Thread {
         try {
             if (level == null) {
                 Log.e("ParceHeap", "level == null");
+                return;
+            }
+            if (level.heaps == null) {
+                Log.e("ParceHeap", "level.heaps == null");
                 return;
             }
             int pos = heapObj.getInt("pos");
@@ -663,6 +668,9 @@ public class ParseThread extends Thread {
                     CharSprite sprite = null;
                     try {
                         sprite_class = Class.forName(sprite_name);
+                        if ((sprite_class == HeroSprite.class) && (chr != hero)) {
+                            sprite_class = HeroCustomSprite.class;
+                        }
                         sprite = (CharSprite) sprite_class.newInstance();
                     } catch (Exception e) {
                         e.printStackTrace();
