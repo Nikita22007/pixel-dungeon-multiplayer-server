@@ -103,6 +103,9 @@ public class FloatingText extends BitmapText {
 	
 	public static void show( float x, float y, int key, String text, int color ) {
 		FloatingText txt = GameScene.status();
+		if (txt == null){
+			return;
+		}
 		txt.reset( x,  y,  text, color );
 		push( txt, key );
 	}

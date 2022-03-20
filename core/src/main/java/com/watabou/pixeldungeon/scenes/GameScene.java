@@ -38,6 +38,7 @@ import com.watabou.pixeldungeon.FogOfWar;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
@@ -445,7 +446,24 @@ public class GameScene extends PixelScene {
 			gases.add( new BlobEmitter( gas ) );
 		}
 	}
-	
+
+	public static void updateCharSprite(Char chr, CharSprite newSprite) {
+		if (scene == null) {
+			newSprite.link(chr);
+			return;
+		}
+		if (chr instanceof Mob) {
+			((Mob) chr).spriteClass = newSprite.getClass();
+			CharSprite oldSprite = chr.sprite;
+			newSprite.killAndErase();
+			scene.mobs.remove(oldSprite);
+			oldSprite.killAndErase();
+			scene.addMobSprite((Mob) chr);
+		} else {
+			GLog.n("trying on change sprite on char that is not mob");
+		}
+	}
+
 	private void addMobSprite( Mob mob ) {
 		CharSprite sprite = mob.sprite();
 		sprite.visible = Dungeon.visible[mob.pos];

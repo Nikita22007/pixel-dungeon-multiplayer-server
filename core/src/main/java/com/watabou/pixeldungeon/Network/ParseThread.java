@@ -24,10 +24,12 @@ import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
+import com.watabou.pixeldungeon.sprites.RatSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.*;
+import com.watabou.pixeldungeon.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,17 +40,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.watabou.pixeldungeon.Dungeon.droppedItems;
 import static com.watabou.pixeldungeon.Dungeon.hero;
 import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
-import static com.watabou.pixeldungeon.scenes.GameScene.show;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
 
 public class ParseThread extends Thread {
@@ -658,8 +657,21 @@ public class ParseThread extends Thread {
                     break;
                 }
                 case "sprite_name": {
-                    assert false : "sprite_name";
-                    //todo
+                    String sprite_name = Utils.format("com.watabou.pixeldungeon.sprites.%s", Utils.ToPascalCase(actorObj.getString(token)));
+                    CharSprite old_sprite = chr.sprite;
+                    Class sprite_class = null;
+                    CharSprite sprite = null;
+                    try {
+                        sprite_class = Class.forName(sprite_name);
+                        sprite = (CharSprite) sprite_class.newInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (sprite == null) {
+                        GLog.n("Incorrect sprite \"%s\" for id %d", sprite_name, ID);
+                        sprite = new RatSprite();
+                    }
+                    GameScene.updateCharSprite(chr, sprite);
                     break;
                 }
                 case "animation_name": {

@@ -38,4 +38,24 @@ public class Utils {
 			return (VOWELS.indexOf( Character.toLowerCase( noun.charAt( 0 ) ) ) != -1 ? "an " : "a ") + noun;
 		}
 	}
+
+	public static String ToPascalCase(String str) {
+		str = '_' + str;
+		StringBuilder builder = new StringBuilder();
+		boolean next_up = false;
+		char[] arr = str.toCharArray();
+		for (int i = 0; i < str.length(); i++) {
+			if (arr[i] == '_') {
+				next_up = true;
+			} else {
+				if (next_up) {
+					builder.append(Character.toUpperCase(arr[i]));
+					next_up = false;
+				} else {
+					builder.append(arr[i]);
+				}
+			}
+		}
+		return builder.toString();
+	}
 }
