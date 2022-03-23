@@ -286,8 +286,11 @@ public class Dungeon {
         observe(hero);
     }
 	public static void switchLevel(final Level level, int pos, @NotNull Hero hero ) {
+		switchLevelToAll(level, pos);  //todo change this for multilevels support
+		/*
 		switchLevel(level);
         swichLevelChangePosition(pos,hero);
+		 */
 	}
 
 	public static void switchLevel(final Level level) {
