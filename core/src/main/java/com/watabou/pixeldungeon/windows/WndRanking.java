@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.windows;
 
-import java.util.Locale;
-
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
@@ -41,6 +39,8 @@ import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.ScrollPane;
 import com.watabou.pixeldungeon.utils.Utils;
+
+import java.util.Locale;
 
 public class WndRanking extends WndTabbed {
 	

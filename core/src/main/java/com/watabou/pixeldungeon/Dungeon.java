@@ -133,16 +133,6 @@ public class Dungeon {
 	}
 	
 
-	public static void resetLevel() {
-		
-		Actor.clear();
-		
-		Arrays.fill( visible, false );
-		
-		level.reset();
-		switchLevel( level, level.entrance );
-	}
-	
 	public static boolean shopOnLevel() {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
@@ -150,27 +140,7 @@ public class Dungeon {
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
-	
-	@SuppressWarnings("deprecation")
-	public static void switchLevel( final Level level, int pos ) {
-		
-		nightMode = new Date().getHours() < 7;
-		
-		Dungeon.level = level;
-		Actor.init();
-		
-		Actor respawner = level.respawner();
-		if (respawner != null) {
-			Actor.add( level.respawner() );
-		}
-		
-		hero.pos = pos != -1 ? pos : level.exit;
-		
-		Light light = hero.buff( Light.class );
-		hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
-		
-		observe();
-	}
+
 	
 	public static void dropToChasm( Item item ) {
 		int depth = Dungeon.depth + 1;
@@ -179,33 +149,6 @@ public class Dungeon {
 			Dungeon.droppedItems.put( depth, dropped = new ArrayList<Item>() ); 
 		}
 		dropped.add( item );
-	}
-	
-	public static boolean posNeeded() {
-		int[] quota = {4, 2, 9, 4, 14, 6, 19, 8, 24, 9};
-		return chance( quota, potionOfStrength );
-	}
-	
-	public static boolean souNeeded() {
-		int[] quota = {5, 3, 10, 6, 15, 9, 20, 12, 25, 13};
-		return chance( quota, scrollsOfUpgrade );
-	}
-	
-	public static boolean soeNeeded() {
-		return Random.Int( 12 * (1 + scrollsOfEnchantment) ) < depth;
-	}
-	
-	private static boolean chance( int[] quota, int number ) {
-		
-		for (int i=0; i < quota.length; i += 2) {
-			int qDepth = quota[i];
-			if (depth <= qDepth) {
-				int qNumber = quota[i + 1];
-				return Random.Float() < (float)(qNumber - number) / (qDepth - depth + 1);
-			}
-		}
-		
-		return false;
 	}
 	
 	private static final String RG_GAME_FILE	= "game.dat";
@@ -319,29 +262,14 @@ public class Dungeon {
 			GamesInProgress.setUnknown( hero.heroClass );
 		}
 	}
-	
-	public static void saveLevel() throws IOException {
-		Bundle bundle = new Bundle();
-		bundle.put( LEVEL, level );
-		
-		OutputStream output = Game.instance.openFileOutput( Utils.format( depthFile( hero.heroClass ), depth ), Game.MODE_PRIVATE );
-		Bundle.write( bundle, output );
-		output.close();
-	}
+
 	
 	public static void saveAll() throws IOException {
 		return;
 	}
-	
-	public static void loadGame( HeroClass cl ) throws IOException {
-		loadGame( gameFile( cl ), true );
-	}
+
 	
 	public static void loadGame( String fileName ) throws IOException {
-		loadGame( fileName, false );
-	}
-	
-	public static void loadGame( String fileName, boolean fullLoad ) throws IOException {
 		
 		Bundle bundle = gameBundle( fileName );
 		
@@ -349,10 +277,6 @@ public class Dungeon {
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
-		
-		if (fullLoad) {
-			PathFinder.setMapSize( Level.WIDTH, Level.HEIGHT );
-		}
 		
 		Scroll.restore( bundle );
 		Potion.restore( bundle );
@@ -363,32 +287,7 @@ public class Dungeon {
 		scrollsOfUpgrade = bundle.getInt( SOU );
 		scrollsOfEnchantment = bundle.getInt( SOE );
 		dewVial = bundle.getBoolean( DV );
-		
-		if (fullLoad) {
-			chapters = new HashSet<Integer>();
-			int ids[] = bundle.getIntArray( CHAPTERS );
-			if (ids != null) {
-				for (int id : ids) {
-					chapters.add( id );
-				}
-			}
-			
-			Bundle quests = bundle.getBundle( QUESTS );
-			if (!quests.isNull()) {
-				Ghost.Quest.restoreFromBundle( quests );
-				Wandmaker.Quest.restoreFromBundle( quests );
-				Blacksmith.Quest.restoreFromBundle( quests );
-				Imp.Quest.restoreFromBundle( quests );
-			} else {
-				Ghost.Quest.reset();
-				Wandmaker.Quest.reset();
-				Blacksmith.Quest.reset();
-				Imp.Quest.reset();
-			}
-			
-			Room.restoreRoomsFromBundle( bundle );
-		}
-		
+
 		Bundle badges = bundle.getBundle( BADGES );
 		if (!badges.isNull()) {
 			Badges.loadLocal( badges );
@@ -398,7 +297,7 @@ public class Dungeon {
 		
 		QuickSlot.restore( bundle );
 		
-		@SuppressWarnings("unused")
+
 		String version = bundle.getString( VERSION );
 		
 		hero = null;
@@ -422,18 +321,6 @@ public class Dungeon {
 				droppedItems.put( i, dropped );
 			}
 		}
-	}
-	
-	public static Level loadLevel( HeroClass cl ) throws IOException {
-		
-		Dungeon.level = null;
-		Actor.clear();
-		
-		InputStream input = Game.instance.openFileInput( Utils.format( depthFile( cl ), depth ) ) ;
-		Bundle bundle = Bundle.read( input );
-		input.close();
-		
-		return (Level)bundle.get( "level" );
 	}
 	
 	public static void deleteGame( HeroClass cl, boolean deleteLevels ) {
@@ -492,13 +379,6 @@ public class Dungeon {
 		if (level == null) {
 			return;
 		}
-
-		/*
-		level.updateFieldOfView( hero );
-		System.arraycopy( Level.fieldOfView, 0, visible, 0, visible.length );
-		
-		BArray.or( level.visited, visible, level.visited );
-		*/
 		GameScene.afterObserve();
 	}
 	
