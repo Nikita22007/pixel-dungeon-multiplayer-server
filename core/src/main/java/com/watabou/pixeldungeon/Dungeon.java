@@ -248,8 +248,7 @@ public class Dungeon {
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
-	
-	//@SuppressWarnings("deprecation")
+
 
 	public static int GetPosNear(int pos)
 	{

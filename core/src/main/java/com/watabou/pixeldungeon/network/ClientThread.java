@@ -166,7 +166,7 @@ class ClientThread extends Thread {
                                 }
                                 break;
                             }
-                            case "window":{
+                            case "window": {
                                 JSONObject resObj = data.getJSONObject(token);
                                 Window.OnButtonPressed(
                                         clientHero,
@@ -176,12 +176,21 @@ class ClientThread extends Thread {
                                 );
                                 break;
                             }
-                            case "toolbar_action":{
+                            case "toolbar_action": {
                                 JSONObject actionObj = data.getJSONObject(token);
                                 switch (actionObj.getString("action_name").toUpperCase(Locale.ENGLISH)) {
-                                    case "SLEEP": {clientHero.rest(true); break;}
-                                    case "WAIT": {clientHero.rest(false); break;}
-                                    case "SEARCH": {clientHero.search(true); break;}
+                                    case "SLEEP": {
+                                        clientHero.rest(true);
+                                        break;
+                                    }
+                                    case "WAIT": {
+                                        clientHero.rest(false);
+                                        break;
+                                    }
+                                    case "SEARCH": {
+                                        clientHero.search(true);
+                                        break;
+                                    }
                                 }
                                 break;
                             }
@@ -273,10 +282,13 @@ class ClientThread extends Thread {
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work
             for (int i = 0; i < Settings.maxPlayers; i++) {
-                if (Dungeon.heroes[i] == null) {
-                    Dungeon.heroes[i] = newHero;
-                    newHero.networkID = i;
-                    break;
+                synchronized (Dungeon.heroes) {
+                    if (Dungeon.heroes[i] == null) {
+                        Dungeon.heroes[i] = newHero;
+                        newHero.networkID = i;
+                        newHero.name = "Player" + i;
+                        break;
+                    }
                 }
             }
 
