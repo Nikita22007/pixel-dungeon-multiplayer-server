@@ -16,7 +16,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
+
+import static com.watabou.pixeldungeon.BuildConfig.BUILD_TYPE;
 
 
 public class Server extends Thread {
@@ -115,19 +116,21 @@ public class Server extends Thread {
 
     //Server thread
     public void run() {
-        try {
-            Socket player1_proxy = new Socket();
-            player1_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1100));
-            clients[0] = new ClientThread(0, player1_proxy, true); //found
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            Socket player2_proxy = new Socket();
-            player2_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1101));
-            clients[1] = new ClientThread(1, player2_proxy, true); //found
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (BUILD_TYPE.equals("debug")) {
+            try {
+                Socket player1_proxy = new Socket();
+                player1_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1100));
+                clients[0] = new ClientThread(0, player1_proxy, true); //found
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                Socket player2_proxy = new Socket();
+                player2_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1101));
+                clients[1] = new ClientThread(1, player2_proxy, true); //found
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         while (started) { //clients  listener
             Socket client;
