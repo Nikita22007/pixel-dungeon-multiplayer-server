@@ -194,7 +194,7 @@ public abstract class Level implements Bundlable {
 		boolean pitNeeded = Dungeon.depth > 1 && weakFloorCreated;
 		
 		do {
-			Arrays.fill( map, feeling == Feeling.CHASM ? Terrain.CHASM : Terrain.CHASM );
+			Arrays.fill( map, feeling == Feeling.CHASM ? Terrain.CHASM : Terrain.WALL );
 			
 			pitRoomNeeded = pitNeeded;
 			weakFloorCreated = false;
