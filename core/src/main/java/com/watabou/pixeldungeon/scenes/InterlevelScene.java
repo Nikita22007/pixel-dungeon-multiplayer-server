@@ -228,12 +228,12 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.level = new SewerLevel();
 		Dungeon.level.create();
 		Dungeon.init();
-		GameLog.wipe();
 	}
 
 	private void descend() throws Exception {
 
 		Actor.fixTime();
+		GameLog.wipe();
 		if (Dungeon.hero == null) {
 			resetLevel();
 			SendData.SendHeroClass(StartScene.curClass);
@@ -249,49 +249,30 @@ public class InterlevelScene extends PixelScene {
 	private void fall() throws Exception {
 		
 		Actor.fixTime();
+		GameLog.wipe();
 //todo
 }
 	
 	private void ascend() throws Exception {
 		Actor.fixTime();
-		
-		Dungeon.saveLevel();
-		Dungeon.depth--;
-		Level level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		Dungeon.switchLevel( level, level.exit );
+		GameLog.wipe();
 	}
 	
 	private void returnTo() throws Exception {
 		
 		Actor.fixTime();
-		
-		Dungeon.saveLevel();
-		Dungeon.depth = returnDepth;
-		Level level = Dungeon.loadLevel( Dungeon.hero.heroClass );
-		Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( returnPos ) : returnPos );
+		GameLog.wipe();
 	}
 	
 	private void restore() throws Exception {
-		
 		Actor.fixTime();
-		
 		GameLog.wipe();
-		
-		Dungeon.loadGame( StartScene.curClass );
-		if (Dungeon.depth == -1) {
-			Dungeon.depth = Statistics.deepestFloor;
-			Dungeon.switchLevel( Dungeon.loadLevel( StartScene.curClass ), -1 );
-		} else {
-			Level level = Dungeon.loadLevel( StartScene.curClass );
-			Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( Dungeon.hero.pos ) : Dungeon.hero.pos );
-		}
+
 	}
 	
 	private void resurrect() throws Exception {
-		
-		Actor.fixTime(); 
-		
-//todo
+		Actor.fixTime();
+		GameLog.wipe();
 	}
 	
 	@Override
