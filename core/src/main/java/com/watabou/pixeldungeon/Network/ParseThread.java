@@ -8,6 +8,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
@@ -700,9 +701,25 @@ public class ParseThread extends Thread {
         return chr;
     }
 
-    protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) {
-        GLog.n("Can't parse BLOB");
-        assert false : "Can't parse BLOB";
+    protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) throws JSONException {
+        Class blob_class = null;
+        if (actor == null) {
+            String blob_name = Utils.format("com.watabou.pixeldungeon.actors.blobs.%s", Utils.ToPascalCase(actorObj.getString("blob_type")));
+            try {
+                blob_class = Class.forName(blob_name);
+                actor = (Blob) blob_class.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        blob_class = actor.getClass();
+        Blob blob = (Blob) actor;
+        blob.clearBlob();
+        JSONArray pos_array = actorObj.getJSONArray("positions");
+        for (int i = 0; i< pos_array.length(); i+=1){
+            pos_array.get(i);
+            GameScene.add( Blob.seed(id, pos_array.getInt(i), 1, blob_class));
+        }
     }
 
     protected void parseActorHero(JSONObject actorObj, int id, Actor actor) throws JSONException {

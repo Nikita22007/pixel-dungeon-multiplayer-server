@@ -185,13 +185,22 @@ public class Blob extends Actor {
 		volume -= cur[cell];
 		cur[cell] = 0;
 	}
-	
+
+	public void clearBlob( ) {
+		Arrays.fill( cur, 0 );
+		volume = 0;
+	}
+
 	public String tileDesc() {
 		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public static<T extends Blob> T seed( int cell, int amount, Class<T> type ) {
+		assert false;
+		return (T) new ConfusionGas();
+	}
+	public static<T extends Blob> T seed(int id, int cell, int amount, Class<T> type ) {
 		try {
 			
 			T gas = (T)Dungeon.level.blobs.get( type );
@@ -199,7 +208,7 @@ public class Blob extends Actor {
 				gas = type.newInstance();
 				Dungeon.level.blobs.put( type, gas );
 			}
-			
+			((T) gas).setId(id);
 			gas.seed( cell, amount );
 			
 			return gas;
