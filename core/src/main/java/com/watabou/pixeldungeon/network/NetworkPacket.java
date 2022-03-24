@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.watabou.pixeldungeon.utils.Utils.toSnakeCase;
+
 public class NetworkPacket {
     public static final String CELLS = "cells";
     public static final String MAP = "map";
@@ -154,9 +156,14 @@ public class NetworkPacket {
                 int id = actor.id();
                 object.put("id", id);
                 object.put("type", "blob");
-//                assert false : "Does not released sending blobs";
-                Log.e("NetworkPacket", "Does not released sending blobs");
-                return new JSONObject();
+                object.put("blob_type", toSnakeCase(actor.getClass().getSimpleName()));
+                JSONArray positions = new JSONArray();
+                for (int i = 0; i < ((Blob) actor).cur.length; i++) {
+                    if (((Blob) actor).cur[i] > 0) {
+                        positions.put(i);
+                    }
+                }
+                object.put("positions", positions);
             } else {
                 Log.w("NetworkPacket:", "pack actor. Actor class: " + actor.getClass().toString());
             }
@@ -182,7 +189,7 @@ public class NetworkPacket {
         }
     }
 
-    public void addNewHeroID(int id){
+    public void addNewHeroID(int id) {
         try {
             synchronized (dataRef) {
 
@@ -645,7 +652,7 @@ public class NetworkPacket {
             obj.put("id", windowID);
             obj.put("type", type);
             obj.put("args", args);
-            synchronized (dataRef){
+            synchronized (dataRef) {
                 dataRef.get().put("window", obj);
             }
         } catch (JSONException e) {
