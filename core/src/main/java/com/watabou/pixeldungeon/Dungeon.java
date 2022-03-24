@@ -261,8 +261,11 @@ public class Dungeon {
 	}
 
 	public static void removeHero(int ID){
-		Actor.remove(heroes[ID]);
+		if (heroes[ID] == null){
+			return;
+		}
 		Actor.freeCell(heroes[ID].pos);
+		Actor.remove(heroes[ID]);
 		heroes[ID].die(null);
 	}
 

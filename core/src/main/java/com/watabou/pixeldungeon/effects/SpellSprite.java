@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.effects;
 
+import android.util.Log;
+
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
@@ -74,7 +76,10 @@ public class SpellSprite extends Image {
 	@Override
 	public void update() {
 		super.update();
-		
+		if (target == null) {
+			Log.e("SpellSprite", "spell sprite target is null");
+			return;
+		}
 		x = target.getSprite().center().x - SIZE / 2;
 		y = target.getSprite().y - SIZE;
 		
