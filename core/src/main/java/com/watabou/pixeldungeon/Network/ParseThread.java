@@ -258,6 +258,19 @@ public class ParseThread extends Thread {
                     GameScene.show(new WndOptions(id, args.getString("title"), args.getString("message"), options));
                     break;
                 }
+                case "quest":
+                case "wnd_quest": {
+                    JSONArray optionsArr = args.getJSONArray("options");
+                    String[] options = new String[optionsArr.length()];
+                    for (int i = 0; i < optionsArr.length(); i += 1) {
+                        options[i] = optionsArr.getString(i);
+                    }
+                    String title = args.getString("title");
+                    String text = args.getString("text");
+                    CharSprite sprite = spriteFromName(args.getString("sprite"), true);
+                    GameScene.show(new WndQuest(id, sprite, title, text, options));
+                    break;
+                }
                 default: {
                     Log.e("parse_window", String.format("incorrect window type: %s", type));
                 }
@@ -663,23 +676,8 @@ public class ParseThread extends Thread {
                     break;
                 }
                 case "sprite_name": {
-                    String sprite_name = Utils.format("com.watabou.pixeldungeon.sprites.%s", Utils.ToPascalCase(actorObj.getString(token)));
                     CharSprite old_sprite = chr.sprite;
-                    Class sprite_class = null;
-                    CharSprite sprite = null;
-                    try {
-                        sprite_class = Class.forName(sprite_name);
-                        if ((sprite_class == HeroSprite.class) && (chr != hero)) {
-                            sprite_class = HeroCustomSprite.class;
-                        }
-                        sprite = (CharSprite) sprite_class.newInstance();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (sprite == null) {
-                        GLog.n("Incorrect sprite \"%s\" for id %d", sprite_name, ID);
-                        sprite = new RatSprite();
-                    }
+                    CharSprite sprite = spriteFromName(Utils.ToPascalCase(actorObj.getString(token)), chr != hero);
                     GameScene.updateCharSprite(chr, sprite);
                     break;
                 }
@@ -701,6 +699,26 @@ public class ParseThread extends Thread {
         return chr;
     }
 
+    protected CharSprite spriteFromName(String spriteName, boolean notHero) {
+        String sprite_name = Utils.format("com.watabou.pixeldungeon.sprites.%s", spriteName);
+        Class sprite_class = null;
+        CharSprite sprite = null;
+        try {
+            sprite_class = Class.forName(sprite_name);
+            if ((sprite_class == HeroSprite.class) && (notHero)) {
+                sprite_class = HeroCustomSprite.class;
+            }
+            sprite = (CharSprite) sprite_class.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (sprite == null) {
+            GLog.n("Incorrect sprite \"%s\"", sprite_name);
+            sprite = new RatSprite();
+        }
+        return sprite;
+    }
+
     protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) throws JSONException {
         Class blob_class = null;
         if (actor == null) {
@@ -716,9 +734,9 @@ public class ParseThread extends Thread {
         Blob blob = (Blob) actor;
         blob.clearBlob();
         JSONArray pos_array = actorObj.getJSONArray("positions");
-        for (int i = 0; i< pos_array.length(); i+=1){
+        for (int i = 0; i < pos_array.length(); i += 1) {
             pos_array.get(i);
-            GameScene.add( Blob.seed(id, pos_array.getInt(i), 1, blob_class));
+            GameScene.add(Blob.seed(id, pos_array.getInt(i), 1, blob_class));
         }
     }
 

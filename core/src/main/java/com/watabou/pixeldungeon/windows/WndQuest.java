@@ -19,6 +19,8 @@ package com.watabou.pixeldungeon.windows;
 
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.mobs.npcs.NPC;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.ui.HighlightedText;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
@@ -31,14 +33,22 @@ public class WndQuest extends Window {
 	
 	private static final int BTN_HEIGHT	= 20;
 	private static final int GAP		= 2;
-	
-	public WndQuest( NPC questgiver, String text, String... options ) {
-		
+
+	public WndQuest(NPC questgiver, String text, String... options ) {
+		this(questgiver.sprite(), questgiver.name, text, options);
+	}
+
+	public WndQuest(int id, CharSprite sprite, String title, String text, String... options ) {
+		this(sprite, title, text, options);
+		this.id = id;
+	}
+
+	public WndQuest(CharSprite sprite, String title, String text, String... options ) {
 		super();
 		
 		int width = PixelDungeon.landscape() ? WIDTH_L : WIDTH_P;
 		
-		IconTitle titlebar = new IconTitle( questgiver.sprite(), Utils.capitalize( questgiver.name ) );
+		IconTitle titlebar = new IconTitle( sprite, title );
 		titlebar.setRect( 0, 0, width, 0 );
 		add( titlebar );
 		
@@ -76,5 +86,7 @@ public class WndQuest extends Window {
 		}
 	}
 	
-	protected void onSelect( int index ) {};
+	protected void onSelect( int index ) {
+		SendData.sendWindowResult(id, index);
+	};
 }
