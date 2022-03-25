@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
@@ -34,7 +35,7 @@ public class SendData {
         }
     }
 
-    public static void sendLevel(Level level, int ID){
+    public static void sendLevel(Level level, int ID) {
         if (clients[ID] != null) {
             clients[ID].packet.packAndAddLevel(level);
             clients[ID].flush();
@@ -121,7 +122,8 @@ public class SendData {
     public static void sendInterLevelScene(int ID, String type) {
         sendInterLevelScene(ID, type, true);
     }
-    public static void sendInterLevelScene(int ID, String type,  boolean reset_level) {
+
+    public static void sendInterLevelScene(int ID, String type, boolean reset_level) {
         if (clients[ID] != null) {
             clients[ID].flush();
             {
@@ -175,7 +177,7 @@ public class SendData {
         }
     }
 
-    public static void sendHeroNewID(Hero hero, int ID){
+    public static void sendHeroNewID(Hero hero, int ID) {
         if (clients[ID] != null) {
             clients[ID].packet.addNewHeroID(hero.id());
             clients[ID].flush();
@@ -280,12 +282,34 @@ public class SendData {
         sendInventoryItemAction(owner, item, path, "update");
     }
 
+    public static void sendUpdateItemFull(Item item) {
+        for (Hero hero : Dungeon.heroes) {
+            if (hero == null) {
+                continue;
+            }
+            List<Integer> path = hero.belongings.pathOfItem(item);
+            if ((path == null) || (path.isEmpty())) {
+                continue;
+            }
+            sendUpdateItemFull(hero, item, path);
+            break;
+        }
+    }
+
+    public static void sendUpdateItemFull(Char owner, Item item, List<Integer> path) {
+        if ((owner == null) || !(owner instanceof Hero)) {
+            return;
+        }
+        JSONObject itemObj = (item == null) ? null : packItem(item, (Hero) owner);
+        sendInventoryItemAction(owner, itemObj, path, "update");
+    }
+
     public static void sendNewInventoryItem(Char owner, Item item, List<Integer> path) {
         if ((owner == null) || !(owner instanceof Hero)) {
             return;
         }
         JSONObject itemObj = (item == null) ? null : packItem(item, (Hero) owner);
-
+        //todo optimize
         sendInventoryItemAction(owner, itemObj, path, "place");
     }
 

@@ -104,7 +104,7 @@ public class Weightstone extends Item {
 	
 	@Override
 	public int price() {
-		return 40 * quantity;
+		return 40 * getQuantity();
 	}
 	
 	@Override

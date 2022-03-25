@@ -49,6 +49,6 @@ public class DwarfToken extends Item {
 	
 	@Override
 	public int price() {
-		return quantity * 100;
+		return getQuantity() * 100;
 	}
 }

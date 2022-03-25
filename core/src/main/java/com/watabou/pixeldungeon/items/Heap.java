@@ -184,7 +184,7 @@ public class Heap implements Bundlable {
 			Class<?> c = item.getClass();
 			for (Item i : items) {
 				if (i.getClass() == c) {
-					i.quantity += item.quantity;
+					i.setQuantity(i.getQuantity() + item.getQuantity());
 					item = i;
 					break;
 				}
@@ -306,8 +306,8 @@ public class Heap implements Bundlable {
 		int index = 0;
 		for (Item item : items) {
 			if (item instanceof Seed) {
-				count += item.quantity;
-				chances[index++] = item.quantity;
+				count += item.getQuantity();
+				chances[index++] = item.getQuantity();
 			} else {
 				count = 0;
 				break;

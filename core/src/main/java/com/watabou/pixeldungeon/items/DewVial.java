@@ -136,7 +136,7 @@ public class DewVial extends Item {
 	public void collectDew( Dewdrop dew ) {
 		
 		GLog.i( TXT_COLLECTED );
-		volume += dew.quantity;
+		volume += dew.getQuantity();
 		if (volume >= MAX_VOLUME) {
 			volume = MAX_VOLUME;
 			GLog.p( TXT_FULL );

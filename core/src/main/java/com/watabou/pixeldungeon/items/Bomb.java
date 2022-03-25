@@ -104,13 +104,13 @@ public class Bomb extends Item {
 	
 	@Override
 	public Item random() {
-		quantity = Random.IntRange( 1, 3 );
+		setQuantity(Random.IntRange( 1, 3 ));
 		return this;
 	}	
 	
 	@Override
 	public int price() {
-		return 10 * quantity;
+		return 10 * getQuantity();
 	}
 	
 	@Override

@@ -72,6 +72,6 @@ public class MysteryMeat extends Food {
 	}
 	
 	public int price() {
-		return 5 * quantity;
+		return 5 * getQuantity();
 	};
 }

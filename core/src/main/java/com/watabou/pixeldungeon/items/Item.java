@@ -48,6 +48,7 @@ import java.util.List;
 
 import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInventory;
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemCount;
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 public class Item implements Bundlable {
 
@@ -77,7 +78,7 @@ public class Item implements Bundlable {
 	
 
 	public boolean stackable = false;
-	protected int quantity = 1;
+	private int quantity = 1;
 	
 	private int level = 0;
 	private int durability = maxDurability();
@@ -181,10 +182,10 @@ public class Item implements Bundlable {
 			Class<?>c = getClass();
 			for (Item item:items) {
 				if (item.getClass() == c) {
-					item.quantity += quantity;
+					item.setQuantity(item.getQuantity() + getQuantity(), false);
 					item.updateQuickslot();
 					path.add(items.indexOf(item));
-					sendUpdateItemCount(container.owner, item.quantity, path);
+					sendUpdateItemCount(container.owner, item.getQuantity(), path);
 					return path;
 				}
 			}	
@@ -223,18 +224,18 @@ public class Item implements Bundlable {
 	
 	public final Item detach( Bag container ) {
 		
-		if (quantity <= 0) {
+		if (getQuantity() <= 0) {
 			
 			return null;
 			
 		} else
-		if (quantity == 1) {
+		if (getQuantity() == 1) {
 
 			return detachAll( container );
 			
 		} else {
 			
-			quantity--;
+			setQuantity(getQuantity() - 1);
 			updateQuickslot();
 			
 			try { 
@@ -427,14 +428,14 @@ public class Item implements Bundlable {
 	public String toString() {
 		
 		if (levelKnown && level != 0) {
-			if (quantity > 1) {
-				return Utils.format( TXT_TO_STRING_LVL_X, name(), level, quantity );
+			if (getQuantity() > 1) {
+				return Utils.format( TXT_TO_STRING_LVL_X, name(), level, getQuantity());
 			} else {
 				return Utils.format( TXT_TO_STRING_LVL, name(), level );
 			}
 		} else {
-			if (quantity > 1) {
-				return Utils.format( TXT_TO_STRING_X, name(), quantity );
+			if (getQuantity() > 1) {
+				return Utils.format( TXT_TO_STRING_X, name(), getQuantity());
 			} else {
 				return Utils.format( TXT_TO_STRING, name() );
 			}
@@ -476,11 +477,11 @@ public class Item implements Bundlable {
 	}
 	
 	public int quantity() {
-		return quantity;
+		return getQuantity();
 	}
 	
 	public void quantity( int value ) {
-		quantity = value;
+		setQuantity(value);
 	}
 	
 	public int price() {
@@ -512,7 +513,7 @@ public class Item implements Bundlable {
 		try {
 			
 			Item item = (Item)cl.newInstance();
-			item.quantity = 0;
+			item.setQuantity(0);
 			return item;
 			
 		} catch (Exception e) {
@@ -525,7 +526,7 @@ public class Item implements Bundlable {
 	}
 	
 	public String status() {
-		return quantity != 1 ? Integer.toString( quantity ) : null;
+		return getQuantity() != 1 ? Integer.toString(getQuantity()) : null;
 	}
 	
 	public void updateQuickslot() {
@@ -549,7 +550,7 @@ public class Item implements Bundlable {
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
-		bundle.put( QUANTITY, quantity );
+		bundle.put( QUANTITY, getQuantity());
 		bundle.put( LEVEL, level );
 		bundle.put( LEVEL_KNOWN, levelKnown );
 		bundle.put( CURSED, cursed );
@@ -562,7 +563,7 @@ public class Item implements Bundlable {
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
-		quantity	= bundle.getInt( QUANTITY );
+		setQuantity(bundle.getInt( QUANTITY ));
 		levelKnown	= bundle.getBoolean( LEVEL_KNOWN );
 		cursedKnown	= bundle.getBoolean( CURSED_KNOWN );
 		
@@ -633,4 +634,18 @@ public class Item implements Bundlable {
 			return "Choose direction of throw";
 		}
 	};
+
+	protected int getQuantity() {
+		return quantity;
+	}
+
+	protected void setQuantity(int quantity) {
+		setQuantity(quantity, true);
+	}
+	protected void setQuantity(int quantity,  boolean send) {
+		this.quantity = quantity;
+		if (send){
+			sendUpdateItemFull(this);
+		}
+	}
 }

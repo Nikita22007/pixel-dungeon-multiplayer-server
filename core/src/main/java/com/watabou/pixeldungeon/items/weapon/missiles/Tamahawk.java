@@ -39,7 +39,7 @@ public class Tamahawk extends MissileWeapon {
 	
 	public Tamahawk( int number ) {
 		super();
-		quantity = number;
+		setQuantity(number);
 	}
 	
 	@Override
@@ -67,12 +67,12 @@ public class Tamahawk extends MissileWeapon {
 	
 	@Override
 	public Item random() {
-		quantity = Random.Int( 5, 12 );
+		setQuantity(Random.Int( 5, 12 ));
 		return this;
 	}
 	
 	@Override
 	public int price() {
-		return 20 * quantity;
+		return 20 * getQuantity();
 	}
 }

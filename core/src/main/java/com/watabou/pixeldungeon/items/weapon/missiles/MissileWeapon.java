@@ -19,7 +19,6 @@ package com.watabou.pixeldungeon.items.weapon.missiles;
 
 import java.util.ArrayList;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
@@ -76,7 +75,7 @@ abstract public class MissileWeapon extends Weapon {
 		
 		Hero hero = (Hero)attacker;
 		if (hero.rangedWeapon == null && stackable) {
-			if (quantity == 1) {
+			if (getQuantity() == 1) {
 				doUnequip( hero, false, false );
 			} else {
 				detach( null );

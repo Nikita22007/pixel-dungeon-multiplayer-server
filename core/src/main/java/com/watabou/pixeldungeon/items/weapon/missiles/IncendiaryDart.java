@@ -45,7 +45,7 @@ public class IncendiaryDart extends MissileWeapon {
 	
 	public IncendiaryDart( int number ) {
 		super();
-		quantity = number;
+		setQuantity(number);
 	}
 	
 	@Override
@@ -89,12 +89,12 @@ public class IncendiaryDart extends MissileWeapon {
 	
 	@Override
 	public Item random() {
-		quantity = Random.Int( 3, 6 );
+		setQuantity(Random.Int( 3, 6 ));
 		return this;
 	}
 	
 	@Override
 	public int price() {
-		return 10 * quantity;
+		return 10 * getQuantity();
 	}
 }

@@ -133,6 +133,6 @@ public class ScrollOfWipeOut extends Item {
 	
 	@Override
 	public int price() {
-		return 100 * quantity;
+		return 100 * getQuantity();
 	}
 }

@@ -50,7 +50,7 @@ public class Gold extends Item {
 	}
 	
 	public Gold( int value ) {
-		this.quantity = value;
+		this.setQuantity(value);
 	}
 	
 	@Override
@@ -61,12 +61,12 @@ public class Gold extends Item {
 	@Override
 	public boolean doPickUp( Hero hero ) {
 		
-		hero.gold += quantity;
-		Statistics.goldCollected += quantity;
+		hero.gold += getQuantity();
+		Statistics.goldCollected += getQuantity();
 		Badges.validateGoldCollected(hero);
 
 		GameScene.pickUp( this );
-		hero.getSprite().showStatus( CharSprite.NEUTRAL, TXT_VALUE, quantity );
+		hero.getSprite().showStatus( CharSprite.NEUTRAL, TXT_VALUE, getQuantity());
 		hero.spendAndNext( TIME_TO_PICK_UP );
 		
 		Sample.INSTANCE.play( Assets.SND_GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
@@ -86,19 +86,19 @@ public class Gold extends Item {
 	
 	@Override
 	public String info() {
-		switch (quantity) {
+		switch (getQuantity()) {
 		case 0:
 			return TXT_COLLECT;
 		case 1:
 			return TXT_INFO_1;
 		default:
-			return Utils.format( TXT_INFO, quantity );
+			return Utils.format( TXT_INFO, getQuantity());
 		}
 	}
 	
 	@Override
 	public Item random() {
-		quantity = Random.Int( 20 + Dungeon.depth * 10, 40 + Dungeon.depth * 20 );
+		setQuantity(Random.Int( 20 + Dungeon.depth * 10, 40 + Dungeon.depth * 20 ));
 		return this;
 	}
 	
@@ -107,12 +107,12 @@ public class Gold extends Item {
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
-		bundle.put( VALUE, quantity );
+		bundle.put( VALUE, getQuantity());
 	}
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		quantity = bundle.getInt( VALUE );
+		setQuantity(bundle.getInt( VALUE ));
 	}
 }

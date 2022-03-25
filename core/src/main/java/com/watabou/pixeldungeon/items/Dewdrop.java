@@ -49,7 +49,7 @@ public class Dewdrop extends Item {
 				value++;
 			}
 			
-			int effect = Math.min( hero.getHT() - hero.getHP(), value * quantity );
+			int effect = Math.min( hero.getHT() - hero.getHP(), value * getQuantity());
 			if (effect > 0) {
 				hero.setHP(hero.getHP() + effect);
 				hero.getSprite().emitter().burst( Speck.factory( Speck.HEALING ), 1 );

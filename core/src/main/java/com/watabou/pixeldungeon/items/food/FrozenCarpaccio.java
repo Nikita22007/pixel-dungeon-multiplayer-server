@@ -81,12 +81,12 @@ public class FrozenCarpaccio extends Food {
 	}
 	
 	public int price() {
-		return 10 * quantity;
+		return 10 * getQuantity();
 	};
 	
 	public static Food cook( MysteryMeat ingredient ) {
 		FrozenCarpaccio result = new FrozenCarpaccio();
-		result.quantity = ingredient.quantity();
+		result.setQuantity(ingredient.quantity());
 		return result;
 	}
 }

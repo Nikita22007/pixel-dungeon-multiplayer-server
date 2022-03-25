@@ -93,6 +93,6 @@ public class ScrollOfRemoveCurse extends Scroll {
 	
 	@Override
 	public int price() {
-		return isKnown() ? 30 * quantity : super.price();
+		return isKnown() ? 30 * getQuantity() : super.price();
 	}
 }

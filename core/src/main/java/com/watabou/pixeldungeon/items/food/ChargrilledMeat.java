@@ -35,12 +35,12 @@ public class ChargrilledMeat extends Food {
 	
 	@Override
 	public int price() {
-		return 5 * quantity;
+		return 5 * getQuantity();
 	}
 	
 	public static Food cook( MysteryMeat ingredient ) {
 		ChargrilledMeat result = new ChargrilledMeat();
-		result.quantity = ingredient.quantity();
+		result.setQuantity(ingredient.quantity());
 		return result;
 	}
 }

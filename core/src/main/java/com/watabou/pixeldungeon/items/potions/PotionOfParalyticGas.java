@@ -53,6 +53,6 @@ public class PotionOfParalyticGas extends Potion {
 	
 	@Override
 	public int price() {
-		return isKnown() ? 40 * quantity : super.price();
+		return isKnown() ? 40 * getQuantity() : super.price();
 	}
 }

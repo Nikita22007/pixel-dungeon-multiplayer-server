@@ -100,6 +100,7 @@ public class SewerLevel extends RegularLevel {
 				break;
 			}
 		}
+		map[entrance +NEIGHBOURS8[4]] = Terrain.FIRE_TRAP;
 	}
 	
 	@Override
