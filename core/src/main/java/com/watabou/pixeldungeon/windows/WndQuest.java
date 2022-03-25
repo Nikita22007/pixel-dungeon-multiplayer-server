@@ -18,11 +18,18 @@
 package com.watabou.pixeldungeon.windows;
 
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.npcs.NPC;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.ui.HighlightedText;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WndQuest extends Window {
 
@@ -31,14 +38,15 @@ public class WndQuest extends Window {
 	
 	private static final int BTN_HEIGHT	= 20;
 	private static final int GAP		= 2;
-	
-	public WndQuest( NPC questgiver, String text, String... options ) {
-		
-		super();
-		
+
+	public WndQuest(Hero owner, NPC questgiver, String text, String... options ) {
+		super(owner);
+
 		int width = PixelDungeon.landscape() ? WIDTH_L : WIDTH_P;
-		
-		IconTitle titlebar = new IconTitle( questgiver.sprite(), Utils.capitalize( questgiver.name ) );
+
+		CharSprite questgiverSprie = questgiver.sprite();
+		String title = Utils.capitalize( questgiver.name );
+		IconTitle titlebar = new IconTitle( questgiverSprie, title );
 		titlebar.setRect( 0, 0, width, 0 );
 		add( titlebar );
 		
@@ -74,6 +82,21 @@ public class WndQuest extends Window {
 		
 			resize( width, (int)hl.bottom() );
 		}
+
+
+
+		JSONObject params = new JSONObject();
+		try {
+			params.put("title", title);
+			params.put("text", text);
+			params.put("sprite", questgiverSprie.spriteName());
+			JSONArray optionsArr = new JSONArray();
+			for (int i = 0; i < options.length; i += 1) {
+				optionsArr.put(options[i]);
+			}
+			params.put("options", optionsArr);
+		} catch (JSONException ignored) {}
+		SendData.sendWindow(owner.networkID, "wnd_quest", id, params);
 	}
 	
 	protected void onSelect( int index ) {};

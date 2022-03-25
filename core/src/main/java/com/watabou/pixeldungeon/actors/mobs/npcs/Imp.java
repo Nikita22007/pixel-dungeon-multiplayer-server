@@ -126,11 +126,11 @@ public class Imp extends NPC {
 			if (tokens != null && (tokens.quantity() >= 8 || (!Quest.alternative && tokens.quantity() >= 6))) {
 				GameScene.show( new WndImp( this, tokens ) );
 			} else {
-				tell( Quest.alternative ? TXT_MONKS2 : TXT_GOLEMS2, hero.className() );
+				tell(hero, Quest.alternative ? TXT_MONKS2 : TXT_GOLEMS2, hero.className() );
 			}
 			
 		} else {
-			tell( Quest.alternative ? TXT_MONKS1 : TXT_GOLEMS1 );
+			tell(hero, Quest.alternative ? TXT_MONKS1 : TXT_GOLEMS1 );
 			Quest.given = true;
 			Quest.completed = false;
 			
@@ -138,9 +138,9 @@ public class Imp extends NPC {
 		}
 	}
 	
-	private void tell( String format, Object...args ) {
+	private void tell(Hero hero, String format, Object...args ) {
 		GameScene.show( 
-			new WndQuest( this, Utils.format( format, args ) ) );
+			new WndQuest(hero, this, Utils.format( format, args ) ) );
 	}
 	
 	public void flee(Hero hero) {

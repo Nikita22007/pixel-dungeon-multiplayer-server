@@ -49,6 +49,16 @@ public class SendData {
         }
     }
 
+    public static void sendLevelCell(Level level, int cell) {
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i] == null) {
+                continue;
+            }
+            clients[i].packet.packAndAddLevelCell(level, cell);
+            clients[i].flush();
+        }
+    }
+
     //---------------------------Hero
     public static void addToSendHeroVisibleCells(boolean[] visible, int ID) {
         if (clients[ID] != null) {

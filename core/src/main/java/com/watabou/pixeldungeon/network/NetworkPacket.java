@@ -296,6 +296,14 @@ public class NetworkPacket {
         addCell(packCell(pos, id, state));
     }
 
+    public void packAndAddLevelCell(Level level, int cell) {
+        packAndAddCell(
+                cell,
+                level.map[cell],
+                getCellState(level.visited[cell], level.mapped[cell])
+        );
+    }
+
     public void packAndAddLevelCells(Level level) {
         for (int i = 0; i < level.LENGTH; i++) {
             packAndAddCell(

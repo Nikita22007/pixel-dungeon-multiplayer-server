@@ -372,14 +372,14 @@ public class Ghost extends NPC {
 
 				Item item = hero.belongings.getItem( DriedRose.class );
 				if (item != null) {
-					GameScene.show( new WndSadGhost( ghost, item, TXT_ROSE3 ) );
+					GameScene.show( new WndSadGhost(hero, ghost, item, TXT_ROSE3 ) );
 				} else {
-					GameScene.show( new WndQuest( ghost, TXT_ROSE2 ) );
+					GameScene.show( new WndQuest(hero, ghost, TXT_ROSE2 ) );
 					relocate( ghost );
 				}
 				
 			} else {
-				GameScene.show( new WndQuest( ghost, TXT_ROSE1 ) );
+				GameScene.show( new WndQuest(hero, ghost, TXT_ROSE1 ) );
 				Quest.given = true;
 				
 				Journal.add( Journal.Feature.GHOST );
@@ -406,14 +406,14 @@ public class Ghost extends NPC {
 
 				Item item = hero.belongings.getItem( RatSkull.class );
 				if (item != null) {
-					GameScene.show( new WndSadGhost( ghost, item, TXT_RAT3 ) );
+					GameScene.show( new WndSadGhost(hero, ghost, item, TXT_RAT3 ) );
 				} else {
-					GameScene.show( new WndQuest( ghost, TXT_RAT2 ) );
+					GameScene.show( new WndQuest(hero, ghost, TXT_RAT2 ) );
 					relocate( ghost );
 				}
 				
 			} else {
-				GameScene.show( new WndQuest( ghost, TXT_RAT1 ) );
+				GameScene.show( new WndQuest(hero, ghost, TXT_RAT1 ) );
 				Quest.given = true;
 				
 				Journal.add( Journal.Feature.GHOST );
@@ -437,10 +437,10 @@ public class Ghost extends NPC {
 		public void interact(final Hero hero, final Ghost ghost ) {
 			if (Quest.given) {
 
-				GameScene.show( new WndSadGhost( ghost, null, Utils.format( TXT_CURSE2, hero.className() ) ) );
+				GameScene.show( new WndSadGhost(hero, ghost, null, Utils.format( TXT_CURSE2, hero.className() ) ) );
 				
 			} else {
-				GameScene.show( new WndQuest( ghost, TXT_CURSE1, TXT_YES, TXT_NO ) {
+				GameScene.show( new WndQuest(hero, ghost, TXT_CURSE1, TXT_YES, TXT_NO ) {
 					protected void onSelect( int index ) {
 						if (index == 0) {
 							Quest.given = true;

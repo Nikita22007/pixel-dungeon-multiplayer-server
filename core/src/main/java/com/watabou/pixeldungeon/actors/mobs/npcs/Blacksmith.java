@@ -85,7 +85,7 @@ public class Blacksmith extends NPC {
 		
 		if (!Quest.given) {
 			
-			GameScene.show( new WndQuest( this, 
+			GameScene.show(new WndQuest(hero,  this,
 				Quest.alternative ? TXT_BLOOD_1 : TXT_GOLD_1 ) {
 				
 				@Override
@@ -111,15 +111,15 @@ public class Blacksmith extends NPC {
 				
 				Pickaxe pick = hero.belongings.getItem( Pickaxe.class );
 				if (pick == null) {
-					tell( TXT2 );
+					tell(hero, TXT2 );
 				} else if (!pick.bloodStained) {
-					tell( TXT4 );
+					tell(hero, TXT4 );
 				} else {
 					if (pick.isEquipped( hero )) {
 						pick.doUnequip( hero, false );
 					}
 					pick.detach( hero.belongings.backpack );
-					tell( TXT_COMPLETED );
+					tell(hero, TXT_COMPLETED );
 					
 					Quest.completed = true;
 					Quest.reforged = false;
@@ -130,16 +130,16 @@ public class Blacksmith extends NPC {
 				Pickaxe pick = hero.belongings.getItem( Pickaxe.class );
 				DarkGold gold = hero.belongings.getItem( DarkGold.class );
 				if (pick == null) {
-					tell( TXT2 );
+					tell(hero, TXT2 );
 				} else if (gold == null || gold.quantity() < 15) {
-					tell( TXT3 );
+					tell(hero, TXT3 );
 				} else {
 					if (pick.isEquipped( hero )) {
 						pick.doUnequip( hero, false );
 					}
 					pick.detach( hero.belongings.backpack );
 					gold.detachAll( hero.belongings.backpack );
-					tell( TXT_COMPLETED );
+					tell(hero, TXT_COMPLETED );
 					
 					Quest.completed = true;
 					Quest.reforged = false;
@@ -152,13 +152,13 @@ public class Blacksmith extends NPC {
 			
 		} else {
 			
-			tell( TXT_GET_LOST );
+			tell(hero, TXT_GET_LOST );
 			
 		}
 	}
 	
-	private void tell( String text ) {
-		GameScene.show( new WndQuest( this, text ) );
+	private void tell(Hero hero, String text ) {
+		GameScene.show( new WndQuest(hero, this, text ) );
 	}
 	
 	public static String verify( Item item1, Item item2 ) {

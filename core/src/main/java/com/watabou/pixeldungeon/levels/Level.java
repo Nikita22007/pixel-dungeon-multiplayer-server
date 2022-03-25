@@ -65,6 +65,7 @@ import com.watabou.pixeldungeon.levels.features.HighGrass;
 import com.watabou.pixeldungeon.levels.painters.Painter;
 import com.watabou.pixeldungeon.levels.traps.*;
 import com.watabou.pixeldungeon.mechanics.ShadowCaster;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -511,6 +512,8 @@ public abstract class Level implements Bundlable {
 		avoid[cell]			= (flags & Terrain.AVOID) != 0;
 		pit[cell]			= (flags & Terrain.PIT) != 0;
 		water[cell]			= terrain == Terrain.WATER || terrain >= Terrain.WATER_TILES;
+
+		SendData.sendLevelCell(Dungeon.level,  cell);
 	}
 	
 	public Heap drop( Item item, int cell ) {

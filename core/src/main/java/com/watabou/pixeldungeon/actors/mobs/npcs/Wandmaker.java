@@ -95,8 +95,8 @@ public class Wandmaker extends NPC {
 		Quest.type.handler.interact( hero,this );
 	}
 	
-	private void tell( String format, Object...args ) {
-		GameScene.show( new WndQuest( this, Utils.format( format, args ) ) );
+	private void tell(Hero hero, String format, Object...args ) {
+		GameScene.show( new WndQuest(hero, this, Utils.format( format, args ) ) );
 	}
 	
 	@Override
@@ -274,11 +274,11 @@ public class Wandmaker extends NPC {
 				if (item != null) {
 					GameScene.show( new WndWandmaker( wandmaker, item, hero  ) );
 				} else {
-					wandmaker.tell( txtQuest2, hero.className() );
+					wandmaker.tell(hero, txtQuest2, hero.className() );
 				}
 				
 			} else {
-				wandmaker.tell( txtQuest1 );
+				wandmaker.tell(hero, txtQuest1 );
 				Quest.given = true;
 				
 				placeItem();

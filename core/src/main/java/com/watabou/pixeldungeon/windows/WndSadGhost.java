@@ -31,9 +31,9 @@ public class WndSadGhost extends WndQuest {
 	private Ghost ghost;
 	private Item questItem;
 	
-	public WndSadGhost( final Ghost ghost, final Item item, String text ) {
+	public WndSadGhost(final Hero hero, final Ghost ghost, final Item item, String text ) {
 		
-		super( ghost, text, TXT_WEAPON, TXT_ARMOR );
+		super( hero, ghost, text, TXT_WEAPON, TXT_ARMOR );
 		
 		this.ghost = ghost;
 		questItem = item;
