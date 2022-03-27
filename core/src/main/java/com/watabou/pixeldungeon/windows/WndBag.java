@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.windows;
 
 import android.graphics.RectF;
+import android.util.JsonReader;
 
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.BitmapText;
@@ -40,6 +41,8 @@ import com.watabou.pixeldungeon.items.bags.WandHolster;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.items.weapon.missiles.Boomerang;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.network.SpecialSlot;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
@@ -49,6 +52,15 @@ import com.watabou.pixeldungeon.ui.ItemSlot;
 import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.GameMath;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.acl.Owner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class WndBag extends WndTabbed {
 	
@@ -64,9 +76,6 @@ public class WndBag extends WndTabbed {
 		WAND,
 		SEED
 	}
-
-
-
 	
 	private Listener listener;
 	private WndBag.Mode mode;
@@ -74,17 +83,74 @@ public class WndBag extends WndTabbed {
 
 	protected int count;
 
+	protected static boolean IsItemEnable(Mode mode, Item item, Hero hero) {
+		return (
+				mode == Mode.QUICKSLOT && (item.defaultAction != null) ||
+				mode == Mode.FOR_SALE && (item.price() > 0) && (!item.isEquipped(hero) || !item.cursed) ||
+				mode == Mode.UPGRADEABLE && item.isUpgradable() ||
+				mode == Mode.UNIDENTIFED && !item.isIdentified() ||
+				mode == Mode.WEAPON && (item instanceof MeleeWeapon || item instanceof Boomerang) ||
+				mode == Mode.ARMOR && (item instanceof Armor) ||
+				mode == Mode.ENCHANTABLE && (item instanceof MeleeWeapon || item instanceof Boomerang || item instanceof Armor) ||
+				mode == Mode.WAND && (item instanceof Wand) ||
+				mode == Mode.SEED && (item instanceof Seed) ||
+				mode == Mode.ALL
+		);
+	}
+
+	protected static List<List<Integer>> AllowedItems(Hero hero, Mode mode) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>(3);
+		for (Bag bag : hero.belongings.getBags()) {
+			for (Item item : bag.items) {
+				if (IsItemEnable(mode, item, hero)) {
+					result.add(item.getSlot(hero));
+				}
+			}
+		}
+		for (SpecialSlot slot : hero.belongings.getSpecialSlots()) {
+			if (IsItemEnable(mode, slot.item, hero)) {
+				List<Integer> res = new ArrayList<>(1);
+				res.add(slot.path());
+				result.add(res);
+			}
+		}
+		return result;
+	}
+
+	protected static JSONArray ListToJsonArray(List<List<Integer>> arg) {
+		JSONArray result = new JSONArray();
+		for (int i = 0; i < arg.size(); i++) {
+			List<Integer> curr_arr = new ArrayList<>();
+			JSONArray cur_json_arr = new JSONArray();
+			for (int j = 0; j < curr_arr.size(); j++) {
+				cur_json_arr.put(curr_arr.get(i));
+			}
+			result.put(cur_json_arr);
+		}
+		return result;
+	}
+
 	public WndBag( Hero owner, Listener listener, Mode mode, String title ) {
 		
 		super();
 
-		ownerHero=owner;
+		ownerHero = owner;
 
 		this.listener = listener;
-		this.mode = mode;  //send to Client
-		this.title = title;  //send to  Client
+		this.mode = mode;  // internal
+		this.title = title;
 
+		JSONObject wnd_obj = new JSONObject();
+		try {
+			wnd_obj.put("title", title);
+			wnd_obj.put("allowed_items", ListToJsonArray(AllowedItems(owner, mode)));
+			wnd_obj.put("has_listener", listener != null);
+		} catch (JSONException ignored) {
+		}
+
+		SendData.sendWindow(id, "wnd_bag", owner.networkID, wnd_obj);
 	}
+
 	public void SelectItem(Item item){
 		if (listener!=null){
 			listener.onSelect(item);

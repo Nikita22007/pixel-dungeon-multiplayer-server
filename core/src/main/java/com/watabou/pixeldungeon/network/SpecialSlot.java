@@ -8,6 +8,10 @@ public class SpecialSlot {
     public int image_id = 127;
     public Item item = null;
 
+    public int path() {
+        return -id - 1;
+    }
+
     public SpecialSlot(int id, String sprite, int image_id, Item item) {
         this.id = id;
         this.sprite = sprite;
