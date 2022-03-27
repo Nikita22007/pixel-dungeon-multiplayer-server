@@ -43,7 +43,6 @@ import com.watabou.pixeldungeon.items.weapon.missiles.Boomerang;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
-import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.ItemSlot;
 import com.watabou.pixeldungeon.ui.QuickSlot;
@@ -51,12 +50,18 @@ import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.GameMath;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.nikita22007.pixeldungeonmultiplayer.Utils.parseArrayOfPath;
 
 public class WndBag extends WndTabbed {
 	
 	public static enum Mode {
 		ALL,
+		ALLOWED_ITEMS,
 		UNIDENTIFED,
 		UPGRADEABLE,
 		QUICKSLOT,
@@ -88,14 +93,35 @@ public class WndBag extends WndTabbed {
 	protected int count;
 	protected int col;
 	protected int row;
-	
+	protected List<Item> allowedItems = null;
+
 	private static Mode lastMode;
 	private static Bag lastBag;
-	
-	public WndBag( Bag bag, Listener listener, Mode mode, String title ) {
+
+	private static final Listener multiplayerListener = new MultiplayerListener();
+
+	public WndBag(Bag bag, boolean has_listener, JSONArray allowed_items, String title) {
+		this(bag, !has_listener ? null : multiplayerListener, Mode.ALLOWED_ITEMS, title, allowed_items);
+	}
+
+	public WndBag(Bag bag, Listener listener, Mode mode, String title) {
+		this(bag, listener, mode, title, null);
+	}
+
+	protected static List<Item> ParseArrayOfItems(Hero hero, JSONArray arr) {
+		List<Item> result = new ArrayList<>(20);
+		for (List<Integer> path : parseArrayOfPath(arr)) {
+			result.add(hero.belongings.get(path));
+		}
+		return result;
+	}
+
+	public WndBag( Bag bag, Listener listener, Mode mode, String title, JSONArray allowedItems ) {
 		
 		super();
-		
+
+		this.allowedItems = (allowedItems == null) ? null : ParseArrayOfItems(Dungeon.hero, allowedItems);
+
 		this.listener = listener;
 		this.mode = mode;
 		this.title = title;
@@ -382,7 +408,8 @@ public class WndBag extends WndTabbed {
 				if (item.name() == null) {
 					enable( false );
 				} else {
-					enable( 
+					enable(
+							mode == Mode.ALLOWED_ITEMS && (allowedItems.contains(item)) ||
 						mode == Mode.QUICKSLOT && (item.defaultAction != null) ||
 						mode == Mode.FOR_SALE && (item.price() > 0) && (!item.isEquipped( Dungeon.hero ) || !item.cursed) ||
 						mode == Mode.UPGRADEABLE && item.isUpgradable() || 
@@ -439,5 +466,12 @@ public class WndBag extends WndTabbed {
 	
 	public interface Listener {
 		void onSelect( Item item );
+	}
+	public static class MultiplayerListener implements Listener {
+
+		@Override
+		public void onSelect(Item item) {
+			//todo
+		}
 	}
 }

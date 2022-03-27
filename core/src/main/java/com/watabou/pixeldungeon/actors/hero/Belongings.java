@@ -189,6 +189,21 @@ public class Belongings implements Iterable<Item> {
         specialSlots.add(specialSlot);
     }
 
+    public Item getItemFromSpecialSlot(int id){
+		for (int i = 0; i < specialSlots.size(); i++) {
+			if (specialSlots.get(i).id == id) {
+				return specialSlots.get(i).item;
+			}
+		}
+		return null;
+	}
+
+	public void updateSpecialSlot(int id, Item item) {
+		SpecialSlot slot = new SpecialSlot();
+		slot.id = id;
+		slot.item = item;
+		updateSpecialSlot(slot);
+	}
     public void updateSpecialSlot(SpecialSlot specialSlot) {
         for (int i = 0; i < specialSlots.size(); i++) {
             if (specialSlots.get(i).id == specialSlot.id) {
@@ -196,8 +211,17 @@ public class Belongings implements Iterable<Item> {
                 return;
             }
         }
+        // if not found this slot in list
         specialSlots.add(specialSlot);
     }
+
+	public Item get(List<Integer> path) {
+		assert !path.isEmpty(): "path is null";
+		if (path.get(0) < 0){
+			return getItemFromSpecialSlot( -path.get(0) - 1);
+		}
+		return backpack.get(path);
+	}
 
 	public List<Integer> pathOfItem(@NotNull Item item) {
 		assert (item != null) : "path of null item";

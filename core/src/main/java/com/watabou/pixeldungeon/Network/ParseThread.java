@@ -239,6 +239,7 @@ public class ParseThread extends Thread {
             int id = windowObj.getInt("id");
             String type = windowObj.getString("type");
             JSONObject args = windowObj.optJSONObject("params");
+            JSONArray optionsArr = args.getJSONArray("options");
             if (args == null) {
                 args = windowObj.optJSONObject("args");
             }
@@ -250,7 +251,6 @@ public class ParseThread extends Thread {
                 }
                 case "option":
                 case "wnd_option": {
-                    JSONArray optionsArr = args.getJSONArray("options");
                     String[] options = new String[optionsArr.length()];
                     for (int i = 0; i < optionsArr.length(); i += 1) {
                         options[i] = optionsArr.getString(i);
@@ -260,7 +260,6 @@ public class ParseThread extends Thread {
                 }
                 case "quest":
                 case "wnd_quest": {
-                    JSONArray optionsArr = args.getJSONArray("options");
                     String[] options = new String[optionsArr.length()];
                     for (int i = 0; i < optionsArr.length(); i += 1) {
                         options[i] = optionsArr.getString(i);
@@ -269,6 +268,15 @@ public class ParseThread extends Thread {
                     String text = args.getString("text");
                     CharSprite sprite = spriteFromName(args.getString("sprite"), true);
                     GameScene.show(new WndQuest(id, sprite, title, text, options));
+                    break;
+                }
+                case "bag":
+                case "wnd_bag": {
+                    String title = args.getString("title");
+                    boolean has_listener = args.getBoolean("has_listener");
+                    JSONArray allowed_items = args.optJSONArray("allowed_items");
+                    JSONArray last_bag_path = args.optJSONArray("last_bag_path"); // todo
+                    GameScene.show(new WndBag( hero.belongings.backpack, has_listener, allowed_items, title ));
                     break;
                 }
                 default: {
