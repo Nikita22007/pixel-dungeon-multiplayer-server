@@ -105,6 +105,9 @@ public class WndBag extends WndTabbed {
 				continue;
 			}
 			for (Item item : bag.items) {
+				if (item == null) {
+					continue;
+				}
 				if (IsItemEnable(mode, item, hero)) {
 					result.add(item.getSlot(hero));
 				}
