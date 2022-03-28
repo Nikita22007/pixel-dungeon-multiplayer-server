@@ -9,6 +9,7 @@ import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.actors.mobs.CustomMob;
@@ -239,18 +240,19 @@ public class ParseThread extends Thread {
             int id = windowObj.getInt("id");
             String type = windowObj.getString("type");
             JSONObject args = windowObj.optJSONObject("params");
-            JSONArray optionsArr = args.getJSONArray("options");
             if (args == null) {
                 args = windowObj.optJSONObject("args");
             }
             switch (type) {
                 case "message":
                 case "wnd_message": {
+                    JSONArray optionsArr = args.getJSONArray("options");
                     GameScene.show(new WndMessage(id, args.getString("text")));
                     break;
                 }
                 case "option":
                 case "wnd_option": {
+                    JSONArray optionsArr = args.getJSONArray("options");
                     String[] options = new String[optionsArr.length()];
                     for (int i = 0; i < optionsArr.length(); i += 1) {
                         options[i] = optionsArr.getString(i);
@@ -260,6 +262,7 @@ public class ParseThread extends Thread {
                 }
                 case "quest":
                 case "wnd_quest": {
+                    JSONArray optionsArr = args.getJSONArray("options");
                     String[] options = new String[optionsArr.length()];
                     for (int i = 0; i < optionsArr.length(); i += 1) {
                         options[i] = optionsArr.getString(i);
@@ -276,7 +279,7 @@ public class ParseThread extends Thread {
                     boolean has_listener = args.getBoolean("has_listener");
                     JSONArray allowed_items = args.optJSONArray("allowed_items");
                     JSONArray last_bag_path = args.optJSONArray("last_bag_path"); // todo
-                    GameScene.show(new WndBag( hero.belongings.backpack, has_listener, allowed_items, title ));
+                    GameScene.show(new WndBag(hero.belongings.backpack, has_listener, allowed_items, title));
                     break;
                 }
                 default: {
@@ -527,6 +530,7 @@ public class ParseThread extends Thread {
                 slot.add(slotArr.getInt(j));
             }
         }
+        Belongings belongings = hero.belongings;
         Bag stuff = hero.belongings.backpack;
         String update_mode = actionObj.optString("update_mode");
         switch (update_mode) {
@@ -547,7 +551,7 @@ public class ParseThread extends Thread {
                 break;
             }
             case ("update"): {
-                stuff.get(slot).update(actionObj.getJSONObject("item"));
+                belongings.get(slot).update(actionObj.getJSONObject("item"));
                 break;
             }
             case ("remove"): {
@@ -749,13 +753,13 @@ public class ParseThread extends Thread {
     }
 
     protected void parseActorHero(JSONObject actorObj, int id, Actor actor) throws JSONException {
-        if ((actor == null) || (actor instanceof Hero)) {
-            actor = hero != null ? hero : new Hero();
-            actor = parseActorChar(actorObj, id, actor);
-            Actor.add(actor); // it has check inside, no more checks
-        } else {
-            assert false : "resolved other actor, but waited Hero";
+        if ((actor != null) && !(actor instanceof Hero)) {
+            Actor.remove(actor);
+            Log.e("ParseThread", Utils.format("Actor is not hero. Deleted. Id:  %d", id));
         }
+        actor = hero != null ? hero : new Hero();
+        actor = parseActorChar(actorObj, id, actor);
+        Actor.add(actor); // it has check inside, no more checks
     }
 
 
