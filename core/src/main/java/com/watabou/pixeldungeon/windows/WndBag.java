@@ -101,6 +101,9 @@ public class WndBag extends WndTabbed {
 	protected static List<List<Integer>> AllowedItems(Hero hero, Mode mode) {
 		List<List<Integer>> result = new ArrayList<List<Integer>>(3);
 		for (Bag bag : hero.belongings.getBags()) {
+			if (bag == null){
+				continue;
+			}
 			for (Item item : bag.items) {
 				if (IsItemEnable(mode, item, hero)) {
 					result.add(item.getSlot(hero));
