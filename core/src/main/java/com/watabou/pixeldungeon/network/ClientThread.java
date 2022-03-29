@@ -15,10 +15,10 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
+import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Random;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -74,19 +73,6 @@ class ClientThread extends Thread {
             GLog.n(e.getMessage());
             disconnect();
         }
-    }
-
-    public static List<Integer> JsonArrayToListInteger(JSONArray arr) {
-        List<Integer> res = new ArrayList<Integer>(2);
-        try {
-            for (int i = 0; i < arr.length(); i++) {
-                res.add(arr.getInt(i));
-            }
-        } catch (Exception e) {
-            GLog.n(e.getMessage());
-            return null;
-        }
-        return res;
     }
 
     public void run() {
@@ -141,7 +127,7 @@ class ClientThread extends Thread {
                                     GLog.n("Empty action");
                                     break;
                                 }
-                                List<Integer> slot = JsonArrayToListInteger(actionObj.getJSONArray("slot"));
+                                List<Integer> slot = Utils.JsonArrayToListInteger(actionObj.getJSONArray("slot"));
                                 if ((slot == null) || slot.isEmpty()) {
                                     GLog.n("Empty slot: %s", slot);
                                     break;

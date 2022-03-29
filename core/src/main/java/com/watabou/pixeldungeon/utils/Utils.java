@@ -17,7 +17,11 @@
  */
 package com.watabou.pixeldungeon.utils;
 
+import org.json.JSONArray;
+
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Utils {
@@ -52,5 +56,18 @@ public class Utils {
 			}
 		}
 		return builder.toString();
+	}
+
+	public static List<Integer> JsonArrayToListInteger(JSONArray arr) {
+		List<Integer> res = new ArrayList<Integer>(2);
+		try {
+			for (int i = 0; i < arr.length(); i++) {
+				res.add(arr.getInt(i));
+			}
+		} catch (Exception e) {
+			GLog.n(e.getMessage());
+			return null;
+		}
+		return res;
 	}
 }

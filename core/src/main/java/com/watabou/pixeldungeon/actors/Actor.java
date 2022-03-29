@@ -84,18 +84,23 @@ public abstract class Actor implements Bundlable {
 		time = bundle.getFloat( TIME );
 		id = bundle.getInt( ID );
 	}
-	
+
 	public int id() {
 		if (id > 0) {
 			return id;
 		} else {
 			int max = 0;
-			for (Actor a : all) {
-				if (a.id > max) {
-					max = a.id;
+			synchronized (all) {
+				if (id > 0) {
+					return id;
 				}
+				for (Actor a : all) {
+					if (a.id > max) {
+						max = a.id;
+					}
+				}
+				return (id = max + 1);
 			}
-			return (id = max + 1);
 		}
 	}
 	
@@ -226,25 +231,26 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	private static void add( @NotNull Actor actor, float time ) {
-		
-		if (all.contains( actor )) {
-			return;
-		}
-		
-		if (actor.id > 0) {
-			ids.put( actor.id,  actor );
-		}
-		
-		all.add( actor );
-		actor.time += time;
-		actor.onAdd();
-		
-		if (actor instanceof Char) {
-			Char ch = (Char)actor;
-			chars[ch.pos] = ch;
-			for (Buff buff : ch.buffs()) {
-				all.add( buff );
-				buff.onAdd();
+		synchronized (all) {
+			if (all.contains(actor)) {
+				return;
+			}
+
+			if (actor.id > 0) {
+				ids.put(actor.id, actor);
+			}
+
+			all.add(actor);
+			actor.time += time;
+			actor.onAdd();
+
+			if (actor instanceof Char) {
+				Char ch = (Char) actor;
+				chars[ch.pos] = ch;
+				for (Buff buff : ch.buffs()) {
+					all.add(buff);
+					buff.onAdd();
+				}
 			}
 		}
 	}

@@ -58,13 +58,23 @@ public class Window extends Group implements Signal.Listener<Key> {
 	public int id;
 
 	public static final int TITLE_COLOR = 0xFFFF44;
-	
+
 	public Window() {
-		this( 0, 0, Chrome.get( Chrome.Type.WINDOW ) );
+		this(0, 0, Chrome.get(Chrome.Type.WINDOW));
 	}
 
 	public Window(Hero hero) {
 		this();
+		generateId(hero);
+	}
+
+	protected void generateId(Hero hero) {
+		if (id > 0) {
+			if (hero != ownerHero) {
+				assert false;
+			}
+			return;
+		}
 		ownerHero = hero;
 		if (!ids.containsKey(hero)) {
 			ids.put(hero, 0);

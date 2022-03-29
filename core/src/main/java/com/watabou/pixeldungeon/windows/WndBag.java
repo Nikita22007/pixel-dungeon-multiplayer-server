@@ -114,6 +114,12 @@ public class WndBag extends WndTabbed {
 			}
 		}
 		for (SpecialSlot slot : hero.belongings.getSpecialSlots()) {
+		    if (slot == null){
+		        continue;
+            }
+            if (slot.item == null) {
+                continue;
+            }
 			if (IsItemEnable(mode, slot.item, hero)) {
 				List<Integer> res = new ArrayList<>(1);
 				res.add(slot.path());
@@ -126,10 +132,10 @@ public class WndBag extends WndTabbed {
 	protected static JSONArray ListToJsonArray(List<List<Integer>> arg) {
 		JSONArray result = new JSONArray();
 		for (int i = 0; i < arg.size(); i++) {
-			List<Integer> curr_arr = new ArrayList<>();
+			List<Integer> curr_arr = arg.get(i);
 			JSONArray cur_json_arr = new JSONArray();
 			for (int j = 0; j < curr_arr.size(); j++) {
-				cur_json_arr.put(curr_arr.get(i));
+				cur_json_arr.put(curr_arr.get(j));
 			}
 			result.put(cur_json_arr);
 		}
@@ -137,8 +143,9 @@ public class WndBag extends WndTabbed {
 	}
 
 	public WndBag( Hero owner, Listener listener, Mode mode, String title ) {
-		
+
 		super();
+		generateId(owner);
 
 		ownerHero = owner;
 
@@ -154,10 +161,21 @@ public class WndBag extends WndTabbed {
 		} catch (JSONException ignored) {
 		}
 
-		SendData.sendWindow(id, "wnd_bag", owner.networkID, wnd_obj);
+		SendData.sendWindow(owner.networkID, "wnd_bag", id, wnd_obj);
 	}
 
-	public void SelectItem(Item item){
+	@Override
+	public void onSelect(int button, JSONObject args) {
+		try {
+			selectItem(ownerHero.belongings.getItemInSlot(Utils.JsonArrayToListInteger(args.getJSONArray("item_path"))));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			assert false;
+		}
+		hide();
+	}
+
+	public void selectItem(Item item){
 		if (listener!=null){
 			listener.onSelect(item);
 		}
