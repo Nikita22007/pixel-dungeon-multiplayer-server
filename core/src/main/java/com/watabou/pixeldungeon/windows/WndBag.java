@@ -476,7 +476,8 @@ public class WndBag extends WndTabbed {
 
 	public static class MultiplayerListener implements Listener {
 		int wndID = -1;
-		Hero owner = null
+		Hero owner = null;
+
 		public MultiplayerListener(int wnd_id, Hero owner) {
 			this.wndID = wnd_id;
 			this.owner = owner;
@@ -484,7 +485,7 @@ public class WndBag extends WndTabbed {
 
 		@Override
 		public void onSelect(Item item) {
-			SendData.sendBagWindowResult(wndID,0, owner.belongings.pathOfItem(item));
+			SendData.sendBagWindowResult(wndID, 0, owner.belongings.pathOfItem(item));
 		}
 	}
 }
