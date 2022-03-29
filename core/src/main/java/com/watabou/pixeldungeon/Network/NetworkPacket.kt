@@ -76,7 +76,7 @@ class NetworkPacket {
     fun packAndAddWindowsResult(
         id: Int,
         pressedButton: Int,
-        args: HashMap<String, Object>? = null
+        args: JSONObject? = null
     ) {
         val obj = JSONObject()
         obj.put("id", id)

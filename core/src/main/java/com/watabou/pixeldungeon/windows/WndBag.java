@@ -40,6 +40,7 @@ import com.watabou.pixeldungeon.items.bags.WandHolster;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.items.weapon.missiles.Boomerang;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
@@ -98,10 +99,15 @@ public class WndBag extends WndTabbed {
 	private static Mode lastMode;
 	private static Bag lastBag;
 
-	private static final Listener multiplayerListener = new MultiplayerListener();
-
-	public WndBag(Bag bag, boolean has_listener, JSONArray allowed_items, String title) {
-		this(bag, !has_listener ? null : multiplayerListener, Mode.ALLOWED_ITEMS, title, allowed_items);
+	public WndBag(int id, Bag bag, boolean has_listener, JSONArray allowed_items, String title) {
+		this(
+				bag,
+				!has_listener ? null : new MultiplayerListener(id, Dungeon.hero),
+				Mode.ALLOWED_ITEMS,
+				title,
+				allowed_items
+		);
+		this.id = id;
 	}
 
 	public WndBag(Bag bag, Listener listener, Mode mode, String title) {
@@ -117,7 +123,7 @@ public class WndBag extends WndTabbed {
 	}
 
 	public WndBag( Bag bag, Listener listener, Mode mode, String title, JSONArray allowedItems ) {
-		
+
 		super();
 
 		this.allowedItems = (allowedItems == null) ? null : ParseArrayOfItems(Dungeon.hero, allowedItems);
@@ -467,11 +473,18 @@ public class WndBag extends WndTabbed {
 	public interface Listener {
 		void onSelect( Item item );
 	}
+
 	public static class MultiplayerListener implements Listener {
+		int wndID = -1;
+		Hero owner = null
+		public MultiplayerListener(int wnd_id, Hero owner) {
+			this.wndID = wnd_id;
+			this.owner = owner;
+		}
 
 		@Override
 		public void onSelect(Item item) {
-			//todo
+			SendData.sendBagWindowResult(wndID,0, owner.belongings.pathOfItem(item));
 		}
 	}
 }
