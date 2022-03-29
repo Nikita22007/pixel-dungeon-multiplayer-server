@@ -279,7 +279,7 @@ public class ParseThread extends Thread {
                     boolean has_listener = args.getBoolean("has_listener");
                     JSONArray allowed_items = args.optJSONArray("allowed_items");
                     JSONArray last_bag_path = args.optJSONArray("last_bag_path"); // todo
-                    GameScene.show(new WndBag(hero.belongings.backpack, has_listener, allowed_items, title));
+                    GameScene.show(new WndBag(id, hero.belongings.backpack, has_listener, allowed_items, title));
                     break;
                 }
                 default: {
