@@ -756,7 +756,11 @@ public class ParseThread extends Thread {
             Actor.remove(actor);
             Log.e("ParseThread", Utils.format("Actor is not hero. Deleted. Id:  %d", id));
         }
-        actor = hero != null ? hero : new Hero();
+        if (hero == null) {
+            hero = new Hero();
+            hero.changeID(id);
+        }
+        actor = hero;
         actor = parseActorChar(actorObj, id, actor);
         Actor.add(actor); // it has check inside, no more checks
     }
