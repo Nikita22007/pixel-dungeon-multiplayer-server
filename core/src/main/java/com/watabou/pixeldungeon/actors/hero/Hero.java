@@ -395,7 +395,11 @@ public class Hero extends Char {
 	
 	@Override
 	public boolean act() {
-		
+
+		if (networkID < 0){
+			return true;
+		}
+
 		super.act();
 		
 		if (paralysed) {

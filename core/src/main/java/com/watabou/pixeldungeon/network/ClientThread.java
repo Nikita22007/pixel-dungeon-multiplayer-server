@@ -13,6 +13,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -258,23 +259,24 @@ class ClientThread extends Thread {
         curClass.initHero(newHero);
 
         newHero.pos = Dungeon.GetPosNear(level.entrance);
+        newHero.updateSpriteState();
         if (newHero.pos == -1) {
             newHero.pos = level.entrance; //todo  FIXME
         }
-
+        Actor.add(newHero);
+        Actor.occupyCell(newHero);
+        newHero.getSprite().place(newHero.pos);
         packet.packAndAddLevel(level);
         packet.pack_and_add_hero(newHero);
         packet.addInventoryFull(newHero);
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work
             for (int i = 0; i < Settings.maxPlayers; i++) {
-                synchronized (Dungeon.heroes) {
-                    if (Dungeon.heroes[i] == null) {
-                        Dungeon.heroes[i] = newHero;
-                        newHero.networkID = i;
-                        newHero.name = "Player" + i;
-                        break;
-                    }
+                if (Dungeon.heroes[i] == null) {
+                    Dungeon.heroes[i] = newHero;
+                    newHero.networkID = i;
+                    newHero.name = "Player" + i;
+                    break;
                 }
             }
 
@@ -282,8 +284,6 @@ class ClientThread extends Thread {
                 throw new Exception("Can not find place for hero");
             }
 
-            Actor.add(newHero);
-            Actor.occupyCell(newHero);
             Dungeon.observe(newHero, false);
         }
         Scene scene = Game.scene();

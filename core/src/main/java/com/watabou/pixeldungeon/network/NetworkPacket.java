@@ -130,6 +130,9 @@ public class NetworkPacket {
         try {
             if (actor instanceof Char) {
                 int id = actor.id();
+                if (id <= 0){
+                    return new JSONObject();
+                }
                 object.put("id", id);
                 if (heroAsHero && (actor instanceof Hero)) {
                     object.put("type", "hero");
@@ -213,6 +216,9 @@ public class NetworkPacket {
 
     protected JSONObject packHero(@NotNull Hero hero) {
         int id = hero.id();
+        if (id <= 0){
+            return new JSONObject();
+        }
         JSONObject object = new JSONObject();
         String class_name = hero.heroClass.name();
         int subclass_id = 0;

@@ -20,8 +20,10 @@ package com.watabou.pixeldungeon.actors;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import android.util.Log;
 import android.util.SparseArray;
 
+import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.Statistics;
@@ -40,9 +42,9 @@ public abstract class Actor implements Bundlable {
 
 	public static final float TICK	= 1f;
 
-	private float time;
+	private volatile float time;
 
-	private int id = 0;
+	private volatile int id = 0;
 	
 	protected abstract boolean act();
 	
@@ -94,11 +96,15 @@ public abstract class Actor implements Bundlable {
 				if (id > 0) {
 					return id;
 				}
+				if (!all.contains(this)){
+					return -1;
+				}
 				for (Actor a : all) {
 					if (a.id > max) {
 						max = a.id;
 					}
 				}
+				Log.i("ACTOR", String.format("ACTOR %s GETTED ID %d", this, max+1));
 				return (id = max + 1);
 			}
 		}
@@ -107,8 +113,8 @@ public abstract class Actor implements Bundlable {
 	// **********************
 	// *** Static members ***
 	
-	private static HashSet<Actor> all = new HashSet<Actor>();
-	private static Actor current;
+	private static final HashSet<Actor> all = new HashSet<Actor>();
+	private volatile static Actor current;
 	
 	private static SparseArray<Actor> ids = new SparseArray<Actor>();
 	
@@ -116,13 +122,14 @@ public abstract class Actor implements Bundlable {
 	
 	private static Char[] chars = new Char[Level.LENGTH];
 	public static void clear() {
-		
-		now = 0;
-		
-		Arrays.fill( chars, null );
-		all.clear();
-		
-		ids.clear();
+		synchronized (all) {
+			now = 0;
+
+			Arrays.fill(chars, null);
+			all.clear();
+
+			ids.clear();
+		}
 	}
 
 	// because "time: int32, we can have overflow of time counter
@@ -130,17 +137,18 @@ public abstract class Actor implements Bundlable {
 		/*if (Dungeon.hero != null && all.contains( Dungeon.hero )) {
 			Statistics.duration += now;
 		}*/
-		
-		float min = Float.MAX_VALUE;
-		for (Actor a : all) {
-			if (a.time < min) {
-				min = a.time;
+		synchronized (all) {
+			float min = Float.MAX_VALUE;
+			for (Actor a : all) {
+				if (a.time < min) {
+					min = a.time;
+				}
 			}
+			for (Actor a : all) {
+				a.time -= min;
+			}
+			now = 0;
 		}
-		for (Actor a : all) {
-			a.time -= min;
-		}
-		now = 0;
 	}
 	
 	public static void init() {
@@ -162,11 +170,15 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static void occupyCell( Char ch ) {
-		chars[ch.pos] = ch;
+		synchronized (chars) {
+			chars[ch.pos] = ch;
+		}
 	}
 	
 	public static void freeCell( int pos ) {
-		chars[pos] = null;
+		synchronized (chars) {
+			chars[pos] = null;
+		}
 	}
 	
 	/*protected*/public void next() {
@@ -183,25 +195,27 @@ public abstract class Actor implements Bundlable {
 	
 		boolean doNext;
 
-		do {
-			now = Float.MAX_VALUE;
-			current = null;
-			
-			Arrays.fill( chars, null );
-			
-			for (Actor actor : all) {
-				if (actor.time < now) {
-					now = actor.time;
-					current = actor;
-				}
-				
-				if (actor instanceof Char) {
-					Char ch = (Char)actor;
-					chars[ch.pos] = ch;
-				}
-			}
+		synchronized (all) {
+			synchronized (chars) {
+				do {
+					now = Float.MAX_VALUE;
+					current = null;
 
-			if (current != null) {
+					Arrays.fill(chars, null);
+
+					for (Actor actor : all) {
+						if (actor.time < now) {
+							now = actor.time;
+							current = actor;
+						}
+
+						if (actor instanceof Char) {
+							Char ch = (Char) actor;
+							chars[ch.pos] = ch;
+						}
+					}
+
+					if (current != null) {
 				
 				/*if (current instanceof Char && ((Char)current).sprite.isMoving) {
 					// If it's character's turn to act, but its sprite 
@@ -209,19 +223,29 @@ public abstract class Actor implements Bundlable {
 					current = null;
 					break;
 				}*/
-				
-				doNext = current.act();
-				if (doNext && !HeroHelp.haveAliveHero()) {
-					doNext = false;
-					current = null;
-				}
-			} else {
-				doNext = false;
+
+						doNext = current.act();
+						if (doNext && !HeroHelp.haveAliveHero()) {
+							doNext = false;
+							current = null;
+						}
+					} else {
+						doNext = false;
+					}
+				} while (doNext);
 			}
-			
-		} while (doNext);
+		}
 	}
-	
+
+	/*
+    use Actor.add() it as early as possible
+    Actor.add() MUST be used BEFORE using actor.id()
+    This function adds actor to Actor.all array
+    If actor is not in Actor.all  and  gets id, race condition will cause  bugs with id
+    because same id can be setted to other creature
+    Note, that all function, that sends information about this character, will adds him id
+    */
+
 	public static void add(@NotNull Actor actor ) {
 		add( actor, now );
 	}
@@ -253,16 +277,18 @@ public abstract class Actor implements Bundlable {
 				}
 			}
 		}
+		SendData.sendActor(actor);
 	}
 	
 	public static void remove( Actor actor ) {
-		
-		if (actor != null) {
-			all.remove( actor );
-			actor.onRemove();
-			
-			if (actor.id > 0) {
-				ids.remove( actor.id );
+		synchronized (all) {
+			if (actor != null) {
+				all.remove(actor);
+				actor.onRemove();
+
+				if (actor.id > 0) {
+					ids.remove(actor.id);
+				}
 			}
 		}
 	}
