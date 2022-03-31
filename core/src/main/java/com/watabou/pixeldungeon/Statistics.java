@@ -23,7 +23,7 @@ import com.watabou.utils.Bundle;
 public class Statistics {
 	
 	public static int goldCollected;
-	public static int deepestFloor;
+	public static int deepestFloor = -1;
 	public static int enemiesSlain;
 	public static int foodEaten;
 	public static int potionsCooked;
@@ -42,7 +42,7 @@ public class Statistics {
 	public static void reset() {
 		
 		goldCollected	= 0;
-		deepestFloor	= 0;
+		deepestFloor	= -1;
 		enemiesSlain	= 0;
 		foodEaten		= 0;
 		potionsCooked	= 0;

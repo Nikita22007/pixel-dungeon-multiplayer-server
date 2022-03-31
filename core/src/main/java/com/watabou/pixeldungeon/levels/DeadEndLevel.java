@@ -24,7 +24,7 @@ import com.watabou.utils.Random;
 
 public class DeadEndLevel extends Level {
 
-	private static final int SIZE = 5;
+	protected static final int SIZE = 9;
 	
 	{
 		color1 = 0x534f3e;

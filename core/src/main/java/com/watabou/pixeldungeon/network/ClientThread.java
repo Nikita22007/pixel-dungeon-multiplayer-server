@@ -231,6 +231,8 @@ class ClientThread extends Thread {
         } catch (IOException e) {
             Log.e(String.format("ClientThread%d", threadID), String.format("IOException in threadID %s. Message: %s", threadID, e.getMessage()));
             disconnect();
+        } catch (StackOverflowError e) {
+            Log.e("st", "st", e);
         }
     }
 

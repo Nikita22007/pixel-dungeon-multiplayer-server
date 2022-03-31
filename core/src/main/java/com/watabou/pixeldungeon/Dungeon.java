@@ -45,6 +45,7 @@ import com.watabou.pixeldungeon.levels.HallsLevel;
 import com.watabou.pixeldungeon.levels.LastLevel;
 import com.watabou.pixeldungeon.levels.LastShopLevel;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.levels.LobbyLevel;
 import com.watabou.pixeldungeon.levels.PrisonBossLevel;
 import com.watabou.pixeldungeon.levels.PrisonLevel;
 import com.watabou.pixeldungeon.levels.Room;
@@ -122,7 +123,7 @@ public class Dungeon {
 		Statistics.reset();
 		Journal.reset();
 		
-		depth = 0;
+		depth = -1;
 		
 		droppedItems = new SparseArray<ArrayList<Item>>();
 		
@@ -169,6 +170,9 @@ public class Dungeon {
 		
 		Level level;
 		switch (depth) {
+		case 0:
+			level = new LobbyLevel();
+			break;
 		case 1:
 		case 2:
 		case 3:

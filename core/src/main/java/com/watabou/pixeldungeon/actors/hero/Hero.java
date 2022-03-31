@@ -775,8 +775,8 @@ public class Hero extends Char {
 	private boolean actAscend( HeroAction.Ascend action ) {
 		int stairs = action.dst;
 		if (pos == stairs && pos == Dungeon.level.entrance) {
-			
-			if (Dungeon.depth == 1) {
+
+			if (Dungeon.depth <= 1) {
 				
 				if (belongings.getItem( Amulet.class ) == null) {
 					GameScene.show(new WndMessage(TXT_LEAVE, this));
