@@ -246,7 +246,6 @@ public class ParseThread extends Thread {
             switch (type) {
                 case "message":
                 case "wnd_message": {
-                    JSONArray optionsArr = args.getJSONArray("options");
                     GameScene.show(new WndMessage(id, args.getString("text")));
                     break;
                 }
