@@ -58,8 +58,7 @@ public class CellSelector extends TouchArea {
 	
 	public void select( int cell ) {
 		if (enabled && listener != null && cell != -1) {
-			SendCellListenerCell(cell);
-			//listener.onSelect( cell );
+			listener.onSelect( cell );
 			GameScene.ready();
 			
 		} else {

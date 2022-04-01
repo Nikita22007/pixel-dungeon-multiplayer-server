@@ -94,6 +94,7 @@ import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.levels.features.AlchemyPot;
 import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.levels.features.Sign;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Earthroot;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
@@ -961,61 +962,8 @@ public class Hero extends Char {
 	}
 	
 	public boolean handle( int cell ) {
-		
-		if (cell == -1) {
-			return false;
-		}
-		
-		Char ch;
-		Heap heap;
-		
-		if (Dungeon.level.map[cell] == Terrain.ALCHEMY && cell != pos) {
-			
-			curAction = new HeroAction.Cook( cell );
-			
-		} else if (Level.fieldOfView[cell] && (ch = Actor.findChar( cell )) instanceof Mob) {
-			
-			if (ch instanceof NPC) {
-				curAction = new HeroAction.Interact( (NPC)ch );
-			} else {
-				curAction = new HeroAction.Attack( ch );
-			}
-			
-		} else if (Level.fieldOfView[cell] && (heap = Dungeon.level.heaps.get( cell )) != null && heap.type != Heap.Type.HIDDEN) {
-
-			switch (heap.type) {
-			case HEAP:
-				curAction = new HeroAction.PickUp( cell );
-				break;
-			case FOR_SALE:
-				curAction = heap.size() == 1 && heap.peek().price() > 0 ? 
-					new HeroAction.Buy( cell ) : 
-					new HeroAction.PickUp( cell );
-				break;
-			default:
-				curAction = new HeroAction.OpenChest( cell );
-			}
-			
-		} else if (Dungeon.level.map[cell] == Terrain.LOCKED_DOOR || Dungeon.level.map[cell] == Terrain.LOCKED_EXIT) {
-			
-			curAction = new HeroAction.Unlock( cell );
-			
-		} else if (cell == Dungeon.level.exit) {
-			
-			curAction = new HeroAction.Descend( cell );
-			
-		} else if (cell == Dungeon.level.entrance) {
-			
-			curAction = new HeroAction.Ascend( cell );
-			
-		} else  {
-			
-			curAction = new HeroAction.Move( cell );
-			lastAction = null;
-			
-		}
-
-		return act();
+		SendData.SendCellListenerCell(cell);
+		return true;
 	}
 	
 	public void earnExp( int exp ) {
