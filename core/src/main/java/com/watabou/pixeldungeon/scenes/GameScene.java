@@ -381,7 +381,6 @@ public class GameScene extends PixelScene {
 		
 		water.offset( 0, -5 * Game.elapsed );
 		
-		//Actor.process();
 		ParseThread.getActiveThread().parseIfHasData();
 		
 		if (Dungeon.hero.ready && !Dungeon.hero.paralysed) {

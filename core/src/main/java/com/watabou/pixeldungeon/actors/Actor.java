@@ -165,53 +165,6 @@ public abstract class Actor implements Bundlable {
 		}
 	}
 
-	public static void process() {
-
-		if (current != null) {
-			return;
-		}
-
-		boolean doNext;
-
-		do {
-			now = Float.MAX_VALUE;
-			current = null;
-
-			Arrays.fill( chars, null );
-
-			for (Actor actor : all) {
-				if (actor.time < now) {
-					now = actor.time;
-					current = actor;
-				}
-
-				if (actor instanceof Char) {
-					Char ch = (Char)actor;
-					chars[ch.pos] = ch;
-				}
-			}
-
-			if (current != null) {
-
-				if (current instanceof Char && ((Char)current).sprite.isMoving) {
-					// If it's character's turn to act, but its sprite 
-					// is moving, wait till the movement is over
-					current = null;
-					break;
-				}
-
-				doNext = current.act();
-				if (doNext && !Dungeon.hero.isAlive()) {
-					doNext = false;
-					current = null;
-				}
-			} else {
-				doNext = false;
-			}
-
-		} while (doNext);
-	}
-
 	public static void add( Actor actor ) {
 		add( actor, now );
 	}
