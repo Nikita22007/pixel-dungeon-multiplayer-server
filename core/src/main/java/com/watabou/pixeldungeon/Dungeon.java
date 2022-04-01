@@ -244,7 +244,11 @@ public class Dungeon {
 		level.reset();
 		switchLevelToAll( level, level.entrance );
 	}
-	
+
+	public static boolean hasHunger(int depth) {
+		return depth != 0;
+	}
+
 	public static boolean shopOnLevel(int depth) {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
@@ -757,5 +761,4 @@ public class Dungeon {
 		return PathFinder.getStepBack( cur, from, passable );
 		
 	}
-
 }

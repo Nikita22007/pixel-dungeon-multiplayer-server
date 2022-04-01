@@ -61,8 +61,10 @@ public class Hunger extends Buff implements Hero.Doom {
 		if (target.isAlive()) {
 			
 			Hero hero = (Hero)target;
-			
-			if (isStarving()) {
+
+			if (!Dungeon.hasHunger(Dungeon.depth)) {
+				// do not process hunger
+			} else if (isStarving()) {
 				if (Random.Float() < 0.3f && (target.getHP() > 1 || !target.paralysed)) {
 					
 					GLog.n( TXT_STARVING );
