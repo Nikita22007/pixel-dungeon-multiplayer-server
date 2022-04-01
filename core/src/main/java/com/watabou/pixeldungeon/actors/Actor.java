@@ -47,6 +47,7 @@ public abstract class Actor implements Bundlable {
 	private volatile int id = 0;
 	
 	protected abstract boolean act();
+	public static final int MAX_TRIES = 20; //  to free mutex
 	
 	protected void spend( float time ) {
 		this.time += time;
@@ -194,10 +195,10 @@ public abstract class Actor implements Bundlable {
 		}
 	
 		boolean doNext;
-
-		synchronized (all) {
+		int tries = 0;
+		do {
+			synchronized (all) {
 			synchronized (chars) {
-				do {
 					now = Float.MAX_VALUE;
 					current = null;
 
@@ -232,9 +233,14 @@ public abstract class Actor implements Bundlable {
 					} else {
 						doNext = false;
 					}
-				} while (doNext);
 			}
 		}
+			tries += 1;
+			if (tries >= MAX_TRIES){
+				doNext = false;
+				current = null;
+			}
+		} while (doNext);
 	}
 
 	/*
