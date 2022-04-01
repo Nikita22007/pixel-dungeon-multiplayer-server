@@ -52,6 +52,7 @@ import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.network.Client.readStream;
 import static com.watabou.pixeldungeon.network.Client.socket;
 import static com.watabou.pixeldungeon.scenes.GameScene.updateMap;
+import static com.watabou.pixeldungeon.utils.Utils.ToPascalCase;
 
 public class ParseThread extends Thread {
 
@@ -268,7 +269,7 @@ public class ParseThread extends Thread {
                     }
                     String title = args.getString("title");
                     String text = args.getString("text");
-                    CharSprite sprite = spriteFromName(args.getString("sprite"), true);
+                    CharSprite sprite = spriteFromName(ToPascalCase(args.getString("sprite")), true);
                     GameScene.show(new WndQuest(id, sprite, title, text, options));
                     break;
                 }
@@ -688,7 +689,7 @@ public class ParseThread extends Thread {
                 }
                 case "sprite_name": {
                     CharSprite old_sprite = chr.sprite;
-                    CharSprite sprite = spriteFromName(Utils.ToPascalCase(actorObj.getString(token)), chr != hero);
+                    CharSprite sprite = spriteFromName(ToPascalCase(actorObj.getString(token)), chr != hero);
                     GameScene.updateCharSprite(chr, sprite);
                     break;
                 }
@@ -733,7 +734,7 @@ public class ParseThread extends Thread {
     protected void parseActorBlob(JSONObject actorObj, int id, Actor actor) throws JSONException {
         Class blob_class = null;
         if (actor == null) {
-            String blob_name = Utils.format("com.watabou.pixeldungeon.actors.blobs.%s", Utils.ToPascalCase(actorObj.getString("blob_type")));
+            String blob_name = Utils.format("com.watabou.pixeldungeon.actors.blobs.%s", ToPascalCase(actorObj.getString("blob_type")));
             try {
                 blob_class = Class.forName(blob_name);
                 actor = (Blob) blob_class.newInstance();
