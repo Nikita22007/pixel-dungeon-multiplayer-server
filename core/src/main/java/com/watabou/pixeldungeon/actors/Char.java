@@ -322,11 +322,9 @@ public abstract class Char extends Actor {
 	@SuppressWarnings("unchecked")
 	public <T extends Buff> HashSet<T> buffs( Class<T> c ) {
 		HashSet<T> filtered = new HashSet<T>();
-		synchronized (buffs) {
-			for (Buff b : buffs) {
-				if (c.isInstance(b)) {
-					filtered.add((T) b);
-				}
+		for (Buff b : buffs) {
+			if (c.isInstance( b )) {
+				filtered.add( (T)b );
 			}
 		}
 		return filtered;
@@ -334,121 +332,113 @@ public abstract class Char extends Actor {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Buff> T buff( Class<T> c ) {
-		synchronized (buffs) {
-			for (Buff b : buffs) {
-				if (c.isInstance(b)) {
-					return (T) b;
-				}
+		for (Buff b : buffs) {
+			if (c.isInstance( b )) {
+				return (T)b;
 			}
 		}
 		return null;
 	}
-
+	
 	public boolean isCharmedBy( Char ch ) {
 		int chID = ch.id();
-		synchronized (buffs) {
-			for (Buff b : buffs) {
-				if (b instanceof Charm && ((Charm) b).object == chID) {
-					return true;
-				}
+		for (Buff b : buffs) {
+			if (b instanceof Charm && ((Charm)b).object == chID) {
+				return true;
 			}
 		}
 		return false;
 	}
 	
 	public void add( Buff buff ) {
-		synchronized (buffs) {
+		
+		buffs.add( buff );
+		Actor.add( buff );
+		
+		if (getSprite() != null) {
+			if (buff instanceof Poison) {
+				
+				CellEmitter.center( pos ).burst( PoisonParticle.SPLASH, 5 );
+				getSprite().showStatus( CharSprite.NEGATIVE, "poisoned" );
+				
+			} else if (buff instanceof Amok) {
+				
+				getSprite().showStatus( CharSprite.NEGATIVE, "amok" );
 
-			buffs.add(buff);
-			Actor.add(buff);
+			} else if (buff instanceof Slow) {
 
-			if (getSprite() != null) {
-				if (buff instanceof Poison) {
+				getSprite().showStatus( CharSprite.NEGATIVE, "slowed" );
+				
+			} else if (buff instanceof MindVision) {
+				
+				getSprite().showStatus( CharSprite.POSITIVE, "mind" );
+				getSprite().showStatus( CharSprite.POSITIVE, "vision" );
+				
+			} else if (buff instanceof Paralysis) {
 
-					CellEmitter.center(pos).burst(PoisonParticle.SPLASH, 5);
-					getSprite().showStatus(CharSprite.NEGATIVE, "poisoned");
+				getSprite().add( CharSprite.State.PARALYSED );
+				getSprite().showStatus( CharSprite.NEGATIVE, "paralysed" );
+				
+			} else if (buff instanceof Terror) {
+				
+				getSprite().showStatus( CharSprite.NEGATIVE, "frightened" );
+				
+			} else if (buff instanceof Roots) {
+				
+				getSprite().showStatus( CharSprite.NEGATIVE, "rooted" );
+				
+			} else if (buff instanceof Cripple) {
 
-				} else if (buff instanceof Amok) {
+				getSprite().showStatus( CharSprite.NEGATIVE, "crippled" );
+				
+			} else if (buff instanceof Bleeding) {
 
-					getSprite().showStatus(CharSprite.NEGATIVE, "amok");
+				getSprite().showStatus( CharSprite.NEGATIVE, "bleeding" );
+				
+			} else if (buff instanceof Vertigo) {
 
-				} else if (buff instanceof Slow) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "slowed");
-
-				} else if (buff instanceof MindVision) {
-
-					getSprite().showStatus(CharSprite.POSITIVE, "mind");
-					getSprite().showStatus(CharSprite.POSITIVE, "vision");
-
-				} else if (buff instanceof Paralysis) {
-
-					getSprite().add(CharSprite.State.PARALYSED);
-					getSprite().showStatus(CharSprite.NEGATIVE, "paralysed");
-
-				} else if (buff instanceof Terror) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "frightened");
-
-				} else if (buff instanceof Roots) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "rooted");
-
-				} else if (buff instanceof Cripple) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "crippled");
-
-				} else if (buff instanceof Bleeding) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "bleeding");
-
-				} else if (buff instanceof Vertigo) {
-
-					getSprite().showStatus(CharSprite.NEGATIVE, "dizzy");
-
-				} else if (buff instanceof Sleep) {
-					getSprite().idle();
-				} else if (buff instanceof Burning) {
-					getSprite().add(CharSprite.State.BURNING);
-				} else if (buff instanceof Levitation) {
-					getSprite().add(CharSprite.State.LEVITATING);
-				} else if (buff instanceof Frost) {
-					getSprite().add(CharSprite.State.FROZEN);
-				} else if (buff instanceof Invisibility) {
-					if (!(buff instanceof Shadows)) {
-						getSprite().showStatus(CharSprite.POSITIVE, "invisible");
-					}
-					getSprite().add(CharSprite.State.INVISIBLE);
+				getSprite().showStatus( CharSprite.NEGATIVE, "dizzy" );
+				
+			} else if (buff instanceof Sleep) {
+				getSprite().idle();
+			}
+			
+			  else if (buff instanceof Burning) {
+				getSprite().add( CharSprite.State.BURNING );
+			} else if (buff instanceof Levitation) {
+				getSprite().add( CharSprite.State.LEVITATING );
+			} else if (buff instanceof Frost) {
+				getSprite().add( CharSprite.State.FROZEN );
+			} else if (buff instanceof Invisibility) {
+				if (!(buff instanceof Shadows)) {
+					getSprite().showStatus( CharSprite.POSITIVE, "invisible" );
 				}
+				getSprite().add( CharSprite.State.INVISIBLE );
 			}
 		}
 	}
 	
 	public void remove( Buff buff ) {
-		synchronized (buffs) {
-
-			buffs.remove(buff);
-			Actor.remove(buff);
-
-			if (buff instanceof Burning) {
-				getSprite().remove(CharSprite.State.BURNING);
-			} else if (buff instanceof Levitation) {
-				getSprite().remove(CharSprite.State.LEVITATING);
-			} else if (buff instanceof Invisibility && invisible <= 0) {
-				getSprite().remove(CharSprite.State.INVISIBLE);
-			} else if (buff instanceof Paralysis) {
-				getSprite().remove(CharSprite.State.PARALYSED);
-			} else if (buff instanceof Frost) {
-				getSprite().remove(CharSprite.State.FROZEN);
-			}
-		}
+		
+		buffs.remove( buff );
+		Actor.remove( buff );
+		
+		if (buff instanceof Burning) {
+			getSprite().remove( CharSprite.State.BURNING );
+		} else if (buff instanceof Levitation) {
+			getSprite().remove( CharSprite.State.LEVITATING );
+		} else if (buff instanceof Invisibility && invisible <= 0) {
+			getSprite().remove( CharSprite.State.INVISIBLE );
+		} else if (buff instanceof Paralysis) {
+			getSprite().remove( CharSprite.State.PARALYSED );
+		} else if (buff instanceof Frost) {
+			getSprite().remove( CharSprite.State.FROZEN );
+		} 
 	}
 	
 	public void remove( Class<? extends Buff> buffClass ) {
-		synchronized (buffs) {
-			for (Buff buff : buffs(buffClass)) {
-				remove(buff);
-			}
+		for (Buff buff : buffs( buffClass )) {
+			remove( buff );
 		}
 	}
 	
@@ -456,32 +446,26 @@ public abstract class Char extends Actor {
 	
 	@Override
 	protected void onRemove() {
-		synchronized (buffs) {
-
-			for (Buff buff : buffs.toArray(new Buff[0])) {
-				buff.detach();
-			}
+		for (Buff buff : buffs.toArray( new Buff[0] )) {
+			buff.detach();
 		}
 		super.onRemove();
 	}
 	
 	public void updateSpriteState() {
-		synchronized (buffs) {
-
-			for (Buff buff : buffs) {
-				if (buff instanceof Burning) {
-					getSprite().add(CharSprite.State.BURNING);
-				} else if (buff instanceof Levitation) {
-					getSprite().add(CharSprite.State.LEVITATING);
-				} else if (buff instanceof Invisibility) {
-					getSprite().add(CharSprite.State.INVISIBLE);
-				} else if (buff instanceof Paralysis) {
-					getSprite().add(CharSprite.State.PARALYSED);
-				} else if (buff instanceof Frost) {
-					getSprite().add(CharSprite.State.FROZEN);
-				} else if (buff instanceof Light) {
-					getSprite().add(CharSprite.State.ILLUMINATED);
-				}
+		for (Buff buff:buffs) {
+			if (buff instanceof Burning) {
+				getSprite().add( CharSprite.State.BURNING );
+			} else if (buff instanceof Levitation) {
+				getSprite().add( CharSprite.State.LEVITATING );
+			} else if (buff instanceof Invisibility) {
+				getSprite().add( CharSprite.State.INVISIBLE );
+			} else if (buff instanceof Paralysis) {
+				getSprite().add( CharSprite.State.PARALYSED );
+			} else if (buff instanceof Frost) {
+				getSprite().add( CharSprite.State.FROZEN );
+			} else if (buff instanceof Light) {
+				getSprite().add( CharSprite.State.ILLUMINATED );
 			}
 		}
 	}
