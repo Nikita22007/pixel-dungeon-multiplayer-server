@@ -61,6 +61,8 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public abstract class Char extends Actor {
 
@@ -91,7 +93,7 @@ public abstract class Char extends Actor {
 	
 	public int viewDistance	= 8;
 	
-	private HashSet<Buff> buffs = new HashSet<Buff>();
+	private Set<Buff> buffs = new CopyOnWriteArraySet<Buff>();
 	
 	@Override
 	protected boolean act() {
@@ -315,13 +317,13 @@ public abstract class Char extends Actor {
 		super.spend( time / timeScale );
 	}
 	
-	public HashSet<Buff> buffs() {
+	public Set<Buff> buffs() {
 		return buffs;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends Buff> HashSet<T> buffs( Class<T> c ) {
-		HashSet<T> filtered = new HashSet<T>();
+	public <T extends Buff> Set<T> buffs( Class<T> c ) {
+		Set<T> filtered = new CopyOnWriteArraySet<T>();
 		for (Buff b : buffs) {
 			if (c.isInstance( b )) {
 				filtered.add( (T)b );
