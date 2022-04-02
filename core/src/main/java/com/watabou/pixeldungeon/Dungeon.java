@@ -268,13 +268,18 @@ public class Dungeon {
 		return -1;
 	}
 
-	public static void removeHero(int ID){
-		if (heroes[ID] == null){
+	public static void removeHero(Hero hero){
+		if ( hero == null){
+			return;
+		}
+		int ID = Arrays.asList(heroes).indexOf(hero);
+		if (ID == -1) {
 			return;
 		}
 		Actor.freeCell(heroes[ID].pos);
 		Actor.remove(heroes[ID]);
 		heroes[ID].die(null);
+		heroes[ID] = null;
 	}
 
 	public static void switchLevelToAll(final Level level,int pos ){

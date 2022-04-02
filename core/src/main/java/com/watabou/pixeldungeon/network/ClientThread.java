@@ -276,7 +276,7 @@ class ClientThread extends Thread {
             for (int i = 0; i < Settings.maxPlayers; i++) {
                 if (Dungeon.heroes[i] == null) {
                     Dungeon.heroes[i] = newHero;
-                    newHero.networkID = i;
+                    newHero.networkID = threadID;
                     newHero.name = "Player" + i;
                     break;
                 }
@@ -409,7 +409,7 @@ class ClientThread extends Thread {
         writeStream = null;
         clientSocket = null;
         Server.clients[threadID] = null;
-        Dungeon.removeHero(threadID);
+        Dungeon.removeHero(clientHero);
         GLog.n("player " + threadID + " disconnected");
     }
 }
