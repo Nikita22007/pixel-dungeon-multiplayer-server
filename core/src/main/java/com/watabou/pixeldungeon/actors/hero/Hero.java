@@ -372,91 +372,10 @@ public class Hero extends Char {
 	
 	@Override
 	public boolean act() {
-		
-		super.act();
-		
-		if (paralysed) {
-			
-			curAction = null;
-			
-			spendAndNext( TICK );
-			return false;
-		}
+
 		
 		checkVisibleMobs();
 		AttackIndicator.updateState();
-		
-		if (curAction == null) {
-			
-			if (restoreHealth) {
-				if (isStarving() || HP >= HT) {
-					restoreHealth = false;
-				} else {
-					spend( TIME_TO_REST ); next();
-					return false;
-				}
-			}
-			
-			ready();
-			return false;
-			
-		} else {
-			
-			restoreHealth = false;
-			
-			ready = false;
-			
-			if (curAction instanceof HeroAction.Move) {
-				
-				return actMove( (HeroAction.Move)curAction );
-				
-			} else 
-			if (curAction instanceof HeroAction.Interact) {
-				
-				return actInteract( (HeroAction.Interact)curAction );
-				
-			} else 
-			if (curAction instanceof HeroAction.Buy) {
-				
-				return actBuy( (HeroAction.Buy)curAction );
-				
-			}else 
-			if (curAction instanceof HeroAction.PickUp) {
-				
-				return actPickUp( (HeroAction.PickUp)curAction );
-				
-			} else 
-			if (curAction instanceof HeroAction.OpenChest) {
-				
-				return actOpenChest( (HeroAction.OpenChest)curAction );
-				
-			} else 
-			if (curAction instanceof HeroAction.Unlock) {
-				
-				return actUnlock( (HeroAction.Unlock)curAction );
-				
-			} else 
-			if (curAction instanceof HeroAction.Descend) {
-				
-				return actDescend( (HeroAction.Descend)curAction );
-				
-			} else
-			if (curAction instanceof HeroAction.Ascend) {
-				
-				return actAscend( (HeroAction.Ascend)curAction );
-				
-			} else
-			if (curAction instanceof HeroAction.Attack) {
-
-				return actAttack( (HeroAction.Attack)curAction );
-				
-			} else
-			if (curAction instanceof HeroAction.Cook) {
-
-				return actCook( (HeroAction.Cook)curAction );
-				
-			}
-		}
 		
 		return false;
 	}
