@@ -76,6 +76,7 @@ import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
 import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
 import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
 import static com.watabou.pixeldungeon.network.SendData.sendAllChars;
+import static com.watabou.pixeldungeon.network.SendData.sendDepth;
 import static com.watabou.pixeldungeon.network.SendData.sendHeroNewID;
 import static com.watabou.pixeldungeon.network.SendData.sendLevel;
 
@@ -294,6 +295,8 @@ public class Dungeon {
 	private static void swichLevelChangePosition(int pos, @NotNull Hero hero)
     {
         hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
+
+		sendDepth(hero.networkID, depth);
 
         Light light = hero.buff( Light.class );
         hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );

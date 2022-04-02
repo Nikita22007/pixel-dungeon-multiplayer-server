@@ -247,9 +247,7 @@ public abstract class Actor implements Bundlable {
     use Actor.add() it as early as possible
     Actor.add() MUST be used BEFORE using actor.id()
     This function adds actor to Actor.all array
-    If actor is not in Actor.all  and  gets id, race condition will cause  bugs with id
-    because same id can be setted to other creature
-    Note, that all function, that sends information about this character, will adds him id
+    If actor is not in Actor.all and gets id, some data can be lost
     */
 
 	public static void add(@NotNull Actor actor ) {

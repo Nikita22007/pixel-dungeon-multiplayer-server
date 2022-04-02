@@ -132,7 +132,8 @@ server:
     "ui":
     {
         "resume_button_visible": false
-        "iron_keys_count": -1s
+        "iron_keys_count": -1
+        "depth": -1
     }
     "badge":
     {

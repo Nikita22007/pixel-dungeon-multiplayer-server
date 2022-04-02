@@ -130,7 +130,7 @@ public class NetworkPacket {
         try {
             if (actor instanceof Char) {
                 int id = actor.id();
-                if (id <= 0){
+                if (id <= 0) {
                     return new JSONObject();
                 }
                 object.put("id", id);
@@ -216,7 +216,7 @@ public class NetworkPacket {
 
     protected JSONObject packHero(@NotNull Hero hero) {
         int id = hero.id();
-        if (id <= 0){
+        if (id <= 0) {
             return new JSONObject();
         }
         JSONObject object = new JSONObject();
@@ -674,4 +674,29 @@ public class NetworkPacket {
         }
     }
 
+    public void packAndAddIronKeysCount(int count) {
+        try {
+            synchronized (dataRef) {
+                JSONObject uiObj = (JSONObject) dataRef.get().optJSONObject("iu");
+                uiObj = uiObj != null ? uiObj : new JSONObject();
+                uiObj.put("iron_key_count", count);
+                dataRef.get().put("ui", uiObj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void packAndAddDepth(int depth) {
+        try {
+            synchronized (dataRef) {
+                JSONObject uiObj = (JSONObject) dataRef.get().optJSONObject("iu");
+                uiObj = uiObj != null ? uiObj : new JSONObject();
+                uiObj.put("depth", depth);
+                dataRef.get().put("ui", uiObj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

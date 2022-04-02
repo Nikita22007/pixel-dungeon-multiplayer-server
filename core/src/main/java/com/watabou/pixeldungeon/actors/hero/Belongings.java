@@ -163,18 +163,18 @@ public class Belongings implements Iterable<Item> {
 		
 		return null;
 	}
-	
+
 	public void countIronKeys() {
 
-		int keyscount =0;
-		
+		int keyscount = 0;
+
 		for (Item item : backpack) {
-			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				keyscount ++;
+			if (item instanceof IronKey && ((IronKey) item).depth == Dungeon.depth) {
+				keyscount++;
 			}
 		}
-		if (keyscount!=IronKeyCount_visual) {
-			IronKeyCount_visual=keyscount;
+		if (keyscount != IronKeyCount_visual) {
+			IronKeyCount_visual = keyscount;
 			sendIronKeysCount(HeroHelp.getHeroID(owner), keyscount);
 		}
 	}

@@ -79,7 +79,21 @@ public class SendData {
 
     public static void sendIronKeysCount(int ID, int count) {
         if (clients[ID] != null) {
-            clients[ID].send(Codes.IRON_KEYS_COUNT, count);
+            clients[ID].packet.packAndAddIronKeysCount(count);
+            clients[ID].flush();
+        }
+    }
+
+    public static void sendDepth(int depth) {
+        for (int i = 0; i < clients.length; i++) {
+            sendDepth(i, depth);
+        }
+    }
+
+    public static void sendDepth(int ID, int depth) {
+        if (clients[ID] != null) {
+            clients[ID].packet.packAndAddDepth(depth);
+            clients[ID].flush();
         }
     }
 
