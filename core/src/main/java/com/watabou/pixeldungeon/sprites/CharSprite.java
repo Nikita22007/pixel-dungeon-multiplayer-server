@@ -42,6 +42,9 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip.Listener {
 	
 	public static final int DEFAULT		= 0xFFFFFF;
@@ -56,7 +59,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED
 	}
-	
+	protected final Set<State> states = new CopyOnWriteArraySet<State>();
+
 	protected Animation idle;
 	protected Animation run;
 	protected Animation attack;
@@ -91,7 +95,11 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		super();
 		listener = this;
 	}
-	
+
+	public Set<State> states(){
+		return states;
+	}
+
 	public void link( Char ch ) {
 		this.ch = ch;
 		ch.sprite = this;
@@ -250,6 +258,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 	
 	public void add( State state ) {
+		states.add(state);
 		switch (state) {
 		case BURNING:
 			burning = emitter();
@@ -279,6 +288,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 	
 	public void remove( State state ) {
+		states.remove(state);
 		switch (state) {
 		case BURNING:
 			if (burning != null) {

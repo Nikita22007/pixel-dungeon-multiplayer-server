@@ -45,9 +45,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.Dungeon.hero;
@@ -763,6 +765,29 @@ public class ParseThread extends Thread {
                 }
                 case "description": {
                     ((Mob) chr).setDesc(actorObj.getString(token));
+                    break;
+                }
+                case "states": {
+                    JSONArray statesArr = actorObj.getJSONArray(token);
+                    CharSprite sprite = chr.sprite;
+                    if (sprite == null) {
+                        break;
+                    }
+                    Set<CharSprite.State> states = sprite.states();
+                    Set<CharSprite.State> newStates = new HashSet<>(3);
+                    for (int i = 0; i < statesArr.length(); i++) {
+                        CharSprite.State state = CharSprite.State.valueOf(statesArr.getString(i).toUpperCase());
+                        newStates.add(state);
+                        if (states.contains(state)) {
+                            continue;
+                        }
+                        sprite.add(state);
+                    }
+                    for (CharSprite.State state : states) {
+                        if (!newStates.contains(state)){
+                            sprite.remove(state);
+                        }
+                    }
                     break;
                 }
                 default: {
