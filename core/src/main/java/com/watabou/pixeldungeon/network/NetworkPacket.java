@@ -12,6 +12,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ public class NetworkPacket {
     public static final String CELLS = "cells";
     public static final String MAP = "map";
     public static final String ACTORS = "actors";
+    public static final String PLANTS = "plants";
 
     enum CellState {
         VISITED,
@@ -331,6 +333,7 @@ public class NetworkPacket {
         packAndAddLevelExit(level.exit);
         packAndAddLevelCells(level);
         packAndAddLevelHeaps(level.heaps);
+        packAndAddPlants(level);
     }
 
     protected void addVisiblePositions(@NotNull JSONArray visiblePositionsArray) {
@@ -679,7 +682,7 @@ public class NetworkPacket {
             synchronized (dataRef) {
                 JSONObject uiObj = (JSONObject) dataRef.get().optJSONObject("iu");
                 uiObj = uiObj != null ? uiObj : new JSONObject();
-                uiObj.put("iron_key_count", count);
+                uiObj.put("iron_keys_count", count);
                 dataRef.get().put("ui", uiObj);
             }
         } catch (JSONException e) {
@@ -694,6 +697,37 @@ public class NetworkPacket {
                 uiObj = uiObj != null ? uiObj : new JSONObject();
                 uiObj.put("depth", depth);
                 dataRef.get().put("ui", uiObj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void packAndAddPlants(Level level) {
+        for (int pos = 0; pos < level.LENGTH; pos++) {
+            packAndAddPlant(pos, level.plants.get(pos, null));
+        }
+    }
+
+    public void packAndAddPlant(int pos, Plant plant) {
+        JSONObject plantObj = new JSONObject();
+        try {
+            plantObj.put("pos", pos);
+            plantObj.put("texture", "plants.png");
+            if (plant == null) {
+                plantObj.put("plant_info", JSONObject.NULL);
+            } else {
+                JSONObject plantInfoObj = new JSONObject();
+                plantInfoObj.put("sprite_id", plant.image);
+                plantInfoObj.put("name", plant.plantName);
+                plantInfoObj.put("desc", plant.desc());
+                plantObj.put("plant_info", plantInfoObj);
+            }
+            synchronized (dataRef) {
+                if (!dataRef.get().has(PLANTS)) {
+                    dataRef.get().put(PLANTS, new JSONArray());
+                }
+                dataRef.get().getJSONArray(PLANTS).put(plantObj);
             }
         } catch (JSONException e) {
             e.printStackTrace();

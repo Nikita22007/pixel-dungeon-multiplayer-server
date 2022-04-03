@@ -50,7 +50,19 @@ server:
         //item can be pseudoItem (chest,bones,tomb etc)
         "visible_item": item //  if null: heap removing
     }
-
+    "plants":
+    [
+        {
+            "pos": 0
+            "plant_info": //if null: remove
+            {
+                "sprite_id": 1
+                "texture": "plants.png"
+                "name" : "sungrass"
+                "desc": "sungrass grass"
+            }
+        }
+    ]
     "actors":
     [
         {

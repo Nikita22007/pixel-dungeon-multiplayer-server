@@ -9,6 +9,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
@@ -375,6 +376,16 @@ public class SendData {
                 continue;
             }
             clients[i].packet.addHeap(heap);
+            clients[i].flush();
+        }
+    }
+
+    public static void sendPlant(int pos, Plant plant) {
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i] == null) {
+                continue;
+            }
+            clients[i].packet.packAndAddPlant(pos, plant);
             clients[i].flush();
         }
     }
