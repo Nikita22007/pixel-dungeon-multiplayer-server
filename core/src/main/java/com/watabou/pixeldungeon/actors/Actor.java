@@ -41,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Actor implements Bundlable {
 
 	public static final float TICK	= 1f;
+	private static final float CRITICAL_TIME = Float.MAX_VALUE / 2;
 
 	private volatile float time;
 
@@ -51,6 +52,9 @@ public abstract class Actor implements Bundlable {
 	
 	protected void spend( float time ) {
 		this.time += time;
+		if (this.time >= CRITICAL_TIME) {
+			Actor.fixTime();
+		}
 	}
 	
 	protected void postpone( float time ) {
@@ -151,7 +155,19 @@ public abstract class Actor implements Bundlable {
 			now = 0;
 		}
 	}
-	
+
+	public static void clearTime() {
+		/*if (Dungeon.hero != null && all.contains( Dungeon.hero )) {
+			Statistics.duration += now;
+		}*/
+		synchronized (all) {
+			for (Actor a : all) {
+				a.time = 0;
+			}
+			now = 0;
+		}
+	}
+
 	public static void init() {
 		for (Hero hero:Dungeon.heroes) {
 			if (hero!=null) {

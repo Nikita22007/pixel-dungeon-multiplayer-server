@@ -1,6 +1,9 @@
 package com.watabou.pixeldungeon.levels;
 
 import com.watabou.pixeldungeon.BuildConfig;
+import com.watabou.pixeldungeon.items.Generator;
+import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.watabou.pixeldungeon.plants.Firebloom;
 import com.watabou.pixeldungeon.plants.Sungrass;
 
@@ -22,8 +25,16 @@ public class LobbyLevel extends DeadEndLevel {
         map[exit] = Terrain.EXIT;
 
         if (BuildConfig.DEBUG) {
-            drop(new Sungrass.Seed(), center + 1);
-            drop(new Firebloom.Seed(), center - 1);
+           Class cl = ScrollOfMirrorImage.class;
+            {
+                try {
+                    drop((Item) cl.newInstance(),center+1);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return true;

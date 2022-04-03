@@ -126,6 +126,7 @@ class Mob extends Char {
 		try {
 			sprite = spriteClass.newInstance();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return sprite;
 	}
