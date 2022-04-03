@@ -22,6 +22,8 @@ import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
 import com.watabou.pixeldungeon.items.keys.IronKey;
 import com.watabou.pixeldungeon.levels.SewerLevel;
+import com.watabou.pixeldungeon.plants.CustomPlant;
+import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
@@ -225,6 +227,10 @@ public class ParseThread extends Thread {
                     parseUI(data.getJSONObject(token));
                     break;
                 }
+                case "plants": {
+                    parsePlants(data.getJSONArray(token));
+                    break;
+                }
                 default: {
                     GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                     continue;
@@ -232,6 +238,41 @@ public class ParseThread extends Thread {
             }
         }
 
+    }
+
+    private void parsePlants(JSONArray plantsArray) {
+        for (int i = 0; i < plantsArray.length(); i++) {
+            JSONObject plantObject = plantsArray.optJSONObject(i);
+            if (plantObject == null) {
+                Log.e("Parse Thread", "malformed plant.");
+                continue;
+            }
+            try {
+                if (plantObject.isNull("plant_info")) {
+                    if (level == null) {
+                        continue;
+                    }
+                    if (level.plants == null) {
+                        continue;
+                    }
+                    Plant plant = level.plants.get(plantObject.getInt("pos"));
+                    if (plant != null) {
+                        plant.wither();
+                    }
+                    continue;
+                }
+                JSONObject plantInfo = plantObject.optJSONObject("plant_info");
+                Plant plant = new CustomPlant(
+                        plantInfo.optInt("sprite_id"),
+                        plantObject.getInt("pos"),
+                        plantInfo.optString("name", "unknown"),
+                        plantInfo.optString("desc", "unknown")
+                );
+                level.plant(plant, plantObject.getInt("pos"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void parseUI(JSONObject uiObject) {

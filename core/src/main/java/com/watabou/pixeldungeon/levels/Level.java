@@ -599,8 +599,25 @@ public abstract class Level implements Bundlable {
 				
 		return heap;
 	}
-	
+
+	public Plant plant( Plant newPlant, int pos ) {
+		if (Dungeon.visible[pos]) {
+			Sample.INSTANCE.play( Assets.SND_PLANT );
+		}
+		Plant plant = plants.get( pos );
+		if (plant != null) {
+			plant.wither();
+		}
+
+		plants.put( pos, newPlant );
+
+		GameScene.add( newPlant );
+
+		return newPlant;
+	}
+
 	public Plant plant( Plant.Seed seed, int pos ) {
+
 		Plant plant = plants.get( pos );
 		if (plant != null) {
 			plant.wither();

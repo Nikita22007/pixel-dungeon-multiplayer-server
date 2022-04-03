@@ -65,15 +65,6 @@ public class Plant implements Bundlable {
 		if (Dungeon.visible[pos]) {
 			CellEmitter.get( pos ).burst( LeafParticle.GENERAL, 6 );
 		}
-		
-		if (Dungeon.hero.subClass == HeroSubClass.WARDEN) {
-			if (Random.Int( 5 ) == 0) {
-				Dungeon.level.drop( Generator.random( Generator.Category.SEED ), pos ).sprite.drop();
-			}
-			if (Random.Int( 5 ) == 0) {
-				Dungeon.level.drop( new Dewdrop(), pos ).sprite.drop();
-			}
-		}
 	}
 	
 	private static final String POS	= "pos";
