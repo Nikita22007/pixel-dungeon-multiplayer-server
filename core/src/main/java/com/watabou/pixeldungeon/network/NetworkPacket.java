@@ -94,7 +94,7 @@ public class NetworkPacket {
         }
     }
 
-    protected static JSONArray put_to_JSONArray(Object[] array) throws JSONException {
+    protected static JSONArray putToJSONArray(Object[] array) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < array.length; i++) {
             jsonArray.put(i, array[i]);
@@ -153,6 +153,10 @@ public class NetworkPacket {
                 object.put("max_hp", ht);
                 object.put("position", pos);
                 object.put("name", name);
+                if (((Char) actor).getSprite() != null) {
+                    JSONArray states = putToJSONArray(((Char) actor).getSprite().states().toArray());
+                    object.put("states", states);
+                }
                 if (actor instanceof Mob) {
                     String desc = ((Mob) actor).description();
                     object.put("description", desc);

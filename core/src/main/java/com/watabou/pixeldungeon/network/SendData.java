@@ -229,16 +229,17 @@ public class SendData {
         }
     }
 
-    public static void sendCharSpriteState(CharSprite.State state, boolean remove) {
+    public static void sendCharSpriteState(Actor actor, CharSprite.State state, boolean remove) {
         String stateName = state.name().toLowerCase();
         JSONObject stateObj = new JSONObject();
         try {
             stateObj.put("state", stateName);
-            stateObj.put("remove", remove);
+            stateObj.put("is_removing", remove);
+            stateObj.put("actor_id", actor.id());
         } catch (JSONException ignored) {
 
         }
-        GLog.w("can't send char sprite state");
+        sendActor(actor);
     }
 
     public static void flush(int networkID) {

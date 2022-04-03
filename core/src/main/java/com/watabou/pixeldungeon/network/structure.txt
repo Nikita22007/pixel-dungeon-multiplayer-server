@@ -76,6 +76,7 @@ server:
             "sprite_name": "rat_sprite"
             "animation_name": "idle"
             "description": "unknown creature" //if mob
+            "states": ["burning"]
             //blob:
             "positions": [0,1,2]
             "type": "class_name"

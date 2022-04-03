@@ -43,6 +43,10 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteAction;
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteState;
 
@@ -60,6 +64,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
     public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED
 	}
+
+	protected final Set<State> states = new CopyOnWriteArraySet<State>();
 
 	protected Animation idle;
 	protected Animation run;
@@ -94,6 +100,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public CharSprite() {
 		super();
 		listener = this;
+	}
+
+	public Set<State> states(){
+		return states;
 	}
 
 	public String spriteName() {
@@ -289,7 +299,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void add( State state ) {
-		sendCharSpriteState(state, true);
+		states.add(state);
+		sendCharSpriteState(ch, state, false);
 		switch (state) {
 		case BURNING:
 			burning = emitter();
@@ -319,7 +330,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void remove( State state ) {
-		sendCharSpriteState(state, true);
+		states.remove(state);
+		sendCharSpriteState(ch, state, true);
 		switch (state) {
 		case BURNING:
 			if (burning != null) {
