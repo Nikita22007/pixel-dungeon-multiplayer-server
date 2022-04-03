@@ -132,17 +132,6 @@ public class Belongings implements Iterable<Item> {
 		return null;
 	}
 
-	public void countIronKeys() {
-
-		IronKey.curDepthQuantity = 0;
-
-		for (Item item : backpack) {
-			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				IronKey.curDepthQuantity++;
-			}
-		}
-	}
-
 	public void identify() {
 		for (Item item : this) {
 			item.identify();

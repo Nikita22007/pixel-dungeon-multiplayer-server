@@ -52,6 +52,7 @@ public class StatusPane extends Component {
 	
 	private int lastLvl = -1;
 	private int lastKeys = -1;
+	private int lastDepth = -1;
 	
 	private BitmapText level;
 	private BitmapText depth;
@@ -111,8 +112,7 @@ public class StatusPane extends Component {
 		depth.hardlight( 0xCACFC2 );
 		depth.measure();
 		add( depth );
-		
-		Dungeon.hero.belongings.countIronKeys();
+
 		keys = new BitmapText( PixelScene.font1x );
 		keys.hardlight( 0xCACFC2 );
 		add( keys );
@@ -184,18 +184,18 @@ public class StatusPane extends Component {
 	@Override
 	public void update() {
 		super.update();
-		
+
 		if (tagDanger != danger.visible || tagLoot != loot.visible || tagResume != resume.visible) {
-			
+
 			tagDanger = danger.visible;
 			tagLoot = loot.visible;
 			tagResume = resume.visible;
-			
+
 			layoutTags();
 		}
-		
+
 		float health = (float)Dungeon.hero.HP / Dungeon.hero.HT;
-		
+
 		if (health == 0) {
 			avatar.tint( 0x000000, 0.6f );
 			blood.on = false;
@@ -206,26 +206,26 @@ public class StatusPane extends Component {
 			avatar.resetColor();
 			blood.on = false;
 		}
-		
+
 		hp.scale.x = health;
 		exp.scale.x = (width / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
-		
+
 		if (Dungeon.hero.lvl != lastLvl) {
-			
+
 			if (lastLvl != -1) {
 				Emitter emitter = (Emitter)recycle( Emitter.class );
 				emitter.revive();
 				emitter.pos( 27, 27 );
 				emitter.burst( Speck.factory( Speck.STAR ), 12 );
 			}
-			
+
 			lastLvl = Dungeon.hero.lvl;
 			level.text( Integer.toString( lastLvl ) );
 			level.measure();
 			level.x = PixelScene.align( 27.5f - level.width() / 2 );
 			level.y = PixelScene.align( 28.0f - level.baseLine() / 2 );
 		}
-		
+
 		int k = IronKey.curDepthQuantity;
 		if (k != lastKeys) {
 			lastKeys = k;
@@ -233,7 +233,17 @@ public class StatusPane extends Component {
 			keys.measure();
 			keys.x = width - 8 - keys.width()    - 18;
 		}
-		
+
+		{
+			int d = Dungeon.depth;
+			if (d != lastDepth) {
+				lastDepth = d;
+				depth.text(Integer.toString(lastDepth));
+				depth.measure();
+				depth.x = width - 24 - depth.width() - 18;
+			}
+		}
+
 		int tier = Dungeon.hero.tier();
 		if (tier != lastTier) {
 			lastTier = tier;

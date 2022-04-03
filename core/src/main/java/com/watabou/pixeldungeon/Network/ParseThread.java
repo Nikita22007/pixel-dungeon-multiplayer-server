@@ -20,6 +20,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.bags.CustomBag;
+import com.watabou.pixeldungeon.items.keys.IronKey;
 import com.watabou.pixeldungeon.levels.SewerLevel;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterlevelScene;
@@ -131,8 +132,8 @@ public class ParseThread extends Thread {
         try {
             data = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("Parsing", "Malformed JSON." + e.toString());
             e.printStackTrace();
+            Log.e("Parsing", "json: " + json);
             return;
         }
         //Log.w("data", data.toString(4));
@@ -192,13 +193,6 @@ public class ParseThread extends Thread {
                     parseHero(data.getJSONObject(token));
                     break;
                 }
-                case "ui": {
-                    JSONObject uiObj = data.getJSONObject(token);
-                    if (uiObj.has("resume_button_visible")) {
-                        hero.resume_button_visible = uiObj.getBoolean("resume_button_visible");
-                    }
-                    break;
-                }
                 case "actions": {
                     parseActions(data.getJSONArray(token));
                     break;
@@ -227,6 +221,10 @@ public class ParseThread extends Thread {
                     parseWindow(data.getJSONObject(token));
                     break;
                 }
+                case "ui": {
+                    parseUI(data.getJSONObject(token));
+                    break;
+                }
                 default: {
                     GLog.h("Incorrect packet token: \"%s\". Ignored", token);
                     continue;
@@ -234,6 +232,18 @@ public class ParseThread extends Thread {
             }
         }
 
+    }
+
+    private void parseUI(JSONObject uiObject) {
+        if (uiObject.has("depth")) {
+            Dungeon.depth = uiObject.optInt("depth");
+        }
+        if (uiObject.has("iron_keys_count") || uiObject.has("iron_key_count")) {
+            IronKey.curDepthQuantity = uiObject.optInt("iron_keys_count", uiObject.optInt("iron_key_count", -20));
+        }
+        if (uiObject.has("resume_button_visible")) {
+            hero.resume_button_visible = uiObject.optBoolean("resume_button_visible");
+        }
     }
 
     private void parseWindow(JSONObject windowObj) {
