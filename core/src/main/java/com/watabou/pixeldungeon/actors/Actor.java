@@ -220,9 +220,16 @@ public abstract class Actor implements Bundlable {
 		}
 	}
 
-	public static Char findChar( int pos ) {
-		return chars[pos];
-	}
+    public static Char findChar(int pos) {
+        for (Actor actor : all) {
+            if (actor instanceof Char) {
+                if (((Char) actor).pos == pos) {
+                    return (Char) actor;
+                }
+            }
+        }
+        return chars[pos];
+    }
 
 	public static Actor findById( int id ) {
 		return ids.get( id );

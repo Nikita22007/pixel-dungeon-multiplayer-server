@@ -635,6 +635,14 @@ public class ParseThread extends Thread {
         Integer key = actionObj.has("key") ? actionObj.getInt("key") : null;
         String text = actionObj.getString("text");
         int color = actionObj.getInt("color");
+        boolean ignore_position = actionObj.optBoolean("ignore_position", true);
+        if ((key != null) && ignore_position) {
+            Char ch = Actor.findChar(key);
+            if ((ch != null) && (ch.sprite != null)) {
+                ch.sprite.showStatus(color, text);
+                return;
+            }
+        }
         if (key == null) {
             FloatingText.show(x, y, text, color);
         } else {
@@ -784,7 +792,7 @@ public class ParseThread extends Thread {
                         sprite.add(state);
                     }
                     for (CharSprite.State state : states) {
-                        if (!newStates.contains(state)){
+                        if (!newStates.contains(state)) {
                             sprite.remove(state);
                         }
                     }
