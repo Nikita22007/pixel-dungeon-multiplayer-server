@@ -52,12 +52,13 @@ public final class ShadowCaster {
 	public static void castShadow( int x, int y, boolean[] fieldOfView, int distance ) {
 
 		losBlocking = Level.losBlocking;
-		
-		ShadowCaster.distance = distance;
+
 		if (distance > MAX_DISTANCE) {
 			Log.e("PixelDungeonServer", String.format("view distance > MAX_DISTANCE.  distance: %d; set: %d", distance,  MAX_DISTANCE));
 			distance =  MAX_DISTANCE;
 		}
+
+		ShadowCaster.distance = distance;
 		limits = rounding[distance];
 		
 		ShadowCaster.fieldOfView = fieldOfView;
