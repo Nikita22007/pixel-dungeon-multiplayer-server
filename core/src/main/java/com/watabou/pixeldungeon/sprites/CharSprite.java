@@ -150,7 +150,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				FloatingText.show( x, y, text, color );
 				key = null;
 			}
-			SendData.addToSendShowStatus(x, y, key, text, color);
+			SendData.addToSendShowStatus(
+					x,
+					y,
+					key,
+					text,
+					color,
+					true
+			);
 		}
 	}
 

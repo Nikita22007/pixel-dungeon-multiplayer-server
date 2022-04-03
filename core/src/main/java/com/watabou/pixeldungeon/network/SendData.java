@@ -264,7 +264,7 @@ public class SendData {
         }
     }
 
-    public static void addToSendShowStatus(float x, float y, Integer key, String text, int color) {
+    public static void addToSendShowStatus(Float x, Float y, Integer key, String text, int color, boolean ignorePosition) {
         JSONObject data = new JSONObject();
         try {
             data.put("action_type", "show_status");
@@ -273,6 +273,7 @@ public class SendData {
             data.put("key", key);
             data.put("text", text);
             data.put("color", color);
+            data.put("ignore_position", ignorePosition);
         } catch (JSONException e) {
             Log.wtf("SendData", "Exception while adding showstatus", e);
             return;

@@ -231,6 +231,7 @@ action show_status
     "key": 123 //may be missing
     "text": "invisible"
     "color": 0xFFFF00
+    "ignore_position": true //  use  char sprite on position=key if can
 }
 
 action add_item_to_bag
