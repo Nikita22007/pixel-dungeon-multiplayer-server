@@ -24,13 +24,23 @@ import com.watabou.utils.Random;
 
 public class DeadEndLevel extends Level {
 
-	protected static final int SIZE = 9;
+	protected final int SIZE;
 	
 	{
 		color1 = 0x534f3e;
 		color2 = 0xb9d661;
 	}
-	
+	protected final int center;
+
+	public DeadEndLevel() {
+		this(5);
+	}
+
+	public DeadEndLevel(int size) {
+		SIZE = size;
+		center = (SIZE / 2 + 1) * (WIDTH + 1);
+	}
+
 	@Override
 	public String tilesTex() {
 		return Assets.TILES_CAVES;
@@ -64,7 +74,8 @@ public class DeadEndLevel extends Level {
 		map[entrance] = Terrain.ENTRANCE;
 		
 		exit = -1;
-		
+
+
 		map[(SIZE / 2 + 1) * (WIDTH + 1)] = Terrain.SIGN;
 		
 		return true;
