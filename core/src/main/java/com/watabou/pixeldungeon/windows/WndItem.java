@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon.windows;
 
 import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
@@ -43,7 +44,7 @@ public class WndItem extends Window {
 		IconTitle titlebar = new IconTitle();
 		titlebar.icon( new ItemSprite( item.image(), item.glowing() ) );
 		titlebar.label( Utils.capitalize( item.toString() ) );
-		if (item.isUpgradable() && item.levelKnown) {
+        if ((item instanceof CustomItem) ? ((CustomItem) item).getShowBar() : item.isUpgradable() && item.levelKnown) {
 			titlebar.health( (float)item.durability() / item.maxDurability() );
 		}
 		titlebar.setRect( 0, 0, WIDTH, 0 );
