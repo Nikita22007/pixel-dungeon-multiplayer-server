@@ -450,7 +450,7 @@ public class NetworkPacket {
 
         topLeft.put("visible", true);
         topRight.put("visible", true);
-        topRight.put("visible", true);
+        bottomRight.put("visible", true);
 
         topLeft.put("text", item.status());
 
@@ -459,7 +459,7 @@ public class NetworkPacket {
         if (isArmor || isWeapon) {
             if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon))) {
                 int str = isArmor ? ((Armor) item).STR : ((Weapon) item).STR;
-                topLeft.put("text", Utils.format(TXT_STRENGTH, str));
+                topRight.put("text", Utils.format(TXT_STRENGTH, str));
                 if (str > owner.STR()) {
                     topRight.put("color", DEGRADED);
                 } else {
