@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Gold;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.armor.Armor;
@@ -397,8 +398,13 @@ public class WndBag extends WndTabbed {
 					bg.ra = 0.1f;
 					bg.ba = 0.1f;
 				}
-				
-				if (lastBag.owner.isAlive() && item.isUpgradable() && item.levelKnown) {
+				boolean showBar = false;
+				if (item instanceof CustomItem){
+					showBar = ((CustomItem) item).getShowBar();
+				} else {
+					showBar = item.isUpgradable() && item.levelKnown;
+				}
+				if (lastBag.owner.isAlive() && showBar) {
 					durability = new ColorBlock[NBARS];
 					int nBars = (int)GameMath.gate( 0, Math.round( (float)NBARS * item.durability() / item.maxDurability() ), NBARS );
 					for (int i=0; i < nBars; i++) {

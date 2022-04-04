@@ -14,6 +14,9 @@ open class CustomItem() : Item() {
 
     protected var identified = false;
 
+    var showBar: Boolean = false;
+    public var ui: UI = UI();
+
     constructor(obj: JSONObject) : this() {
         cursedKnown = true // todo check it
         update(obj)
@@ -44,7 +47,10 @@ open class CustomItem() : Item() {
                     durability = obj.getInt(token)
                 }
                 "level" -> {
-                    durability = obj.getInt(token)
+                    level = obj.getInt(token)
+                }
+                "level_known" -> {
+                    levelKnown = obj.getBoolean(token)
                 }
                 "cursed" -> {
                     cursed = obj.getBoolean(token)
@@ -62,6 +68,13 @@ open class CustomItem() : Item() {
                     } else {
                         action
                     };
+                }
+                "ui" -> {
+                    val uiObj = obj.getJSONObject(token);
+                    ui = UI(uiObj)
+                }
+                "show_bar" -> {
+                    showBar = obj.getBoolean(token);
                 }
             }
         }
@@ -93,4 +106,78 @@ open class CustomItem() : Item() {
         //super.execute(hero, action)
     }
 
+    override fun visiblyUpgraded(): Int {
+        return level;
+    }
+
+    public class UI {
+        val topLeft: Label;
+        val topRight: Label;
+        val bottomRight: Label;
+
+        constructor(obj: JSONObject) {
+            val topLeftObj: JSONObject? = obj.optJSONObject("top_left");
+            if (topLeftObj == null) {
+                topLeft = Label(null, null, false);
+            } else {
+                var color: Int? = null;
+                if (topLeftObj.has("color")) {
+                    color = topLeftObj.optInt("color", 0)
+                }
+                topLeft = Label(
+                    color,
+                    topLeftObj.optString("text"),
+                    topLeftObj.optBoolean("visible", false)
+                );
+            }
+
+            val topRightObj: JSONObject? = obj.optJSONObject("top_right");
+            if (topRightObj == null) {
+                topRight = Label(null, null, false);
+            } else {
+                var color: Int? = null;
+                if (topRightObj.has("color")) {
+                    color = topRightObj.optInt("color", 0)
+                }
+                topRight = Label(
+                    color,
+                    topRightObj.optString("text"),
+                    topRightObj.optBoolean("visible", false)
+                );
+            }
+
+            val bottomRightObj: JSONObject? = obj.optJSONObject("bottom_right");
+            if (bottomRightObj == null) {
+                bottomRight = Label(null, null, false);
+            } else {
+                var color: Int? = null;
+                if (bottomRightObj.has("color")) {
+                    color = bottomRightObj.optInt("color", 0)
+                }
+                bottomRight = Label(
+                    color,
+                    bottomRightObj.optString("text"),
+                    bottomRightObj.optBoolean("visible", false)
+                );
+            }
+        }
+
+        constructor() {
+            topLeft = Label(null, null, false);
+            topRight = Label(null, null, false);
+            bottomRight = Label(null, null, false);
+        }
+
+        public class Label {
+            val text: String?;
+            val color: Int?;
+            val visible: Boolean;
+
+            constructor(color: Int?, text: String?, visible: Boolean) {
+                this.text = text;
+                this.color = color;
+                this.visible = visible;
+            }
+        }
+    }
 }

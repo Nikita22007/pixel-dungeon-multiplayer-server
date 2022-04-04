@@ -20,6 +20,7 @@ package com.watabou.pixeldungeon.ui;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.items.CustomItem;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
@@ -115,10 +116,42 @@ public class ItemSlot extends Button {
 	
 	public void item( Item item ) {
 		if (item == null) {
-			
 			active = false;
 			icon.visible = topLeft.visible = topRight.visible = bottomRight.visible = false;
-			
+			return;
+		}
+        if (item instanceof CustomItem) {
+            CustomItem customItem = (CustomItem) item;
+            CustomItem.UI ui = customItem.getUi();
+            icon.visible = true;
+			icon.view( item.image(), item.glowing() );
+			topLeft.visible = ui.getTopLeft().getVisible();
+            topRight.visible = ui.getTopRight().getVisible();
+            bottomRight.visible = ui.getBottomRight().getVisible();
+
+            if (ui.getTopLeft().getColor() == null) {
+                topLeft.resetColor();
+            } else {
+                topLeft.hardlight(ui.getTopLeft().getColor());
+            }
+
+            if (ui.getTopRight().getColor() == null) {
+                topRight.resetColor();
+            } else {
+                topRight.hardlight(ui.getTopRight().getColor());
+            }
+
+            if (ui.getBottomRight().getColor() == null) {
+                bottomRight.resetColor();
+            } else {
+                bottomRight.hardlight(ui.getBottomRight().getColor());
+            }
+            topRight.text(ui.getTopRight().getText());
+            topLeft.text(ui.getTopLeft().getText());
+            bottomRight.text(ui.getBottomRight().getText());
+            topRight.measure();
+            topLeft.measure();
+            bottomRight.measure();
 		} else {
 			
 			active = true;
