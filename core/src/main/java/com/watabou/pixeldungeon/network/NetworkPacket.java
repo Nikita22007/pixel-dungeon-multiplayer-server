@@ -10,9 +10,13 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.bags.Bag;
+import com.watabou.pixeldungeon.items.weapon.Weapon;
+import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.plants.Plant;
+import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
@@ -429,6 +433,62 @@ public class NetworkPacket {
         return actionsArr;
     }
 
+    public static final int DEGRADED = 0xFF4444;
+    public static final int UPGRADED = 0x44FF44;
+    public static final int WARNING = 0xFF8800;
+    private static final String TXT_STRENGTH = ":%d";
+    private static final String TXT_TYPICAL_STR = "%d?";
+
+    private static final String TXT_LEVEL = "%+d";
+    private static final String TXT_CURSED = "";//"-";
+
+    private static JSONObject itemUI(Item item, Hero owner) throws JSONException {
+        JSONObject ui = new JSONObject();
+        JSONObject topLeft = new JSONObject();
+        JSONObject topRight = new JSONObject();
+        JSONObject bottomRight = new JSONObject();
+
+        topLeft.put("visible", true);
+        topRight.put("visible", true);
+        topRight.put("visible", true);
+
+        topLeft.put("text", item.status());
+
+        boolean isArmor = item instanceof Armor;
+        boolean isWeapon = item instanceof Weapon;
+        if (isArmor || isWeapon) {
+            if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon))) {
+                int str = isArmor ? ((Armor) item).STR : ((Weapon) item).STR;
+                topLeft.put("text", Utils.format(TXT_STRENGTH, str));
+                if (str > owner.STR()) {
+                    topRight.put("color", DEGRADED);
+                } else {
+                    topRight.put("color", null);
+                }
+            } else {
+                topRight.put("text", Utils.format(TXT_TYPICAL_STR, isArmor ?
+                        ((Armor) item).typicalSTR() :
+                        ((MeleeWeapon) item).typicalSTR()));
+                topRight.put("color", WARNING);
+            }
+        } else {
+            topRight.put("text", null);
+        }
+
+        int level = item.visiblyUpgraded();
+        if (level != 0 || (item.cursed && item.cursedKnown)) {
+            bottomRight.put("text", item.levelKnown ? Utils.format(TXT_LEVEL, level) : TXT_CURSED);
+            bottomRight.put("color", level > 0 ? (item.isBroken() ? WARNING : UPGRADED) : DEGRADED);
+        } else {
+            bottomRight.put("text", null);
+        }
+        ui.put("top_left", topLeft);
+        ui.put("top_right", topRight);
+        ui.put("bottom_right", bottomRight);
+        return ui;
+    }
+
+
     public static JSONObject packItem(Item item, Hero hero) {
         JSONObject itemObj = new JSONObject();
         try {
@@ -436,6 +496,7 @@ public class NetworkPacket {
                 itemObj.put("actions", packActions(item, hero));
                 itemObj.put("default_action", item.defaultAction == null ? "null" : item.defaultAction);
                 itemObj.put("info", item.info(hero));
+                itemObj.put("ui", itemUI(item, hero));
             }
             //itemObj.put("sprite_sheet")
             itemObj.put("image", item.image());
@@ -447,6 +508,8 @@ public class NetworkPacket {
             itemObj.put("known", item.isKnown());
             itemObj.put("cursed", item.visiblyCursed());
             itemObj.put("identified", item.isIdentified());
+            itemObj.put("level_known", item.levelKnown);
+            itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
             itemObj.put("level", item.visiblyUpgraded());
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packItem. " + e.toString());

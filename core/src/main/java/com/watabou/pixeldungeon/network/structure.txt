@@ -185,7 +185,7 @@ item:
     "name": "smth"
     "info": "missingno"
 
-    "stackable": false
+    "stackable": false //why it needs?
     "quantity": 1
 
     "durability": 0
@@ -195,6 +195,21 @@ item:
     "level": 0 // uses visiblyUpgraded()
     "cursed": false // uses  visiblyCursed()
     "identified": false
+    "level_known": false
+    "show_bar": false
+
+    "ui":
+    {
+        top_left...
+        top_right
+        bottom_right:
+        {
+            visible:  true
+            text:  "+2?"
+            color: 0xFF8800
+        }
+        background: 0xFF00FF //if has not, will calculated
+    }
 
     //"unique": false
 
