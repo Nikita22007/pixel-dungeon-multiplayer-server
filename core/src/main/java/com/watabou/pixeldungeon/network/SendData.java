@@ -391,4 +391,14 @@ public class SendData {
             clients[i].flush();
         }
     }
+
+    public static void sendActorRemoving(Actor actor) {
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i] == null) {
+                continue;
+            }
+            clients[i].packet.packActorRemoving(actor);
+            clients[i].flush();
+        }
+    }
 }

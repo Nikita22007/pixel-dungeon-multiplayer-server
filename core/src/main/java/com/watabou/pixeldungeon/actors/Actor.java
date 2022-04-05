@@ -38,6 +38,8 @@ import com.watabou.utils.Bundle;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.watabou.pixeldungeon.network.SendData.sendActorRemoving;
+
 public abstract class Actor implements Bundlable {
 
 	public static final float TICK	= 1f;
@@ -309,6 +311,7 @@ public abstract class Actor implements Bundlable {
 				if (actor.id > 0) {
 					ids.remove(actor.id);
 				}
+				sendActorRemoving(actor);
 			}
 		}
 	}

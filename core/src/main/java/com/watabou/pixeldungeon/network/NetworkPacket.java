@@ -130,6 +130,26 @@ public class NetworkPacket {
         }
     }
 
+    protected JSONObject packActorRemoving(@NotNull Actor actor) {
+
+        JSONObject object = new JSONObject();
+        try {
+            if ((actor instanceof Char) || (actor instanceof Blob)) {
+                int id = actor.id();
+                if (id <= 0) {
+                    return new JSONObject();
+                }
+                object.put("id", id);
+                object.put("type", "removed");
+            } else {
+                Log.w("NetworkPacket:", "pack actor. Actor class: " + actor.getClass().toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
     protected JSONObject packActor(@NotNull Actor actor, boolean heroAsHero) {
 
         JSONObject object = new JSONObject();
@@ -178,7 +198,7 @@ public class NetworkPacket {
                 }
                 object.put("positions", positions);
             } else {
-                Log.w("NetworkPacket:", "pack actor. Actor class: " + actor.getClass().toString());
+                Log.w("NetworkPacket", "remove actor. Actor class: " + actor.getClass().toString());
             }
         } catch (JSONException e) {
 
@@ -189,6 +209,10 @@ public class NetworkPacket {
 
     public void packAndAddActor(Actor actor, boolean heroAsHero) {
         addActor(packActor(actor, heroAsHero));
+    }
+
+    public void packAndAddActorRemoving(Actor actor) {
+        addActor(packActorRemoving(actor));
     }
 
     protected void addHero(JSONObject hero) {

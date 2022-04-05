@@ -12,7 +12,7 @@ version 5  //increment when modify
 4. опционально:
     4.1. Сервер передает клиенту мир так, как клиент его видит
         4.1.1 вместо скрытых ловушек передается просто пол
-        4.1.2 Аналогично для осталього
+        4.1.2 Аналогично для остального
 5. Синхронизация состояния:
     5.1 Сервер передает измененное или полное состояние
     5.2 Сервер передает состояние некоторых UI элементов
@@ -36,7 +36,7 @@ Translator: translate.yandex.ru //change if use other
 4. optional:
     4.1. The server transmits the world to the client as the client sees it
         4.1.1 instead of hidden traps, just the floor is transmitted
-        4.1.2 Similarly for the rest
+        4.1.2 Similarly for the others
 5. Status synchronization:
     5.1 The server transmits a modified or complete state
     5.2 The server transmits the state of some UI elements

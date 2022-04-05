@@ -3,6 +3,8 @@ package com.watabou.pixeldungeon.levels;
 import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.watabou.pixeldungeon.items.potions.PotionOfToxicGas;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.watabou.pixeldungeon.plants.Firebloom;
 import com.watabou.pixeldungeon.plants.Sungrass;
@@ -25,10 +27,18 @@ public class LobbyLevel extends DeadEndLevel {
         map[exit] = Terrain.EXIT;
 
         if (BuildConfig.DEBUG) {
-           Class cl = ScrollOfMirrorImage.class;
             {
                 try {
+                    Class cl = PotionOfToxicGas.class;
                     drop((Item) cl.newInstance(),center+1);
+                    drop((Item) cl.newInstance(),center+1);
+                    drop((Item) cl.newInstance(),center+1);
+                    cl = PotionOfLiquidFlame.class;
+                    drop((Item) cl.newInstance(),center+1);
+                    drop((Item) cl.newInstance(),center+1);
+                    drop((Item) cl.newInstance(),center+1);
+                    drop((Item) cl.newInstance(),center+1);
+
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
