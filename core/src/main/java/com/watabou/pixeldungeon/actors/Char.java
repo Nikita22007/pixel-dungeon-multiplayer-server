@@ -295,10 +295,10 @@ public abstract class Char extends Actor {
 	}
 	
 	public void die( Object src ) {
-		destroy();
 		getSprite().die();
+		destroy();
 	}
-	
+
 	public boolean isAlive() {
 		return getHP() > 0;
 	}

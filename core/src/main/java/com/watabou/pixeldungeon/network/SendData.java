@@ -298,15 +298,8 @@ public class SendData {
         sendInventoryItemAction(owner, null, path, "remove");
     }
 
-    public static void sendUpdateItemCount(Char owner, int count, List<Integer> path) {
-        JSONObject item;
-        try {
-            item = (new JSONObject()).put("quantity", count);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-        sendInventoryItemAction(owner, item, path, "update");
+    public static void sendUpdateItemCount(Char owner, Item item, int count, List<Integer> path) {
+        sendUpdateItemFull(owner,item,path);
     }
 
     public static void sendUpdateItemFull(Item item) {
@@ -397,7 +390,7 @@ public class SendData {
             if (clients[i] == null) {
                 continue;
             }
-            clients[i].packet.packActorRemoving(actor);
+            clients[i].packet.packAndAddActorRemoving(actor);
             clients[i].flush();
         }
     }
