@@ -886,8 +886,13 @@ public class ParseThread extends Thread {
             String type = actorObj.getString("type");
             switch (type) {
                 case "remove":
+                case "removed":
                 case "removing": {
-                    Actor.remove(actor);
+                    if (actor instanceof Char) {
+                        ((Char) actor).die(null);
+                    } else {
+                        Actor.remove(actor);
+                    }
                     break;
                 }
                 case "char":
