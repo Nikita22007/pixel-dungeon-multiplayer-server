@@ -60,8 +60,9 @@ public class Plant implements Bundlable {
 	
 	public void wither() {
 		Dungeon.level.uproot( pos );
-		
-		sprite.kill();
+		if (sprite != null) {
+			sprite.kill();
+		}
 		if (Dungeon.visible[pos]) {
 			CellEmitter.get( pos ).burst( LeafParticle.GENERAL, 6 );
 		}

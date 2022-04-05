@@ -839,6 +839,13 @@ public class ParseThread extends Thread {
             }
         }
         blob_class = actor.getClass();
+        if (blob_class == CustomMob.class) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         Blob blob = (Blob) actor;
         blob.clearBlob();
         JSONArray pos_array = actorObj.getJSONArray("positions");
@@ -878,6 +885,11 @@ public class ParseThread extends Thread {
             Actor actor = (erase_old ? null : Actor.findById(ID));
             String type = actorObj.getString("type");
             switch (type) {
+                case "remove":
+                case "removing": {
+                    Actor.remove(actor);
+                    break;
+                }
                 case "char":
                 case "character": {
                     parseActorChar(actorObj, ID, actor);
