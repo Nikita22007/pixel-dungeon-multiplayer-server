@@ -101,6 +101,7 @@ public class QuickSlot extends Button implements WndBag.Listener {
 				icon.resetColor();
 			}
 		};
+		slot.showParams(false);
 		add( slot );
 		
 		crossB = Icons.TARGET.get();
@@ -156,9 +157,9 @@ public class QuickSlot extends Button implements WndBag.Listener {
 	public void onSelect( Item item ) {
 		if (item != null) {
 			if (this == primary) {
-				primaryValue = (item.stackable ? item.getClass() : item);
+				primaryValue = ( item);
 			} else {
-				secondaryValue = (item.stackable ? item.getClass() : item);
+				secondaryValue = ( item);
 			}
 			refresh();
 		}

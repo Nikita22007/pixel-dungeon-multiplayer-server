@@ -32,6 +32,7 @@ import com.watabou.pixeldungeon.sprites.HeroCustomSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.sprites.RatSprite;
 import com.watabou.pixeldungeon.ui.GameLog;
+import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.ui.SpecialSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.*;
@@ -627,6 +628,7 @@ public class ParseThread extends Thread {
                 Log.w("ParseThread", "Unexpected item update mode: " + update_mode);
                 return;
         }
+        QuickSlot.refresh();
     }
 
     private void parseShowStatusAction(JSONObject actionObj) throws JSONException {
