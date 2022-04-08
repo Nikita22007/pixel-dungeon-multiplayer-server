@@ -369,6 +369,12 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static void add( EmoIcon icon ) {
+		if (scene == null) {
+			return;
+		}
+		if (scene.emoicons == null) {
+			return;
+		}
 		scene.emoicons.add( icon );
 	}
 	
