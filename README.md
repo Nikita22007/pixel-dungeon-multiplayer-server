@@ -9,7 +9,7 @@ Now we have this branches:
 1. **_master_**: this   branch only for Readme.md and etc
 2. **_Client_**: that's easy - it is client branch
 3. **_Server_**: that's easy - it is server branch
-4. **_NetworkCodes_**: this branch including only one file: `codes.java`. Еhis file contains codes that indicate various events. If you change this branch, you must merge it with the server and client before building it to avoid conflicts. After the release of a more or less workable version, try not to change the already installed codes.
+4. **_NetworkCodes_ (closed!)**: this branch including only one file: `codes.java`. Еhis file contains codes that indicate various events. ~~If you change this branch, you must merge it with the server and client before building it to avoid conflicts. After the release of a more or less workable version, try not to change the already installed codes.~~ This branch is deprecated. Project use json
 5. **_NetworkUpdate_ (closed!)** : This branch contains the main work on creating the server before creating the compilable version. Please don't ask why it's called that. It just happened. _(or you can ask this and I say ~~very long~~ story about it)_
 
 **UPD 1:** 26 october 2020 we get first compilable verison. 27 october 2020 _NetworkUpdate_ brunch was merged with _Server_ branch
