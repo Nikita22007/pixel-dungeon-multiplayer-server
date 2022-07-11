@@ -58,6 +58,20 @@ public class Heap implements Bundlable {
 	
 	private static final float FADE_TIME = 0.6f;
 
+	public int getCustomImage() {
+		return customImage;
+	}
+
+	public void setCustomImage(int customImage) {
+		if (customImage == this.customImage) {
+			return;
+		}
+		this.customImage = customImage;
+		pseudoItem = new Item() {
+			public int image() { return getCustomImage(); };
+		};
+	}
+
 	public enum Type {
 		HEAP, 
 		FOR_SALE, 
@@ -77,12 +91,13 @@ public class Heap implements Bundlable {
 	
 	public LinkedList<Item> items = new LinkedList<Item>();
 
-	public int customImage = -1;
+	protected int customImage = -1;
+	protected Item pseudoItem = null;
 	public boolean showsItem = false;
 
 	public int image() {
-		if (customImage != -1){
-			return customImage;
+		if (getCustomImage() != -1){
+			return getCustomImage();
 		}
 		switch (type) {
 		case HEAP:
@@ -167,12 +182,10 @@ public class Heap implements Bundlable {
 	}
 	
 	public Item peek() {
-		if ((showsItem) || (customImage == -1)) {
+		if ((showsItem) || (getCustomImage() == -1) ||  (pseudoItem == null)) {
 			return items.peek();
 		} else {
-			return new Item() {
-				public int image() { return customImage; };
-			};
+			return pseudoItem;
 		}
 
 
