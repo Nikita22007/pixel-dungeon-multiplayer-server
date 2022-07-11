@@ -57,7 +57,7 @@ public class Heap implements Bundlable {
 	private static final int SEEDS_TO_POTION = 3;
 	
 	private static final float FADE_TIME = 0.6f;
-	
+
 	public enum Type {
 		HEAP, 
 		FOR_SALE, 
@@ -76,8 +76,14 @@ public class Heap implements Bundlable {
 	public ItemSprite sprite;
 	
 	public LinkedList<Item> items = new LinkedList<Item>();
-	
+
+	public int customImage = -1;
+	public boolean showsItem = false;
+
 	public int image() {
+		if (customImage != -1){
+			return customImage;
+		}
 		switch (type) {
 		case HEAP:
 		case FOR_SALE:
@@ -161,7 +167,15 @@ public class Heap implements Bundlable {
 	}
 	
 	public Item peek() {
-		return items.peek();
+		if ((showsItem) || (customImage == -1)) {
+			return items.peek();
+		} else {
+			return new Item() {
+				public int image() { return customImage; };
+			};
+		}
+
+
 	}
 	
 	public void drop( Item item ) {

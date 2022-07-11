@@ -398,11 +398,11 @@ public class ParseThread extends Thread {
     private void parseHeap(JSONObject heapObj) {
         try {
             if (level == null) {
-                Log.e("ParceHeap", "level == null");
+                Log.e("ParseHeap", "level == null");
                 return;
             }
             if (level.heaps == null) {
-                Log.e("ParceHeap", "level.heaps == null");
+                Log.e("ParseHeap", "level.heaps == null");
                 return;
             }
             int pos = heapObj.getInt("pos");
@@ -417,6 +417,8 @@ public class ParseThread extends Thread {
                 return;
             }
             level.drop(new CustomItem(visibleItemObj), pos);
+            level.heaps.get(pos).customImage = heapObj.optInt("visible_sprite", -1);
+            level.heaps.get(pos).showsItem = heapObj.optBoolean("show_item", false);
         } catch (JSONException e) {
             Log.e("parse heap", String.format("bad heap. Exception: %s", e.getMessage()));
         }
