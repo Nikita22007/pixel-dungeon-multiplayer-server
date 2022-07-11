@@ -104,7 +104,7 @@ public class Heap implements Bundlable {
 	}
 
 	public boolean showsFirstItem() {
-		return (type == Type.HEAP || type == Type.FOR_SALE);
+		return (type == Type.HEAP || type == Type.FOR_SALE || type == Type.HIDDEN || type == Type.CRYSTAL_CHEST);
 	}
 
 	public ItemSprite.Glowing glowing() {

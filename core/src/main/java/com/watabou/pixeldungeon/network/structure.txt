@@ -47,8 +47,8 @@ server:
         "pos": 0
         "hidden": false
         //item is visible sprite. If heap.type != HEAP/FOR_SALE then
-        //item can be pseudoItem (chest,bones,tomb etc)
         "visible_item": item //  if null: heap removing
+        "visible_sprite": -1//if != -1  and != null: show special sprite in  world (chest,bones,tomb etc)
     }
     "plants":
     [

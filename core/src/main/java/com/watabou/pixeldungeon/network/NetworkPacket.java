@@ -699,14 +699,13 @@ public class NetworkPacket {
         heapObj = new JSONObject();
         try {
             heapObj.put("pos", heap.pos);
-            heapObj.put("hidden", heap.isHidden());
+            heapObj.put("visible_item", packItem(heap.items.getFirst(), null));
+            int heapImage = -1;
             if (!heap.showsFirstItem()) {
-                //pseudo-item
-                heapObj.put("visible_item", packItem(heap.items.getFirst(), null)); //todo
-                heapObj.put("hidden", heap.isHidden());
-            } else {
-                heapObj.put("visible_item", packItem(heap.items.getFirst(), null));
+                heapImage = heap.image();
             }
+            heapObj.put("visible_sprite", heapImage);
+            heapObj.put("show_item", heap.showsFirstItem());
         } catch (JSONException e) {
             e.printStackTrace();
         }
