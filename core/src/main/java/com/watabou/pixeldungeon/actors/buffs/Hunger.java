@@ -29,6 +29,8 @@ import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.sendBuff;
+
 public class Hunger extends Buff implements Hero.Doom {
 
 	private static final float STEP	= 10f;
@@ -58,6 +60,7 @@ public class Hunger extends Buff implements Hero.Doom {
 	
 	@Override
 	public boolean act() {
+		int old_image = icon();
 		if (target.isAlive()) {
 			
 			Hero hero = (Hero)target;
@@ -109,6 +112,10 @@ public class Hunger extends Buff implements Hero.Doom {
 			
 			diactivate();
 			
+		}
+
+		if (old_image != icon()) {
+			sendBuff(this);
 		}
 
 		return true;

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
@@ -34,6 +35,7 @@ public class NetworkPacket {
     public static final String MAP = "map";
     public static final String ACTORS = "actors";
     public static final String PLANTS = "plants";
+    public static final String BUFFS = "buffs";
 
     enum CellState {
         VISITED,
@@ -197,6 +199,8 @@ public class NetworkPacket {
                     }
                 }
                 object.put("positions", positions);
+            } else if (actor instanceof Buff) {
+                //no warning
             } else {
                 Log.w("NetworkPacket", "remove actor. Actor class: " + actor.getClass().toString());
             }
@@ -823,4 +827,30 @@ public class NetworkPacket {
             e.printStackTrace();
         }
     }
+
+    public void packAndAddBuff(Buff buff) {
+        JSONObject buffObj = new JSONObject();
+        int id = buff.id();
+        try {
+            buffObj.put("id", id);
+            buffObj.put("icon", buff.icon());
+            Actor target = buff.target;
+            buffObj.put("target_id", target == null ? JSONObject.NULL : target.id());
+            buffObj.put("desc", buff.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            synchronized (dataRef) {
+                addToArray(dataRef.get(),BUFFS, buffObj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+    }
+
 }

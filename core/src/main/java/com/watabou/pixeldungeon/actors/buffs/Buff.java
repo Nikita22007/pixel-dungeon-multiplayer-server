@@ -21,6 +21,8 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 
+import static com.watabou.pixeldungeon.network.SendData.sendBuff;
+
 public class Buff extends Actor {
 
 	public Char target;
@@ -33,12 +35,14 @@ public class Buff extends Actor {
 		
 		this.target = target;
 		target.add( this );
-		
+		sendBuff(this);
 		return true;
 	}
 	
 	public void detach() {
 		target.remove( this );
+		target = null;
+		sendBuff(this);
 	}
 	
 	@Override

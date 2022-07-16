@@ -5,6 +5,7 @@ import android.util.Log;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
+import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
@@ -391,6 +392,16 @@ public class SendData {
                 continue;
             }
             clients[i].packet.packAndAddActorRemoving(actor);
+            clients[i].flush();
+        }
+    }
+
+    public static void sendBuff(Buff buff) {
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i] == null) {
+                continue;
+            }
+            clients[i].packet.packAndAddBuff(buff);
             clients[i].flush();
         }
     }

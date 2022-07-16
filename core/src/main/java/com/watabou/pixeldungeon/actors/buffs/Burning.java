@@ -65,7 +65,7 @@ public class Burning extends Buff implements Hero.Doom {
 	
 	@Override
 	public boolean act() {
-		
+		Char target = this.target;
 		if (target.isAlive()) {
 			
 			if (target instanceof Hero) {

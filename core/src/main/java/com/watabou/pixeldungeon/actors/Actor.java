@@ -17,16 +17,11 @@
  */
 package com.watabou.pixeldungeon.actors;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.HeroHelp;
-import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
@@ -37,6 +32,9 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static com.watabou.pixeldungeon.network.SendData.sendActorRemoving;
 
