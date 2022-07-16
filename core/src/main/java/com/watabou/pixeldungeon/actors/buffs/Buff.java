@@ -21,16 +21,30 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 public class Buff extends Actor {
 
 	public Char target;
-	
+
+	public int buff_id = -1;
+
+	public static Dictionary<Integer, Buff> all_buffs = new Hashtable<>();
+
+
 	public boolean attachTo( Char target ) {
 
 		if (target.immunities().contains( getClass() )) {
 			return false;
 		}
-		
+
+		if (buff_id < 0) {
+			return false;
+		}
+
+		all_buffs.put(buff_id, this);
+
 		this.target = target;
 		target.add( this );
 		
@@ -38,6 +52,7 @@ public class Buff extends Actor {
 	}
 	
 	public void detach() {
+		all_buffs.remove(buff_id);
 		target.remove( this );
 	}
 	
@@ -50,7 +65,8 @@ public class Buff extends Actor {
 	public int icon() {
 		return BuffIndicator.NONE;
 	}
-	
+
+	// static
 	public static<T extends Buff> T append( Char target, Class<T> buffClass ) {
 		try {
 			T buff = buffClass.newInstance();
@@ -87,7 +103,11 @@ public class Buff extends Actor {
 		buff.postpone( duration );
 		return buff;
 	}
-	
+
+	public static void detach(int id) {
+		detach(all_buffs.get(id));
+	}
+
 	public static void detach( Buff buff ) {
 		if (buff != null) {
 			buff.detach();
@@ -97,4 +117,10 @@ public class Buff extends Actor {
 	public static void detach( Char target, Class<? extends Buff> cl ) {
 		detach( target.buff( cl ) );
 	}
+
+
+	public static Buff get(int id) {
+		return all_buffs.get(id);
+	}
+
 }

@@ -4,11 +4,14 @@ import android.util.Log;
 
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Scene;
+import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
+import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.buffs.CustomBuff;
 import com.watabou.pixeldungeon.actors.hero.Belongings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
@@ -201,9 +204,12 @@ public class ParseThread extends Thread {
                     }
                     break;
                 }
-                //Hero block
                 case "actors": {
                     parseActors(data.getJSONArray(token));
+                    break;
+                }
+                case "buffs": {
+                    parseBuffs(data.getJSONArray(token));
                     break;
                 }
                 case "hero": {
@@ -962,4 +968,38 @@ public class ParseThread extends Thread {
         }
     }
 
+
+    private void parseBuffs(JSONArray buffs) {
+        for (int i = 0; i < buffs.length(); i++) {
+            try {
+                JSONObject obj = buffs.getJSONObject(i);
+                int id = obj.getInt("id");
+                int targetId = obj.optInt("target_id", -1);
+                if (targetId == -1) {
+                    Buff.detach(id);
+                    continue;
+                }
+
+                Actor target_actor = Actor.findById(targetId);
+                if (! (target_actor instanceof Char)){
+                    Buff.detach(id);
+                    continue;
+                }
+                Char target = (Char) target_actor;
+
+                Buff old_buf = Buff.get(id);
+                if ((old_buf instanceof CustomBuff) && (old_buf.target == target) ) {
+                    ((CustomBuff) old_buf).update(obj);
+                    continue;
+                }
+
+                CustomBuff buff = new CustomBuff(obj);
+                buff.attachTo((Char) Actor.findById(targetId));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+    }
 }
