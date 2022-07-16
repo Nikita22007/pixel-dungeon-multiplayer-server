@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NetworkScanner { //Todo write this
+public class NetworkScanner {
     protected static final String SERVICE_TYPE = "_mppd._tcp."; // _name._protocol //mppd=MultiPlayerPixelDungeon
 
     protected static List<ServerInfo> serverList = new ArrayList<>();
+
     //NSD
     protected static enum ListenerState {STARTED, STOPPED, START_FAIL, STOP_FAIL, NULL}
+
     protected static ListenerState state;
     protected static NsdManager.DiscoveryListener discoveryListener;
     protected static NsdManager.ResolveListener resolveListener;
@@ -30,22 +32,23 @@ public class NetworkScanner { //Todo write this
 
     protected static ServicesListener servicesListener;
 
-    public  static boolean isWifiConnected(){
-        WifiManager  wifiManager = (WifiManager) Game.instance.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    public static boolean isWifiConnected() {
+        WifiManager wifiManager = (WifiManager) Game.instance.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return wifiManager.isWifiEnabled();
     }
+
     public static List<ServerInfo> getServerList() {
         return serverList;
     }
 
-    public static boolean start( @NotNull ServicesListener listener) {
+    public static boolean start(@NotNull ServicesListener listener) {
 
-        servicesListener=listener;
+        servicesListener = listener;
         initializeNSDManager();
         initializeResolveListener();
         initializeDiscoveryListener();
         state = ListenerState.NULL;
-        serverList= new ArrayList<>();
+        serverList = new ArrayList<>();
         nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
         while (state == ListenerState.NULL) {
             //GLog.h(state.toString());
@@ -55,8 +58,8 @@ public class NetworkScanner { //Todo write this
                 try {
                     ServerInfo test_server = new ServerInfo(
                             String.format("TestServer:Player %d", i),
-                            InetAddress.getByAddress(new byte[] {(byte)195,43,(byte)142,107}),
-                            1100+i-1,
+                            InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}),
+                            1100 + i - 1,
                             -1,
                             -1,
                             false
@@ -69,7 +72,7 @@ public class NetworkScanner { //Todo write this
         }
         return state == ListenerState.STARTED;
     }
-    
+
     public static boolean stop() {
         if (nsdManager != null) {
             nsdManager.stopServiceDiscovery(discoveryListener);
@@ -79,7 +82,7 @@ public class NetworkScanner { //Todo write this
 
     //NSD
     private static void initializeNSDManager() {
-        if (nsdManager==null) {
+        if (nsdManager == null) {
             nsdManager = (NsdManager) Game.instance.getSystemService(Context.NSD_SERVICE);
         }
     }
@@ -100,9 +103,9 @@ public class NetworkScanner { //Todo write this
             public void onServiceResolved(NsdServiceInfo serviceInfo) {
                 GLog.p("Resolve Succeeded. " + serviceInfo);
                 String name = serviceInfo.getServiceName();
-                for (ServerInfo server:serverList) {
-                    if  (server.name.equals(name)){
-                        GLog.p("Already have server: %s",name);
+                for (ServerInfo server : serverList) {
+                    if (server.name.equals(name)) {
+                        GLog.p("Already have server: %s", name);
                         return;
                     }
                 }
@@ -114,7 +117,7 @@ public class NetworkScanner { //Todo write this
                 );
 
                 serverList.add(server);
-                if (servicesListener!=null){
+                if (servicesListener != null) {
                     servicesListener.OnServerConnected(server);
                 }
             }
@@ -175,7 +178,7 @@ public class NetworkScanner { //Todo write this
         };
     }
 
-    public interface ServicesListener{
+    public interface ServicesListener {
         public void OnServerConnected(ServerInfo info);
     }
 }

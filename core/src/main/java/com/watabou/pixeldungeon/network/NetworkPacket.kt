@@ -25,11 +25,7 @@ class NetworkPacket {
     }
 
     @JvmField
-    var dataRef: AtomicReference<JSONObject>
-
-    init {
-        dataRef = AtomicReference(JSONObject())
-    }
+    var dataRef: AtomicReference<JSONObject> = AtomicReference(JSONObject())
 
     fun clearData() {
         synchronized(dataRef) { dataRef.set(JSONObject()) }

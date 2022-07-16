@@ -31,7 +31,7 @@ public class CustomBuff extends Buff{
     public void setDesc(String desc) {
         this.desc = desc;
     }
-    
+
     @Override
     public String toString()  {
         return desc;
