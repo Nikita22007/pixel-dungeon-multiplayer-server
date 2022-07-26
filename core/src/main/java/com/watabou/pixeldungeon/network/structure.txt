@@ -92,7 +92,13 @@ server:
         "exp": 0
         "ready": false
    }
-
+   "buffs"
+   [
+       "id": 1
+       "icon": 2
+       "target_id": 4 //target actor id; null to detach
+       "desc": "Some (de)buff"
+   ]
    "inventory":
    {
         "backpack": bag
@@ -105,7 +111,7 @@ server:
                 "item": item/"null"
             }
         ]
-}
+   }
    "sprites":
     [
         {
