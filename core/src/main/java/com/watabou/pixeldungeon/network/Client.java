@@ -28,9 +28,7 @@ public class Client extends Thread {
 
     public static boolean connect(String server, int port) {
         packet.clearData();
-        if (parceThread == null) {
-            parceThread = new ParseThread();
-        }
+        parceThread = new ParseThread();
         try {
             socket = new Socket(server, port);
             writeStream = new OutputStreamWriter(

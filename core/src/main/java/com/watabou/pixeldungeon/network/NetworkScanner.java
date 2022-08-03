@@ -16,6 +16,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.watabou.pixeldungeon.BuildConfig.DEBUG;
+
 
 public class NetworkScanner {
     protected static final String SERVICE_TYPE = "_mppd._tcp."; // _name._protocol //mppd=MultiPlayerPixelDungeon
@@ -53,6 +55,7 @@ public class NetworkScanner {
         while (state == ListenerState.NULL) {
             //GLog.h(state.toString());
         }
+        if (DEBUG)
         {
             for (int i = 1; i <= 2; i += 1) {
                 try {
