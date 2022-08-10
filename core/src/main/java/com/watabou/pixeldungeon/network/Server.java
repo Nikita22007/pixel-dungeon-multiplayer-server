@@ -45,7 +45,7 @@ public class Server extends Thread {
         if ((serverStepThread != null) && (serverStepThread.isAlive())) {
             return false;
         }
-        if (serverStepThread == null) {
+        {
             serverStepThread = new Thread() {
                 @Override
                 public void run() {
@@ -93,9 +93,7 @@ public class Server extends Thread {
         }//should  we use  Sleep?
 
         started = (regListenerState == RegListenerState.REGISTERED);
-        if (serverThread == null) {
-            serverThread = new Server();
-        }
+        serverThread = new Server();
 
         serverThread.start();
 
@@ -109,7 +107,7 @@ public class Server extends Thread {
         serverStepThread.interrupt();
         ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
-        while (regListenerState != RegListenerState.UNREGISTERED || regListenerState != RegListenerState.UNREGISTRATION_FAILED) {
+        while (regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) {
         }//should  we use  Sleep?
         return true;
     }
@@ -137,15 +135,15 @@ public class Server extends Thread {
             try {
                 client = serverSocket.accept();  //accept connect
 
-                for (int i = 0; i < clients.length; i++) {   //search not connected
+                for (int i = 0; i <= clients.length; i++) {   //search not connected
+                    if (i == clients.length) { //If we test last and it's connected too
+                        //todo use new json
+                        new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
+                        client.close();
+                    } else
                     if (clients[i] == null) {
                         clients[i] = new ClientThread(i, client, true); //found
                         break;
-                    } else {
-                        if (i == clients.length) { //If we test last and it's connected too
-                            new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
-                            client.close();
-                        }
                     }
                 }
             } catch (IOException e) {
