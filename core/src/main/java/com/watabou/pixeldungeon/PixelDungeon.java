@@ -19,6 +19,7 @@ package com.watabou.pixeldungeon;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.rohitss.uceh.UCEHandler;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -125,7 +126,10 @@ public class PixelDungeon extends Game {
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
-		
+
+		// Initialize UCE_Handler Library (to catch errors in pretty error screen)
+		new UCEHandler.Builder(this).build();
+
 		updateImmersiveMode();
 		
 		DisplayMetrics metrics = new DisplayMetrics();
