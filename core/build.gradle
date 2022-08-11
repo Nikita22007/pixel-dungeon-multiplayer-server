@@ -20,4 +20,5 @@ android {
 dependencies {
     implementation project(':PD-classes')
     implementation 'org.jetbrains:annotations:15.0'
+    implementation 'com.github.RohitSurwase.UCE-Handler:uce_handler:1.4'
 }

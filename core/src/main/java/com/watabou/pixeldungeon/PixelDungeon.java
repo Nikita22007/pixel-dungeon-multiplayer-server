@@ -25,6 +25,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
+import com.rohitss.uceh.UCEHandler;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
@@ -125,7 +126,10 @@ public class PixelDungeon extends Game {
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
-		
+
+		// Initialize UCE_Handler Library (to catch errors in pretty error screen)
+		new UCEHandler.Builder(this).build();
+
 		updateImmersiveMode();
 		
 		DisplayMetrics metrics = new DisplayMetrics();
