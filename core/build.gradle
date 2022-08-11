@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion appAndroidCompileSDK
 
+    setProperty("archivesBaseName", appVersionName)
     defaultConfig {
         manifestPlaceholders = [appName:appName]
         applicationId appPackageName
