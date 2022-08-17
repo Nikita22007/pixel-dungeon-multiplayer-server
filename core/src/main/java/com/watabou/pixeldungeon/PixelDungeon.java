@@ -19,13 +19,13 @@ package com.watabou.pixeldungeon;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
-import com.rohitss.uceh.UCEHandler;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
@@ -122,13 +122,14 @@ public class PixelDungeon extends Game {
 			com.watabou.pixeldungeon.items.wands.WandOfReach.class,
 			"com.watabou.pixeldungeon.items.wands.WandOfTelekinesis" );
 	}
-	
+
+	private FirebaseAnalytics mFirebaseAnalytics;
+
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 
-		// Initialize UCE_Handler Library (to catch errors in pretty error screen)
-		new UCEHandler.Builder(this).build();
+		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 		updateImmersiveMode();
 		

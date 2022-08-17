@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion appAndroidCompileSDK
@@ -21,5 +23,11 @@ android {
 dependencies {
     implementation project(':PD-classes')
     implementation 'org.jetbrains:annotations:15.0'
-    implementation 'com.github.RohitSurwase.UCE-Handler:uce_handler:1.4'
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.android.gms:play-services-measurement-api:19.0.0'
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
 }

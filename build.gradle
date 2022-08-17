@@ -5,6 +5,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
     }
 }
 
@@ -18,7 +20,7 @@ allprojects {
 
     ext {
         appName = 'Pixel Dungeon Server'
-        appPackageName = 'com.watabou.pixeldungeonServer'
+        appPackageName = 'com.nikita22007.pixeldungeonserver'
 
         appVersionCode = 74
         if (gradle.getStartParameter().getTaskRequests().toString().toLowerCase().contains("debug")) {
@@ -36,7 +38,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
