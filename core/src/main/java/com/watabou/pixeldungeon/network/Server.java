@@ -33,6 +33,7 @@ public class Server extends Thread {
     protected static ServerSocket serverSocket;
     protected static Server serverThread;
     protected static ClientThread[] clients;
+    protected static RelayThread relay;
 
     //NSD
     public static RegListenerState regListenerState = RegListenerState.NONE;
@@ -104,6 +105,10 @@ public class Server extends Thread {
         if (!started) {
             return true;
         }
+        if (relay != null) {
+            relay.stop();
+            relay = null;
+        }
         serverStepThread.interrupt();
         ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
@@ -114,46 +119,32 @@ public class Server extends Thread {
 
     //Server thread
     public void run() {
-        if (BUILD_TYPE.equals("debug")) {
-            try {
-                Socket player1_proxy = new Socket();
-                player1_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1100));
-                clients[0] = new ClientThread(0, player1_proxy, true); //found
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                Socket player2_proxy = new Socket();
-                player2_proxy.connect(new InetSocketAddress(InetAddress.getByAddress(new byte[]{(byte) 195, 43, (byte) 142, 107}), 1101));
-                clients[1] = new ClientThread(1, player2_proxy, true); //found
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (Settings.useRelay) {
+            relay = new RelayThread();
+            relay.start();
         }
         while (started) { //clients  listener
             Socket client;
             try {
                 client = serverSocket.accept();  //accept connect
-
-                for (int i = 0; i <= clients.length; i++) {   //search not connected
-                    if (i == clients.length) { //If we test last and it's connected too
-                        //todo use new json
-                        new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
-                        client.close();
-                    } else
-                    if (clients[i] == null) {
-                        clients[i] = new ClientThread(i, client, true); //found
-                        break;
+                synchronized (clients) {
+                    for (int i = 0; i <= clients.length; i++) {   //search not connected
+                        if (i == clients.length) { //If we test last and it's connected too
+                            //todo use new json
+                            new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
+                            client.close();
+                        } else if (clients[i] == null) {
+                            clients[i] = new ClientThread(i, client, true); //found
+                            break;
+                        }
                     }
                 }
             } catch (IOException e) {
                 if (!(e.getMessage().equals("Socket is closed"))) {  //"Socket is closed" means that client disconnected
                     GLog.h("IO exception:".concat(e.getMessage()));
                 }
-                break;
             }
         }
-
     }
 
     //NSD

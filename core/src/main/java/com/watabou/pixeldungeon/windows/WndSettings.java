@@ -17,10 +17,19 @@
  */
 package com.watabou.pixeldungeon.windows;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.text.Editable;
+import android.widget.EditText;
+
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
+import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
+import com.watabou.pixeldungeon.Settings;
+import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.CheckBox;
 import com.watabou.pixeldungeon.ui.RedButton;
@@ -41,7 +50,8 @@ public class WndSettings extends Window {
 	
 	private static final String TXT_BRIGHTNESS	= "Brightness";
 
-	
+	private static final String TXT_RELAY = "Internet multiplayer";
+	private static final String TXT_SET_SERVER_NAME = "Set server name";
 	private static final String TXT_SWITCH_PORT	= "Switch to portrait";
 	private static final String TXT_SWITCH_LAND	= "Switch to landscape";
 	
@@ -55,7 +65,7 @@ public class WndSettings extends Window {
 	public WndSettings(boolean inGame ) {
 		super();
 		
-		CheckBox btnImmersive = null;
+		CheckBox btnRelay = null;
 		
 		if (inGame) {
 			int w = BTN_HEIGHT;
@@ -97,7 +107,8 @@ public class WndSettings extends Window {
 			btnScaleUp.setRect( 0, 0, WIDTH, BTN_HEIGHT );
 			btnScaleUp.checked( PixelDungeon.scaleUp() );
 			add( btnScaleUp );
-			
+
+			CheckBox btnImmersive = null;
 			btnImmersive = new CheckBox( TXT_IMMERSIVE ) {
 				@Override
 				protected void onClick() {
@@ -109,6 +120,49 @@ public class WndSettings extends Window {
 			btnImmersive.checked( PixelDungeon.immersed() );
 			btnImmersive.enable( android.os.Build.VERSION.SDK_INT >= 19 );
 			add( btnImmersive );
+
+
+			Button btnServerName = new RedButton(TXT_SET_SERVER_NAME) {
+				@Override
+				protected void onClick() {
+
+					hide();
+					//GameScene.show( new WndSetServerName() );
+					final EditText input = new EditText(PixelDungeon.instance);
+					input.setText(Settings.serverName);
+					PixelDungeon.instance.runOnUiThread(() -> {
+						new AlertDialog.Builder(PixelDungeon.instance)
+								.setTitle(TXT_SET_SERVER_NAME)
+								.setView(input)
+								.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										Editable editable = input.getText();
+										Settings.serverName = editable.toString();
+										// deal with the editable
+									}
+								})
+								.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										// Do nothing.
+									}
+								}).show();
+					});
+				}
+			};
+			btnServerName.setRect( 0, btnImmersive.bottom() + GAP, WIDTH, BTN_HEIGHT );
+			add( btnServerName );
+
+			btnRelay = new CheckBox( TXT_RELAY ) {
+				@Override
+				protected void onClick() {
+					super.onClick();
+					Settings.useRelay = !Settings.useRelay;
+					Sample.INSTANCE.play( Assets.SND_CLICK );
+				}
+			};
+			btnRelay.setRect( 0, btnServerName.bottom() + GAP, WIDTH, BTN_HEIGHT );
+			btnRelay.checked( Settings.useRelay );
+			add( btnRelay );
 			
 		}
 		
@@ -119,7 +173,7 @@ public class WndSettings extends Window {
 				PixelDungeon.music( checked() );
 			}
 		};
-		btnMusic.setRect( 0, (btnImmersive != null ? btnImmersive.bottom() : BTN_HEIGHT) + GAP, WIDTH, BTN_HEIGHT );
+		btnMusic.setRect( 0, (btnRelay != null ? btnRelay.bottom() : BTN_HEIGHT) + GAP, WIDTH, BTN_HEIGHT );
 		btnMusic.checked( PixelDungeon.music() );
 		add( btnMusic );
 		
