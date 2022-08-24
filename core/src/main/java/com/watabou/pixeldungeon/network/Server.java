@@ -110,6 +110,7 @@ public class Server extends Thread {
             relay = null;
         }
         serverStepThread.interrupt();
+        started = false;
         ClientThread.sendAll(Codes.SERVER_CLOSED);
         unregisterService();
         while (regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) {
