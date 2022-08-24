@@ -466,6 +466,9 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	private static boolean cancelCellSelector(Hero hero) {
+		if (hero == null) {
+			return true;
+		}
 		if (hero.cellSelector.listener != null && hero.cellSelector.listener != hero.defaultCellListener) {
 			hero.cellSelector.cancel();
 			return true;
