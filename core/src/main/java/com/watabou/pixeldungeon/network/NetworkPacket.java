@@ -2,6 +2,8 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
@@ -470,7 +472,7 @@ public class NetworkPacket {
     private static final String TXT_LEVEL = "%+d";
     private static final String TXT_CURSED = "";//"-";
 
-    private static JSONObject itemUI(Item item, Hero owner) throws JSONException {
+    private static JSONObject itemUI(@NotNull Item item, @NotNull Hero owner) throws JSONException {
         JSONObject ui = new JSONObject();
         JSONObject topLeft = new JSONObject();
         JSONObject topRight = new JSONObject();
@@ -517,7 +519,7 @@ public class NetworkPacket {
     }
 
 
-    public static JSONObject packItem(Item item, Hero hero) {
+    public static JSONObject packItem(@NotNull Item item, @Nullable Hero hero) {
         JSONObject itemObj = new JSONObject();
         try {
             if (hero != null) {
@@ -539,6 +541,9 @@ public class NetworkPacket {
             itemObj.put("level_known", item.levelKnown);
             itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
             itemObj.put("level", item.visiblyUpgraded());
+            if (item instanceof Bag) {
+                itemObj = packBag((Bag) item, hero, itemObj);
+            }
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packItem. " + e.toString());
         }
@@ -555,21 +560,22 @@ public class NetworkPacket {
     }
 
     @NotNull
-    public JSONObject packBag(Bag bag, Hero hero) {
+    public JSONObject packBag(@NotNull Bag bag, Hero hero) {
+        return packItem(bag, hero);
+    }
+
+    @NotNull
+    public static JSONObject packBag(@NotNull Bag bag, @Nullable Hero hero, @NotNull JSONObject itemObj) {
         if ((bag.owner != null) && (bag.owner != hero)) {
             Log.w("Packet", "bag.owner != gotten_hero");
         }
 
-        JSONObject bagObj = new JSONObject();
+        JSONObject bagObj = itemObj;
         JSONArray bagItems = new JSONArray();
 
         for (Item item : bag.items) {
             JSONObject serializedItem;
-            if (item instanceof Bag) {
-                serializedItem = packBag((Bag) item, hero);
-            } else {
-                serializedItem = packItem(item, hero);
-            }
+            serializedItem = packItem(item, hero);
             if (serializedItem.length() == 0) {
                 Log.w("Packet", "item hadn't serialized");
             }
@@ -577,10 +583,10 @@ public class NetworkPacket {
         }
 
         try {
-            bagObj = packItem(bag, hero);
+            bagObj = itemObj;
             bagObj.put("size", bag.size);
             bagObj.put("items", bagItems);
-            bagObj.put("owner", bag.owner != null ? bag.owner.id() : null);
+            bagObj.put("owner", hero != null ? hero.id() : null);
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packBag. " + e.toString());
         }
@@ -588,7 +594,7 @@ public class NetworkPacket {
         return bagObj;
     }
 
-    public JSONArray packBags(Bag[] bags) {
+    public JSONArray packBags(@NonNull Bag[] bags) {
         JSONArray bagsObj = new JSONArray();
         for (Bag bag : bags) {
             if (bag == null) {
@@ -621,7 +627,7 @@ public class NetworkPacket {
 
     protected static final String INVENTORY = "inventory";
 
-    public void addHeroBags(Hero hero) {
+    public void addHeroBags(@NotNull Hero hero) {
 
         JSONObject bagsObj = packHeroBags(hero);
         try {
@@ -844,7 +850,7 @@ public class NetworkPacket {
 
         try {
             synchronized (dataRef) {
-                addToArray(dataRef.get(),BUFFS, buffObj);
+                addToArray(dataRef.get(), BUFFS, buffObj);
             }
         } catch (JSONException e) {
             e.printStackTrace();

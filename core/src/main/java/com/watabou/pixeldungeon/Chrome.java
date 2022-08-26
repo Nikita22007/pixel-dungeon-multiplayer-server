@@ -54,7 +54,7 @@ public class Chrome {
 		case TAB_UNSELECTED:
 			return new NinePatch( Assets.CHROME, 74, 22, 10, 14, 4, 7, 4, 6 );
 		default:
-			return null;
+			throw new IllegalArgumentException("Illegal type value");
 		}
 	}
 }
