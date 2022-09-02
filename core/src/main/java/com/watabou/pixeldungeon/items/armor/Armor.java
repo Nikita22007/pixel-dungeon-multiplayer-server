@@ -33,6 +33,8 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
+
 public class Armor extends EquipableItem {
 	
 	private static final int HITS_TO_KNOW	= 10;
@@ -304,6 +306,7 @@ public class Armor extends EquipableItem {
 	
 	public Armor inscribe( Glyph glyph ) {
 		this.glyph = glyph;
+		sendUpdateItemFull(this);
 		return this;
 	}
 	

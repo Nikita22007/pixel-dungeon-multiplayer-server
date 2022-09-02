@@ -32,6 +32,8 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
+
 abstract public class Weapon extends KindOfWeapon {
 
 	private static final int HITS_TO_KNOW	= 20;
@@ -199,6 +201,7 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	public Weapon enchant( Enchantment ench ) {
 		enchantment = ench;
+		sendUpdateItemFull(this);
 		return this;
 	}
 	

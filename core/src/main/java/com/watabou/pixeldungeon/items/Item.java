@@ -302,7 +302,8 @@ public class Item implements Bundlable {
 		
 		level++;
 		fix();
-		
+
+		sendUpdateItemFull(this);
 		return this;
 	}
 	
@@ -416,7 +417,8 @@ public class Item implements Bundlable {
 		
 		levelKnown = true;
 		cursedKnown = true;
-		
+
+		sendUpdateItemFull(this);
 		return this;
 	}
 	
