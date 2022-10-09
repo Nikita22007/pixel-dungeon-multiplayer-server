@@ -50,7 +50,7 @@ public class WndSettings extends Window {
 	
 	private static final String TXT_BRIGHTNESS	= "Brightness";
 
-	private static final String TXT_RELAY = "Internet multiplayer";
+	private static final String TXT_RELAY = "Online multiplayer";
 	private static final String TXT_SET_SERVER_NAME = "Set server name";
 	private static final String TXT_SWITCH_PORT	= "Switch to portrait";
 	private static final String TXT_SWITCH_LAND	= "Switch to landscape";
