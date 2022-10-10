@@ -12,12 +12,8 @@ import com.watabou.pixeldungeon.utils.GLog;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import static com.watabou.pixeldungeon.BuildConfig.BUILD_TYPE;
 
 
 public class Server extends Thread {
@@ -39,6 +35,8 @@ public class Server extends Thread {
     public static RegListenerState regListenerState = RegListenerState.NONE;
     protected static NsdManager nsdManager;
     protected static NsdManager.RegistrationListener registrationListener;
+    protected static int TIME_TO_STOP = 3000;
+    protected static final int SLEEP_TIME = 100; // ms
 
     protected static Thread serverStepThread;
 
@@ -106,15 +104,21 @@ public class Server extends Thread {
             return true;
         }
         if (relay != null) {
-            relay.stop();
+            relay.interrupt();
             relay = null;
         }
         serverStepThread.interrupt();
         started = false;
-        ClientThread.sendAll(Codes.SERVER_CLOSED);
+        //ClientThread.sendAll(Codes.SERVER_CLOSED); //todo
         unregisterService();
-        while (regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) {
-        }//should  we use  Sleep?
+        int sleep_time = TIME_TO_STOP;
+           try {
+            while ((regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) && (sleep_time > 0)) {
+                Thread.sleep(SLEEP_TIME);
+                sleep_time -= SLEEP_TIME;
+            }
+        } catch (InterruptedException ignored) {
+        }
         return true;
     }
 
