@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.TitleScene;
 import com.watabou.pixeldungeon.ui.RedButton;
@@ -80,8 +81,8 @@ public class WndGame extends Window {
 			} );
 		}*/
 				
-		addButtons( 
-			new RedButton( TXT_MENU ) {
+		/*addButtons(
+			/*new RedButton( TXT_MENU ) {
 				@Override
 				protected void onClick() {
 					try {
@@ -89,9 +90,12 @@ public class WndGame extends Window {
 					} catch (IOException e) {
 						// Do nothing
 					}
+					Server.stopServer();
 					Game.switchScene( TitleScene.class );
 				}
-			}, new RedButton( TXT_EXIT ) {
+			},*/
+		addButton (
+				new RedButton( TXT_EXIT ) {
 				@Override
 				protected void onClick() {
 					Game.instance.finish();
