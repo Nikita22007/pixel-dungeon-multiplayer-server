@@ -19,7 +19,6 @@ import java.util.prefs.Preferences;
 
 
 public class Server extends Thread {
-    public static final String SERVICENAME = "MultiplayerPD"; //any nonzero string
     public static final String SERVICETYPE = "_mppd._tcp."; // _name._protocol //mppd=MultiPlayerPixelDungeon
 
     //primitive vars
@@ -81,7 +80,7 @@ public class Server extends Thread {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;
         }
-        serviceName = SERVICENAME;
+        serviceName = PixelDungeon.serverName();
         regListenerState = RegListenerState.NONE;
         if (!initializeServerSocket()) {
             return false;
@@ -161,7 +160,7 @@ public class Server extends Thread {
 
         // The name is subject to change based on conflicts
         // with other services advertised on the same network.
-        serviceInfo.setServiceName(SERVICENAME);
+        serviceInfo.setServiceName(serviceName);
         serviceInfo.setServiceType(SERVICETYPE);
         serviceInfo.setPort(port);
         nsdManager = (NsdManager) Game.instance.getSystemService(Context.NSD_SERVICE);
