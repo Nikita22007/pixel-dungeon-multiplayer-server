@@ -8,6 +8,7 @@ import com.watabou.pixeldungeon.items.potions.PotionOfLevitation;
 import com.watabou.pixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.watabou.pixeldungeon.items.potions.PotionOfToxicGas;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfMirrorImage;
+import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
 import com.watabou.pixeldungeon.plants.Firebloom;
 import com.watabou.pixeldungeon.plants.Sungrass;
 
@@ -31,7 +32,8 @@ public class LobbyLevel extends DeadEndLevel {
         if (BuildConfig.DEBUG) {
             {
                 try {
-                    Class cl = PotionOfLevitation.class;
+                    Class cl = Dart.class;
+                    drop((Item) cl.newInstance(),center+1);
                     drop((Item) cl.newInstance(),center+1);
                     heaps.get(center + 1).type = Heap.Type.CHEST;
                 } catch (IllegalAccessException e) {

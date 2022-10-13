@@ -267,6 +267,16 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 		Actor.process();
 
+		for (Hero hero : Dungeon.heroes) {
+			if (hero == null) {
+				continue;
+			}
+			if (hero.cellSelector == null) {
+				continue;
+			}
+			hero.cellSelector.enabled = hero.getReady();
+		}
+
 	}
 	
 	public void brightness( boolean value ) {
