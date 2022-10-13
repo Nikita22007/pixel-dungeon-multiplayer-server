@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.utils.GLog;
 
@@ -56,7 +57,7 @@ public class RelayThread extends Thread {
 
             JSONObject name = new JSONObject();
             name.put("action", "name");
-            name.put("name", Settings.serverName);
+            name.put("name", PixelDungeon.serverName());
             writer.write(name.toString());
             writer.write('\n');
             writer.flush();

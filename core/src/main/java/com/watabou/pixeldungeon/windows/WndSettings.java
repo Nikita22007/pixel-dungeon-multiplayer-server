@@ -35,6 +35,8 @@ import com.watabou.pixeldungeon.ui.CheckBox;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
 
+import java.util.prefs.Preferences;
+
 public class WndSettings extends Window {
 	
 	private static final String TXT_ZOOM_IN			= "+";
@@ -129,7 +131,7 @@ public class WndSettings extends Window {
 					hide();
 					//GameScene.show( new WndSetServerName() );
 					final EditText input = new EditText(PixelDungeon.instance);
-					input.setText(Settings.serverName);
+					input.setText(PixelDungeon.serverName());
 					PixelDungeon.instance.runOnUiThread(() -> {
 						new AlertDialog.Builder(PixelDungeon.instance)
 								.setTitle(TXT_SET_SERVER_NAME)
@@ -137,7 +139,7 @@ public class WndSettings extends Window {
 								.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int whichButton) {
 										Editable editable = input.getText();
-										Settings.serverName = editable.toString();
+										PixelDungeon.serverName(editable.toString());
 										// deal with the editable
 									}
 								})
@@ -156,12 +158,12 @@ public class WndSettings extends Window {
 				@Override
 				protected void onClick() {
 					super.onClick();
-					Settings.useRelay = !Settings.useRelay;
+					PixelDungeon.onlineMode(!PixelDungeon.onlineMode());
 					Sample.INSTANCE.play( Assets.SND_CLICK );
 				}
 			};
 			btnRelay.setRect( 0, btnServerName.bottom() + GAP, WIDTH, BTN_HEIGHT );
-			btnRelay.checked( Settings.useRelay );
+			btnRelay.checked(PixelDungeon.onlineMode());
 			add( btnRelay );
 			
 		}

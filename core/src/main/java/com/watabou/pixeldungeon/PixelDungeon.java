@@ -293,6 +293,22 @@ public class PixelDungeon extends Game {
 		return Preferences.INSTANCE.getBoolean( Preferences.KEY_SCALE_UP, true );
 	}
 
+	public static void onlineMode( boolean value ) {
+		Preferences.INSTANCE.put( Preferences.KEY_ONLINE_MODE, value );
+	}
+
+	public static boolean onlineMode() {
+		return Preferences.INSTANCE.getBoolean( Preferences.KEY_ONLINE_MODE, false);
+	}
+
+	public static void serverName( String value ) {
+		Preferences.INSTANCE.put( Preferences.KEY_SERVER_NAME, value );
+	}
+
+	public static String serverName() {
+		return Preferences.INSTANCE.getString( Preferences.KEY_SERVER_NAME, "PDMP Server");
+	}
+
 	public static void zoom( int value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_ZOOM, value );
 	}

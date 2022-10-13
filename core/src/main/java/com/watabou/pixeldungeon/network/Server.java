@@ -6,6 +6,7 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -14,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.prefs.Preferences;
 
 
 public class Server extends Thread {
@@ -124,7 +126,7 @@ public class Server extends Thread {
 
     //Server thread
     public void run() {
-        if (Settings.useRelay) {
+        if (PixelDungeon.onlineMode()) {
             relay = new RelayThread();
             relay.start();
         }
