@@ -185,7 +185,7 @@ public class Item implements Bundlable {
 					item.setQuantity(item.getQuantity() + getQuantity(), false);
 					item.updateQuickslot();
 					path.add(items.indexOf(item));
-					sendUpdateItemCount(container.owner, this, item.getQuantity(), path);
+					sendUpdateItemCount(container.owner, item, item.getQuantity(), path);
 					return path;
 				}
 			}	
