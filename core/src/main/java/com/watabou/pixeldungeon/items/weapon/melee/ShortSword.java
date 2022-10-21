@@ -84,7 +84,8 @@ public class ShortSword extends MeleeWeapon {
 			}
 			
 			curUser = hero;
-			
+
+			SendSelfUpdate();
 			GameScene.selectItem(hero, itemSelector, WndBag.Mode.WEAPON, TXT_SELECT_WEAPON );
 			
 		} else {

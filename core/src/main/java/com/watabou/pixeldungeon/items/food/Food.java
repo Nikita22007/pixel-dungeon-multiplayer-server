@@ -88,7 +88,8 @@ public class Food extends Item {
 			
 			Statistics.foodEaten++;
 			Badges.validateFoodEaten();
-			
+
+			SendSelfUpdate(hero);
 		} else {
 		
 			super.execute( hero, action );

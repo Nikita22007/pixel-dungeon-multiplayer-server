@@ -143,6 +143,8 @@ public class Item implements Bundlable {
 			doThrow( hero );
 			
 		}
+		sendUpdateItemFull(this);
+		SendData.flush(hero);
 	}
 	
 	public void execute( Hero hero ) {
@@ -311,7 +313,7 @@ public class Item implements Bundlable {
 		for (int i=0; i < n; i++) {
 			upgrade();
 		}
-		
+
 		return this;
 	}
 	
@@ -319,7 +321,8 @@ public class Item implements Bundlable {
 		
 		this.level--;	
 		fix();
-		
+
+		sendUpdateItemFull(this);
 		return this;
 	}
 	
@@ -648,6 +651,15 @@ public class Item implements Bundlable {
 		this.quantity = quantity;
 		if (send){
 			sendUpdateItemFull(this);
+		}
+	}
+	protected void SendSelfUpdate(){
+		SendSelfUpdate(null);
+	}
+	protected void SendSelfUpdate(Hero heroToFlash){
+		sendUpdateItemFull(this);
+		if (heroToFlash != null){
+			SendData.flush(heroToFlash);
 		}
 	}
 }

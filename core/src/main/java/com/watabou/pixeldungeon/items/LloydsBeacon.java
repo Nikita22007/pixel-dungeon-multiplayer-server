@@ -125,6 +125,8 @@ public class LloydsBeacon extends Item {
 			Sample.INSTANCE.play( Assets.SND_BEACON );
 			
 			GLog.i( TXT_RETURN );
+
+			SendSelfUpdate();
 			
 		} else if (action == AC_RETURN) {
 			
@@ -137,8 +139,8 @@ public class LloydsBeacon extends Item {
 				InterLevelSceneServer.returnTo(returnDepth, returnPos, hero );
 				reset();
 			}
-			
-			
+
+			SendSelfUpdate();
 		} else {
 			
 			super.execute( hero, action );

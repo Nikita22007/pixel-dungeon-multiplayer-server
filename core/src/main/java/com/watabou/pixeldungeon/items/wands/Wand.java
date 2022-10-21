@@ -166,7 +166,7 @@ public abstract class Wand extends KindOfWeapon {
 			curUser = hero;
 			curItem = this;
 			GameScene.selectCell(hero, zapper );
-			
+			SendSelfUpdate(hero);
 		} else {
 			
 			super.execute( hero, action );
