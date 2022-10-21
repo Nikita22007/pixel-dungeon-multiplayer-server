@@ -243,6 +243,12 @@ public class SendData {
         sendActor(actor);
     }
 
+    public static void flush(Hero hero) {
+        if (hero.networkID >=0) {
+            flush(hero.networkID);
+        }
+    }
+
     public static void flush(int networkID) {
         if (clients[networkID] != null) {
             clients[networkID].flush();

@@ -22,7 +22,10 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.particles.ShadowParticle;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.utils.GLog;
+
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 public abstract class EquipableItem extends Item {
 
@@ -34,9 +37,15 @@ public abstract class EquipableItem extends Item {
 	@Override
 	public void execute( Hero hero, String action ) {
 		if (action.equals( AC_EQUIP )) {
-			doEquip( hero );
+			if (doEquip(hero)) {
+				sendUpdateItemFull(this);
+				SendData.flush(hero);
+			}
 		} else if (action.equals( AC_UNEQUIP )) {
-			doUnequip( hero, true );
+			if (doUnequip(hero, true)) {
+				sendUpdateItemFull(this);
+				SendData.flush(hero);
+			}
 		} else {
 			super.execute( hero, action );
 		}
