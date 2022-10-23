@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 import static com.watabou.pixeldungeon.Dungeon.heroes;
+import static com.watabou.pixeldungeon.Dungeon.level;
 import static com.watabou.pixeldungeon.levels.Level.getNearClearCell;
 
 public class InterLevelSceneServer {
@@ -169,7 +170,7 @@ public class InterLevelSceneServer {
     }
     private static Level getNextLevel()throws IOException {
 
-        if (Dungeon.depth >= Statistics.deepestFloor) {
+        if ((Dungeon.depth <= 0) || (Dungeon.depth >= Statistics.deepestFloor)) {
             return  Dungeon.newLevel();
         } else {
             Dungeon.depth++;
@@ -189,6 +190,11 @@ public class InterLevelSceneServer {
             Dungeon.saveLevel();
             Dungeon.depth--;
             Level level = Dungeon.loadLevel();
+            if (level == null){
+                Dungeon.depth--;
+                descend(hero);
+            }
+            else
             Dungeon.switchLevel(level, level.exit, hero);
 
             for (int i = 0; i < heroes.length; i++) {

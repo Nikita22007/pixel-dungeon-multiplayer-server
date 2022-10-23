@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon;
 
+import android.os.Debug;
+
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -51,6 +53,7 @@ import com.watabou.pixeldungeon.levels.PrisonLevel;
 import com.watabou.pixeldungeon.levels.Room;
 import com.watabou.pixeldungeon.levels.SewerBossLevel;
 import com.watabou.pixeldungeon.levels.SewerLevel;
+import com.watabou.pixeldungeon.levels.debug_levels.DebugLevel1;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.ui.QuickSlot;
@@ -170,6 +173,9 @@ public class Dungeon {
 		Arrays.fill( visible, false );
 		
 		Level level;
+		if (depth <0 ){
+			level = new DebugLevel1(depth);
+		} else
 		switch (depth) {
 		case 0:
 			level = new LobbyLevel();
