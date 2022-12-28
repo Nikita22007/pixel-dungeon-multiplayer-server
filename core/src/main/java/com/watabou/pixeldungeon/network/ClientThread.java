@@ -192,10 +192,10 @@ class ClientThread extends Thread {
                     }
                 }
             } catch (IOException e) {
-                assert false;
                 PixelDungeon.reportException(e);
                 GLog.n(String.format("ThreadID:%s; Message:%s", threadID, e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
+                assert false;
                 disconnect();//  need?
 
             } catch (NullPointerException e) {
