@@ -60,6 +60,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
+import org.json.JSONObject;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -559,5 +561,12 @@ public abstract class Char extends Actor {
 	public void setSprite(CharSprite sprite) {
 		this.sprite = sprite;
 		sendSelf();
+	}
+
+	public JSONObject getEmoJsonObject() {
+		if (sprite == null){
+			return new JSONObject();
+		}
+		return sprite.getEmoJsonObject();
 	}
 }

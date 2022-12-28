@@ -24,7 +24,9 @@ import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.utils.Random;
 
-public class EmoIcon extends Image {
+import org.json.JSONObject;
+
+public abstract class EmoIcon extends Image {
 
 	protected float maxSize = 2;
 	protected float timeScale = 1;
@@ -61,7 +63,20 @@ public class EmoIcon extends Image {
 			y = owner.y - height;
 		}
 	}
-	
+
+	public JSONObject toJsonObject() {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("max_size", maxSize);
+			json.put("time_scale", timeScale);
+			json.put("max_size", maxSize);
+		} catch (Exception ignored) {
+		}
+		// todo: part of future, for ShatteredPD
+		assert false;
+		return new JSONObject();
+	}
+
 	public static class Sleep extends EmoIcon {
 		
 		public Sleep( CharSprite owner ) {
@@ -75,6 +90,17 @@ public class EmoIcon extends Image {
 			
 			origin.set( width / 2, height / 2 );
 			scale.set( Random.Float( 1, maxSize ) );
+		}
+
+		@Override
+		public JSONObject toJsonObject() {
+			JSONObject json = new JSONObject();
+			try {
+				json.put("type", "default");
+				json.put("emotion", "sleep");
+			} catch (Exception ignored) {
+			}
+			return json;
 		}
 	}
 	
@@ -91,6 +117,17 @@ public class EmoIcon extends Image {
 			
 			origin.set( 2.5f, height - 2.5f );
 			scale.set( Random.Float( 1, maxSize ) );
+		}
+
+		@Override
+		public JSONObject toJsonObject() {
+			JSONObject json = new JSONObject();
+			try {
+				json.put("type", "default");
+				json.put("emotion", "alert");
+			} catch (Exception ignored) {
+			}
+			return json;
 		}
 	}
 

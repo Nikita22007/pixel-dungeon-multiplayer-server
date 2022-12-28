@@ -181,6 +181,8 @@ public class NetworkPacket {
                 object.put("max_hp", ht);
                 object.put("position", pos);
                 object.put("name", name);
+
+                object.put("emo", character.getEmoJsonObject());
                 if (((Char) actor).getSprite() != null) {
                     JSONArray states = putToJSONArray(((Char) actor).getSprite().states().toArray());
                     object.put("states", states);

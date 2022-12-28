@@ -43,7 +43,8 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-import java.util.HashSet;
+import org.json.JSONObject;
+
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -61,7 +62,21 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	private static final float MOVE_INTERVAL	= 0.1f;
 	private static final float FLASH_INTERVAL	= 0.05f;
 
-    public enum State {
+	protected void setEmo(EmoIcon emo) {
+		this.emo = emo;
+		if (this.ch != null) {
+			SendData.sendActor(this.ch);
+		}
+	}
+
+	public JSONObject getEmoJsonObject() {
+		if (emo == null){
+			return new JSONObject();
+		}
+		return emo.toJsonObject();
+	}
+
+	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED
 	}
 
@@ -412,14 +427,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			if (emo != null) {
 				emo.killAndErase();
 			}
-			emo = new EmoIcon.Sleep( this );
+			setEmo(new EmoIcon.Sleep( this ));
 		}
 	}
 
 	public void hideSleep() {
 		if (emo instanceof EmoIcon.Sleep) {
 			emo.killAndErase();
-			emo = null;
+			setEmo(null);
 		}
 	}
 
@@ -430,14 +445,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			if (emo != null) {
 				emo.killAndErase();
 			}
-			emo = new EmoIcon.Alert( this );
+			setEmo(new EmoIcon.Alert( this ));
 		}
 	}
 
 	public void hideAlert() {
 		if (emo instanceof EmoIcon.Alert) {
 			emo.killAndErase();
-			emo = null;
+			setEmo(null);
 		}
 	}
 
@@ -447,7 +462,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (emo != null) {
 			emo.killAndErase();
-			emo = null;
+			setEmo(null);
 		}
 	}
 
