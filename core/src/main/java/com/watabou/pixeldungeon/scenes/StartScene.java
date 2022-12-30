@@ -230,7 +230,7 @@ public class StartScene extends PixelScene {			//client  Scene
 		shields.get(curClass = cl).highlight(true);
 
 		GamesInProgress.Info info = GamesInProgress.check(curClass);
-		if (info != null) {
+		if (false && (info != null)) {
 
 			btnLoad.visible = true;
 			btnLoad.secondary(Utils.format(TXT_DPTH_LVL, info.depth, info.level), info.challenges);
