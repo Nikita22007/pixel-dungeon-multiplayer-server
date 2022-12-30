@@ -39,7 +39,10 @@ enum Preferences {
 	public static final String KEY_BRIGHTNESS	= "brightness";
 	public static final String KEY_SERVER_NAME	= "server_name";
 	public static final String KEY_ONLINE_MODE	= "online_mode";
-	
+	public static final String KEY_CUSTOM_RELAY	= "use_custom_relay";
+	public static final String KEY_RELAY_ADDR	= "custom_relay_addr";
+	public static final String KEY_RELAY_PORT	= "custom_relay_port";
+
 	private SharedPreferences prefs;
 	
 	private SharedPreferences get() {

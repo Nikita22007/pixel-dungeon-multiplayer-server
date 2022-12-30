@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
+import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -21,6 +22,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.charset.Charset;
+import java.util.Set;
 
 import static com.watabou.pixeldungeon.network.ClientThread.CHARSET;
 import static com.watabou.pixeldungeon.network.Server.clients;
@@ -32,11 +34,27 @@ public class RelayThread extends Thread {
     protected InputStreamReader readStream;
     private BufferedReader reader;
     protected Socket clientSocket;
+    private int getRelayPort(){
+        if (!PixelDungeon.useCustomRelay()){
+            return Settings.defaultRelayServerPort;
+        }
+        int port = PixelDungeon.customRelayPort();
+       return (port != 0)? port: Settings.defaultRelayServerPort;
+    }
+
+    private String getRelayAddress(){
+        if (!PixelDungeon.useCustomRelay()){
+            return Settings.defaultRelayServerAddress;
+        }
+        String address = PixelDungeon.customRelayAddress();
+        return (!"".equals(address))? address : Settings.defaultRelayServerAddress;
+    }
 
     public void run() {
         Socket socket = null;
+        String relayServerAddress = getRelayAddress();
         try {
-            socket = new Socket(Settings.relayServerAddress, Settings.relayServerPort);
+            socket = new Socket(relayServerAddress, getRelayPort());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -70,7 +88,7 @@ public class RelayThread extends Thread {
                 }
                 JSONObject port_obj = new JSONObject(json);
                 int port = port_obj.getInt("port");
-                Socket client = new Socket(Settings.relayServerAddress, port);
+                Socket client = new Socket(relayServerAddress, port);
                 synchronized (clients) {
                     for (int i = 0; i <= clients.length; i++) {   //search not connected
                         if (i == clients.length) { //If we test last and it's connected too
