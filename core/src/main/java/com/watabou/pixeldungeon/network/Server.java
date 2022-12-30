@@ -1,6 +1,7 @@
 package com.watabou.pixeldungeon.network;
 // based on https://developer.android.com/training/connect-devices-wirelessly/nsd.html#java
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
@@ -15,7 +16,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.prefs.Preferences;
 
 
 public class Server extends Thread {
@@ -75,11 +75,11 @@ public class Server extends Thread {
     }
 
     public static boolean startServer() {
-        clients = new ClientThread[Settings.maxPlayers];
         if (started) {
             GLog.h("start when started: WTF?! WHO AND WHERE USED THIS?!");
             return false;
         }
+        clients = new ClientThread[Settings.maxPlayers];
         serviceName = PixelDungeon.serverName();
         regListenerState = RegListenerState.NONE;
         if (!initializeServerSocket()) {
@@ -113,7 +113,7 @@ public class Server extends Thread {
         //ClientThread.sendAll(Codes.SERVER_CLOSED); //todo
         unregisterService();
         int sleep_time = TIME_TO_STOP;
-           try {
+        try {
             while ((regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) && (sleep_time > 0)) {
                 Thread.sleep(SLEEP_TIME);
                 sleep_time -= SLEEP_TIME;
@@ -126,7 +126,17 @@ public class Server extends Thread {
     //Server thread
     public void run() {
         if (PixelDungeon.onlineMode()) {
-            relay = new RelayThread();
+            relay = new RelayThread(() -> {
+                PixelDungeon.instance.runOnUiThread(() -> { //only UI thread can create dialogs
+                    new AlertDialog.Builder(PixelDungeon.instance)
+                            .setTitle("Error")
+                            .setMessage("Relay disconnected or failed to connect.")
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                });
+            });
             relay.start();
         }
         while (started) { //clients  listener

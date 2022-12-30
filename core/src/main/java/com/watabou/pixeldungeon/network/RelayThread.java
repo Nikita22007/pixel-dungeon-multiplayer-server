@@ -1,8 +1,5 @@
 package com.watabou.pixeldungeon.network;
 
-import android.util.Log;
-
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -16,13 +13,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.charset.Charset;
-import java.util.Set;
 
 import static com.watabou.pixeldungeon.network.ClientThread.CHARSET;
 import static com.watabou.pixeldungeon.network.Server.clients;
@@ -34,7 +26,19 @@ public class RelayThread extends Thread {
     protected InputStreamReader readStream;
     private BufferedReader reader;
     protected Socket clientSocket;
-    private int getRelayPort(){
+    private Callback callback = null;
+
+    public RelayThread(){
+        this.callback = new Callback() {
+            @Override
+            public void onDisconnect() {
+            };
+        };
+    }
+    public RelayThread(Callback callback){
+        this.callback = callback;
+    }
+    private static int getRelayPort(){
         if (!PixelDungeon.useCustomRelay()){
             return Settings.defaultRelayServerPort;
         }
@@ -42,7 +46,7 @@ public class RelayThread extends Thread {
        return (port != 0)? port: Settings.defaultRelayServerPort;
     }
 
-    private String getRelayAddress(){
+    private static String getRelayAddress(){
         if (!PixelDungeon.useCustomRelay()){
             return Settings.defaultRelayServerAddress;
         }
@@ -57,6 +61,7 @@ public class RelayThread extends Thread {
             socket = new Socket(relayServerAddress, getRelayPort());
         } catch (IOException e) {
             e.printStackTrace();
+            this.callback.onDisconnect();
             return;
         }
         this.clientSocket = socket;
@@ -84,6 +89,7 @@ public class RelayThread extends Thread {
                 if (json == null){
                     GLog.h("relay thread stopped");
                     socket.close();
+                    this.callback.onDisconnect();
                     return;
                 }
                 JSONObject port_obj = new JSONObject(json);
@@ -105,7 +111,12 @@ public class RelayThread extends Thread {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             GLog.h("relay thread stopped");
+            this.callback.onDisconnect();
             return;
         }
+    }
+
+    public interface Callback {
+         void onDisconnect();
     }
 }
