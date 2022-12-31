@@ -17,13 +17,8 @@
  */
 package com.watabou.pixeldungeon.scenes;
 
-import com.watabou.input.Touchscreen.Touch;
-import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.DungeonTilemap;
-import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.utils.GameMath;
-import com.watabou.utils.PointF;
 
 import org.jetbrains.annotations.Nullable;
 

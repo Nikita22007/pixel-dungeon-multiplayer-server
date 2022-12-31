@@ -717,8 +717,6 @@ public class Dungeon {
 			addToSendHeroVisibleCells(visible,networkID);
 			SendData.flush(networkID);
 		}
-		//GameScene.afterObserve(); // todo client only
-
 	}
 	
 	private static boolean[] passable = new boolean[Level.LENGTH];

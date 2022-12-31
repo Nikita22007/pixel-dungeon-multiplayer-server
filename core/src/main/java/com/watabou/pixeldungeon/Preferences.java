@@ -36,7 +36,6 @@ enum Preferences {
 	public static final String KEY_CHALLENGES	= "challenges";
 	public static final String KEY_DONATED		= "donated";
 	public static final String KEY_INTRO		= "intro";
-	public static final String KEY_BRIGHTNESS	= "brightness";
 	public static final String KEY_SERVER_NAME	= "server_name";
 	public static final String KEY_ONLINE_MODE	= "online_mode";
 	public static final String KEY_CUSTOM_RELAY	= "use_custom_relay";

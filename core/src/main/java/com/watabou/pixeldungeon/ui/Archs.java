@@ -22,6 +22,7 @@ import com.watabou.noosa.SkinnedBlock;
 import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.Assets;
 
+// used in basic scenes
 public class Archs extends Component {
 
 	private static final float SCROLL_SPEED	= 20f;

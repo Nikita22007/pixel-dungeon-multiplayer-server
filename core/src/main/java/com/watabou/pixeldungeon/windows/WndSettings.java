@@ -26,16 +26,11 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
-import com.watabou.pixeldungeon.Settings;
-import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.pixeldungeon.ui.CheckBox;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
-
-import java.util.prefs.Preferences;
 
 public class WndSettings extends Window {
 	
@@ -49,8 +44,6 @@ public class WndSettings extends Window {
 	private static final String TXT_MUSIC	= "Music";
 	
 	private static final String TXT_SOUND	= "Sound FX";
-	
-	private static final String TXT_BRIGHTNESS	= "Brightness";
 
 	private static final String TXT_RELAY = "Online multiplayer";
 	private static final String TXT_SET_SERVER_NAME = "Set server name";
@@ -207,17 +200,6 @@ public class WndSettings extends Window {
 		add( btnSound );
 		
 		if (inGame) {
-			
-			CheckBox btnBrightness = new CheckBox( TXT_BRIGHTNESS ) {
-				@Override
-				protected void onClick() {
-					super.onClick();
-					PixelDungeon.brightness( checked() );
-				}
-			};
-			btnBrightness.setRect( 0, btnSound.bottom() + GAP, WIDTH, BTN_HEIGHT );
-			btnBrightness.checked( PixelDungeon.brightness() );
-			add( btnBrightness );
 			
 		} else {
 			

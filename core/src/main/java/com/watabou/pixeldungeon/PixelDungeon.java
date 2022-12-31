@@ -356,17 +356,6 @@ public class PixelDungeon extends Game {
 		return Preferences.INSTANCE.getBoolean( Preferences.KEY_SOUND_FX, true );
 	}
 	
-	public static void brightness( boolean value ) {
-		Preferences.INSTANCE.put( Preferences.KEY_BRIGHTNESS, value );
-		if (scene() instanceof GameScene) {
-			((GameScene)scene()).brightness( value );
-		}
-	}
-	
-	public static boolean brightness() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_BRIGHTNESS, false );
-	}
-	
 	public static void donated( String value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_DONATED, value );
 	}

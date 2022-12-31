@@ -28,7 +28,6 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
-import com.watabou.pixeldungeon.FogOfWar;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -82,7 +81,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private SkinnedBlock water;
 	private DungeonTilemap tiles;
-	private FogOfWar fog;
 	private HeroSprite hero;
 	
 	private GameLog log;
@@ -182,12 +180,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			addBlobSprite( blob );
 		}
 		
-		fog = new FogOfWar( Level.WIDTH, Level.HEIGHT );
-		fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
-		add( fog );
-		
-		brightness( PixelDungeon.brightness() );
-		
 		spells = new Group();
 		add( spells );
 		
@@ -278,20 +270,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 
 	}
-	
-	public void brightness( boolean value ) {
-		water.rm = water.gm = water.bm = 
-		tiles.rm = tiles.gm = tiles.bm = 
-			value ? 1.5f : 1.0f;
-		if (value) {
-			fog.am = +2f;
-			fog.aa = -1f;
-		} else {
-			fog.am = +1f;
-			fog.aa =  0f;
-		}
-	}
-	
+
 	private void addHeapSprite( Heap heap ) {
 		ItemSprite sprite = heap.sprite = (ItemSprite)heaps.recycle( ItemSprite.class );
 		sprite.revive();
@@ -440,17 +419,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		cancelCellSelector(wnd.ownerHero);
 		scene.add( wnd );
 	}
-	
-	public static void afterObserve() {
-		if (scene != null) {
-			scene.fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
-			
-			for (Mob mob : Dungeon.level.mobs) {
-				mob.getSprite().visible = Dungeon.visible[mob.pos];
-			}
-		}
-	}
-	
+
 	public static void flash( int color ) {
 		scene.fadeIn( 0xFF000000 | color, true );
 	}
