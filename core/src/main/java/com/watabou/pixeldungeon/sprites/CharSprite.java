@@ -309,7 +309,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	public void flash() {
 		flashTime = FLASH_INTERVAL;
-		SendData.flashChar(this, flashTime);
+		SendData.sendFlashChar(this, flashTime);
 	}
 
 	public void add( State state ) {
