@@ -58,6 +58,7 @@ public class Frost extends FlavourBuff {
 	
 	@Override
 	public void detach() {
+		Char target = this.target;
 		super.detach();
 		Paralysis.unfreeze( target );
 	}
