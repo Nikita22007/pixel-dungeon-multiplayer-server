@@ -59,9 +59,7 @@ public class TenguSprite extends MobSprite {
 		
 		play( run );
 		turnTo( from , to );
-		
-		isMoving = true;
-		
+
 		if (Level.water[to]) {
 			GameScene.ripple( to );
 		}
@@ -94,7 +92,6 @@ public class TenguSprite extends MobSprite {
 	@Override
 	public void onComplete( Animation anim ) {
 		if (anim == run) {
-			isMoving = false;
 			idle();
 		} else {
 			super.onComplete( anim );

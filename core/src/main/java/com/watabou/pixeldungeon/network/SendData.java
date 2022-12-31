@@ -411,4 +411,7 @@ public class SendData {
             clients[i].flush();
         }
     }
+
+    public static void sendFlashChar(CharSprite sprite, float flashTime) {
+    }
 }

@@ -586,8 +586,6 @@ public abstract class Level implements Bundlable {
 		plant = seed.couch( pos );
 		plants.put( pos, plant );
 
-		GameScene.add( plant );
-
 		SendData.sendPlant(pos, plant);
 
 		return plant;

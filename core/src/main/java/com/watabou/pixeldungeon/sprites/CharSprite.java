@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.sprites;
 
 import com.watabou.noosa.Game;
-import com.watabou.noosa.MovieClip;
+import com.nikita22007.multiplayer.noosa.MovieClip;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -99,7 +99,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	protected EmoIcon emo;
 
-	private Tweener jumpTweener;
 	private Callback jumpCallback;
 
 	private float flashTime = 0;
@@ -107,8 +106,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected boolean sleeping = false;
 
 	public Char ch;
-
-	public boolean isMoving = false;
 
 	public CharSprite() {
 		super();
@@ -139,8 +136,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		final int csize = DungeonTilemap.SIZE;
 
 		return new PointF(
-			((cell % Level.WIDTH) + 0.5f) * csize - width * 0.5f,
-			((cell / Level.WIDTH) + 1.0f) * csize - height
+			((cell % Level.WIDTH) + 0.5f) * csize ,
+			((cell / Level.WIDTH) + 1.0f) * csize
 		);
 	}
 
@@ -186,12 +183,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			sendCharSpriteAction(ch.id(), "run", from, to);
 		}
 		play( run );
-
-		motion = new PosTweener( this, worldToCamera( to ), MOVE_INTERVAL );
-		motion.listener = this;
-		parent.add( motion );
-
-		isMoving = true;
 
 		turnTo( from , to );
 
@@ -257,12 +248,15 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		jumpCallback = callback;
 
-		int distance = Level.distance( from, to );
-		jumpTweener = new JumpTweener( this, worldToCamera( to ), distance * 4, distance * 0.1f );
-		jumpTweener.listener = this;
-		parent.add( jumpTweener );
-
 		turnTo( from, to );
+
+		if (visible && Level.water[ch.pos] && !ch.flying) {
+			GameScene.ripple( ch.pos );
+		}
+		if (jumpCallback != null) {
+			jumpCallback.call();
+		}
+
 	}
 
 	public void die() {
@@ -314,8 +308,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void flash() {
-		ra = ba = ga = 1f;
 		flashTime = FLASH_INTERVAL;
+		SendData.flashChar(this, flashTime);
 	}
 
 	public void add( State state ) {
@@ -365,7 +359,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			}
 			break;
 		case INVISIBLE:
-			alpha( 1f );
 			break;
 		case PARALYSED:
 			paused = false;
@@ -388,10 +381,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (paused && listener != null) {
 			listener.onComplete( curAnim );
-		}
-
-		if (flashTime > 0 && (flashTime -= Game.elapsed) <= 0) {
-			resetColor();
 		}
 
 		if (burning != null) {
@@ -458,18 +447,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	@Override
 	public void onComplete( Tweener tweener ) {
-		if (tweener == jumpTweener) {
-
-			if (visible && Level.water[ch.pos] && !ch.flying) {
-				GameScene.ripple( ch.pos );
-			}
-			if (jumpCallback != null) {
-				jumpCallback.call();
-			}
-
-		} else if (tweener == motion) {
-
-			isMoving = false;
+	if (tweener == motion) {
 
 			motion.killAndErase();
 			motion = null;
