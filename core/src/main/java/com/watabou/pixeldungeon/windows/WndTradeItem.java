@@ -36,8 +36,6 @@ import com.watabou.pixeldungeon.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.security.acl.Owner;
-
 public class WndTradeItem extends Window {
 	
 	private static final float GAP		= 2;

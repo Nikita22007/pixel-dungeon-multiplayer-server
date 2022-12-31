@@ -17,106 +17,30 @@
  */
 package com.watabou.pixeldungeon.ui;
 
-import com.watabou.input.Touchscreen.Touch;
-import com.watabou.noosa.BitmapText;
-import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
-import com.watabou.noosa.NinePatch;
-import com.watabou.noosa.TouchArea;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.noosa.particles.BitmaskEmitter;
-import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.ui.Button;
 import com.watabou.noosa.ui.Component;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.actors.hero.HeroClass;
-import com.watabou.pixeldungeon.effects.Speck;
-import com.watabou.pixeldungeon.effects.particles.BloodParticle;
-import com.watabou.pixeldungeon.items.keys.IronKey;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.scenes.PixelScene;
-import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.windows.WndGame;
 
 public class StatusPane extends Component {    //remove when server is not client
-	
-	private NinePatch shield;
-	private Image avatar;
-	private Emitter blood;
-	
-	private int lastTier = 0;
 
-	private Image exp;
-	
-	private int lastLvl = -1;
-	
-	private BitmapText level;
-	private BitmapText depth;
-
-	private BuffIndicator buffs;
-	private Compass compass;
-	
 	private MenuButton btnMenu;
-	
+
 	@Override
 	protected void createChildren() {
-		
-		shield = new NinePatch( Assets.STATUS, 80, 0, 30   + 18, 0 );
-		add( shield );
-		
-		add( new TouchArea( 0, 1, 30, 30 ) {
-			@Override
-			protected void onClick( Touch touch ) {
-			};			
-		} );
-		
+
 		btnMenu = new MenuButton();
 		add( btnMenu );
-		
-		avatar = HeroSprite.avatar( HeroClass.WARRIOR, lastTier );
-		add( avatar );
-		
-		blood = new BitmaskEmitter( avatar );
-		blood.pour( BloodParticle.FACTORY, 0.3f );
-		blood.autoKill = false;
-		blood.on = false;
-		add( blood );
-		
-		compass = new Compass( Dungeon.level.exit );
-		add( compass );
-		
-		exp = new Image( Assets.XP_BAR );
-		add( exp );
-		
-		level = new BitmapText( PixelScene.font1x );
-		level.hardlight( 0xFFEBA4 );
-		add( level );
-		
-		depth = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.font1x );
-		depth.hardlight( 0xCACFC2 );
-		depth.measure();
-		add( depth );
-
-//		Dungeon.heroes[0].belongings.countIronKeys();
 	}
 	
 	@Override
 	protected void layout() {
 		
 		height = 32;
-		
-		shield.size( width, shield.height );
-		
-		avatar.x = PixelScene.align( camera(), shield.x + 15 - avatar.width / 2 );
-		avatar.y = PixelScene.align( camera(), shield.y + 16 - avatar.height / 2 );
-		
-		compass.x = avatar.x + avatar.width / 2 - compass.origin.x;
-		compass.y = avatar.y + avatar.height / 2 - compass.origin.y;
-		
-		depth.x = width - 24 - depth.width()    - 18;
-		depth.y = 6;
-
 		btnMenu.setPos( width - btnMenu.width(), 1 );
 	}
 
@@ -125,30 +49,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 		super.update();
 		if (Dungeon.heroes[0]==null){
 			return;
-		}
-
-		exp.scale.x = (width / exp.width) * Dungeon.heroes[0].exp / Dungeon.heroes[0].maxExp();
-		
-		if (Dungeon.heroes[0].lvl != lastLvl) {
-			
-			if (lastLvl != -1) {
-				Emitter emitter = (Emitter)recycle( Emitter.class );
-				emitter.revive();
-				emitter.pos( 27, 27 );
-				emitter.burst( Speck.factory( Speck.STAR ), 12 );
-			}
-			
-			lastLvl = Dungeon.heroes[0].lvl;
-			level.text( Integer.toString( lastLvl ) );
-			level.measure();
-			level.x = PixelScene.align( 27.5f - level.width() / 2 );
-			level.y = PixelScene.align( 28.0f - level.baseLine() / 2 );
-		}
-		
-		int tier = Dungeon.heroes[0].tier();
-		if (tier != lastTier) {
-			lastTier = tier;
-			avatar.copy( HeroSprite.avatar( Dungeon.heroes[0].heroClass, tier ) );
 		}
 	}
 	
