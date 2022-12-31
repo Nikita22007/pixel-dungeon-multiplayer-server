@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
-import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Invisibility;
@@ -38,7 +37,6 @@ import com.watabou.pixeldungeon.mechanics.Ballistica;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -62,7 +60,7 @@ public abstract class Wand extends KindOfWeapon {
 	private static final float TIME_TO_ZAP	= 1f;
 	
 	public int maxCharges = initialCharges();
-	public int curCharges = maxCharges;
+	private int curCharges = maxCharges;
 	
 	protected Charger charger;
 	
@@ -138,7 +136,7 @@ public abstract class Wand extends KindOfWeapon {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (curCharges > 0 || !curChargeKnown) {
+		if (getCurCharges() > 0 || !curChargeKnown) {
 			actions.add( AC_ZAP );
 		}
 		if (hero.heroClass != HeroClass.MAGE) {
@@ -224,7 +222,8 @@ public abstract class Wand extends KindOfWeapon {
 		if (!isKnown()) {
 			handler.know( this );
 		}
-		
+
+		SendSelfUpdate();
 		Badges.validateAllWandsIdentified();
 	}
 	
@@ -234,8 +233,8 @@ public abstract class Wand extends KindOfWeapon {
 		setKnown();
 		curChargeKnown = true;
 		super.identify();
-		
-		updateQuickslot();
+
+		SendSelfUpdate();
 		
 		return this;
 	}
@@ -285,7 +284,7 @@ public abstract class Wand extends KindOfWeapon {
 	@Override
 	public String status() {
 		if (levelKnown) {
-			return (curChargeKnown ? curCharges : "?") + "/" + maxCharges;
+			return (curChargeKnown ? getCurCharges() : "?") + "/" + maxCharges;
 		} else {
 			return null;
 		}
@@ -297,8 +296,8 @@ public abstract class Wand extends KindOfWeapon {
 		super.upgrade();
 		
 		updateLevel();
-		curCharges = Math.min( curCharges + 1, maxCharges );
-		updateQuickslot();
+		setCurCharges(Math.min( getCurCharges() + 1, maxCharges ));
+		SendSelfUpdate();
 		
 		return this;
 	}
@@ -308,8 +307,7 @@ public abstract class Wand extends KindOfWeapon {
 		super.degrade();
 		
 		updateLevel();
-		updateQuickslot();
-		
+		SendSelfUpdate();
 		return this;
 	}
 	
@@ -320,7 +318,7 @@ public abstract class Wand extends KindOfWeapon {
 	
 	protected void updateLevel() {
 		maxCharges = Math.min( initialCharges() + level(), 9 );
-		curCharges = Math.min( curCharges, maxCharges );
+		setCurCharges(Math.min(getCurCharges(), maxCharges ));
 	}
 	
 	protected int initialCharges() {
@@ -347,12 +345,12 @@ public abstract class Wand extends KindOfWeapon {
 
 	protected void wandUsed() {
 		
-		curCharges--;
+		setCurCharges(getCurCharges() - 1);
 		if (!isIdentified() && --usagesToKnow <= 0) {
 			identify();
 			GLog.w( TXT_IDENTIFY, name() );
 		} else {
-			updateQuickslot();
+			SendSelfUpdate();
 		}
 		
 		use();
@@ -391,7 +389,7 @@ public abstract class Wand extends KindOfWeapon {
 		super.storeInBundle( bundle );
 		bundle.put( UNFAMILIRIARITY, usagesToKnow );
 		bundle.put( MAX_CHARGES, maxCharges );
-		bundle.put( CUR_CHARGES, curCharges );
+		bundle.put( CUR_CHARGES, getCurCharges());
 		bundle.put( CUR_CHARGE_KNOWN, curChargeKnown );
 	}
 	
@@ -402,7 +400,7 @@ public abstract class Wand extends KindOfWeapon {
 			usagesToKnow = USAGES_TO_KNOW;
 		}
 		maxCharges = bundle.getInt( MAX_CHARGES );
-		curCharges = bundle.getInt( CUR_CHARGES );
+		setCurCharges(bundle.getInt( CUR_CHARGES ));
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
 	}
 	
@@ -425,9 +423,7 @@ public abstract class Wand extends KindOfWeapon {
 				final int cell = Ballistica.cast( curUser.pos, target, true, curWand.hitChars );
 				curUser.getSprite().zap( cell );
 				
-				QuickSlot.target( curItem, Actor.findChar( cell ) );
-				
-				if (curWand.curCharges > 0) {
+				if (curWand.getCurCharges() > 0) {
 					
 					curUser.busy();
 					
@@ -446,8 +442,8 @@ public abstract class Wand extends KindOfWeapon {
 					curUser.spendAndNext( TIME_TO_ZAP );
 					GLog.w( TXT_FIZZLES );
 					curWand.levelKnown = true;
-					
-					curWand.updateQuickslot();
+
+					curWand.SendSelfUpdate(curUser);
 				}
 				
 			}
@@ -458,7 +454,16 @@ public abstract class Wand extends KindOfWeapon {
 			return "Choose direction to zap";
 		}
 	};
-	
+
+	public int getCurCharges() {
+		return curCharges;
+	}
+
+	public void setCurCharges(int curCharges) {
+		this.curCharges = curCharges;
+		SendSelfUpdate();
+	}
+
 	protected class Charger extends Buff {
 		
 		private static final float TIME_TO_CHARGE = 40f;
@@ -474,9 +479,8 @@ public abstract class Wand extends KindOfWeapon {
 		@Override
 		public boolean act() {
 			
-			if (curCharges < maxCharges) {
-				curCharges++;
-				updateQuickslot();
+			if (getCurCharges() < maxCharges) {
+				setCurCharges(getCurCharges() + 1);
 			}
 			
 			delay();

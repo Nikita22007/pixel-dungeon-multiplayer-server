@@ -55,7 +55,6 @@ import com.watabou.pixeldungeon.sprites.PlantSprite;
 import com.watabou.pixeldungeon.ui.Banner;
 import com.watabou.pixeldungeon.ui.BusyIndicator;
 import com.watabou.pixeldungeon.ui.GameLog;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Toast;
 import com.watabou.pixeldungeon.ui.Window;
@@ -481,7 +480,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	public static void ready(@NotNull Hero hero) {
 		selectCell(hero, hero.defaultCellListener );
-		QuickSlot.cancel();
 	}
 
 		public String prompt() {

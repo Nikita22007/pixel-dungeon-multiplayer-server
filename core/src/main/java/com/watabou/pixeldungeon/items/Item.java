@@ -34,7 +34,6 @@ import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.MissileSprite;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -185,7 +184,6 @@ public class Item implements Bundlable {
 			for (Item item:items) {
 				if (item.getClass() == c) {
 					item.setQuantity(item.getQuantity() + getQuantity(), false);
-					item.updateQuickslot();
 					path.add(items.indexOf(item));
 					sendUpdateItemCount(container.owner, item, item.getQuantity(), path);
 					return path;
@@ -201,7 +199,6 @@ public class Item implements Bundlable {
 			}
 			
 			items.add( this );
-			QuickSlot.refresh();
 			Collections.sort( items, itemComparator );
 
 			path.add(items.indexOf(this));
@@ -238,7 +235,6 @@ public class Item implements Bundlable {
 		} else {
 			
 			setQuantity(getQuantity() - 1);
-			updateQuickslot();
 			
 			try { 
 				Item detached = getClass().newInstance();
@@ -266,7 +262,6 @@ public class Item implements Bundlable {
 				}
 				container.items.remove(this);
 				item.onDetach(container);
-				QuickSlot.refresh();
 				return this;
 			} else if (item instanceof Bag) {
 				Bag bag = (Bag) item;
@@ -534,18 +529,6 @@ public class Item implements Bundlable {
 		return getQuantity() != 1 ? Integer.toString(getQuantity()) : null;
 	}
 	
-	public void updateQuickslot() {
-		
-		if (stackable) {
-			Class<? extends Item> cl = getClass();
-			if (QuickSlot.primaryValue == cl || QuickSlot.secondaryValue == cl) {
-				QuickSlot.refresh();
-			}
-		} else if (QuickSlot.primaryValue == this || QuickSlot.secondaryValue == this) {
-			QuickSlot.refresh();
-		}
-	}
-	
 	private static final String QUANTITY		= "quantity";
 	private static final String LEVEL			= "level";
 	private static final String LEVEL_KNOWN		= "levelKnown";
@@ -563,7 +546,6 @@ public class Item implements Bundlable {
 		if (isUpgradable()) {
 			bundle.put( DURABILITY, durability );
 		}
-		QuickSlot.save( bundle, this );
 	}
 	
 	@Override
@@ -584,8 +566,6 @@ public class Item implements Bundlable {
 		if (isUpgradable()) {
 			durability = bundle.getInt( DURABILITY );
 		}
-		
-		QuickSlot.restore( bundle, this );
 	}
 	
 	public void cast( final Hero user, int dst ) {
@@ -597,7 +577,6 @@ public class Item implements Bundlable {
 		Sample.INSTANCE.play( Assets.SND_MISS, 0.6f, 0.6f, 1.5f );
 		
 		Char enemy = Actor.findChar( cell );
-		QuickSlot.target( this, enemy );
 		
 		// FIXME!!!
 		float delay = TIME_TO_THROW;

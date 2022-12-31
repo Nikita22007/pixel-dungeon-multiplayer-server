@@ -33,7 +33,6 @@ import com.watabou.pixeldungeon.items.weapon.melee.Knuckles;
 import com.watabou.pixeldungeon.items.weapon.melee.ShortSword;
 import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
 import com.watabou.pixeldungeon.items.weapon.missiles.Boomerang;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.utils.Bundle;
 
 public enum HeroClass {
@@ -135,9 +134,7 @@ public enum HeroClass {
 		
 		(hero.belongings.setWeapon(new ShortSword())).identify();
 		new Dart( 8 ).identify().collect(hero);
-		
-		QuickSlot.primaryValue = Dart.class;
-		
+
 		new PotionOfStrength().setKnown();
 	}
 	
@@ -146,9 +143,7 @@ public enum HeroClass {
 		
 		WandOfMagicMissile wand = new WandOfMagicMissile();
 		wand.identify().collect(hero);
-		
-		QuickSlot.primaryValue = wand;
-		
+
 		new ScrollOfIdentify().setKnown();
 	}
 	
@@ -158,9 +153,7 @@ public enum HeroClass {
 		new Dart( 8 ).identify().collect(hero);
 		
 		hero.belongings.getRing1().activate( hero );
-		
-		QuickSlot.primaryValue = Dart.class;
-		
+
 		new ScrollOfMagicMapping().setKnown();
 	}
 	
@@ -171,8 +164,6 @@ public enum HeroClass {
 		(hero.belongings.setWeapon(new Dagger())).identify();
 		Boomerang boomerang = new Boomerang();
 		boomerang.identify().collect(hero);
-		
-		QuickSlot.primaryValue = boomerang;
 	}
 	
 	public String title() {

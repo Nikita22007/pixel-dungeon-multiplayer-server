@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 
@@ -52,9 +51,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 			
 			hero.belongings.setWeapon(this);
 			activate( hero );
-			
-			QuickSlot.refresh();
-			
+
 			cursedKnown = true;
 			if (cursed) {
 				equipCursed( hero );

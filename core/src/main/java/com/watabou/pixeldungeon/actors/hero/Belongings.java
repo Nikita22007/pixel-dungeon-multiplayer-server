@@ -46,6 +46,7 @@ import java.util.List;
 
 import static com.watabou.pixeldungeon.network.SendData.sendIronKeysCount;
 import static com.watabou.pixeldungeon.network.SendData.sendNewInventoryItem;
+import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 public class Belongings implements Iterable<Item> {
 
@@ -254,11 +255,9 @@ public class Belongings implements Iterable<Item> {
 		for (Item item : this) {
 			if (item instanceof Wand) {
 				Wand wand = (Wand)item;
-				if (wand.curCharges < wand.maxCharges) {
-					wand.curCharges = full ? wand.maxCharges : wand.curCharges + 1;
+				if (wand.getCurCharges() < wand.maxCharges) {
+					wand.setCurCharges(full ? wand.maxCharges : wand.getCurCharges() + 1);
 					count++;
-					
-					wand.updateQuickslot();
 				}
 			}
 		}
@@ -273,11 +272,10 @@ public class Belongings implements Iterable<Item> {
 		for (Item item : this) {
 			if (item instanceof Wand) {
 				Wand wand = (Wand)item;
-				if (wand.curCharges > 0) {
-					wand.curCharges--;
+				if (wand.getCurCharges() > 0) {
+					wand.setCurCharges(wand.getCurCharges() - 1);
 					count++;
-					
-					wand.updateQuickslot();
+					sendUpdateItemFull(wand);
 				}
 			}
 		}

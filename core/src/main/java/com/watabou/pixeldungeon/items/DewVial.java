@@ -105,8 +105,6 @@ public class DewVial extends Item {
 				
 				Sample.INSTANCE.play( Assets.SND_DRINK );
 				hero.getSprite().operate( hero.pos );
-				
-				updateQuickslot();
 
 				SendSelfUpdate(hero);
 			} else {
@@ -142,14 +140,11 @@ public class DewVial extends Item {
 			volume = MAX_VOLUME;
 			GLog.p( TXT_FULL );
 		}
-		
-		updateQuickslot();
 		SendSelfUpdate();
 	}
 	
 	public void fill() {
 		volume = MAX_VOLUME;
-		updateQuickslot();
 		SendSelfUpdate();
 	}
 	

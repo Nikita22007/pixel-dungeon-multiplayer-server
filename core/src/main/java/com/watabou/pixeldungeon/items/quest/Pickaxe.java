@@ -152,7 +152,7 @@ public class Pickaxe extends Weapon {
 	public void proc( Char attacker, Char defender, int damage ) {
 		if (!bloodStained && defender instanceof Bat && (defender.getHP() <= damage)) {
 			bloodStained = true;
-			updateQuickslot();
+			SendSelfUpdate(attacker instanceof Hero? (Hero) attacker: null);
 		}
 	}
 	

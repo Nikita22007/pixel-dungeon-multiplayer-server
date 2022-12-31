@@ -160,7 +160,8 @@ abstract public class Weapon extends KindOfWeapon {
 				enchant();
 			}
 		}
-		
+
+		SendSelfUpdate();
 		return super.upgrade();
 	}
 	

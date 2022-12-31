@@ -53,7 +53,6 @@ import com.watabou.pixeldungeon.levels.SewerBossLevel;
 import com.watabou.pixeldungeon.levels.SewerLevel;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.StartScene;
-import com.watabou.pixeldungeon.ui.QuickSlot;
 import com.watabou.pixeldungeon.utils.BArray;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.pixeldungeon.windows.WndResurrect;
@@ -139,9 +138,6 @@ public class Dungeon {
 		Imp.Quest.reset();
 		
 		Room.shuffleTypes();
-		
-		QuickSlot.primaryValue = null;
-		QuickSlot.secondaryValue = null;
 
 		Badges.reset();
 
@@ -473,8 +469,6 @@ public class Dungeon {
 			Statistics.storeInBundle( bundle );
 			Journal.storeInBundle( bundle );
 			
-			QuickSlot.save( bundle );
-			
 			Scroll.save( bundle );
 			Potion.save( bundle );
 			Wand.save( bundle );
@@ -578,9 +572,7 @@ public class Dungeon {
 		} else {
 			Badges.reset();
 		}
-		
-		QuickSlot.restore( bundle );
-		
+
 		@SuppressWarnings("unused")
 		String version = bundle.getString( VERSION );
 
@@ -588,8 +580,6 @@ public class Dungeon {
 			heroes=new Hero[1];
 			heroes[0] = null; //TODO FIX LOAD
 			heroes[0]= (Hero) bundle.get(HERO);
-
-			QuickSlot.compress();
 
 			heroes[0].gold = bundle.getInt(GOLD);
 			depth = bundle.getInt(DEPTH);
