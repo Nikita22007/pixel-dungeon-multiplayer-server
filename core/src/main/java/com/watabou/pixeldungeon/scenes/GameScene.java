@@ -140,16 +140,11 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		plants = new Group();
 		add( plants );
-		
-		int size = Dungeon.level.plants.size();
-		for (int i=0; i < size; i++) {
-			addPlantSprite( Dungeon.level.plants.valueAt( i ) );
-		}
-		
+
 		heaps = new Group();
 		add( heaps );
 		
-		size = Dungeon.level.heaps.size();
+		int size = Dungeon.level.heaps.size();
 		for (int i=0; i < size; i++) {
 			addHeapSprite( Dungeon.level.heaps.valueAt( i ) );
 		}
@@ -284,10 +279,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		heaps.add( heap.sprite );
 	}
 	
-	private void addPlantSprite( Plant plant ) {
-		(plant.sprite = (PlantSprite)plants.recycle( PlantSprite.class )).reset( plant );
-	}
-	
 	private void addBlobSprite( final Blob gas ) {
 		if (gas.emitter == null) {
 			gases.add( new BlobEmitter( gas ) );
@@ -316,13 +307,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	// -------------------------------------------------------
-	
-	public static void add( Plant plant ) {
-		if (scene != null) {
-			scene.addPlantSprite( plant );
-		}
-	}
-	
+
 	public static void add( Blob gas ) {
 		Actor.add( gas );
 		if (scene != null) {

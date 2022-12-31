@@ -47,9 +47,7 @@ public class Plant implements Bundlable {
 	
 	public int image;
 	public int pos;
-	
-	public PlantSprite sprite;
-	
+
 	public void activate( Char ch ) {
 		
 		if (ch instanceof Hero && ((Hero)ch).subClass == HeroSubClass.WARDEN) {
@@ -73,8 +71,7 @@ public class Plant implements Bundlable {
 	}
 	public void wither() {
 		Dungeon.level.uproot( pos );
-		
-		sprite.kill();
+
 		if (Dungeon.visible[pos]) {
 			CellEmitter.get( pos ).burst( LeafParticle.GENERAL, 6 );
 		}
