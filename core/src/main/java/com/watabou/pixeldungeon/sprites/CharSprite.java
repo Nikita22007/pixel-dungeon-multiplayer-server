@@ -29,7 +29,6 @@ import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.effects.EmoIcon;
 import com.watabou.pixeldungeon.effects.FloatingText;
-import com.watabou.pixeldungeon.effects.IceBlock;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.Splash;
 import com.watabou.pixeldungeon.effects.TorchHalo;
@@ -96,7 +95,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected Emitter burning;
 	protected Emitter levitation;
 
-	protected IceBlock iceBlock;
 	protected TorchHalo halo;
 
 	protected EmoIcon emo;
@@ -342,7 +340,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			paused = true;
 			break;
 		case FROZEN:
-			iceBlock = IceBlock.freeze( this );
 			paused = true;
 			break;
 		case ILLUMINATED:
@@ -374,10 +371,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			paused = false;
 			break;
 		case FROZEN:
-			if (iceBlock != null) {
-				iceBlock.melt();
-				iceBlock = null;
-			}
 			paused = false;
 			break;
 		case ILLUMINATED:
@@ -406,9 +399,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		if (levitation != null) {
 			levitation.visible = visible;
-		}
-		if (iceBlock != null) {
-			iceBlock.visible = visible;
 		}
 		if (sleeping) {
 			showSleep();
