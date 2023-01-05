@@ -22,6 +22,7 @@
 package com.watabou.gltextures;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -37,7 +38,7 @@ public class TextureCache {
 
 	public static Context context;
 	
-	private static HashMap<Object,SmartTexture> all = new HashMap<>();
+	private static ConcurrentHashMap<Object,SmartTexture> all = new ConcurrentHashMap<>();
 	
 	// No dithering, no scaling, 32 bits per pixel
 	private static BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
