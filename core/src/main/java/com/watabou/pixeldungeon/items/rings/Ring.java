@@ -148,14 +148,14 @@ public class Ring extends EquipableItem {
 			return false;
 			
 		} else {
-			
+
+
+			detach( hero.belongings.backpack );
 			if (hero.belongings.getRing1() == null) {
 				hero.belongings.setRing1(this);
 			} else {
 				hero.belongings.setRing2(this);
 			}
-			
-			detach( hero.belongings.backpack );
 			
 			activate( hero );
 			

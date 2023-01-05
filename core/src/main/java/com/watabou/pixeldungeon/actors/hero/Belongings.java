@@ -339,7 +339,7 @@ public class Belongings implements Iterable<Item> {
 
 	public Ring setRing1(Ring ring1) {
 		List<Integer> path = new ArrayList<Integer>(1);
-		path.add(-4);
+		path.add(-3);
 		sendNewInventoryItem(owner, ring1, path);
 		return (this.ring1 = ring1);
 	}

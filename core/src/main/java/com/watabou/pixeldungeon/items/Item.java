@@ -339,9 +339,10 @@ public class Item implements Bundlable {
 	public void use(Hero user) {                  //degrade
 		if (level > 0 && !isBroken()) {
 			int threshold = (int)(maxDurability() * DURABILITY_WARNING_LEVEL);
-			if (durability-- >= threshold && threshold > durability && levelKnown) {
+			if (durability >= threshold && threshold > (durability-1) && levelKnown) {
 				GLog.w( TXT_GONNA_BREAK, name() );
 			}
+			durability -= 1;
 			if (isBroken()) {
 				getBroken();
 				if (levelKnown) {
