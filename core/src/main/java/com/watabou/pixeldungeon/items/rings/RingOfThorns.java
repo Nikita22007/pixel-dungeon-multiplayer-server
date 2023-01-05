@@ -52,7 +52,7 @@ public class RingOfThorns extends Ring {
 	}
 	
 	@Override
-	public void use() {
+	public void use(Hero user) {
 		// Do nothing (it can't degrade)
 	}
 	

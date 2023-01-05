@@ -274,6 +274,13 @@ action add_item_to_bag
     // remove: removes item. item field in action  will be ignored
 }
 
+action visual_degradation
+{
+    "action_type": "degradation"
+    "position_x": x //float
+    "position_y": y //float
+    "matrix":  [x1,y1,x2,y2...] //int
+}
 
 server_actions
 type: "reset_level" -> clears level

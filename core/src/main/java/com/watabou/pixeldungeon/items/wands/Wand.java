@@ -343,7 +343,7 @@ public abstract class Wand extends KindOfWeapon {
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 
-	protected void wandUsed() {
+	protected void wandUsed(Hero curUser) {
 		
 		setCurCharges(getCurCharges() - 1);
 		if (!isIdentified() && --usagesToKnow <= 0) {
@@ -353,7 +353,7 @@ public abstract class Wand extends KindOfWeapon {
 			SendSelfUpdate();
 		}
 		
-		use();
+		use(curUser);
 		
 		curUser.spendAndNext( TIME_TO_ZAP );
 	}
@@ -431,7 +431,7 @@ public abstract class Wand extends KindOfWeapon {
 						@Override
 						public void call() {
 							curWand.onZap( cell );
-							curWand.wandUsed();
+							curWand.wandUsed(curUser);
 						}
 					} );
 					

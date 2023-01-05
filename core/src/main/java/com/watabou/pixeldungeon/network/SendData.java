@@ -12,7 +12,6 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
-import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
 
 import org.jetbrains.annotations.Nullable;
@@ -244,7 +243,7 @@ public class SendData {
     }
 
     public static void flush(Hero hero) {
-        if (hero.networkID >=0) {
+        if (hero.networkID >= 0) {
             flush(hero.networkID);
         }
     }
@@ -306,7 +305,7 @@ public class SendData {
     }
 
     public static void sendUpdateItemCount(Char owner, Item item, int count, List<Integer> path) {
-        sendUpdateItemFull(owner,item,path);
+        sendUpdateItemFull(owner, item, path);
     }
 
     public static void sendUpdateItemFull(Item item) {
@@ -413,5 +412,27 @@ public class SendData {
     }
 
     public static void sendFlashChar(CharSprite sprite, float flashTime) {
+    }
+
+    public static void sendCustomActionForAll(JSONObject action_obj){
+        for (int i = 0; i < clients.length; i++) {
+            sendCustomAction(action_obj, i);
+        }
+    }
+    public static void sendCustomAction(JSONObject action_obj, Hero hero) {
+        if (hero.networkID <= -1){
+            return;
+        }
+        int networkID = hero.networkID;
+        if (clients[networkID] != null) {
+            clients[networkID].packet.addAction(action_obj);
+            clients[networkID].flush();
+        }
+    }
+    public static void sendCustomAction(JSONObject action_obj, int networkID) {
+        if (clients[networkID] != null) {
+            clients[networkID].packet.addAction(action_obj);
+            clients[networkID].flush();
+        }
     }
 }

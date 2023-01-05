@@ -862,7 +862,7 @@ public class Hero extends Char {
 					Wand wand = (Wand)wep;
 					if (wand.getCurCharges() >= wand.maxCharges) {
 						
-						wand.use();
+						wand.use(this);
 						
 					} else if (damage > 0) {
 						

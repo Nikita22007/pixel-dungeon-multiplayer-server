@@ -198,9 +198,9 @@ public class Armor extends EquipableItem {
 				Badges.validateItemLevelAquired( this );
 			}
 		}
-		
-		use();
-		
+		if (defender instanceof Hero) {
+			use((Hero) defender);
+		}
 		return damage;
 	}
 	

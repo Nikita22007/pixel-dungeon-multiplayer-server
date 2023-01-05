@@ -372,9 +372,9 @@ public class Ring extends EquipableItem {
 				GLog.w( TXT_IDENTIFY, gemName, Ring.this.toString() );
 				Badges.validateItemLevelAquired( Ring.this );
 			}
-			
-			use();
-			
+			if (target instanceof Hero) {
+				use((Hero) target);
+			}
 			spend( TICK );
 			
 			return true;

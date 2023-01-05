@@ -17,18 +17,17 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import android.opengl.GLES20;
-
-import com.watabou.noosa.Group;
-import com.watabou.noosa.particles.PixelParticle;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.PointF;
-import com.watabou.utils.Random;
 
-public class Degradation extends Group {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-	private static int[] WEAPON = {
+import static com.nikita22007.multiplayer.utils.Utils.putToJSONArray;
+
+public class Degradation {
+
+	private static final int[] WEAPON = {
 		+2, -2,
 		+1, -1,
 		 0,  0,
@@ -38,7 +37,7 @@ public class Degradation extends Group {
 		 0, +2
 	};
 	
-	private static int[] ARMOR = {
+	private static final int[] ARMOR = {
 		-2, -1,
 		-1, -1,
 		+1, -1,
@@ -55,7 +54,7 @@ public class Degradation extends Group {
 		+1, +2
 	};
 	
-	private static int[] RING = {
+	private static final int[] RING = {
 		 0, -1,
 		-1,  0,
 		 0,  0,
@@ -67,7 +66,7 @@ public class Degradation extends Group {
 		+1, +2
 	};
 	
-	private static int[] WAND = {
+	private static final int[] WAND = {
 		+2, -2,
 		+1, -1,
 		 0,  0,
@@ -76,81 +75,37 @@ public class Degradation extends Group {
 		+1, -2,
 		+2, -1
 	};
-	
-	public static Degradation weapon( PointF p ) {
-		return new Degradation( p, WEAPON );
+
+	public static void weapon( PointF p ) {
+		Degradation( p, WEAPON );
 	}
-	
-	public static Degradation armor( PointF p ) {
-		return new Degradation( p, ARMOR );
+
+	public static void armor( PointF p ) {
+		Degradation( p, ARMOR );
 	}
-	
-	public static Degradation ring( PointF p ) {
-		return new Degradation( p, RING );
+
+	public static void ring( PointF p ) {
+		Degradation( p, RING );
 	}
-	
-	public static Degradation wand( PointF p ) {
-		return new Degradation( p, WAND );
+
+	public static void wand( PointF p ) {
+		Degradation( p, WAND );
 	}
-	
-	private Degradation( PointF p, int[] matrix ) {
-		
-		for (int i=0; i < matrix.length; i += 2) {
-			add( new Speck( p.x, p.y, matrix[i], matrix[i+1] ) );
-			add( new Speck( p.x, p.y, matrix[i], matrix[i+1] ) );
+
+	private static void Degradation(PointF p, int[] matrix ) {
+		JSONObject action = new JSONObject();
+		try {
+			action.put("action_type", "degradation");
+			action.put("position_x", p.x);
+			action.put("position_y", p.y);
+			action.put("matrix", putToJSONArray(matrix));
+		} catch (JSONException ignored) {
 		}
+		SendData.sendCustomActionForAll(action);
 	}
-	
-	@Override
-	public void update() {
-		super.update();
-		if (countLiving() == 0) {
-			killAndErase();
-		}
-	}
-	
-	@Override
-	public void draw() {
-		GLES20.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
-		super.draw();
-		GLES20.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
-	}
-	
-	public static class Speck extends PixelParticle {
-		
-		private static final int COLOR = 0xFF4422;
-		private static final int SIZE = 3;
-		
-		public Speck( float x0, float y0, int mx, int my ) {
-			
-			super();
-			color( COLOR );
-			
-			float x1 = x0 + mx * SIZE;
-			float y1 = y0 + my * SIZE;
-			
-			PointF p = new PointF().polar( Random.Float( 2 * PointF.PI ), 8 );
-			x0 += p.x;
-			y0 += p.y;
-			
-			float dx = x1 - x0;
-			float dy = y1 - y0;
-			
-			x = x0;
-			y = y0;
-			speed.set( dx, dy );
-			acc.set( -dx / 4, -dy / 4 );
-			
-			left = lifespan = 2f;
-		}
-		
-		@Override
-		public void update() {
-			super.update();
-			
-			am = 1 - Math.abs( left / lifespan - 0.5f ) * 2;
-			am *= am;
-			size( am * SIZE );
-		}
-	}
+
+    public static class Speck {
+        private static final int COLOR = 0xFF4422;
+        private static final int SIZE = 3;
+    }
 }

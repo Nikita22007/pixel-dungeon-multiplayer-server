@@ -25,13 +25,19 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.SnipersMark;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.effects.Degradation;
 import com.watabou.pixeldungeon.effects.Speck;
+import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.bags.Bag;
+import com.watabou.pixeldungeon.items.rings.Ring;
+import com.watabou.pixeldungeon.items.wands.Wand;
+import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.MissileSprite;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -39,6 +45,7 @@ import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PointF;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -329,7 +336,7 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	public void use() {                  //degrade
+	public void use(Hero user) {                  //degrade
 		if (level > 0 && !isBroken()) {
 			int threshold = (int)(maxDurability() * DURABILITY_WARNING_LEVEL);
 			if (durability-- >= threshold && threshold > durability && levelKnown) {
@@ -337,23 +344,23 @@ public class Item implements Bundlable {
 			}
 			if (isBroken()) {
 				getBroken();
-				/*if (levelKnown) {   CLIENT
+				if (levelKnown) {
 					GLog.n( TXT_BROKEN, name() );
-					Dungeon.hero.interrupt();
+					user.interrupt();
 					
-					CharSprite sprite = Dungeon.hero.sprite;
+					CharSprite sprite = user.getSprite();
 					PointF point = sprite.center().offset( 0, -16 );
 					if (this instanceof Weapon) {
-						sprite.parent.add( Degradation.weapon( point ) );
+						Degradation.weapon( point );
 					} else if (this instanceof Armor) {
-						sprite.parent.add( Degradation.armor( point ) );
+						Degradation.armor( point );
 					} else if (this instanceof Ring) {
-						sprite.parent.add( Degradation.ring( point ) );
+						Degradation.ring( point );
 					} else if (this instanceof Wand) {
-						sprite.parent.add( Degradation.wand( point ) );
+						Degradation.wand( point );
 					}
 					Sample.INSTANCE.play( Assets.SND_DEGRADE );
-				}*/
+				}
 			}
 		}
 	}

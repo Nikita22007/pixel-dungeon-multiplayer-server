@@ -73,8 +73,9 @@ abstract public class Weapon extends KindOfWeapon {
 				Badges.validateItemLevelAquired( this );
 			}
 		}
-		
-		use();
+		if (attacker instanceof Hero) {
+			use((Hero) attacker);
+		}
 	}
 	
 	private static final String UNFAMILIRIARITY	= "unfamiliarity";

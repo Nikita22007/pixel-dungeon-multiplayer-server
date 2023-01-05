@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.nikita22007.multiplayer.utils.Utils.putToJSONArray;
 import static com.watabou.pixeldungeon.utils.Utils.toSnakeCase;
 
 public class NetworkPacket {
@@ -100,14 +101,6 @@ public class NetworkPacket {
         synchronized (dataRef) {
             dataRef.get().put(key, data);
         }
-    }
-
-    protected static JSONArray putToJSONArray(Object[] array) throws JSONException {
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < array.length; i++) {
-            jsonArray.put(i, array[i]);
-        }
-        return jsonArray;
     }
 
     protected CellState getCellState(boolean visited, boolean mapped) {
