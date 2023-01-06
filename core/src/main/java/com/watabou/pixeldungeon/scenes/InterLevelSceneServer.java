@@ -250,6 +250,7 @@ public class InterLevelSceneServer {
         Game.switchScene( GameScene.class );
     }
 
+    @SuppressWarnings("fallthrough")
     public static void resurrect(Hero hero)  { //respawn by ankh
 
         Generator.reset();

@@ -598,7 +598,8 @@ public abstract class Level implements Bundlable {
 	public int pitCell() {
 		return randomRespawnCell();
 	}
-	
+
+	@SuppressWarnings("fallthrough")
 	public void press( int cell, Char ch ) {
 
 		if (pit[cell] && ch instanceof Hero) {
@@ -607,7 +608,7 @@ public abstract class Level implements Bundlable {
 		}
 		
 		boolean trap = false;
-		
+
 		switch (map[cell]) {
 		
 		case Terrain.SECRET_TOXIC_TRAP:
@@ -746,6 +747,8 @@ public abstract class Level implements Bundlable {
 			
 		case Terrain.DOOR:
 			Door.enter( cell );
+			trap = false;
+			break;
 			
 		default:
 			trap = false;

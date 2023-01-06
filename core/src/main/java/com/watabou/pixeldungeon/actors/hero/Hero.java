@@ -1101,7 +1101,7 @@ public class Hero extends Char {
 				getSprite().emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			}
 			
-			((Hunger)buff( Hunger.class )).satisfy( 10 );
+			(buff( Hunger.class )).satisfy( 10 );
 		}
 	}
 	
@@ -1117,7 +1117,7 @@ public class Hero extends Char {
 	}
 	
 	public boolean isStarving() {
-		return ((Hunger)buff( Hunger.class )).isStarving();
+		return (buff( Hunger.class )).isStarving();
 	}
 	
 	@Override
@@ -1198,7 +1198,7 @@ public class Hero extends Char {
 		Actor.fixTime();
 		super.die( cause );
 		
-		Ankh ankh = (Ankh)belongings.getItem( Ankh.class );
+		Ankh ankh = belongings.getItem( Ankh.class );
 		if (ankh == null) {
 			
 			this.reallyDie( cause );

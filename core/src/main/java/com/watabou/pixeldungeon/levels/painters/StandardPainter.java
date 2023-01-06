@@ -29,13 +29,13 @@ import com.watabou.utils.Random;
 
 public class StandardPainter extends Painter {
 
+	@SuppressWarnings("fallthrough")
 	public static void paint( Level level, Room room ) {
 		
 		fill( level, room, Terrain.WALL );
 		for (Room.Door door : room.connected.values()) {
 			door.set( Room.Door.Type.REGULAR );
 		}
-		
 		if (!Dungeon.bossLevel(Dungeon.depth) && Random.Int( 5 ) == 0) {
 			switch (Random.Int( 6 )) {
 			case 0:
