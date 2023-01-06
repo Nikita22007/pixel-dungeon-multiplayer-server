@@ -99,6 +99,7 @@ public class MovieClip extends Image {
 	}
 
 	//from Image and Visual
+	/*
 	public float x,y,width,height;
 	public boolean flipHorizontal = false;
 
@@ -122,4 +123,5 @@ public class MovieClip extends Image {
 	}
 	public void kill() {
 	}
+	*/
 }
