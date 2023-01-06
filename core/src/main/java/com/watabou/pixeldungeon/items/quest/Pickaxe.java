@@ -118,7 +118,6 @@ public class Pickaxe extends Weapon {
 							Hunger hunger = hero.buff( Hunger.class );
 							if (hunger != null && !hunger.isStarving()) {
 								hunger.satisfy( -Hunger.STARVING / 10 );
-								BuffIndicator.refreshHero();
 							}
 							
 							hero.onOperateComplete();

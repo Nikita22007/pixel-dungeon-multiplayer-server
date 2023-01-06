@@ -1160,8 +1160,7 @@ public class Hero extends Char {
 				getSprite().add( CharSprite.State.ILLUMINATED );
 			}
 		}
-		
-		BuffIndicator.refreshHero();
+
 	}
 	
 	@Override
@@ -1171,8 +1170,6 @@ public class Hero extends Char {
 		if (buff instanceof Light) {
 			getSprite().remove( CharSprite.State.ILLUMINATED );
 		}
-		
-		BuffIndicator.refreshHero();
 	}
 	
 	@Override

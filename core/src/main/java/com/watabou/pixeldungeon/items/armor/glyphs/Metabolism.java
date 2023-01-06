@@ -28,6 +28,8 @@ import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.sendBuff;
+
 public class Metabolism extends Glyph {
 
 	private static final String TXT_METABOLISM	= "%s of metabolism";
@@ -48,7 +50,6 @@ public class Metabolism extends Glyph {
 				if (hunger != null && !hunger.isStarving()) {
 					
 					hunger.satisfy( -Hunger.STARVING / 10 );
-					BuffIndicator.refreshHero();
 					
 					defender.setHP(defender.getHP() + healing);
 					defender.getSprite().emitter().burst( Speck.factory( Speck.HEALING ), 1 );

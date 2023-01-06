@@ -100,7 +100,7 @@ public class Hunger extends Buff implements Hero.Doom {
 				level = newLevel;
 				
 				if (statusUpdated) {
-					BuffIndicator.refreshHero();
+					sendBuff(this);
 				}
 				
 			}
@@ -129,7 +129,7 @@ public class Hunger extends Buff implements Hero.Doom {
 			level = STARVING;
 		}
 		
-		BuffIndicator.refreshHero();
+		sendBuff(this);
 	}
 	
 	public boolean isStarving() {

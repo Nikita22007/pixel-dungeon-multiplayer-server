@@ -61,16 +61,16 @@ public class GameLog extends Component implements Signal.Listener<String> {
 
 	@Override
 	public void onSignal( String text ) {
-
+/*
 		int color = CharSprite.DEFAULT;
 		if (text.startsWith( GLog.POSITIVE )) {
 			text = text.substring( GLog.POSITIVE.length() );
 			color = CharSprite.POSITIVE;
-		} else 
+		} else
 		if (text.startsWith( GLog.NEGATIVE )) {
 			text = text.substring( GLog.NEGATIVE.length() );
 			color = CharSprite.NEGATIVE;
-		} else 
+		} else
 		if (text.startsWith( GLog.WARNING )) {
 			text = text.substring( GLog.WARNING.length() );
 			color = CharSprite.WARNING;
@@ -79,29 +79,29 @@ public class GameLog extends Component implements Signal.Listener<String> {
 			text = text.substring( GLog.HIGHLIGHT.length() );
 			color = CharSprite.NEUTRAL;
 		}
-		
-		text = Utils.capitalize( text ) + 
+
+		text = Utils.capitalize( text ) +
 			(PUNCTUATION.matcher( text ).matches() ? "" : ".");
 
 		SendData.		sendMessageToAll(text,color);
 
 		if (lastEntry != null && color == lastColor && lastEntry.nLines < MAX_LINES) {
-			
+
 			String lastMessage = lastEntry.text();
 			lastEntry.text( lastMessage.length() == 0 ? text : lastMessage + " " + text );
 			lastEntry.measure();
 
 			entries.get( entries.size() - 1 ).text = lastEntry.text();
-			
+
 		} else {
-			
+
 			lastEntry = PixelScene.createMultiline( text, 6 );
 			lastEntry.hardlight( color );
 			lastColor = color;
 			add( lastEntry );
 
 			entries.add( new Entry( text, color ) );
-			
+
 		}
 
 		if (length > 0) {
@@ -122,12 +122,14 @@ public class GameLog extends Component implements Signal.Listener<String> {
 				lastEntry = null;
 			}
 		}
-		
+
 		layout();
+		*/
 	}
 	
 	@Override
 	protected void layout() {
+		/*
 		float pos = y;
 		for (int i=length-1; i >= 0; i--) {
 			BitmapTextMultiline entry = (BitmapTextMultiline)members.get( i );
@@ -137,6 +139,7 @@ public class GameLog extends Component implements Signal.Listener<String> {
 			entry.y = pos - entry.height();
 			pos -= entry.height();
 		}
+		*/
 	}
 	
 	@Override

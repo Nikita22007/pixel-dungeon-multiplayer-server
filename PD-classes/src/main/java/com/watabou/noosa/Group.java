@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class Group extends Gizmo {
 
-	protected final ArrayList<Gizmo> members;
+	private final ArrayList<Gizmo> members;
 	
 	// Accessing it is a little faster,
 	// than calling members.getSize()
@@ -173,16 +173,17 @@ public class Group extends Gizmo {
 		if (g.parent != null) {
 			g.parent.remove( g );
 		}
-		
-		if (members.get( 0 ) == null) {
-			members.set( 0, g );
+		synchronized (members) {
+			if (members.get(0) == null) {
+				members.set(0, g);
+				g.parent = this;
+				return g;
+			}
+
+			members.add(0, g);
 			g.parent = this;
-			return g;
+			length++;
 		}
-		
-		members.add( 0, g );
-		g.parent = this;
-		length++;
 		return g;
 	}
 	
