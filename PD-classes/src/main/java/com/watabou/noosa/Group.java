@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class Group extends Gizmo {
 
-	protected ArrayList<Gizmo> members;
+	protected final ArrayList<Gizmo> members;
 	
 	// Accessing it is a little faster,
 	// than calling members.getSize()
@@ -42,60 +42,63 @@ public class Group extends Gizmo {
 	
 	@Override
 	public void destroy() {
-		super.destroy();
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null) {
-				g.destroy();
+		synchronized (members) {
+			super.destroy();
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null) {
+					g.destroy();
+				}
 			}
+
+			members.clear();
 		}
-		
-		members.clear();
-		members = null;
 		length = 0;
 	}
 	
 	@Override
 	public void update() {
-		if (members == null)  {
-			return;
+		synchronized (members) {
+			for (Gizmo g : members) {
+				if (!members.contains(g)) {
+					continue;
+				}
+				if (g != null && g.exists && g.active
+						//functionality for the freezing of emitters(particle effects), effects are given a second
+						//from load to get started so they aren't frozen before anything is generated.
+						&& !(freezeEmitters && Game.timeTotal > 1f && g instanceof Emitter)) {
+					g.update();
+				}
+			}
 		}
-        ArrayList<Gizmo> membersTemp = (ArrayList<Gizmo>) members.clone();
-        for (Gizmo g : membersTemp) {
-            if (!members.contains(g)) {
-                continue;
-            }
-            if (g != null && g.exists && g.active
-                    //functionality for the freezing of emitters(particle effects), effects are given a second
-                    //from load to get started so they aren't frozen before anything is generated.
-                    && !(freezeEmitters && Game.timeTotal > 1f && g instanceof Emitter)) {
-                g.update();
-            }
-        }
     }
 
 	@Override
 	public void draw() {
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && g.exists && g.visible) {
-				g.draw();
+		synchronized (members) {
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null && g.exists && g.visible) {
+					g.draw();
+				}
 			}
 		}
 	}
 	
 	@Override
 	public void kill() {
-		// A killed group keeps all its members,
-		// but they get killed too
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && g.exists) {
-				g.kill();
+		synchronized (members) {
+			// A killed group keeps all its members,
+			// but they get killed too
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null && g.exists) {
+					g.kill();
+				}
 			}
+
+			super.kill();
 		}
-		
-		super.kill();
 	}
 	
 	public int indexOf( Gizmo g ) {
@@ -111,22 +114,23 @@ public class Group extends Gizmo {
 		if (g.parent != null) {
 			g.parent.remove( g );
 		}
-		
-		// Trying to find an empty space for a new member
-		for (int i=0; i < length; i++) {
-			if (members.get( i ) == null) {
-				members.set( i, g );
-				g.parent = this;
-				return g;
+		synchronized (members) {
+			// Trying to find an empty space for a new member
+			for (int i = 0; i < length; i++) {
+				if (members.get(i) == null) {
+					members.set(i, g);
+					g.parent = this;
+					return g;
+				}
 			}
+
+			members.add(g);
+			g.parent = this;
+			length++;
 		}
-		
-		members.add( g );
-		g.parent = this;
-		length++;
 		return g;
 	}
-	
+
 	public Gizmo addToFront( Gizmo g){
 
 		if (g.parent == this) {
@@ -139,21 +143,23 @@ public class Group extends Gizmo {
 
 		// Trying to find an empty space for a new member
 		// starts from the front and never goes over a none-null element
-		for (int i=length-1; i >= 0; i--) {
-			if (members.get( i ) == null) {
-				if (i == 0 || members.get(i - 1) != null) {
-					members.set(i, g);
-					g.parent = this;
-					return g;
+		synchronized (members) {
+			for (int i = length - 1; i >= 0; i--) {
+				if (members.get(i) == null) {
+					if (i == 0 || members.get(i - 1) != null) {
+						members.set(i, g);
+						g.parent = this;
+						return g;
+					}
+				} else {
+					break;
 				}
-			} else {
-				break;
 			}
-		}
 
-		members.add( g );
-		g.parent = this;
-		length++;
+			members.add(g);
+			g.parent = this;
+			length++;
+		}
 		return g;
 	}
 	
@@ -205,46 +211,53 @@ public class Group extends Gizmo {
 	
 	// Fast removal - replacing with null
 	public Gizmo erase( Gizmo g ) {
-		int index = members.indexOf( g );
+		synchronized (members) {
+			int index = members.indexOf(g);
 
-		if (index != -1) {
-			members.set( index, null );
-			g.parent = null;
-			return g;
-		} else {
-			return null;
+			if (index != -1) {
+				members.set(index, null);
+				g.parent = null;
+				return g;
+			} else {
+				return null;
+			}
 		}
 	}
 	
 	// Real removal
 	public Gizmo remove( Gizmo g ) {
-		if (members.remove( g )) {
-			length--;
-			g.parent = null;
-			return g;
-		} else {
-			return null;
+		synchronized (members) {
+			if (members.remove(g)) {
+				length--;
+				g.parent = null;
+				return g;
+			} else {
+				return null;
+			}
 		}
 	}
 	
 	public Gizmo replace( Gizmo oldOne, Gizmo newOne ) {
-		int index = members.indexOf( oldOne );
-		if (index != -1) {
-			members.set( index, newOne );
-			newOne.parent = this;
-			oldOne.parent = null;
-			return newOne;
-		} else {
-			return null;
+		synchronized (members) {
+			int index = members.indexOf(oldOne);
+			if (index != -1) {
+				members.set(index, newOne);
+				newOne.parent = this;
+				oldOne.parent = null;
+				return newOne;
+			} else {
+				return null;
+			}
 		}
 	}
 	
 	public Gizmo getFirstAvailable( Class<? extends Gizmo> c ) {
-		
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && !g.exists && ((c == null) || g.getClass() == c)) {
-				return g;
+		synchronized (members) {
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null && !g.exists && ((c == null) || g.getClass() == c)) {
+					return g;
+				}
 			}
 		}
 		
@@ -254,67 +267,75 @@ public class Group extends Gizmo {
 	public int countLiving() {
 		
 		int count = 0;
-		
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && g.exists && g.alive) {
-				count++;
+		synchronized (members) {
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null && g.exists && g.alive) {
+					count++;
+				}
 			}
 		}
-		
 		return count;
 	}
 	
 	public int countDead() {
 		
 		int count = 0;
-		
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null && !g.alive) {
-				count++;
+		synchronized (members) {
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null && !g.alive) {
+					count++;
+				}
 			}
 		}
-		
 		return count;
 	}
 	
 	public Gizmo random() {
-		if (length > 0) {
-			return members.get( (int)(Math.random() * length) );
-		} else {
-			return null;
+		synchronized (members) {
+			if (length > 0) {
+				return members.get((int) (Math.random() * length));
+			} else {
+				return null;
+			}
 		}
 	}
 	
 	public void clear() {
-		for (int i=0; i < length; i++) {
-			Gizmo g = members.get( i );
-			if (g != null) {
-				g.parent = null;
+		synchronized (members) {
+			for (int i = 0; i < length; i++) {
+				Gizmo g = members.get(i);
+				if (g != null) {
+					g.parent = null;
+				}
 			}
+			members.clear();
+			length = 0;
 		}
-		members.clear();
-		length = 0;
 	}
 	
 	public Gizmo bringToFront( Gizmo g ) {
-		if (members.contains( g )) {
-			members.remove( g );
-			members.add( g );
-			return g;
-		} else {
-			return null;
+		synchronized (members) {
+			if (members.contains(g)) {
+				members.remove(g);
+				members.add(g);
+				return g;
+			} else {
+				return null;
+			}
 		}
 	}
 	
 	public Gizmo sendToBack( Gizmo g ) {
-		if (members.contains( g )) {
-			members.remove( g );
-			members.add( 0, g );
-			return g;
-		} else {
-			return null;
+		synchronized (members) {
+			if (members.contains(g)) {
+				members.remove(g);
+				members.add(0, g);
+				return g;
+			} else {
+				return null;
+			}
 		}
 	}
 }
