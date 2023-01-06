@@ -14,7 +14,6 @@ import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.RegularLevel;
 import com.watabou.pixeldungeon.levels.features.Chasm;
 import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndStory;
 import com.watabou.utils.Random;
@@ -234,7 +233,7 @@ public class InterLevelSceneServer {
             Generator.reset();
             Actor.fixTime();
 
-            GameLog.wipe();
+            GLog.wipe();
 
             Dungeon.loadGame(StartScene.curClass);
             if (Dungeon.depth == -1) {

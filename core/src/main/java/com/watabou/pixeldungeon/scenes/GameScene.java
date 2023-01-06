@@ -51,10 +51,8 @@ import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.PlantSprite;
 import com.watabou.pixeldungeon.ui.Banner;
 import com.watabou.pixeldungeon.ui.BusyIndicator;
-import com.watabou.pixeldungeon.ui.GameLog;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Toast;
 import com.watabou.pixeldungeon.ui.Window;
@@ -80,9 +78,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private SkinnedBlock water;
 	private DungeonTilemap tiles;
-	private HeroSprite hero;
-	
-	private GameLog log;
 	
 	private BusyIndicator busy;
 
@@ -99,8 +94,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private Group statuses;
 	private Group emoicons;
 
-	private Toast prompt;
-	
 	@Override
 	public void create() {
 		super.create();
@@ -198,12 +191,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sb.setSize( uiCamera.width, 0 );
 		add( sb );
 
-
-		log = new GameLog();
-		log.camera = uiCamera;
-		log.setRect( 0, uiCamera.height, uiCamera.width,  0 );
-		add( log );
-		
 		busy = new BusyIndicator();
 		busy.camera = uiCamera;
 		busy.x = 1;
@@ -224,8 +211,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			}
 			Dungeon.droppedItems.remove( Dungeon.depth );
 		}
-		
-		Camera.main.target = hero;
+
 	}
 	
 	public void destroy() {

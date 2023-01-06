@@ -363,6 +363,7 @@ public class Item implements Bundlable {
 					Sample.INSTANCE.play( Assets.SND_DEGRADE );
 				}
 			}
+			SendSelfUpdate(user);
 		}
 	}
 	
@@ -643,10 +644,10 @@ public class Item implements Bundlable {
 	protected void SendSelfUpdate(){
 		SendSelfUpdate(null);
 	}
-	protected void SendSelfUpdate(Hero heroToFlash){
+	protected void SendSelfUpdate(Hero heroToFlush){
 		sendUpdateItemFull(this);
-		if (heroToFlash != null){
-			SendData.flush(heroToFlash);
+		if (heroToFlush != null){
+			SendData.flush(heroToFlush);
 		}
 	}
 }

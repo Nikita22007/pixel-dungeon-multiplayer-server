@@ -17,21 +17,25 @@
  */
 package com.watabou.pixeldungeon.utils;
 
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Signal;
 
 import android.util.Log;
 
+import java.util.regex.Pattern;
+
 public class GLog {
 
 	public static final String TAG = "GAME";
-	
+
 	public static final String POSITIVE		= "++ ";
 	public static final String NEGATIVE		= "-- ";
 	public static final String WARNING		= "** ";
 	public static final String HIGHLIGHT	= "@@ ";
-	
-	public static Signal<String> update = new Signal<String>();
-	
+
+	private static final Pattern PUNCTUATION = Pattern.compile( ".*[.,;?! ]$" );
+
 	public static void i( String text, Object... args ) {
 		
 		if (args.length > 0) {
@@ -39,7 +43,7 @@ public class GLog {
 		}
 		
 		Log.i( TAG, text );
-		update.dispatch( text );
+		sendMessage(text);
 	}
 	
 	public static void p( String text, Object... args ) {
@@ -56,5 +60,32 @@ public class GLog {
 	
 	public static void h( String text, Object... args ) {
 		i( HIGHLIGHT + text, args );
+	}
+
+	protected static void sendMessage(String text) {
+		int color = CharSprite.DEFAULT;
+		if (text.startsWith(GLog.POSITIVE)) {
+			text = text.substring(GLog.POSITIVE.length());
+			color = CharSprite.POSITIVE;
+		} else if (text.startsWith(GLog.NEGATIVE)) {
+			text = text.substring(GLog.NEGATIVE.length());
+			color = CharSprite.NEGATIVE;
+		} else if (text.startsWith(GLog.WARNING)) {
+			text = text.substring(GLog.WARNING.length());
+			color = CharSprite.WARNING;
+		} else if (text.startsWith(GLog.HIGHLIGHT)) {
+			text = text.substring(GLog.HIGHLIGHT.length());
+			color = CharSprite.NEUTRAL;
+		}
+
+		text = Utils.capitalize(text) +
+				(PUNCTUATION.matcher(text).matches() ? "" : ".");
+
+		SendData.sendMessageToAll(text, color);
+
+	}
+
+	public static void wipe() {
+		//todo
 	}
 }
