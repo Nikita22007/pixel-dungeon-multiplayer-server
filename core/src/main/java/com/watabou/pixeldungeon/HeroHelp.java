@@ -80,7 +80,7 @@ public class HeroHelp {
                     if (ClassName == "") {
                         ClassName = heroes[i].className();
                     } else {
-                        if (ClassName != heroes[i].className()) ;
+                        if (ClassName != heroes[i].className())
                         {
                             return "heroes";
                         }
