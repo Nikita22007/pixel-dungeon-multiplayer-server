@@ -61,7 +61,6 @@ public class GameLog extends Component implements Signal.Listener<String> {
 
 	@Override
 	public void onSignal( String text ) {
-/*
 		int color = CharSprite.DEFAULT;
 		if (text.startsWith( GLog.POSITIVE )) {
 			text = text.substring( GLog.POSITIVE.length() );
@@ -83,48 +82,8 @@ public class GameLog extends Component implements Signal.Listener<String> {
 		text = Utils.capitalize( text ) +
 			(PUNCTUATION.matcher( text ).matches() ? "" : ".");
 
-		SendData.		sendMessageToAll(text,color);
-
-		if (lastEntry != null && color == lastColor && lastEntry.nLines < MAX_LINES) {
-
-			String lastMessage = lastEntry.text();
-			lastEntry.text( lastMessage.length() == 0 ? text : lastMessage + " " + text );
-			lastEntry.measure();
-
-			entries.get( entries.size() - 1 ).text = lastEntry.text();
-
-		} else {
-
-			lastEntry = PixelScene.createMultiline( text, 6 );
-			lastEntry.hardlight( color );
-			lastColor = color;
-			add( lastEntry );
-
-			entries.add( new Entry( text, color ) );
-
-		}
-
-		if (length > 0) {
-			int nLines;
-			do {
-				nLines = 0;
-				for (int i = 0; i < length; i++) {
-					nLines += ((BitmapTextMultiline) members.get(i)).nLines;
-				}
-
-				if (nLines > MAX_LINES) {
-					remove(members.get(0));
-
-					entries.remove( 0 );
-				}
-			} while (nLines > MAX_LINES);
-			if (entries.isEmpty()) {
-				lastEntry = null;
-			}
-		}
-
-		layout();
-		*/
+		SendData.sendMessageToAll(text,color);
+		
 	}
 	
 	@Override
