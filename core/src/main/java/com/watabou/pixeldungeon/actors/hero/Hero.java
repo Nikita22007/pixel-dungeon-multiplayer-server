@@ -1185,7 +1185,13 @@ public class Hero extends Char {
 	public void die( Object cause  ) {
 		
 		curAction = null;
-		
+
+		if (cause == GodPunishment.INSTANCE) {
+			Actor.fixTime();
+			super.die( cause );
+			//reallyDie(cause);
+			return;
+		}
 		DewVial.autoDrink( this );
 		if (isAlive()) {
 			new Flare( 8, 32 ).color( 0xFFFF66, true ).show(getSprite(), 2f ) ;

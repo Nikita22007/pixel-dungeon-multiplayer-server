@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
@@ -195,8 +196,7 @@ class ClientThread extends Thread {
                 PixelDungeon.reportException(e);
                 GLog.n(String.format("ThreadID:%s; Message:%s", threadID, e.getMessage()));
                 GLog.n(e.getStackTrace().toString());
-                assert false;
-                disconnect();//  need?
+                disconnect();
 
             } catch (NullPointerException e) {
                 PixelDungeon.reportException(e);

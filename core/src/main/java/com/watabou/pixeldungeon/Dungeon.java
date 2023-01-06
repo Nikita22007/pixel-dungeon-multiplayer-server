@@ -270,12 +270,10 @@ public class Dungeon {
 			return;
 		}
 		int ID = Arrays.asList(heroes).indexOf(hero);
+		hero.die(Char.GodPunishment.INSTANCE);
 		if (ID == -1) {
 			return;
 		}
-		Actor.freeCell(heroes[ID].pos);
-		Actor.remove(heroes[ID]);
-		heroes[ID].die(null);
 		heroes[ID] = null;
 	}
 
