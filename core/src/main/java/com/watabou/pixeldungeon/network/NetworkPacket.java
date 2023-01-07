@@ -355,17 +355,17 @@ public class NetworkPacket {
         }
     }
 
-    public void packAndAddLevelHeaps(SparseArray<Heap> heaps) {
+    public void packAndAddLevelHeaps(SparseArray<Heap> heaps, Hero observer) {
         for (Heap heap : heaps.values()) {
-            addHeap(heap);
+            addHeap(heap, observer);
         }
     }
 
-    public void packAndAddLevel(Level level) {
+    public void packAndAddLevel(Level level, Hero observer) {
         packAndAddLevelEntrance(level.entrance);
         packAndAddLevelExit(level.exit);
         packAndAddLevelCells(level);
-        packAndAddLevelHeaps(level.heaps);
+        packAndAddLevelHeaps(level.heaps, observer);
         packAndAddPlants(level);
     }
 
@@ -693,7 +693,7 @@ public class NetworkPacket {
         return heapObj;
     }
 
-    public JSONObject packHeap(Heap heap) {
+    public JSONObject packHeap(Heap heap, Hero observer) {
         if (heap == null) {
             return null;
         }
@@ -704,7 +704,7 @@ public class NetworkPacket {
         heapObj = new JSONObject();
         try {
             heapObj.put("pos", heap.pos);
-            heapObj.put("visible_item", packItem(heap.items.getFirst(), null));
+            heapObj.put("visible_item", packItem(heap.items.getFirst(), observer));
             int heapImage = -1;
             if (!heap.showsFirstItem()) {
                 heapImage = heap.image();
@@ -738,11 +738,11 @@ public class NetworkPacket {
         }
     }
 
-    public void addHeap(Heap heap) {
+    public void addHeap(Heap heap, Hero observer) {
         if (heap.isEmpty()) {
             return;
         }
-        addHeap(packHeap(heap));
+        addHeap(packHeap(heap, observer ));
     }
 
     public void packAndAddServerAction(String action_type) {

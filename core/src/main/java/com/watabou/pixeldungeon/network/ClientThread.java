@@ -265,7 +265,7 @@ class ClientThread extends Thread {
         Actor.add(newHero);
         Actor.occupyCell(newHero);
         newHero.getSprite().place(newHero.pos);
-        packet.packAndAddLevel(level);
+        packet.packAndAddLevel(level, clientHero);
         packet.pack_and_add_hero(newHero);
         packet.addInventoryFull(newHero);
 

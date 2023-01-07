@@ -38,7 +38,7 @@ public class SendData {
 
     public static void sendLevel(Level level, int ID) {
         if (clients[ID] != null) {
-            clients[ID].packet.packAndAddLevel(level);
+            clients[ID].packet.packAndAddLevel(level, clients[ID].clientHero);
             clients[ID].flush();
         }
     }
@@ -376,7 +376,7 @@ public class SendData {
             if (clients[i] == null) {
                 continue;
             }
-            clients[i].packet.addHeap(heap);
+            clients[i].packet.addHeap(heap, clients[i].clientHero);
             clients[i].flush();
         }
     }
