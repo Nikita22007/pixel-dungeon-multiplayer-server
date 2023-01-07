@@ -108,9 +108,6 @@ class ClientThread extends Thread {
                             }
                             case ("cell_listener"): {
                                 Integer cell = data.getInt(token);
-                                if (cell < 0) {
-                                    cell = null;
-                                }
                                 if (clientHero.cellSelector != null) {
                                     if (clientHero.cellSelector.listener != null) {
                                         clientHero.cellSelector.listener.onSelect(cell);

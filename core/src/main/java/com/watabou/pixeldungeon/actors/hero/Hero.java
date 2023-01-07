@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
+import android.graphics.drawable.LevelListDrawable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -1000,9 +1002,15 @@ public class Hero extends Char {
 
 	}
 	
-	public boolean handle( int cell ) {
+	public boolean handle( Integer cell ) {
 		
-		if (cell == -1) {
+		if (cell == null) {
+			return false;
+		}
+		if (cell < 0 ){
+			return false;
+		}
+		if (cell >= Dungeon.level.LENGTH){
 			return false;
 		}
 		
