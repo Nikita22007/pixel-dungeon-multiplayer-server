@@ -32,16 +32,19 @@ public class LobbyLevel extends DeadEndLevel {
                 try {
                     Class cl = RingOfSatiety.class;
                     //drop((Item) cl.newInstance(),center+1);
-                    Ring ring = (Ring) cl.newInstance();
-                    ring.upgrade();
-                    ring.upgrade();
-                    ring.upgrade();
-                    while (ring.durability() > 20) {
-                        ring.use(null);
+                    for (int i=1; i <= 3; i++) {
+                        Ring ring = (Ring) cl.newInstance();
+                        ring.upgrade();
+                        ring.upgrade();
+                        ring.upgrade();
+                        while (ring.durability() > 20) {
+                            ring.use(null);
+                        }
+                        ring.identify();
+
+                        drop((Item) ring, center + i);
                     }
-                    ring.identify();
-                    drop((Item) ring,center+1);
-                    heaps.get(center + 1).type = Heap.Type.CHEST;
+//                    heaps.get(center + 1).type = Heap.Type.CHEST;
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
