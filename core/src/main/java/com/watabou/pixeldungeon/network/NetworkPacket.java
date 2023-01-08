@@ -582,6 +582,7 @@ public class NetworkPacket {
             bagObj.put("size", bag.size);
             bagObj.put("items", bagItems);
             bagObj.put("owner", hero != null ? hero.id() : null);
+            bagObj.put("icon", bag.icon());
         } catch (JSONException e) {
             Log.e("Packet", "JSONException inside packBag. " + e.toString());
         }

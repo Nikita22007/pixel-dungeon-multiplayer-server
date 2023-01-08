@@ -20,12 +20,15 @@ package com.watabou.pixeldungeon.items.bags;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
+import com.watabou.noosa.Image;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -181,6 +184,24 @@ public class Bag extends Item implements Iterable<Item> {
 		}
 		return null;
 	}
+
+	public String icon() {
+		Icons icon;
+		Bag bag = this;
+		if (bag instanceof SeedPouch) {
+			icon = Icons.SEED_POUCH;
+		} else if (bag instanceof ScrollHolder) {
+			icon = Icons.SCROLL_HOLDER;
+		} else if (bag instanceof WandHolster) {
+			icon = Icons.WAND_HOLSTER;
+		} else if (bag instanceof Keyring) {
+			icon = Icons.KEYRING;
+		} else {
+			icon = Icons.BACKPACK;
+		}
+		return icon.name().toLowerCase(Locale.ROOT);
+	}
+
 
 	private class ItemIterator implements Iterator<Item> {
 
