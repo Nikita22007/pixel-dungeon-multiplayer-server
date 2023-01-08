@@ -90,10 +90,10 @@ public class Camera extends Gizmo {
 	
 	public static void updateAll() {
 		for (int i=0; i < all.size(); i++) {
-			if (i > all.size()) {
-				break;
-			}
 			Camera c = all.get( i );
+			if (c == null) {
+				return;
+			}
 			if (c.exists && c.active) {
 				c.update();
 			}
