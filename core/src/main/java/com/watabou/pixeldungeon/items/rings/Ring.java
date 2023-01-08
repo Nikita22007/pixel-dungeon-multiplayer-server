@@ -142,6 +142,7 @@ public class Ring extends EquipableItem {
 						} else {
 							collect( hero.belongings.backpack );
 						}
+						hide();
 					}
 				} );
 			
@@ -186,10 +187,12 @@ public class Ring extends EquipableItem {
 			} else {
 				hero.belongings.setRing2(null);
 			}
-			
+
 			hero.remove( buff );
 			buff = null;
 			
+			SendSelfUpdate(hero);
+
 			return true;
 			
 		} else {
