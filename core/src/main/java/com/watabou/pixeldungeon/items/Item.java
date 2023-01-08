@@ -33,6 +33,7 @@ import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
@@ -52,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.watabou.pixeldungeon.DungeonTilemap.tileCenterToWorld;
 import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInventory;
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemCount;
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
@@ -348,9 +350,9 @@ public class Item implements Bundlable {
 				if (levelKnown) {
 					GLog.n( TXT_BROKEN, name() );
 					user.interrupt();
-					
-					CharSprite sprite = user.getSprite();
-					PointF point = sprite.center().offset( 0, -16 );
+
+					PointF point = tileCenterToWorld(user.pos - Level.WIDTH);
+					//PointF point = sprite.center().offset( 0, -16 );
 					if (this instanceof Weapon) {
 						Degradation.weapon( point );
 					} else if (this instanceof Armor) {
