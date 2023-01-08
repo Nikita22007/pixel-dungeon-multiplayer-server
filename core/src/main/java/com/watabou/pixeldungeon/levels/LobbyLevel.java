@@ -51,4 +51,8 @@ public class LobbyLevel extends DeadEndLevel {
 
         return true;
     }
+
+    public Actor respawner() {
+        return null;
+    }
 }
