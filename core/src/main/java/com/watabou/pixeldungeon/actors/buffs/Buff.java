@@ -20,6 +20,7 @@ package com.watabou.pixeldungeon.actors.buffs;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
+import com.watabou.pixeldungeon.utils.GLog;
 
 import static com.watabou.pixeldungeon.network.SendData.sendBuff;
 
@@ -40,6 +41,10 @@ public class Buff extends Actor {
 	}
 	
 	public void detach() {
+		if (target == null){
+			GLog.n("Can't detach buff: no target");
+			return;
+		}
 		target.remove( this );
 		target = null;
 		sendBuff(this);

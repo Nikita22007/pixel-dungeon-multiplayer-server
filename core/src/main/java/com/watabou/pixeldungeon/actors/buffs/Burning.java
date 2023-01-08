@@ -102,10 +102,6 @@ public class Burning extends Buff implements Hero.Doom {
 				((Thief)target).item = null;
 				target.getSprite().emitter().burst( ElmoParticle.FACTORY, 6 );
 			}
-
-		} else {
-			detach();
-		}
 		
 		if (Level.flamable[target.pos]) {
 			GameScene.add( Blob.seed( target.pos, 4, Fire.class ) );
@@ -121,6 +117,10 @@ public class Burning extends Buff implements Hero.Doom {
 			detach();
 		}
 
+
+		} else {
+			detach();
+		}
 		return true;
 	}
 	
