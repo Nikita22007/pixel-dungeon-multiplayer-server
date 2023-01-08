@@ -111,6 +111,7 @@ class ClientThread extends Thread {
                                 if (clientHero.cellSelector != null) {
                                     if (clientHero.cellSelector.listener != null) {
                                         clientHero.cellSelector.listener.onSelect(cell);
+                                        GameScene.ready(clientHero);
                                     }
                                 }
                                 break;
