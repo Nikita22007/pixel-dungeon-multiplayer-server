@@ -109,7 +109,7 @@ public abstract class Actor implements Bundlable {
 						max = a.id;
 					}
 				}
-				Log.i("ACTOR", String.format("ACTOR %s GETTED ID %d", this, max+1));
+				Log.i("ACTOR", String.format("ACTOR %s GOTTEN ID %d", this, max+1));
 				return (id = max + 1);
 			}
 		}

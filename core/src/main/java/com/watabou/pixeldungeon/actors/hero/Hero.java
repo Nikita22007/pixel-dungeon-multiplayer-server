@@ -507,6 +507,11 @@ public class Hero extends Char {
 		SendData.sendHeroReady(HeroHelp.getHeroID(this),ready);
 	}
 
+	public void resendReady(){
+		setReady(getReady());
+	}
+
+
 	public boolean getReady(){
 		return ready;
 	}

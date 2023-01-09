@@ -18,6 +18,7 @@
 package com.watabou.pixeldungeon.scenes;
 
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.SkinnedBlock;
 import com.watabou.noosa.Visual;
@@ -62,6 +63,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.watabou.noosa.Game.timeTotal;
 
 public class GameScene extends PixelScene {     //only client, exclude static
 	
@@ -231,13 +234,25 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			//
 		}
 	}
-	
+
+	public static final double PING_TIME = 2.0;
+	private double lastPingTime = 0;
 	@Override
 	public synchronized void update() {
 
 		super.update();
 
 		Actor.process();
+
+		if (timeTotal - lastPingTime >= PING_TIME) {
+			for (Hero hero : Dungeon.heroes) {
+				if (hero == null) {
+					continue;
+				}
+				lastPingTime = timeTotal;
+				hero.resendReady();
+			}
+		}
 
 		for (Hero hero : Dungeon.heroes) {
 			if (hero == null) {
