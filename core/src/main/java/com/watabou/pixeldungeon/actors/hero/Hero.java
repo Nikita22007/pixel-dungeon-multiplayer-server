@@ -489,9 +489,9 @@ public class Hero extends Char {
 		
 		return false;
 	}
-	
+
 	public void busy() {
-		setReady(ready);
+		setReady(false);
 	}
 	
 	private void ready() {
