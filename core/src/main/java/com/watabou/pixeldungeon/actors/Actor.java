@@ -301,6 +301,9 @@ public abstract class Actor implements Bundlable {
 				if (actor.id > 0) {
 					ids.remove(actor.id);
 				}
+				if (current == actor){
+					current = null;
+				}
 				sendActorRemoving(actor);
 			}
 		}
