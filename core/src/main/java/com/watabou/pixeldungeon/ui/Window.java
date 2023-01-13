@@ -28,18 +28,16 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.TouchArea;
-import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Chrome;
+import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.ShadowBox;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
-import com.watabou.pixeldungeon.ui.Window;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Window extends Group implements Signal.Listener<Key> {
@@ -51,10 +49,13 @@ public class Window extends Group implements Signal.Listener<Key> {
 	protected ShadowBox shadow;
 	protected NinePatch chrome;
 
-	public static HashMap<Hero, HashMap<Integer, Window>> windows = new HashMap<>(4);
-	public static HashMap<Hero, Integer> ids = new HashMap<>(4);
+	//todo: memory leak. Remove entries when hero removes
+	//todo: use Hero.NetworkID instead of Hero?
+	public static HashMap<Hero, HashMap<Integer, Window>> windows = new HashMap<>(Settings.maxPlayers);
+	public static HashMap<Hero, Integer> idCounter = new HashMap<>(Settings.maxPlayers); // contains last used Window.id for each hero
 
-	public Hero ownerHero;
+	private Hero ownerHero;
+	//Each window CURRENTLY open for ownerHero has a unique id. Two windows can have the same id only with different ownerHero.
 	public int id;
 
 	public static final int TITLE_COLOR = 0xFFFF44;
@@ -65,25 +66,25 @@ public class Window extends Group implements Signal.Listener<Key> {
 
 	public Window(Hero hero) {
 		this();
-		generateId(hero);
+		attachToHero(hero);
 	}
 
-	protected void generateId(Hero hero) {
+	protected synchronized void attachToHero(Hero hero) {
 		if (id > 0) {
-			if (hero != ownerHero) {
+			if (hero != getOwnerHero()) {
 				assert false;
 			}
 			return;
 		}
-		ownerHero = hero;
-		if (!ids.containsKey(hero)) {
-			ids.put(hero, 0);
+		setOwnerHero(hero);
+		if (!idCounter.containsKey(hero)) {
+			idCounter.put(hero, 0);
 		}
 		if (!windows.containsKey(hero)) {
 			windows.put(hero, new HashMap<>(3));
 		}
-		id = ids.get(hero) + 1;
-		ids.put(hero, id);
+		id = idCounter.get(hero) + 1;
+		idCounter.put(hero, id);
 		windows.get(hero).put(id, this);
 	}
 
@@ -173,7 +174,9 @@ public class Window extends Group implements Signal.Listener<Key> {
 	}
 	
 	public void hide() {
-		parent.erase( this );
+		if (parent != null) {
+			parent.erase(this);
+		}
 		destroy();
 	}
 	
@@ -183,6 +186,13 @@ public class Window extends Group implements Signal.Listener<Key> {
 		
 		Camera.remove( camera );
 		Keys.event.remove( this );
+
+		if (getOwnerHero() != null) {
+			Window removed = windows.get(ownerHero).remove(id);
+			if ((removed != null) && (removed != this)) {
+				throw new AssertionError("Removed window is not current Window");
+			}
+		}
 	}
 
 	@Override
@@ -214,5 +224,13 @@ public class Window extends Group implements Signal.Listener<Key> {
 
 	protected void onSelect(int button){
 
+	}
+
+	public Hero getOwnerHero() {
+		return ownerHero;
+	}
+
+	private void setOwnerHero(Hero ownerHero) {
+		this.ownerHero = ownerHero;
 	}
 }

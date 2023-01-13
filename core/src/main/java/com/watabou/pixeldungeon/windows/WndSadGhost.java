@@ -43,11 +43,11 @@ public class WndSadGhost extends WndQuest {
 	protected void onSelect( int index ) {
 
 		if (questItem != null) {
-			questItem.detach( ownerHero.belongings.backpack );
+			questItem.detach( getOwnerHero().belongings.backpack );
 		}
 		
 		Item reward = index == 0 ? Ghost.Quest.weapon : Ghost.Quest.armor;
-		if (reward.doPickUp( ownerHero)) {
+		if (reward.doPickUp(getOwnerHero())) {
 			GLog.i( Hero.TXT_YOU_NOW_HAVE, reward.name() );
 		} else {
 			Dungeon.level.drop( reward, ghost.pos ).sprite.drop();

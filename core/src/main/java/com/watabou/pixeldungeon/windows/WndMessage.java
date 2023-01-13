@@ -41,6 +41,7 @@ public class WndMessage extends Window {
 			args.put("text", text);
 		}catch (JSONException ignored){}
 		SendData.sendWindow(owner.networkID, "wnd_message", id, args);
+
 		BitmapTextMultiline info = PixelScene.createMultiline( text, 6 );
 		info.maxWidth = (PixelDungeon.landscape() ? WIDTH_L : WIDTH_P) - MARGIN * 2;
 		info.measure();

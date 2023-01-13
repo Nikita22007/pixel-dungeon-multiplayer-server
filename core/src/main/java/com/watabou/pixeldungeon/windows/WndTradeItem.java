@@ -54,9 +54,8 @@ public class WndTradeItem extends Window {
 	
 	public WndTradeItem(final Item item, @NotNull Hero owner) {
 		
-		super();
+		super(owner);
 
-		ownerHero=owner;
 		float pos = createDescription( item, false );
 		
 		if (item.quantity() == 1) {
@@ -113,8 +112,7 @@ public class WndTradeItem extends Window {
 	
 	public WndTradeItem( final Heap heap, boolean canBuy, Hero hero ) {
 		
-		super();
-		ownerHero=hero;
+		super(hero);
 		Item item = heap.peek();
 		
 		float pos = createDescription( item, true );
@@ -157,7 +155,7 @@ public class WndTradeItem extends Window {
 		
 		super.hide();
 
-		Shopkeeper.sell(ownerHero);
+		Shopkeeper.sell(getOwnerHero());
 	}
 	
 	private float createDescription( Item item, boolean forSale ) {
@@ -190,14 +188,14 @@ public class WndTradeItem extends Window {
 	
 	private void sell( Item item ) {
 
-		if (item.isEquipped( ownerHero ) && !((EquipableItem)item).doUnequip( ownerHero, false )) {
+		if (item.isEquipped(getOwnerHero()) && !((EquipableItem)item).doUnequip(getOwnerHero(), false )) {
 			return;
 		}
-		item.detachAll( ownerHero.belongings.backpack );
+		item.detachAll( getOwnerHero().belongings.backpack );
 		
 		int price = item.price();
 		
-		new Gold( price ).doPickUp( ownerHero );
+		new Gold( price ).doPickUp(getOwnerHero());
 		GLog.i( TXT_SOLD, item.name(), price );
 	}
 	
@@ -206,10 +204,10 @@ public class WndTradeItem extends Window {
 		if (item.quantity() <= 1) {
 			sell( item );
 		} else {
-			item = item.detach( ownerHero.belongings.backpack );
+			item = item.detach( getOwnerHero().belongings.backpack );
 			int price = item.price();
 			
-			new Gold( price ).doPickUp( ownerHero);
+			new Gold( price ).doPickUp(getOwnerHero());
 			GLog.i( TXT_SOLD, item.name(), price );
 		}
 	}
@@ -217,7 +215,7 @@ public class WndTradeItem extends Window {
 	private int price( Item item ) {
 
 		int price = item.price() * 5 * (Dungeon.depth / 5 + 1);
-		if (ownerHero.buff( RingOfHaggler.Haggling.class ) != null && price >= 2) {
+		if (getOwnerHero().buff( RingOfHaggler.Haggling.class ) != null && price >= 2) {
 			price /= 2;
 		}
 		return price;
@@ -228,11 +226,11 @@ public class WndTradeItem extends Window {
 		Item item = heap.pickUp();
 		
 		int price = price( item );
-		ownerHero.gold -= price;
+		getOwnerHero().gold -= price;
 		
 		GLog.i( TXT_BOUGHT, item.name(), price );
 		
-		if (!item.doPickUp( ownerHero )) {
+		if (!item.doPickUp(getOwnerHero())) {
 			Dungeon.level.drop( item, heap.pos ).sprite.drop();
 		}
 	}

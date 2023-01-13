@@ -119,9 +119,7 @@ public class WndBag extends WndTabbed {
 	public WndBag( Hero owner, Listener listener, Mode mode, String title ) {
 
 		super();
-		generateId(owner);
-
-		ownerHero = owner;
+		attachToHero(owner);
 
 		this.listener = listener;
 		this.mode = mode;  // internal
@@ -141,7 +139,7 @@ public class WndBag extends WndTabbed {
 	@Override
 	public void onSelect(int button, JSONObject args) {
 		try {
-			selectItem(ownerHero.belongings.getItemInSlot(Utils.JsonArrayToListInteger(args.getJSONArray("item_path"))));
+			selectItem(getOwnerHero().belongings.getItemInSlot(Utils.JsonArrayToListInteger(args.getJSONArray("item_path"))));
 		} catch (JSONException e) {
 			e.printStackTrace();
 			assert false;

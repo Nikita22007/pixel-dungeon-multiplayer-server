@@ -399,8 +399,10 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static void show( Window wnd ) {
-		cancelCellSelector(wnd.ownerHero);
-		scene.add( wnd );
+		cancelCellSelector(wnd.getOwnerHero());
+		if (wnd.getOwnerHero() == null) {
+			scene.add(wnd);
+		}
 	}
 
 	public static void flash( int color ) {

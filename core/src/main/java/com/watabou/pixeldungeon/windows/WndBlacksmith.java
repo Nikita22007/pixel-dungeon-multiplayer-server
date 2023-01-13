@@ -114,7 +114,7 @@ public class WndBlacksmith extends Window {
 				if (btnItem1.item != null && btnItem2.item != null) {
 					String result = Blacksmith.verify( btnItem1.item, btnItem2.item );
 					if (result != null) {
-						GameScene.show(new WndMessage(result, ownerHero));
+						GameScene.show(new WndMessage(result, getOwnerHero()));
 						btnReforge.enable( false );
 					} else {
 						btnReforge.enable( true );
