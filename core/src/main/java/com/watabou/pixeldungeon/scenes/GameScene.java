@@ -395,9 +395,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static void discoverTile( int pos, int oldValue ) {
-		if (scene != null) {
-			scene.tiles.discover( pos, oldValue );
-		}
+		SendData.sendActionDiscoverTile(pos, oldValue);
 	}
 	
 	public static void show( Window wnd ) {

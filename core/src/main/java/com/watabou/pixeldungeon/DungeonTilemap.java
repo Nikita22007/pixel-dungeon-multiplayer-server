@@ -52,25 +52,7 @@ public class DungeonTilemap extends Tilemap {
 	public boolean overlapsPoint( float x, float y ) {
 		return true;
 	}
-	
-	public void discover( int pos, int oldValue ) {
-		
-		final Image tile = tile( oldValue );
-		tile.point( tileToWorld( pos ) );
-		
-		// For bright mode
-		tile.rm = tile.gm = tile.bm = rm;
-		tile.ra = tile.ga = tile.ba = ra;
-		parent.add( tile );
-		
-		parent.add( new AlphaTweener( tile, 0, 0.6f ) {
-			protected void onComplete() {
-				tile.killAndErase();
-				killAndErase();
-			};
-		} );
-	}
-	
+
 	public static PointF tileToWorld( int pos ) {
 		return new PointF( pos % Level.WIDTH, pos / Level.WIDTH  ).scale( SIZE );
 	}

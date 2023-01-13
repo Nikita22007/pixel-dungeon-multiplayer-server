@@ -414,13 +414,14 @@ public class SendData {
     public static void sendFlashChar(CharSprite sprite, float flashTime) {
     }
 
-    public static void sendCustomActionForAll(JSONObject action_obj){
+    public static void sendCustomActionForAll(JSONObject action_obj) {
         for (int i = 0; i < clients.length; i++) {
             sendCustomAction(action_obj, i);
         }
     }
+
     public static void sendCustomAction(JSONObject action_obj, Hero hero) {
-        if (hero.networkID <= -1){
+        if (hero.networkID <= -1) {
             return;
         }
         int networkID = hero.networkID;
@@ -429,10 +430,22 @@ public class SendData {
             clients[networkID].flush();
         }
     }
+
     public static void sendCustomAction(JSONObject action_obj, int networkID) {
         if (clients[networkID] != null) {
             clients[networkID].packet.addAction(action_obj);
             clients[networkID].flush();
         }
+    }
+
+    public static void sendActionDiscoverTile(int pos, int oldValue) {
+        JSONObject action = new JSONObject();
+        try {
+            action.put("action_type", "discover_tile");
+            action.put("pos", pos);
+            action.put("old_tile", oldValue);
+        } catch (JSONException ignored) {
+        }
+        sendCustomActionForAll(action);
     }
 }

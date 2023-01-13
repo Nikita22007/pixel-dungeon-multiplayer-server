@@ -8,6 +8,8 @@ import com.watabou.pixeldungeon.items.potions.PotionOfFrost;
 import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.rings.RingOfSatiety;
 import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
+import com.watabou.pixeldungeon.levels.painters.Painter;
+import com.watabou.pixeldungeon.levels.traps.FireTrap;
 import com.watabou.pixeldungeon.plants.Icecap;
 
 public class LobbyLevel extends DeadEndLevel {
@@ -32,7 +34,7 @@ public class LobbyLevel extends DeadEndLevel {
                 try {
                     Class cl = RingOfSatiety.class;
                     //drop((Item) cl.newInstance(),center+1);
-                    for (int i=1; i <= 3; i++) {
+                    for (int i=1; i <= 1; i++) {
                         Ring ring = (Ring) cl.newInstance();
                         ring.upgrade();
                         ring.upgrade();
@@ -40,7 +42,8 @@ public class LobbyLevel extends DeadEndLevel {
                         while (ring.durability() > 20) {
                             ring.use(null);
                         }
-                        ring.identify();
+                        Painter.set(this,center + i, Terrain.SECRET_FIRE_TRAP   );
+                        //ring.identify();
 
                         drop((Item) ring, center + i);
                     }
