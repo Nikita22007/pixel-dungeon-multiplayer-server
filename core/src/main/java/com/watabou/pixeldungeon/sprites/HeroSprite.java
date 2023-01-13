@@ -103,6 +103,7 @@ public class HeroSprite extends CharSprite {
 	}
 	
 	public void read() {
+		super.read();
 		animCallback = new Callback() {
 			@Override
 			public void call() {

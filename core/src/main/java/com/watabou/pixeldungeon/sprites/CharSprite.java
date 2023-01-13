@@ -259,6 +259,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	}
 
+	public void read(){
+		if (ch != null) {
+			sendCharSpriteAction(ch.id(), "read", null, null);
+		}
+	}
+
 	public void die() {
 		if (ch != null) {
 			sendCharSpriteAction(ch.id(), "die", null, null);
