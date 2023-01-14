@@ -39,6 +39,13 @@ server:
         ]
         "entrance": 000
         "exit": 000
+        level_visual:
+        {
+             first_color: 12345 //level.color1
+             second_color: 54321 //level.color2
+             tiles_texture //level.tilesTex()
+             water_texture //level.waterTex()
+        }
         "visible_positions": [0,1,2]
     }
 
