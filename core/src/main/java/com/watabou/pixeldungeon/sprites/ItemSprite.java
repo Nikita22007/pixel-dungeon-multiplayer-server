@@ -38,6 +38,9 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ItemSprite extends MovieClip {
 
 	public static final int SIZE	= 16;
@@ -232,6 +235,17 @@ public class ItemSprite extends MovieClip {
 			blue = (color & 0xFF) / 255f;
 			
 			this.period = period;
+		}
+		public JSONObject toJsonObject(){
+			JSONObject result = new JSONObject();
+			try {
+			result.put("color", color);
+			result.put("period", period);
+			} catch (JSONException ignored){
+				return new JSONObject();
+			}
+			return result;
+
 		}
 	}
 }

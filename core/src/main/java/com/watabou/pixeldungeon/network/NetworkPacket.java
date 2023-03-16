@@ -3,6 +3,7 @@ package com.watabou.pixeldungeon.network;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NavUtils;
 
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -19,6 +20,7 @@ import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.plants.Plant;
+import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.SparseArray;
 
@@ -536,6 +538,13 @@ public class NetworkPacket {
             itemObj.put("level_known", item.levelKnown);
             itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
             itemObj.put("level", item.visiblyUpgraded());
+            ItemSprite.Glowing glowing = item.glowing();
+            if (glowing != null) {
+                itemObj.put("glowing", glowing.toJsonObject());
+            }
+            else{
+                itemObj.put("glowing", JSONObject.NULL);
+            }
             if (item instanceof Bag) {
                 itemObj = packBag((Bag) item, hero, itemObj);
             }
@@ -565,7 +574,6 @@ public class NetworkPacket {
             Log.w("Packet", "bag.owner != gotten_hero");
         }
 
-        JSONObject bagObj = itemObj;
         JSONArray bagItems = new JSONArray();
 
         for (Item item : bag.items) {
@@ -577,8 +585,8 @@ public class NetworkPacket {
             bagItems.put(serializedItem);
         }
 
+        JSONObject bagObj = itemObj;
         try {
-            bagObj = itemObj;
             bagObj.put("size", bag.size);
             bagObj.put("items", bagItems);
             bagObj.put("owner", hero != null ? hero.id() : null);

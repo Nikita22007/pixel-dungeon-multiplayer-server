@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.items;
 
+import androidx.annotation.Nullable;
+
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
@@ -58,7 +60,7 @@ import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInvent
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemCount;
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
-public class Item implements Bundlable {
+public abstract class Item implements Bundlable {
 
 	private static final String TXT_PACK_FULL	= "Your pack is too full for the %s";
 	
@@ -108,6 +110,7 @@ public class Item implements Bundlable {
 		return true;
 	}
 
+	// actions
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = new ArrayList<String>();
 		actions.add( AC_DROP );
@@ -464,7 +467,8 @@ public class Item implements Bundlable {
 	public int image() {
 		return image;
 	}
-	
+
+	@Nullable
 	public ItemSprite.Glowing glowing() {
 		return null;
 	}

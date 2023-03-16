@@ -7,10 +7,22 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.potions.PotionOfFrost;
 import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.rings.RingOfSatiety;
+import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.watabou.pixeldungeon.items.weapon.melee.WarHammer;
 import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
 import com.watabou.pixeldungeon.levels.painters.Painter;
 import com.watabou.pixeldungeon.levels.traps.FireTrap;
+import com.watabou.pixeldungeon.levels.traps.ToxicTrap;
 import com.watabou.pixeldungeon.plants.Icecap;
+
+import static com.watabou.pixeldungeon.levels.Terrain.ALARM_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.FIRE_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.GRIPPING_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.LIGHTNING_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.PARALYTIC_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.POISON_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.SUMMONING_TRAP;
+import static com.watabou.pixeldungeon.levels.Terrain.TOXIC_TRAP;
 
 public class LobbyLevel extends DeadEndLevel {
 
@@ -28,31 +40,32 @@ public class LobbyLevel extends DeadEndLevel {
         viewDistance = ((int) (SIZE * 1.5));
         exit = entrance + Level.WIDTH;
         map[exit] = Terrain.EXIT;
-
+        MeleeWeapon n = new WarHammer();
+        n.levelKnown = true;
+        n.enchant();
+        this.drop(n,center+1);
         if (BuildConfig.DEBUG) {
             {
-                try {
-                    Class cl = RingOfSatiety.class;
-                    //drop((Item) cl.newInstance(),center+1);
-                    for (int i=1; i <= 1; i++) {
-                        Ring ring = (Ring) cl.newInstance();
-                        ring.upgrade();
-                        ring.upgrade();
-                        ring.upgrade();
-                        while (ring.durability() > 20) {
-                            ring.use(null);
-                        }
-                        Painter.set(this,center + i, Terrain.SECRET_FIRE_TRAP   );
-                        //ring.identify();
+                int pos = center - 2-this.WIDTH;
+                Painter.set(this, pos,TOXIC_TRAP);
+                pos+=1;
+                Painter.set(this, pos,FIRE_TRAP);
+                pos+=1;
+                Painter.set(this, pos,PARALYTIC_TRAP);
+                pos+=1;
+                Painter.set(this, pos,POISON_TRAP);
+                pos+=1;
 
-                        drop((Item) ring, center + i);
-                    }
-//                    heaps.get(center + 1).type = Heap.Type.CHEST;
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
+                pos = center - 2-this.WIDTH-this.WIDTH;
+
+                Painter.set(this, pos,ALARM_TRAP);
+                pos+=1;
+                Painter.set(this, pos,LIGHTNING_TRAP);
+                pos+=1;
+                Painter.set(this, pos,GRIPPING_TRAP);
+                pos+=1;
+                Painter.set(this, pos,SUMMONING_TRAP);
+                pos+=1;
             }
         }
 
