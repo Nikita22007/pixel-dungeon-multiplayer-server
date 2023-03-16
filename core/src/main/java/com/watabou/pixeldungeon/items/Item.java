@@ -468,9 +468,15 @@ public abstract class Item implements Bundlable {
 		return image;
 	}
 
+	private ItemSprite.Glowing glowing = null;
+
 	@Nullable
-	public ItemSprite.Glowing glowing() {
-		return null;
+	public final ItemSprite.Glowing glowing() {
+		return glowing;
+	}
+
+	public void setGlowing(ItemSprite.Glowing glowing) {
+		this.glowing = glowing;
 	}
 
 	//always need hero.

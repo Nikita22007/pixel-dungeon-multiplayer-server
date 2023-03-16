@@ -99,7 +99,7 @@ public class DewVial extends Item {
 				}
 				
 				volume = 0;
-				
+				updateGlowing();
 				hero.spend( TIME_TO_DRINK );
 				hero.busy();
 				
@@ -136,6 +136,7 @@ public class DewVial extends Item {
 		
 		GLog.i( TXT_COLLECTED );
 		volume += dew.getQuantity();
+		updateGlowing();
 		if (volume >= MAX_VOLUME) {
 			volume = MAX_VOLUME;
 			GLog.p( TXT_FULL );
@@ -159,10 +160,9 @@ public class DewVial extends Item {
 	}
 	
 	private static final Glowing WHITE = new Glowing( 0xFFFFCC );
-	
-	@Override
-	public Glowing glowing() {
-		return isFull() ? WHITE : null;
+
+	public void updateGlowing() {
+		setGlowing(isFull() ? WHITE : null);
 	}
 	
 	@Override

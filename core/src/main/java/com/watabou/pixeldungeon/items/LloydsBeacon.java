@@ -71,8 +71,8 @@ public class LloydsBeacon extends Item {
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
-		bundle.put( DEPTH, returnDepth );
-		if (returnDepth != -1) {
+		bundle.put( DEPTH, getReturnDepth());
+		if (getReturnDepth() != -1) {
 			bundle.put( POS, returnPos );
 		}
 	}
@@ -80,7 +80,7 @@ public class LloydsBeacon extends Item {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		returnDepth	= bundle.getInt( DEPTH );
+		setReturnDepth(bundle.getInt( DEPTH ));
 		returnPos	= bundle.getInt( POS );
 	}
 	
@@ -88,7 +88,7 @@ public class LloydsBeacon extends Item {
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add( AC_SET );
-		if (returnDepth != -1) {
+		if (getReturnDepth() != -1) {
 			actions.add( AC_RETURN );
 		}
 		return actions;
@@ -115,7 +115,7 @@ public class LloydsBeacon extends Item {
 		
 		if (action == AC_SET) {
 			
-			returnDepth = Dungeon.depth;
+			setReturnDepth(Dungeon.depth);
 			returnPos = hero.pos;
 			
 			hero.spend( LloydsBeacon.TIME_TO_USE );
@@ -130,13 +130,13 @@ public class LloydsBeacon extends Item {
 			
 		} else if (action == AC_RETURN) {
 			
-			if (returnDepth == Dungeon.depth) {
+			if (getReturnDepth() == Dungeon.depth) {
 				reset();
 				WandOfBlink.appear( hero, returnPos );
 				Dungeon.level.press( returnPos, hero );
 				Dungeon.observeAll();
 			} else {
-				InterLevelSceneServer.returnTo(returnDepth, returnPos, hero );
+				InterLevelSceneServer.returnTo(getReturnDepth(), returnPos, hero );
 				reset();
 			}
 
@@ -149,7 +149,7 @@ public class LloydsBeacon extends Item {
 	}
 	
 	public void reset() {
-		returnDepth = -1;
+		setReturnDepth(-1);
 	}
 	
 	@Override
@@ -163,14 +163,22 @@ public class LloydsBeacon extends Item {
 	}
 	
 	private static final Glowing WHITE = new Glowing( 0xFFFFFF );
-	
-	@Override
-	public Glowing glowing() {
-		return returnDepth != -1 ? WHITE : null;
+
+	public void updateGlowing() {
+		setGlowing(getReturnDepth() != -1 ? WHITE : null);
 	}
 	
 	@Override
 	public String info() {
-		return TXT_INFO + (returnDepth == -1 ? "" : Utils.format( TXT_SET, returnDepth ) );
+		return TXT_INFO + (getReturnDepth() == -1 ? "" : Utils.format( TXT_SET, getReturnDepth()) );
+	}
+
+	private int getReturnDepth() {
+		return returnDepth;
+	}
+
+	private void setReturnDepth(int returnDepth) {
+		this.returnDepth = returnDepth;
+		updateGlowing();
 	}
 }

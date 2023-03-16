@@ -34,7 +34,6 @@ import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
-import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -60,7 +59,7 @@ public class Pickaxe extends Weapon {
 		STR = 14;
 	}
 	
-	public boolean bloodStained = false;
+	private boolean bloodStained = false;
 	
 	@Override
 	public int min() {
@@ -149,8 +148,8 @@ public class Pickaxe extends Weapon {
 	
 	@Override
 	public void proc( Char attacker, Char defender, int damage ) {
-		if (!bloodStained && defender instanceof Bat && (defender.getHP() <= damage)) {
-			bloodStained = true;
+		if (!isBloodStained() && defender instanceof Bat && (defender.getHP() <= damage)) {
+			setBloodStained(true);
 			SendSelfUpdate(attacker instanceof Hero? (Hero) attacker: null);
 		}
 	}
@@ -161,24 +160,33 @@ public class Pickaxe extends Weapon {
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		
-		bundle.put( BLOODSTAINED, bloodStained );
+		bundle.put( BLOODSTAINED, isBloodStained());
 	}
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		
-		bloodStained = bundle.getBoolean( BLOODSTAINED );
+		setBloodStained(bundle.getBoolean( BLOODSTAINED ));
 	}
 	
-	@Override
-	public Glowing glowing() {
-		return bloodStained ? BLOODY : null;
+
+	protected void updateGlowing() {
+		setGlowing(isBloodStained() ? BLOODY : null);
 	}
 	
 	@Override
 	public String info() {
 		return
 			"This is a large and sturdy tool for breaking rocks. Probably it can be used as a weapon.";
+	}
+
+	public boolean isBloodStained() {
+		return bloodStained;
+	}
+
+	protected void setBloodStained(boolean bloodStained) {
+		this.bloodStained = bloodStained;
+		updateGlowing();
 	}
 }

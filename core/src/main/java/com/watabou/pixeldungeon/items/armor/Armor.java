@@ -33,6 +33,8 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import org.jetbrains.annotations.Nullable;
+
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 public class Armor extends EquipableItem {
@@ -304,8 +306,13 @@ public class Armor extends EquipableItem {
 		return considerState( price );
 	}
 	
-	public Armor inscribe( Glyph glyph ) {
+	public Armor inscribe( @Nullable Glyph glyph ) {
 		this.glyph = glyph;
+		if (glyph == null) {
+			setGlowing(null);
+		} else {
+			setGlowing(glyph.glowing());
+		}
 		sendUpdateItemFull(this);
 		return this;
 	}
@@ -324,12 +331,7 @@ public class Armor extends EquipableItem {
 	public boolean isInscribed() {
 		return glyph != null;
 	}
-	
-	@Override
-	public ItemSprite.Glowing glowing() {
-		return glyph != null ? glyph.glowing() : null;
-	}
-	
+
 	public static abstract class Glyph implements Bundlable {
 		
 		private static final Class<?>[] glyphs = new Class<?>[]{ 

@@ -32,6 +32,8 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import org.jetbrains.annotations.Nullable;
+
 import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 abstract public class Weapon extends KindOfWeapon {
@@ -201,8 +203,13 @@ abstract public class Weapon extends KindOfWeapon {
 		return this;
 	}
 	
-	public Weapon enchant( Enchantment ench ) {
+	public Weapon enchant(@Nullable Enchantment ench ) {
 		enchantment = ench;
+		if (ench == null) {
+			setGlowing(null);
+		} else {
+			setGlowing(ench.glowing());
+		}
 		sendUpdateItemFull(this);
 		return this;
 	}
@@ -220,11 +227,6 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	public boolean isEnchanted() {
 		return enchantment != null;
-	}
-	
-	@Override
-	public ItemSprite.Glowing glowing() {
-		return enchantment != null ? enchantment.glowing() : null;
 	}
 	
 	public static abstract class Enchantment implements Bundlable {

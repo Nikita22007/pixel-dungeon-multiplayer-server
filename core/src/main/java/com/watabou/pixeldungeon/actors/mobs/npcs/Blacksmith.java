@@ -112,7 +112,7 @@ public class Blacksmith extends NPC {
 				Pickaxe pick = hero.belongings.getItem( Pickaxe.class );
 				if (pick == null) {
 					tell(hero, TXT2 );
-				} else if (!pick.bloodStained) {
+				} else if (!pick.isBloodStained()) {
 					tell(hero, TXT4 );
 				} else {
 					if (pick.isEquipped( hero )) {
