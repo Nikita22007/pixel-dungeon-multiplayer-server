@@ -58,6 +58,8 @@ import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndBag;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -397,7 +399,15 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 
 	public static void flash( int color ) {
-		scene.fadeIn( 0xFF000000 | color, true );
+		JSONObject obj = new JSONObject();
+		try {
+			obj.put("action_type", "game_scene_flash");
+			obj.put("color", color);
+			obj.put("light", true);
+		} catch (JSONException ignored) {
+
+		}
+		SendData.sendCustomActionForAll(obj);
 	}
 
 	public static void gameOver(@NotNull Hero hero) {

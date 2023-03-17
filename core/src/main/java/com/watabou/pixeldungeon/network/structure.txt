@@ -302,5 +302,13 @@ action visual_show_banner
     "show_time": 9999999f //float, seconds
 }
 
+action game_scene_flash
+{
+    "action_type": "game_scene_flash"
+    "color": color
+    "light": true
+}
+
+
 server_actions
 type: "reset_level" -> clears level
