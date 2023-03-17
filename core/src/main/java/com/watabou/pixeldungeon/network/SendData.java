@@ -68,10 +68,6 @@ public class SendData {
     }
 
     //---------------------------UI  and mechanics
-    public static void sendAllBossSlain() {
-        ClientThread.sendAll(Codes.BOSS_SLAIN);
-    }
-
     public static void sendResumeButtonVisible(int ID, boolean visible) {
         if (clients[ID] != null) {
             //  clients[ID].send(Codes.RESUME_BUTTON, visible);

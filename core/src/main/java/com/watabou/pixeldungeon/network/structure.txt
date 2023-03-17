@@ -210,7 +210,11 @@ item:
     "identified": false
     "level_known": false
     "show_bar": false
-
+    "glowing":
+    {
+        "color": 0x334411 //rgb int
+        "period": 1f //float, seconds
+    }
     "ui":
     {
         top_left...
@@ -287,6 +291,15 @@ action visual_degradation
     "position_x": x //float
     "position_y": y //float
     "matrix":  [x1,y1,x2,y2...] //int
+}
+
+action visual_show_banner
+{
+    "action_type": "show_banner"
+    "banner": BOSS_SLAIN
+    "color": 0x000000, // int RGB COLOR
+    "fadeTime": 1f //float, seconds
+    "show_time": 9999999f //float, seconds
 }
 
 server_actions

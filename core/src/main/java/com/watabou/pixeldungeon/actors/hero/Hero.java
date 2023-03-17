@@ -1276,7 +1276,7 @@ public class Hero extends Char {
 			items.remove( item );
 		}
 		
-		GameScene.gameOver();
+		GameScene.gameOver(this);
 		
 		if (cause instanceof Hero.Doom) {
 			((Hero.Doom)cause).onDeath();

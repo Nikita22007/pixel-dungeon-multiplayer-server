@@ -17,6 +17,7 @@
  */
 package com.watabou.pixeldungeon.scenes;
 
+import com.nikita22007.multiplayer.client_ui.Banner;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.SkinnedBlock;
@@ -51,7 +52,6 @@ import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.Banner;
 import com.watabou.pixeldungeon.ui.BusyIndicator;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Window;
@@ -298,13 +298,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sprite.link(hero);
 	}
 
-	private void showBanner( Banner banner ) {
-		banner.camera = uiCamera;
-		banner.x = align( uiCamera, (uiCamera.width - banner.width) / 2 );
-		banner.y = align( uiCamera, (uiCamera.height - banner.height) / 3 );
-		add( banner );
-	}
-	
 	// -------------------------------------------------------
 
 	public static void add( Blob gas ) {
@@ -406,17 +399,20 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	public static void flash( int color ) {
 		scene.fadeIn( 0xFF000000 | color, true );
 	}
-	
-	public static void gameOver() {
-		Banner gameOver = new Banner( BannerSprites.get( BannerSprites.Type.GAME_OVER ) );
-		gameOver.show( 0x000000, 1f );
-		scene.showBanner( gameOver );
-		
-		Sample.INSTANCE.play( Assets.SND_DEATH );
+
+	public static void gameOver(@NotNull Hero hero) {
+		Banner.show(hero, BannerSprites.Type.GAME_OVER, 0x000000, 1f);
+		Sample.INSTANCE.play(Assets.SND_DEATH);
 	}
 
 	public static void bossSlain() {
-		SendData.sendAllBossSlain();
+		for (Hero hero : Dungeon.heroes) {
+			if (hero == null) {
+				continue;
+			}
+			Banner.show(hero, BannerSprites.Type.BOSS_SLAIN, 0xFFFFFF, 0.3f, 5f);
+		}
+		Sample.INSTANCE.play(Assets.SND_BOSS);
 	}
 
 	public static void handleCell(Hero hero, int cell ) {
