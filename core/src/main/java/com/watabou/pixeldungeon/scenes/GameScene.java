@@ -52,7 +52,6 @@ import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.BusyIndicator;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndBag;
@@ -82,7 +81,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private SkinnedBlock water;
 	private DungeonTilemap tiles;
 	
-	private BusyIndicator busy;
 
 	//graphics
 	private Group terrain = new Group();
@@ -193,12 +191,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		sb.camera = uiCamera;
 		sb.setSize( uiCamera.width, 0 );
 		add( sb );
-
-		busy = new BusyIndicator();
-		busy.camera = uiCamera;
-		busy.x = 1;
-		busy.y = sb.bottom() + 1;
-		add( busy );
 		
 		ArrayList<Item> dropped = Dungeon.droppedItems.get( Dungeon.depth );
 		if (dropped != null) {
