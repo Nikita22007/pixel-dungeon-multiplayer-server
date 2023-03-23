@@ -316,7 +316,13 @@ action lightning_visual
     "duration": 1f;
 }
 
-
+action deathray_visual
+{
+    "action_type": "death_ray_centered_visual"
+    "start_pos": 2
+    "end_pos": 4
+    "duration": 1f;
+}
 
 server_actions
 type: "reset_level" -> clears level
