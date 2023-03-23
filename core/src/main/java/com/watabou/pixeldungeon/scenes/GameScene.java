@@ -76,15 +76,13 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private static final String TXT_SECRETS	= "The atmosphere hints that this floor hides many secrets.";
 	
 	static GameScene scene;
-	
-	private SkinnedBlock water;
+
 	private DungeonTilemap tiles;
 	
 
 	//graphics
 	private Group terrain = new Group();
 	private Group ripples;
-	private Group plants;
 	private Group heaps;
 	private Group mobs;
 	private Group emitters;
@@ -116,12 +114,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 		add( terrain );
 		
-		water = new SkinnedBlock( 
-			Level.WIDTH * DungeonTilemap.SIZE, 
-			Level.HEIGHT * DungeonTilemap.SIZE,
-			Dungeon.level.waterTex() );
-		terrain.add( water );
-		
 		ripples = new Group();
 		terrain.add( ripples );
 		
@@ -129,9 +121,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		terrain.add( tiles );
 		
 		Dungeon.level.addVisuals( this );
-		
-		plants = new Group();
-		add( plants );
 
 		heaps = new Group();
 		add( heaps );
