@@ -25,7 +25,7 @@ import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.EmoIcon;
+import com.nikita22007.multiplayer.client.effects.EmoIcon;
 import com.nikita22007.multiplayer.client.effects.FloatingText;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.Splash;

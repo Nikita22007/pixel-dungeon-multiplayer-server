@@ -20,7 +20,6 @@ package com.watabou.pixeldungeon.scenes;
 import com.nikita22007.multiplayer.client.ui.Banner;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
-import com.watabou.noosa.SkinnedBlock;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
@@ -37,7 +36,6 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
-import com.watabou.pixeldungeon.effects.EmoIcon;
 import com.watabou.pixeldungeon.effects.Ripple;
 import com.watabou.pixeldungeon.effects.SpellSprite;
 import com.watabou.pixeldungeon.items.Heap;
@@ -89,7 +87,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private Group effects;
 	private Group gases;
 	private Group spells;
-	private Group emoicons;
 
 	@Override
 	public void create() {
@@ -132,7 +129,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 		emitters = new Group();
 		effects = new Group();
-		emoicons = new Group();
 
 		mobs = new Group();
 		add( mobs );
@@ -157,8 +153,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		spells = new Group();
 		add( spells );
-
-		add( emoicons );
 
 		for ( Hero heroobj:Dungeon.heroes) {
 			if (heroobj == null){
@@ -309,16 +303,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		Actor.addDelayed( mob, delay );
 		Actor.occupyCell( mob );
 		scene.addMobSprite( mob );
-	}
-	
-	public static void add( EmoIcon icon ) {
-		if (scene == null) {
-			return;
-		}
-		if (scene.emoicons == null) {
-			return;
-		}
-		scene.emoicons.add( icon );
 	}
 	
 	public static void effect( Visual effect ) {

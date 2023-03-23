@@ -1,6 +1,7 @@
 /*
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
+ * Copyright (C) 2021-2023 Nikita Shaposhnikov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,53 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.watabou.pixeldungeon.effects;
+package com.nikita22007.multiplayer.client.effects;
 
-import com.watabou.noosa.Game;
-import com.watabou.noosa.Image;
-import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
-import com.watabou.pixeldungeon.ui.Icons;
-import com.watabou.utils.Random;
 
 import org.json.JSONObject;
 
-public abstract class EmoIcon extends Image {
+public abstract class EmoIcon {
 
 	protected float maxSize = 2;
 	protected float timeScale = 1;
-	
-	protected boolean growing	= true;
 	
 	protected CharSprite owner;
 	
 	public EmoIcon( CharSprite owner ) {
 		super();
-		
 		this.owner = owner;
-		GameScene.add( this );
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		
-		if (visible) {
-			if (growing) {
-				scale.set( scale.x + Game.elapsed * timeScale );
-				if (scale.x > maxSize) {
-					growing = false;
-				}
-			} else {
-				scale.set( scale.x - Game.elapsed * timeScale );
-				if (scale.x < 1) {
-					growing = true;
-				}
-			}
-			
-			x = owner.x + owner.width - width / 2;
-			y = owner.y - height;
-		}
 	}
 
 	public JSONObject toJsonObject() {
@@ -82,14 +52,8 @@ public abstract class EmoIcon extends Image {
 		public Sleep( CharSprite owner ) {
 			
 			super( owner );
-			
-			copy( Icons.get( Icons.SLEEP ) );
-			
 			maxSize = 1.2f;
 			timeScale = 0.5f;
-			
-			origin.set( width / 2, height / 2 );
-			scale.set( Random.Float( 1, maxSize ) );
 		}
 
 		@Override
@@ -107,16 +71,9 @@ public abstract class EmoIcon extends Image {
 	public static class Alert extends EmoIcon {
 		
 		public Alert( CharSprite owner ) {
-			
 			super( owner );
-			
-			copy( Icons.get( Icons.ALERT ) );
-			
 			maxSize = 1.3f;
 			timeScale = 2;
-			
-			origin.set( 2.5f, height - 2.5f );
-			scale.set( Random.Float( 1, maxSize ) );
 		}
 
 		@Override
