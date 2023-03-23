@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.sprites;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.mobs.Shaman;
-import com.watabou.pixeldungeon.effects.Lightning;
+import com.nikita22007.multiplayer.client.effects.Lightning;
 
 public class ShamanSprite extends MobSprite {
 	
@@ -54,7 +54,7 @@ public class ShamanSprite extends MobSprite {
 		
 		points[0] = ch.pos;
 		points[1] = pos;
-		parent.add( new Lightning( points, 2, (Shaman)ch ) );
+		Lightning.showLightning( points, 2, (Shaman)ch );
 		
 		turnTo( ch.pos, pos );
 		play( zap );

@@ -309,6 +309,14 @@ action game_scene_flash
     "light": true
 }
 
+action lightning_visual
+{
+    "action_type": "lightning_visual"
+    "cells": [0,1,2]
+    "duration": 1f;
+}
+
+
 
 server_actions
 type: "reset_level" -> clears level

@@ -22,7 +22,7 @@ import java.util.HashSet;
 
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.Lightning;
+import com.nikita22007.multiplayer.client.effects.Lightning;
 import com.watabou.pixeldungeon.effects.particles.SparkParticle;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.levels.Level;
@@ -49,8 +49,8 @@ public class Shock extends Weapon.Enchantment {
 			affected.add( attacker );
 			
 			hit( defender, Random.Int( 1, damage / 2 ) );
-			
-			attacker.getSprite().parent.add( new Lightning( points, nPoints, null ) );
+
+			Lightning.showLightning( points, nPoints, null );
 			
 			return true;
 			

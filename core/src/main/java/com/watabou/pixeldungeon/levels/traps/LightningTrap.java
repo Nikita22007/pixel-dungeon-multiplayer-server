@@ -23,7 +23,7 @@ import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
-import com.watabou.pixeldungeon.effects.Lightning;
+import com.nikita22007.multiplayer.client.effects.Lightning;
 import com.watabou.pixeldungeon.effects.particles.SparkParticle;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -56,11 +56,11 @@ public class LightningTrap {
 			
 			points[0] = pos - Level.WIDTH;
 			points[1] = pos + Level.WIDTH;
-			ch.getSprite().parent.add( new Lightning( points, 2, null ) );
+			Lightning.showLightning( points, 2, null );
 			
 			points[0] = pos - 1;
 			points[1] = pos + 1;
-			ch.getSprite().parent.add( new Lightning( points, 2, null ) );
+			Lightning.showLightning( points, 2, null );
 		}
 		
 		CellEmitter.center( pos ).burst( SparkParticle.FACTORY, Random.IntRange( 3, 4 ) );
