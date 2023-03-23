@@ -17,46 +17,40 @@
  */
 package com.nikita22007.multiplayer.client.effects;
 
-import com.watabou.noosa.audio.Sample;
-import com.watabou.pixeldungeon.Assets;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.utils.Callback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
+public class Wound {
 
-public class Lightning {
+    private static final float TIME_TO_FADE = 0.8f;
 
-    private static final float DURATION = 0.3f;
-
-
-    private Lightning() {
+    protected Wound() {
         throw new RuntimeException();
     }
 
-    public static void showLightning(int[] cells, int length, Callback callback) {
-        if (cells.length != length) {
-            cells = Arrays.copyOfRange(cells, 0, length - 1);
-        }
-        showLightning(cells);
-
-        Sample.INSTANCE.play(Assets.SND_LIGHTNING);
-
-        if (callback != null) {
-            callback.call();
-        }
-    }
-
-    protected static void showLightning(int[] cells) {
+    public static void reset(int p) {
         JSONObject actionObj = new JSONObject();
         try {
-            actionObj.put("action_type", "lightning_visual");
-            actionObj.put("cells", cells);
-            actionObj.put("duration", DURATION);
+            actionObj.put("action_type", "death_ray_centered_visual");
+            actionObj.put("pos", p);
+            actionObj.put("duration", TIME_TO_FADE);
         } catch (JSONException ignore) {
         }
         SendData.sendCustomActionForAll(actionObj);
+    }
+
+    public static void hit(Char ch) {
+        hit(ch, 0);
+    }
+
+    public static void hit(Char ch, float angle) {
+        reset(ch.pos);
+    }
+
+    public static void hit(int pos) {
+        reset(pos);
     }
 }

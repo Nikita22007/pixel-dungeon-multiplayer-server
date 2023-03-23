@@ -324,5 +324,13 @@ action deathray_visual
     "duration": 1f;
 }
 
+action wound_visual
+{
+    "action_type": "wound_visual"
+    "pos": 2
+    "duration": 1f;
+}
+
+
 server_actions
 type: "reset_level" -> clears level
