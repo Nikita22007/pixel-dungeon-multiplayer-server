@@ -1,6 +1,7 @@
 /*
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
+ * Copyright (C) 2021-2023 Nikita Shaposhnikov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.watabou.pixeldungeon.effects;
+package com.nikita22007.multiplayer.client.effects;
 
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.PointF;
