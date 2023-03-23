@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.scenes;
 
-import com.nikita22007.multiplayer.client_ui.Banner;
+import com.nikita22007.multiplayer.client.ui.Banner;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.SkinnedBlock;
@@ -38,7 +38,6 @@ import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
 import com.watabou.pixeldungeon.effects.EmoIcon;
-import com.watabou.pixeldungeon.effects.FloatingText;
 import com.watabou.pixeldungeon.effects.Ripple;
 import com.watabou.pixeldungeon.effects.SpellSprite;
 import com.watabou.pixeldungeon.items.Heap;
@@ -92,7 +91,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private Group effects;
 	private Group gases;
 	private Group spells;
-	private Group statuses;
 	private Group emoicons;
 
 	@Override
@@ -170,10 +168,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		spells = new Group();
 		add( spells );
-		
-		statuses = new Group();
-		add( statuses );
-		
+
 		add( emoicons );
 
 		for ( Hero heroobj:Dungeon.heroes) {
@@ -359,10 +354,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		} else {
 			return null;
 		}
-	}
-	
-	public static FloatingText status() {
-		return scene != null ? (FloatingText)scene.statuses.recycle( FloatingText.class ) : null;
 	}
 	
 	public static void pickUp( Item item ) { }

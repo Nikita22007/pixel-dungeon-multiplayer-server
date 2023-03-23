@@ -17,18 +17,16 @@
  */
 package com.watabou.pixeldungeon.sprites;
 
-import com.watabou.noosa.Game;
 import com.nikita22007.multiplayer.noosa.MovieClip;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.noosa.tweeners.PosTweener;
 import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.effects.EmoIcon;
-import com.watabou.pixeldungeon.effects.FloatingText;
+import com.nikita22007.multiplayer.client.effects.FloatingText;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.Splash;
 import com.watabou.pixeldungeon.effects.TorchHalo;
@@ -152,22 +150,11 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				text = Utils.format( text, args );
 			}
 			x += width * 0.5f;
-			Integer key;
 			if (ch != null) {
 				FloatingText.show( x, y, ch.pos, text, color );
-				key = ch.pos;
 			} else {
 				FloatingText.show( x, y, text, color );
-				key = null;
 			}
-			SendData.addToSendShowStatus(
-					x,
-					y,
-					key,
-					text,
-					color,
-					true
-			);
 		}
 	}
 
