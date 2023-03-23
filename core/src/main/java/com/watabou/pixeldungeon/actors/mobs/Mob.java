@@ -37,6 +37,7 @@ import com.nikita22007.multiplayer.client.effects.Wound;
 import com.watabou.pixeldungeon.items.Generator;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -342,12 +343,10 @@ class Mob extends Char {
 
 	@Override
 	public void destroy() {
-
 		super.destroy();
-
 		Dungeon.level.mobs.remove(this);
-
 	}
+
 	public int exp(int level){
 		return level <= maxLvl ? EXP : 0;
 	}

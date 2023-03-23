@@ -29,6 +29,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.levels.RegularLevel;
 import com.watabou.pixeldungeon.levels.Room;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
 import com.watabou.pixeldungeon.sprites.MobSprite;
@@ -103,6 +104,7 @@ public class Chasm {
 	}
 
 	public static void mobFall( Mob mob ) {
+		SendData.sendCharSpriteAction(mob.id(), "fall", null, null);
 		mob.destroy();
 		((MobSprite) mob.getSprite()).fall();
 	}

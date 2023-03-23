@@ -38,7 +38,8 @@ abstract public class Tweener extends Gizmo {
 		
 		this.target = target;
 		this.interval = interval;
-		
+
+		onComplete();
 		elapsed = 0;
 	}
 	
@@ -47,7 +48,6 @@ abstract public class Tweener extends Gizmo {
 		elapsed += Game.elapsed;
 		if (elapsed >= interval) {
 			updateValues( 1 );
-			onComplete();
 			kill();
 		} else {
 			updateValues( elapsed / interval );

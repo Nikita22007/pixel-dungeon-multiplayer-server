@@ -131,15 +131,16 @@ public class Ghost extends NPC {
 	}
 	
 	public static void replace( final Mob a, final Mob b ) {
+		//todo visual send this!!!!
 		final float FADE_TIME = 0.5f;
 		
 		a.destroy();
-		a.getSprite().parent.add(new AlphaTweener(a.getSprite(), 0, FADE_TIME ) {
+		/*a.getSprite().parent.add(new AlphaTweener(a.getSprite(), 0, FADE_TIME ) {
 			protected void onComplete() {
 				a.getSprite().killAndErase();
 				parent.erase( this );
 			};
-		} );
+		} );*/a.getSprite().killAndErase();
 		
 		b.pos = a.pos;
 		GameScene.add( b );

@@ -256,10 +256,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		sleeping = false;
 		play( die );
-
-		if (emo != null) {
-			emo.killAndErase();
-		}
 	}
 
 	public Emitter emitter() {
@@ -384,43 +380,32 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		} else {
 			hideSleep();
 		}
-		if (emo != null) {
-			emo.visible = visible;
-		}
 	}
 
 	public void showSleep() {
 		if (emo instanceof EmoIcon.Sleep) {
-
+			return;
 		} else {
-			if (emo != null) {
-				emo.killAndErase();
-			}
 			setEmo(new EmoIcon.Sleep( this ));
 		}
 	}
 
 	public void hideSleep() {
 		if (emo instanceof EmoIcon.Sleep) {
-			emo.killAndErase();
 			setEmo(null);
 		}
 	}
 
 	public void showAlert() {
 		if (emo instanceof EmoIcon.Alert) {
-
+			return;
 		} else {
-			if (emo != null) {
-				emo.killAndErase();
-			}
 			setEmo(new EmoIcon.Alert( this ));
 		}
 	}
 
 	public void hideAlert() {
 		if (emo instanceof EmoIcon.Alert) {
-			emo.killAndErase();
 			setEmo(null);
 		}
 	}
@@ -430,7 +415,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		super.kill();
 
 		if (emo != null) {
-			emo.killAndErase();
 			setEmo(null);
 		}
 	}
@@ -467,28 +451,4 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 	}
 
-	private static class JumpTweener extends Tweener {
-
-		public Visual visual;
-
-		public PointF start;
-		public PointF end;
-
-		public float height;
-
-		public JumpTweener( Visual visual, PointF pos, float height, float time ) {
-			super( visual, time );
-
-			this.visual = visual;
-			start = visual.point();
-			end = pos;
-
-			this.height = height;
-		}
-
-		@Override
-		protected void updateValues( float progress ) {
-			visual.point( PointF.inter( start, end, progress ).offset( 0, -height * 4 * progress * (1 - progress) ) );
-		}
-	}
 }
