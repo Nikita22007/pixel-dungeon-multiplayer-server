@@ -98,9 +98,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected EmoIcon emo;
 
 	private Callback jumpCallback;
-
-	private float flashTime = 0;
-
+	
 	protected boolean sleeping = false;
 
 	public Char ch;
@@ -301,8 +299,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void flash() {
-		flashTime = FLASH_INTERVAL;
-		SendData.sendFlashChar(this, flashTime);
+		SendData.sendFlashChar(this, FLASH_INTERVAL);
 	}
 
 	public void add( State state ) {
