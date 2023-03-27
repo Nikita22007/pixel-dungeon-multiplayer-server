@@ -105,7 +105,7 @@ public class Chasm {
 
 	public static void mobFall( Mob mob ) {
 		SendData.sendCharSpriteAction(mob.id(), "fall", null, null);
-		mob.destroy();
 		((MobSprite) mob.getSprite()).fall();
+		mob.destroy();
 	}
 }

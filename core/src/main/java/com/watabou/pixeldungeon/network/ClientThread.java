@@ -77,6 +77,104 @@ class ClientThread extends Thread {
         }
     }
 
+    public void parse(String json) throws JSONException {
+
+        JSONObject data = new JSONObject(json);
+        for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+            String token = it.next();
+            try {
+                switch (token) {
+                    //Level block
+                    case ("hero_class"): {
+                        InitPlayerHero(data.getString(token));
+                        break;
+                    }
+                    case ("cell_listener"): {
+                        Integer cell = data.getInt(token);
+                        if (clientHero.cellSelector != null) {
+                            if (clientHero.cellSelector.listener != null) {
+                                clientHero.cellSelector.listener.onSelect(cell);
+                                GameScene.ready(clientHero);
+                            }
+                        }
+                        break;
+                    }
+                    case ("action"): {
+                        JSONObject actionObj = data.getJSONObject(token);
+                        if (actionObj == null) {
+                            GLog.n("Empty action object");
+                            break;
+                        }
+                        String action = actionObj.getString("action_name");
+                        if ((action == null) || (action.equals(""))) {
+                            GLog.n("Empty action");
+                            break;
+                        }
+                        List<Integer> slot = Utils.JsonArrayToListInteger(actionObj.getJSONArray("slot"));
+                        if ((slot == null) || slot.isEmpty()) {
+                            GLog.n("Empty slot: %s", slot);
+                            break;
+                        }
+                        Item item = clientHero.belongings.getItemInSlot(slot);
+                        if (item == null) {
+                            GLog.n("No item in this slot. Slot: %s", slot);
+                            break;
+                        }
+                        action = action.toLowerCase(Locale.ROOT);
+                        boolean did_something = false;
+                        for (String item_action : item.actions(clientHero)) {
+                            if (item_action.toLowerCase(Locale.ROOT).equals(action)) {
+                                did_something = true;
+                                item.execute(clientHero, item_action);
+                                break;
+                            }
+                        }
+                        if (!did_something) {
+                            GLog.n("No such action in actions list. Action: %s", action);
+                            break;
+                        }
+                        break;
+                    }
+                    case "window": {
+                        JSONObject resObj = data.getJSONObject(token);
+                        Window.OnButtonPressed(
+                                clientHero,
+                                resObj.getInt("id"),
+                                resObj.getInt("button"),
+                                resObj.optJSONObject("result")
+                        );
+                        break;
+                    }
+                    case "toolbar_action": {
+                        JSONObject actionObj = data.getJSONObject(token);
+                        switch (actionObj.getString("action_name").toUpperCase(Locale.ENGLISH)) {
+                            case "SLEEP": {
+                                clientHero.rest(true);
+                                break;
+                            }
+                            case "WAIT": {
+                                clientHero.rest(false);
+                                break;
+                            }
+                            case "SEARCH": {
+                                clientHero.search(true);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    default: {
+                        GLog.n("Server: Bad token: %s", token);
+                        break;
+                    }
+                }
+            } catch (JSONException e) {
+                assert false;
+                GLog.n(String.format("JSONException in ThreadID:%s; Message:%s", threadID, e.getMessage()));
+            }
+        }
+    }
+
     public void run() {
         //socket read
         if (clientSocket != null && !clientSocket.isConnected()) {
@@ -96,100 +194,7 @@ class ClientThread extends Thread {
                 if (json == null) {
                     disconnect();
                 }
-                JSONObject data = new JSONObject(json);
-                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
-                    String token = it.next();
-                    try {
-                        switch (token) {
-                            //Level block
-                            case ("hero_class"): {
-                                InitPlayerHero(data.getString(token));
-                                break;
-                            }
-                            case ("cell_listener"): {
-                                Integer cell = data.getInt(token);
-                                if (clientHero.cellSelector != null) {
-                                    if (clientHero.cellSelector.listener != null) {
-                                        clientHero.cellSelector.listener.onSelect(cell);
-                                        GameScene.ready(clientHero);
-                                    }
-                                }
-                                break;
-                            }
-                            case ("action"): {
-                                JSONObject actionObj = data.getJSONObject(token);
-                                if (actionObj == null) {
-                                    GLog.n("Empty action object");
-                                    break;
-                                }
-                                String action = actionObj.getString("action_name");
-                                if ((action == null) || (action.equals(""))) {
-                                    GLog.n("Empty action");
-                                    break;
-                                }
-                                List<Integer> slot = Utils.JsonArrayToListInteger(actionObj.getJSONArray("slot"));
-                                if ((slot == null) || slot.isEmpty()) {
-                                    GLog.n("Empty slot: %s", slot);
-                                    break;
-                                }
-                                Item item = clientHero.belongings.getItemInSlot(slot);
-                                if (item == null) {
-                                    GLog.n("No item in this slot. Slot: %s", slot);
-                                    break;
-                                }
-                                action = action.toLowerCase(Locale.ROOT);
-                                boolean did_something = false;
-                                for (String item_action : item.actions(clientHero)) {
-                                    if (item_action.toLowerCase(Locale.ROOT).equals(action)) {
-                                        did_something = true;
-                                        item.execute(clientHero, item_action);
-                                        break;
-                                    }
-                                }
-                                if (!did_something) {
-                                    GLog.n("No such action in actions list. Action: %s", action);
-                                    break;
-                                }
-                                break;
-                            }
-                            case "window": {
-                                JSONObject resObj = data.getJSONObject(token);
-                                Window.OnButtonPressed(
-                                        clientHero,
-                                        resObj.getInt("id"),
-                                        resObj.getInt("button"),
-                                        resObj.optJSONObject("result")
-                                );
-                                break;
-                            }
-                            case "toolbar_action": {
-                                JSONObject actionObj = data.getJSONObject(token);
-                                switch (actionObj.getString("action_name").toUpperCase(Locale.ENGLISH)) {
-                                    case "SLEEP": {
-                                        clientHero.rest(true);
-                                        break;
-                                    }
-                                    case "WAIT": {
-                                        clientHero.rest(false);
-                                        break;
-                                    }
-                                    case "SEARCH": {
-                                        clientHero.search(true);
-                                        break;
-                                    }
-                                }
-                                break;
-                            }
-                            default: {
-                                GLog.n("Server: Bad token: %s", token);
-                                break;
-                            }
-                        }
-                    } catch (JSONException e) {
-                        assert false;
-                        GLog.n(String.format("JSONException in ThreadID:%s; Message:%s", threadID, e.getMessage()));
-                    }
-                }
+                parse(json);
             } catch (IOException e) {
                 PixelDungeon.reportException(e);
                 GLog.n(String.format("ThreadID:%s; Message:%s", threadID, e.getMessage()));
@@ -200,7 +205,7 @@ class ClientThread extends Thread {
                 PixelDungeon.reportException(e);
                 GLog.n(e.getStackTrace().toString());
                 disconnect();
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 PixelDungeon.reportException(e);
                 GLog.n(e.getStackTrace().toString());
                 disconnect();
@@ -235,7 +240,7 @@ class ClientThread extends Thread {
     }
 
     //some functions
-    protected void InitPlayerHero(String className) throws Exception {
+    protected void InitPlayerHero(String className) {
         HeroClass curClass;
         try {
             curClass = HeroClass.valueOf(className.toUpperCase());
@@ -281,7 +286,7 @@ class ClientThread extends Thread {
             }
 
             if (newHero.networkID == -1) {
-                throw new Exception("Can not find place for hero");
+                throw new RuntimeException("Can not find place for hero");
             }
 
             Dungeon.observe(newHero, false);
