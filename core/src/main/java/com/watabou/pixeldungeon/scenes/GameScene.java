@@ -96,8 +96,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		scene = this;
 
 		Server.startServerStepLoop();
-
-		fadeIn();
 		//todo
 	}
 	public void init() {
@@ -211,6 +209,10 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	public synchronized void update() {
 
 		super.update();
+
+
+		Server.parseActions();
+
 
 		Actor.process();
 

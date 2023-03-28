@@ -123,6 +123,15 @@ public class Server extends Thread {
         return true;
     }
 
+    public static void parseActions() {
+        for (ClientThread client : com.watabou.pixeldungeon.network.Server.clients) {
+            if (client == null){
+                continue;
+            }
+            client.parse();
+        }
+    }
+
     //Server thread
     public void run() {
         if (PixelDungeon.onlineMode()) {

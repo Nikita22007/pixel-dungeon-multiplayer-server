@@ -217,12 +217,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 			return;
 		}
 
-		SystemTime.tick();
-		long rightNow = SystemTime.now;
-		step = (now == 0 ? 0 : rightNow - now);
-		now = rightNow;
-
-		step();
+		server_step();
 
 		NoosaScript.get().resetCamera();
 		GLES20.glScissor( 0, 0, width, height );
@@ -299,10 +294,9 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 			
 			
 		}
-		
 		update();
 	}
-	
+
 	protected void draw() {
 		scene.draw();
 	}

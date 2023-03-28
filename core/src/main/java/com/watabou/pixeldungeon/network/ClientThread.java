@@ -34,10 +34,13 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import static com.watabou.pixeldungeon.Dungeon.level;
 
-class ClientThread extends Thread {
+class ClientThread implements Callable<String> {
 
     public static final String CHARSET = "UTF-8";
 
@@ -48,11 +51,14 @@ class ClientThread extends Thread {
 
     protected int threadID;
 
-    protected Socket clientSocket = null;
+    protected final Socket clientSocket;
 
     protected Hero clientHero;
 
     protected final NetworkPacket packet = new NetworkPacket();
+
+    @NotNull
+    private FutureTask<String> jsonCall;
 
     public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
         this.clientSocket = clientSocket;
@@ -68,12 +74,30 @@ class ClientThread extends Thread {
             this.threadID = ThreadID;
             reader = new BufferedReader(readStream);
             writer = new BufferedWriter(writeStream, 16384);
-            if (autostart) {
-                this.start(); //auto start
-            }
         } catch (IOException e) {
             GLog.n(e.getMessage());
             disconnect();
+            return;
+        }
+        updateTask();
+    }
+
+    protected void updateTask() {
+        if ((jsonCall == null) || (jsonCall.isDone())) {
+            jsonCall = new FutureTask<String>(this);
+            new Thread(jsonCall).start();
+        }
+    }
+    @Override
+    public String call() {
+        if (clientSocket.isClosed()) {
+            return null;
+        }
+        try {
+            return reader.readLine();
+        } catch (IOException e) {
+            Log.e("ParseThread", e.getMessage());
+            return null;
         }
     }
 
@@ -175,41 +199,25 @@ class ClientThread extends Thread {
         }
     }
 
-    public void run() {
-        //socket read
-        if (clientSocket != null && !clientSocket.isConnected()) {
+
+    public void parse() {
+        if (!jsonCall.isDone()) {
             return;
         }
-        while (clientSocket != null && !clientSocket.isClosed()) {
-            if ((level == null) || !(Game.scene() instanceof GameScene)) {
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    break;
-                }
-                continue;
-            }
+        try {
+            String json = jsonCall.get();
+            updateTask();
             try {
-                String json = reader.readLine();
-                if (json == null) {
-                    disconnect();
-                }
                 parse(json);
-            } catch (IOException e) {
-                PixelDungeon.reportException(e);
-                GLog.n(String.format("ThreadID:%s; Message:%s", threadID, e.getMessage()));
-                GLog.n(e.getStackTrace().toString());
-                disconnect();
-
-            } catch (NullPointerException e) {
-                PixelDungeon.reportException(e);
-                GLog.n(e.getStackTrace().toString());
-                disconnect();
             } catch (JSONException e) {
                 PixelDungeon.reportException(e);
                 GLog.n(e.getStackTrace().toString());
                 disconnect();
             }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -408,11 +416,11 @@ class ClientThread extends Thread {
             clientSocket.close(); //it creates exception when we will wait client data
         } catch (Exception ignore) {
         }
+        Dungeon.removeHero(clientHero);
+        Server.clients[threadID] = null;
         readStream = null;
         writeStream = null;
-        clientSocket = null;
-        Server.clients[threadID] = null;
-        Dungeon.removeHero(clientHero);
+        jsonCall.cancel(true);
         GLog.n("player " + threadID + " disconnected");
     }
 }
