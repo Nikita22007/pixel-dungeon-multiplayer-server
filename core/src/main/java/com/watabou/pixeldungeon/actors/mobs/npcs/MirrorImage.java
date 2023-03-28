@@ -88,8 +88,7 @@ public class MirrorImage extends NPC {
 	public int attackProc( Char enemy, int damage ) {
 		int dmg = super.attackProc( enemy, damage );
 
-		destroy();
-		getSprite().die();
+		die(null);
 		
 		return dmg;
 	}

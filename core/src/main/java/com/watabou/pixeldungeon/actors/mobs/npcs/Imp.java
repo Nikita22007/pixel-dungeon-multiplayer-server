@@ -146,9 +146,7 @@ public class Imp extends NPC {
 	public void flee(Hero hero) {
 		
 		yell( Utils.format( TXT_CYA, hero.className() ) );
-		
-		destroy();
-		getSprite().die();
+		die(null);
 	}
 	
 	@Override

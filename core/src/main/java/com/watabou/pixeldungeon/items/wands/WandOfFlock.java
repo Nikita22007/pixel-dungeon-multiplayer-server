@@ -123,8 +123,7 @@ public class WandOfFlock extends Wand {
 			if (initialized) {
 				setHP(0);
 
-				destroy();
-				getSprite().die();
+				die(null);
 				
 			} else {
 				initialized = true;
