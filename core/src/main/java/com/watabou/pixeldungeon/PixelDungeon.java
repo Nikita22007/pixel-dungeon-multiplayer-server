@@ -21,12 +21,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import android.content.pm.ActivityInfo;
+import android.opengl.GLES20;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
 import com.watabou.noosa.Game;
+import com.watabou.noosa.NoosaScript;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.network.Server;
@@ -395,4 +397,13 @@ public class PixelDungeon extends Game {
 	public static void reportException( Throwable tr ) {
 		Log.e( "PD", Log.getStackTraceString( tr ) ); 
 	}
+
+	@Override
+	public void onDrawFrame( GL10 gl ) {
+		if (scene instanceof GameScene) {
+			return;
+		}
+		super.onDrawFrame(gl);
+	}
+
 }

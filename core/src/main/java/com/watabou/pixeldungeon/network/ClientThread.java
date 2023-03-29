@@ -1,9 +1,11 @@
 package com.watabou.pixeldungeon.network;
 
+import android.os.Debug;
 import android.util.Log;
 
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Scene;
+import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
@@ -228,9 +230,11 @@ class ClientThread implements Callable<String> {
                 if (packet.dataRef.get().length() == 0) {
                     return;
                 }
-                try {
-                    Log.i("flush", "clientID: " + threadID + " data:" + packet.dataRef.get().toString(4));
-                } catch (JSONException ignored) {
+                if (BuildConfig.DEBUG) {
+                    try {
+                        Log.i("flush", "clientID: " + threadID + " data:" + packet.dataRef.get().toString(4));
+                    } catch (JSONException ignored) {
+                    }
                 }
                 synchronized (writer) {
                     writer.write(packet.dataRef.get().toString());
