@@ -33,6 +33,7 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.GamesInProgress;
 import com.watabou.pixeldungeon.HeroHelp;
 import com.watabou.pixeldungeon.ResultDescriptions;
+import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Barkskin;
@@ -119,7 +120,7 @@ import static com.watabou.pixeldungeon.network.SendData.sendResumeButtonVisible;
 public class Hero extends Char {
 	
 	private static final String TXT_LEAVE = "One does not simply leave Pixel Dungeon.";
-
+	private static final String TXT_NO_RETURN_ALLOWED = "You'd swear there were up stairs  here.";
 	public int gold;
 
 	private static final String TXT_LEVEL_UP = "level up!";
@@ -782,7 +783,11 @@ public class Hero extends Char {
 	private boolean actAscend( HeroAction.Ascend action ) {
 		int stairs = action.dst;
 		if (pos == stairs && pos == Dungeon.level.entrance) {
-
+			if (Settings.returnDisabled){
+				GameScene.show(new WndMessage(TXT_NO_RETURN_ALLOWED, this));
+				ready();
+				return false;
+			}
 			if (Dungeon.depth <= 1) {
 				
 				if (belongings.getItem( Amulet.class ) == null) {
