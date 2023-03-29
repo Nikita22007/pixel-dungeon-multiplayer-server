@@ -331,6 +331,13 @@ action wound_visual
     "duration": 1f;
 }
 
+action ripple_visual
+{
+    "action_type": "ripple_visual"
+    "pos": 2
+}
+
+
 
 server_actions
 type: "reset_level" -> clears level

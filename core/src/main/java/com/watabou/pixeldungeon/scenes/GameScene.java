@@ -36,7 +36,6 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
-import com.watabou.pixeldungeon.effects.Ripple;
 import com.watabou.pixeldungeon.effects.SpellSprite;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
@@ -306,10 +305,14 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		scene.effects.add( effect );
 	}
 	
-	public static Ripple ripple( int pos ) {
-		Ripple ripple = (Ripple)scene.ripples.recycle( Ripple.class );
-		ripple.reset( pos );
-		return ripple;
+	public static void ripple( int pos ) {
+		JSONObject actionObj = new JSONObject();
+		try {
+			actionObj.put("action_type", "ripple_visual");
+			actionObj.put("pos", pos);
+		} catch (JSONException ignore) {
+		}
+		SendData.sendCustomActionForAll(actionObj);
 	}
 	
 	public static SpellSprite spellSprite() {
