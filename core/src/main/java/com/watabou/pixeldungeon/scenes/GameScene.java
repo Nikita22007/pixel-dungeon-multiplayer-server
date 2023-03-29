@@ -27,7 +27,6 @@ import com.watabou.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -40,14 +39,11 @@ import com.watabou.pixeldungeon.effects.SpellSprite;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.potions.Potion;
-import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
-import com.watabou.pixeldungeon.sprites.DiscardedItemSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndBag;
@@ -76,9 +72,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 
 	//graphics
-	private Group terrain = new Group();
-	private Group ripples;
-	private Group heaps;
 	private Group mobs;
 	private Group emitters;
 	private Group effects;
@@ -103,21 +96,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 		Camera.main.zoom( defaultZoom + PixelDungeon.zoom() );
 		
-
-		add( terrain );
-		
-		ripples = new Group();
-		terrain.add( ripples );
-		
 		Dungeon.level.addVisuals( this );
-
-		heaps = new Group();
-		add( heaps );
-		
-		int size = Dungeon.level.heaps.size();
-		for (int i=0; i < size; i++) {
-			addHeapSprite( Dungeon.level.heaps.valueAt( i ) );
-		}
 
 		emitters = new Group();
 		effects = new Group();
@@ -231,20 +210,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		}
 
 	}
-
-	private void addHeapSprite( Heap heap ) {
-		ItemSprite sprite = heap.sprite = (ItemSprite)heaps.recycle( ItemSprite.class );
-		sprite.revive();
-		sprite.link( heap );
-		heaps.add( sprite );
-	}
-	
-	private void addDiscardedSprite( Heap heap ) {
-		heap.sprite = (DiscardedItemSprite)heaps.recycle( DiscardedItemSprite.class );
-		heap.sprite.revive();
-		heap.sprite.link( heap );
-		heaps.add( heap.sprite );
-	}
 	
 	private void addBlobSprite( final Blob gas ) {
 		if (gas.emitter == null) {
@@ -276,15 +241,11 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	}
 	
 	public static void add( Heap heap ) {
-		if (scene != null) {
-			scene.addHeapSprite( heap );
-		}
+		return;
 	}
 	
 	public static void discard( Heap heap ) {
-		if (scene != null) {
-			scene.addDiscardedSprite( heap );
-		}
+		return;
 	}
 
 	public static void add( Mob mob ) {
