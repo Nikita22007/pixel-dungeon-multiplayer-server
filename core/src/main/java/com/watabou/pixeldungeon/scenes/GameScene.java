@@ -74,8 +74,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private static final String TXT_SECRETS	= "The atmosphere hints that this floor hides many secrets.";
 	
 	static GameScene scene;
-
-	private DungeonTilemap tiles;
 	
 
 	//graphics
@@ -111,9 +109,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		ripples = new Group();
 		terrain.add( ripples );
-		
-		tiles = new DungeonTilemap();
-		terrain.add( tiles );
 		
 		Dungeon.level.addVisuals( this );
 
@@ -334,15 +329,13 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	public static void pickUp( Item item ) { }
 	
 	public static void updateMap() {
-		if (scene != null) {
-			scene.tiles.updated.set( 0, 0, Level.WIDTH, Level.HEIGHT );
-		}
+		//todo use this to optimize map updates
+		return;
 	}
 	
 	public static void updateMap( int cell ) {
-		if (scene != null) {
-			scene.tiles.updated.union( cell % Level.WIDTH, cell / Level.WIDTH );
-		}
+		//todo use this to optimize map updates
+		return;
 	}
 	
 	public static void discoverTile( int pos, int oldValue ) {
