@@ -31,20 +31,20 @@ public class SendData {
     //---------------------------Level
 
     public static void addToSendLevelVisitedState(Level level, int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddLevelCells(level); //todo optimize this
         }
     }
 
     public static void sendLevel(Level level, int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddLevel(level, clients[ID].clientHero);
             clients[ID].flush();
         }
     }
 
     public static void SendLevelReset(int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddServerAction("reset_level");
             clients[ID].flush();
         }
@@ -62,20 +62,20 @@ public class SendData {
 
     //---------------------------Hero
     public static void addToSendHeroVisibleCells(boolean[] visible, int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddVisiblePositions(visible);
         }
     }
 
     //---------------------------UI  and mechanics
     public static void sendResumeButtonVisible(int ID, boolean visible) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             //  clients[ID].send(Codes.RESUME_BUTTON, visible);
         }
     }
 
     public static void sendIronKeysCount(int ID, int count) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddIronKeysCount(count);
             clients[ID].flush();
         }
@@ -88,7 +88,7 @@ public class SendData {
     }
 
     public static void sendDepth(int ID, int depth) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddDepth(depth);
             clients[ID].flush();
         }
@@ -96,7 +96,10 @@ public class SendData {
 
     //--------------------------Control
     public static void sendHeroReady(int ID, boolean ready) {
-        if (clients[ID] != null) {
+        if (ID == -1) {
+            return;
+        }
+        if ((ID != -1) && (clients[ID] != null)) {
             synchronized (clients[ID].packet.dataRef) {
                 JSONObject data = clients[ID].packet.dataRef.get();
                 JSONObject heroObj = null;
@@ -118,13 +121,13 @@ public class SendData {
     //---------------------------Badges
     //public static void sendBadge
     public static void sendBadgeLevelReached(int ID, int bLevel) {//bLevel=BadgeLevel
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].addBadgeToSend("level_reached", bLevel);
         }
     }
 
     public static void sendBadgeStrengthAttained(int ID, int bLevel) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].send(Codes.BADGE_STRENGTH_ATTAINED, bLevel);
         }
     }
@@ -134,7 +137,7 @@ public class SendData {
     }
 
     public static void sendBadgeMastery(int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].sendCode(Codes.BADGE_MASTERY);
         }
     }
@@ -145,7 +148,7 @@ public class SendData {
     }
 
     public static void sendInterLevelScene(int ID, String type, boolean reset_level) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].flush();
             {
                 if (clients[ID].clientHero == null) {
@@ -158,7 +161,7 @@ public class SendData {
     }
 
     public static void sendInterLevelSceneFadeOut(int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].flush();
             if (clients[ID].clientHero == null) {
                 return;
@@ -170,7 +173,7 @@ public class SendData {
 
     //-----------------------------Windows
     public static void sendWindow(int ID, String type, int windowID, @Nullable JSONObject args) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.packAndAddWindow(type, windowID, args);
             clients[ID].flush();
         }
@@ -192,14 +195,14 @@ public class SendData {
     }
 
     public static void sendAllChars(int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].addAllCharsToSend();
             clients[ID].flush();
         }
     }
 
     public static void sendHeroNewID(Hero hero, int ID) {
-        if (clients[ID] != null) {
+        if ((ID != -1) && (clients[ID] != null)) {
             clients[ID].packet.addNewHeroID(hero.id());
             clients[ID].flush();
         }

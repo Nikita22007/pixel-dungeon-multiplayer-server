@@ -8,6 +8,7 @@ public class Settings {
     public static boolean returnDisabled = true;
 
     public static int maxPlayers;
+    public static boolean killOnDisconnect = false;
 
     public static enum ResurrectModeEnum {
         RESET_LEVEL, RESPAWN_HERO

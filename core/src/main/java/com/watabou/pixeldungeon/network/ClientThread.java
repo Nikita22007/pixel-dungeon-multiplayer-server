@@ -1,6 +1,5 @@
 package com.watabou.pixeldungeon.network;
 
-import android.os.Debug;
 import android.util.Log;
 
 import com.watabou.noosa.Game;
@@ -15,7 +14,6 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -31,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +59,11 @@ class ClientThread implements Callable<String> {
     @NotNull
     private FutureTask<String> jsonCall;
 
-    public ClientThread(int ThreadID, Socket clientSocket, boolean autostart) {
+    public ClientThread(int ThreadID, Socket clientSocket, Hero hero) {
+        clientHero = hero;
+        if (hero != null){
+            hero.networkID = threadID;
+        }
         this.clientSocket = clientSocket;
         try {
             writeStream = new OutputStreamWriter(
@@ -82,6 +83,9 @@ class ClientThread implements Callable<String> {
             return;
         }
         updateTask();
+        if (clientHero != null){
+            sendInitData();
+        }
     }
 
     protected void updateTask() {
@@ -112,7 +116,9 @@ class ClientThread implements Callable<String> {
                 switch (token) {
                     //Level block
                     case ("hero_class"): {
-                        InitPlayerHero(data.getString(token));
+                        if (clientHero == null) {
+                            InitPlayerHero(data.getString(token));
+                        }
                         break;
                     }
                     case ("cell_listener"): {
@@ -208,6 +214,10 @@ class ClientThread implements Callable<String> {
         }
         try {
             String json = jsonCall.get();
+            if (json == null){
+                disconnect();
+                return;
+            }
             updateTask();
             try {
                 parse(json);
@@ -262,17 +272,10 @@ class ClientThread implements Callable<String> {
             }
             curClass = Random.element(HeroClass.values());
         }
-
         Hero newHero = new Hero();
         clientHero = newHero;
         newHero.live();
 
-/*        if (true ){
-            Mob mob = Bestiary.mutable( Dungeon.depth );
-            mob.state = mob.WANDERING;
-            mob.pos = Dungeon.level.entrance+1;
-            GameScene.add(mob);
-        }*///cheking that mobs sends correctly
         curClass.initHero(newHero);
 
         newHero.pos = Dungeon.GetPosNear(level.entrance);
@@ -420,11 +423,33 @@ class ClientThread implements Callable<String> {
             clientSocket.close(); //it creates exception when we will wait client data
         } catch (Exception ignore) {
         }
-        Dungeon.removeHero(clientHero);
+        if (clientHero != null) {
+            clientHero.networkID = -1;
+            clientHero.next();
+            Dungeon.removeHero(clientHero);
+        }
         Server.clients[threadID] = null;
         readStream = null;
         writeStream = null;
         jsonCall.cancel(true);
         GLog.n("player " + threadID + " disconnected");
+    }
+
+    private void sendInitData() {
+        packet.packAndAddLevel(level, clientHero);
+        packet.pack_and_add_hero(clientHero);
+        packet.addInventoryFull(clientHero);
+
+        synchronized (Dungeon.heroes) { //todo fix it. It is not work
+            Dungeon.observe(clientHero, false); //todo fix this
+        }
+        addAllCharsToSend();
+        packet.packAndAddVisiblePositions(Dungeon.visible);
+        //TODO send all  information
+
+        flush();
+
+        packet.packAndAddInterlevelSceneState("fade_out", null);
+        flush();
     }
 }

@@ -7,8 +7,10 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 
 import com.watabou.noosa.Game;
+import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Settings;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.utils.GLog;
 
@@ -16,6 +18,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static com.watabou.pixeldungeon.Dungeon.heroes;
 
 
 public class Server extends Thread {
@@ -125,10 +129,38 @@ public class Server extends Thread {
 
     public static void parseActions() {
         for (ClientThread client : com.watabou.pixeldungeon.network.Server.clients) {
-            if (client == null){
+            if (client == null) {
                 continue;
             }
             client.parse();
+        }
+    }
+
+    public static void startClientThread(Socket client) throws IOException {
+        synchronized (clients) {
+            for (int i = 0; i <= clients.length; i++) {   //search not connected
+                if (i == clients.length) { //If we test last and it's connected too
+                    //todo use new json
+                    new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
+                    client.close();
+                } else if (clients[i] == null) {
+                    synchronized (heroes) {
+                        Hero emptyHero = null;
+                        for (Hero hero : heroes) {
+                            if (hero == null) {
+                                continue;
+                            }
+                            if (hero.networkID != -1) {
+                                continue;
+                            }
+                            emptyHero = hero;
+                            break;
+                        }
+                        clients[i] = new ClientThread(i, client, emptyHero); //found
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -152,18 +184,7 @@ public class Server extends Thread {
             Socket client;
             try {
                 client = serverSocket.accept();  //accept connect
-                synchronized (clients) {
-                    for (int i = 0; i <= clients.length; i++) {   //search not connected
-                        if (i == clients.length) { //If we test last and it's connected too
-                            //todo use new json
-                            new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
-                            client.close();
-                        } else if (clients[i] == null) {
-                            clients[i] = new ClientThread(i, client, true); //found
-                            break;
-                        }
-                    }
-                }
+                startClientThread(client);
             } catch (IOException e) {
                 if (!(e.getMessage().equals("Socket is closed"))) {  //"Socket is closed" means that client disconnected
                     GLog.h("IO exception:".concat(e.getMessage()));

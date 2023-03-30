@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -17,7 +16,6 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 
 import static com.watabou.pixeldungeon.network.ClientThread.CHARSET;
-import static com.watabou.pixeldungeon.network.Server.clients;
 
 
 public class RelayThread extends Thread {
@@ -95,18 +93,7 @@ public class RelayThread extends Thread {
                 JSONObject port_obj = new JSONObject(json);
                 int port = port_obj.getInt("port");
                 Socket client = new Socket(relayServerAddress, port);
-                synchronized (clients) {
-                    for (int i = 0; i <= clients.length; i++) {   //search not connected
-                        if (i == clients.length) { //If we test last and it's connected too
-                            //todo use new json
-                            new DataOutputStream(client.getOutputStream()).writeInt(Codes.SERVER_FULL);
-                            client.close();
-                        } else if (clients[i] == null) {
-                            clients[i] = new ClientThread(i, client, true); //found
-                            break;
-                        }
-                    }
-                }
+                Server.startClientThread(client);
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();

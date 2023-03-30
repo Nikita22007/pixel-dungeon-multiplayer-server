@@ -266,15 +266,19 @@ public class Dungeon {
 	}
 
 	public static void removeHero(Hero hero){
-		if ( hero == null){
-			return;
+		if (Settings.killOnDisconnect) {
+			if (hero == null) {
+				return;
+			}
+			int ID = Arrays.asList(heroes).indexOf(hero);
+			hero.die(Char.GodPunishment.INSTANCE);
+			if (ID == -1) {
+				return;
+			}
+			heroes[ID] = null;
+		} else {
+			hero.next();
 		}
-		int ID = Arrays.asList(heroes).indexOf(hero);
-		hero.die(Char.GodPunishment.INSTANCE);
-		if (ID == -1) {
-			return;
-		}
-		heroes[ID] = null;
 	}
 
 	public static void switchLevelToAll(final Level level,int pos ){
