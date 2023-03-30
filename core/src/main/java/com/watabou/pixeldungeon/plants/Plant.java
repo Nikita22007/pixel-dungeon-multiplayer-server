@@ -62,10 +62,10 @@ public class Plant implements Bundlable {
 		wither();
 		if (ch instanceof Hero && ((Hero)ch).subClass == HeroSubClass.WARDEN) {
 			if (Random.Int( 5 ) == 0) {
-				Dungeon.level.drop( Generator.random( Generator.Category.SEED ), pos ).sprite.drop();
+				Dungeon.level.drop( Generator.random( Generator.Category.SEED ), pos );
 			}
 			if (Random.Int( 5 ) == 0) {
-				Dungeon.level.drop( new Dewdrop(), pos ).sprite.drop();
+				Dungeon.level.drop( new Dewdrop(), pos );
 			}
 		}
 	}

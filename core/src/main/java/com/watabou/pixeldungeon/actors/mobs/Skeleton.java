@@ -91,7 +91,7 @@ public class Skeleton extends Mob {
 					loot = l;
 				}
 			}
-			Dungeon.level.drop( loot, pos ).sprite.drop();
+			Dungeon.level.drop( loot, pos );
 		}
 	}
 	

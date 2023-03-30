@@ -96,11 +96,11 @@ public class Tengu extends Mob {
                     break;
             }
             if (!Badges.isUnlocked(badgeToCheck) || hero.subClass != HeroSubClass.NONE) {
-                Dungeon.level.drop(new TomeOfMastery(), pos).sprite.drop();
+                Dungeon.level.drop(new TomeOfMastery(), pos);
             }
         }
         GameScene.bossSlain();
-        Dungeon.level.drop(new SkeletonKey(), pos).sprite.drop();
+        Dungeon.level.drop(new SkeletonKey(), pos);
         super.die(cause);
 
         Badges.validateBossSlain();

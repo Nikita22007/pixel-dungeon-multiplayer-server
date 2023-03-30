@@ -116,7 +116,7 @@ public class SacrificialFire extends Blob {
 					
 					GLog.w( TXT_REWARD );
 					GameScene.effect( new Flare( 7, 32 ).color( 0x66FFFF, true ).show( ch.getSprite().parent, DungeonTilemap.tileCenterToWorld( fire.pos ), 2f ) );
-					Dungeon.level.drop( new ScrollOfWipeOut(), fire.pos ).sprite.drop();
+					Dungeon.level.drop( new ScrollOfWipeOut(), fire.pos );
 				}
 			} else {
 				

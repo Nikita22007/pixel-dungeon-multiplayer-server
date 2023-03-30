@@ -89,7 +89,6 @@ public class WellWater extends Blob {
 					heap.replace( oldItem, newItem );
 				}
 				
-				heap.sprite.link();
 				volume = off[pos] = cur[pos] = 0;
 				
 				return true;
@@ -100,7 +99,7 @@ public class WellWater extends Blob {
 				do {
 					newPlace = pos + Level.NEIGHBOURS8[Random.Int( 8 )];
 				} while (!Level.passable[newPlace] && !Level.avoid[newPlace]);
-				Dungeon.level.drop( heap.pickUp(), newPlace ).sprite.drop( pos );
+				Dungeon.level.drop( heap.pickUp(), newPlace );
 				
 				return false;
 				

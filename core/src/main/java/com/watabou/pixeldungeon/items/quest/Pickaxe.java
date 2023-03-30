@@ -111,7 +111,7 @@ public class Pickaxe extends Weapon {
 							if (gold.doPickUp( hero )) {
 								GLog.i( Hero.TXT_YOU_NOW_HAVE, gold.name() );
 							} else {
-								Dungeon.level.drop( gold, hero.pos ).sprite.drop();
+								Dungeon.level.drop( gold, hero.pos );
 							}
 							
 							Hunger hunger = hero.buff( Hunger.class );

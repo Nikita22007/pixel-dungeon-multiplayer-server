@@ -85,7 +85,7 @@ public class Mimic extends Mob {
 			Gold gold = new Gold( Random.Int( ((Hero)enemy).gold / 10,  ((Hero)enemy).gold / 2 ) );
 			if (gold.quantity() > 0) {
 				((Hero)enemy).gold -= gold.quantity();
-				Dungeon.level.drop( gold, enemy.pos).sprite.drop();
+				Dungeon.level.drop( gold, enemy.pos);
 			}
 		}
 		return super.attackProc( enemy, damage );
@@ -108,7 +108,7 @@ public class Mimic extends Mob {
 		
 		if (items != null) {
 			for (Item item : items) {
-				Dungeon.level.drop( item, pos ).sprite.drop();
+				Dungeon.level.drop( item, pos );
 			}
 		}
 	}

@@ -99,7 +99,7 @@ public class Blacksmith extends NPC {
 					if (pick.doPickUp( hero )) {
 						GLog.i( Hero.TXT_YOU_NOW_HAVE, pick.name() );
 					} else {
-						Dungeon.level.drop( pick, hero.pos ).sprite.drop();
+						Dungeon.level.drop( pick, hero.pos );
 					}
 				};
 			} );

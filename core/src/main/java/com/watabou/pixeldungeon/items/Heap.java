@@ -76,8 +76,6 @@ public class Heap implements Bundlable {
 	
 	public int pos = 0;
 	
-	public ItemSprite sprite;
-	
 	public LinkedList<Item> items = new LinkedList<Item>();
 
 	public int image() {
@@ -142,16 +140,12 @@ public class Heap implements Bundlable {
 			}
 			break;
 		case HIDDEN:
-			sprite.alpha( 0 );
-			sprite.parent.add( new AlphaTweener( sprite, 1, FADE_TIME ) );
 			break;
 		default:
 		}
 		
 		if (type != Type.MIMIC) {
 			type = Type.HEAP;
-			sprite.link();
-			sprite.drop();
 		}
 		sendHeap(this);
 	}
@@ -165,10 +159,8 @@ public class Heap implements Bundlable {
 		Item item = items.removeFirst();
 		if (items.isEmpty()) {
 			destroy();
-		} else if (sprite != null) {
-			sprite.view( image(), glowing() );
-			sendHeap(this);
 		}
+			sendHeap(this);
 
 		return item;
 	}
@@ -197,10 +189,6 @@ public class Heap implements Bundlable {
 			items.add( item );
 		} else {
 			items.addFirst( item );
-		}
-		
-		if (sprite != null) {
-			sprite.view( image(), glowing() );
 		}
 		sendHeap(this);
 	}
@@ -256,8 +244,6 @@ public class Heap implements Bundlable {
 			
 			if (isEmpty()) {
 				destroy();
-			} else if (sprite != null) {
-				sprite.view( image(), glowing() );
 			}
 			
 		}
@@ -288,9 +274,7 @@ public class Heap implements Bundlable {
 		if (frozen) {
 			if (isEmpty()) {
 				destroy();
-			} else if (sprite != null) {
-				sprite.view( image(), glowing() );
-			}	
+			}
 		}
 		sendHeap(this);
 	}
@@ -371,9 +355,6 @@ public class Heap implements Bundlable {
 	
 	public void destroy() {
 		Dungeon.level.heaps.remove( this.pos );
-		if (sprite != null) {
-			sprite.kill();
-		}
 		items.clear();
 		items = null;
 		sendHeapRemoving(this);

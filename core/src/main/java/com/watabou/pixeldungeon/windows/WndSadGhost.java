@@ -50,7 +50,7 @@ public class WndSadGhost extends WndQuest {
 		if (reward.doPickUp(getOwnerHero())) {
 			GLog.i( Hero.TXT_YOU_NOW_HAVE, reward.name() );
 		} else {
-			Dungeon.level.drop( reward, ghost.pos ).sprite.drop();
+			Dungeon.level.drop( reward, ghost.pos );
 		}
 		
 		ghost.yell( "Farewell, adventurer!" );

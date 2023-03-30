@@ -303,7 +303,7 @@ public class Ghost extends NPC {
 				switch (type) {
 				case ROSE:
 					if (Random.Int( left2kill ) == 0) {
-						Dungeon.level.drop( new DriedRose(), pos ).sprite.drop();
+						Dungeon.level.drop( new DriedRose(), pos );
 						processed = true;
 					} else {
 						left2kill--;

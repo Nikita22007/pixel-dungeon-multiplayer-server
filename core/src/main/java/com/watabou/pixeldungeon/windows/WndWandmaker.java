@@ -55,7 +55,7 @@ public class WndWandmaker extends WndQuest {
 		if (reward.doPickUp(getOwnerHero())) {
 			GLog.i( Hero.TXT_YOU_NOW_HAVE, reward.name() );
 		} else {
-			Dungeon.level.drop( reward, wandmaker.pos ).sprite.drop();
+			Dungeon.level.drop( reward, wandmaker.pos );
 		}
 		
 		wandmaker.yell( Utils.format( TXT_FARAWELL, getOwnerHero().className() ) );

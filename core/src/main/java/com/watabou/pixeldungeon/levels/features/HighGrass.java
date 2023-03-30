@@ -51,12 +51,12 @@ public class HighGrass {
 			}
 			// Seed
 			if (herbalismLevel >= 0 && Random.Int( 18 ) <= Random.Int( herbalismLevel + 1 )) {
-				level.drop( Generator.random( Generator.Category.SEED ), pos ).sprite.drop();
+				level.drop( Generator.random( Generator.Category.SEED ), pos );
 			}
 			
 			// Dew
 			if (herbalismLevel >= 0 && Random.Int( 6 ) <= Random.Int( herbalismLevel + 1 )) {
-				level.drop( new Dewdrop(), pos ).sprite.drop();
+				level.drop( new Dewdrop(), pos );
 			}
 		}
 		

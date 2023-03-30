@@ -352,7 +352,6 @@ public class Wandmaker extends NPC {
 				
 				Heap heap = Dungeon.level.drop( new CorpseDust(), pos );
 				heap.type = Heap.Type.SKELETON;
-				heap.sprite.link();
 			}
 		}
 	};
@@ -381,7 +380,6 @@ public class Wandmaker extends NPC {
 				if (Level.water[pos]) {
 					heap = Dungeon.level.drop( new PhantomFish(), pos );
 					heap.type = Heap.Type.HIDDEN;
-					heap.sprite.link();
 					return;
 				}
 			}

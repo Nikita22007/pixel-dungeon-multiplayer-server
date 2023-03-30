@@ -1,0 +1,22 @@
+{
+  "incremental": false,
+  "verbose": false,
+  "disable-cache": false,
+  "debug-log": ".PVS-Studio/logs",
+  "exclude": [],
+  "include-generated": false,
+  "fail-on-warnings": false,
+  "analysis-mode": [
+    "GA"
+  ],
+  "launch-mode": "CORE",
+  "disabled-warnings": [],
+  "enabled-warnings": [],
+  "additional-warnings": [],
+  "benchmark": false,
+  "suppress-base": ".PVS-Studio/suppress_base.json",
+  "timeout": 10,
+  "logging": "INFO",
+  "compatibility": false,
+  "exclude-packages": []
+}

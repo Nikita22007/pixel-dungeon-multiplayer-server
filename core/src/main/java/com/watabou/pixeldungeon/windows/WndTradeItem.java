@@ -231,7 +231,7 @@ public class WndTradeItem extends Window {
 		GLog.i( TXT_BOUGHT, item.name(), price );
 		
 		if (!item.doPickUp(getOwnerHero())) {
-			Dungeon.level.drop( item, heap.pos ).sprite.drop();
+			Dungeon.level.drop( item, heap.pos );
 		}
 	}
 }

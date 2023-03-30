@@ -33,7 +33,7 @@ public class Rotberry extends Plant {
 		
 		GameScene.add( Blob.seed( pos, 100, ToxicGas.class ) );
 		
-		Dungeon.level.drop( new Seed(), pos ).sprite.drop();
+		Dungeon.level.drop( new Seed(), pos );
 		
 		if (ch != null) {
 			Buff.prolong( ch, Roots.class, Roots.TICK * 3 );

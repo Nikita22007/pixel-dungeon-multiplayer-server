@@ -117,7 +117,7 @@ public class WandOfReach extends Wand {
 			}
 
 		} else {
-			Dungeon.level.drop( item, curUser.pos ).sprite.drop();
+			Dungeon.level.drop( item, curUser.pos );
 		}
 	}
 	

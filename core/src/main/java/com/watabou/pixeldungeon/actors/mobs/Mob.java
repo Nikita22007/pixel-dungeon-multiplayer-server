@@ -408,7 +408,7 @@ class Mob extends Char {
 				item = (Item)loot;
 				
 			}
-			Dungeon.level.drop( item, pos ).sprite.drop();
+			Dungeon.level.drop( item, pos );
 		}
 	}
 	

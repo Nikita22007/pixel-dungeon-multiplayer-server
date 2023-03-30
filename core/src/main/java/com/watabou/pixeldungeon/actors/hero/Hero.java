@@ -643,7 +643,7 @@ public class Hero extends Char {
 					}
 					curAction = null;
 				} else {
-					Dungeon.level.drop( item, pos ).sprite.drop();
+					Dungeon.level.drop( item, pos );
 					ready();
 				}
 			} else {
@@ -1277,7 +1277,7 @@ public class Hero extends Char {
 			}
 			
 			Item item = Random.element( items );
-			Dungeon.level.drop( item, cell ).sprite.drop( pos );
+			Dungeon.level.drop( item, cell );
 			items.remove( item );
 		}
 		

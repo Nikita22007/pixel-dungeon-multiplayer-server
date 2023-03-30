@@ -102,7 +102,6 @@ public class ScrollOfWipeOut extends Item {
 				break;
 			case MIMIC:
 				heap.type = Type.HEAP;
-				heap.sprite.link();
 				Sample.INSTANCE.play( Assets.SND_CURSED, 0.3f, 0.3f, Random.Float( 0.6f, 0.9f ) );
 				break;
 			default:

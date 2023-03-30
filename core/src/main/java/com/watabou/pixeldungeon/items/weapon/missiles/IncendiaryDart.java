@@ -69,7 +69,7 @@ public class IncendiaryDart extends MissileWeapon {
 			}
 		} else {
 			if (!curUser.shoot( enemy, this )) {
-				Dungeon.level.drop( this, cell ).sprite.drop();
+				Dungeon.level.drop( this, cell );
 			}
 		}
 	}
