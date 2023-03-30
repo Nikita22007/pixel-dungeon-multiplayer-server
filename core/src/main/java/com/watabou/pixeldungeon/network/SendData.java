@@ -96,9 +96,6 @@ public class SendData {
 
     //--------------------------Control
     public static void sendHeroReady(int ID, boolean ready) {
-        if (ID == -1) {
-            return;
-        }
         if ((ID != -1) && (clients[ID] != null)) {
             synchronized (clients[ID].packet.dataRef) {
                 JSONObject data = clients[ID].packet.dataRef.get();
@@ -220,11 +217,12 @@ public class SendData {
 
         }
         for (int i = 0; i < clients.length; i++) {
-            if (clients[i] == null) {
+            ClientThread client = clients[i];
+            if (client == null) {
                 continue;
             }
-            clients[i].packet.addAction(actionObj);
-            clients[i].flush();
+            client.packet.addAction(actionObj);
+            client.flush();
         }
     }
 

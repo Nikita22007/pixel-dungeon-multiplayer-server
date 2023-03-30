@@ -107,7 +107,7 @@ class ClientThread implements Callable<String> {
         }
     }
 
-    public void parse(String json) throws JSONException {
+    public void parse(@NotNull String json) throws JSONException {
 
         JSONObject data = new JSONObject(json);
         for (Iterator<String> it = data.keys(); it.hasNext(); ) {

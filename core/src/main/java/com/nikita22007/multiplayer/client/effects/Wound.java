@@ -34,9 +34,9 @@ public class Wound {
     public static void reset(int p) {
         JSONObject actionObj = new JSONObject();
         try {
-            actionObj.put("action_type", "death_ray_centered_visual");
+            actionObj.put("action_type", "wound_visual");
             actionObj.put("pos", p);
-            actionObj.put("duration", TIME_TO_FADE);
+            actionObj.put("time_to_fade", TIME_TO_FADE);
         } catch (JSONException ignore) {
         }
         SendData.sendCustomActionForAll(actionObj);

@@ -17,6 +17,7 @@
  */
 package com.nikita22007.multiplayer.client.effects;
 
+import com.nikita22007.multiplayer.utils.Utils;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.network.SendData;
@@ -53,7 +54,7 @@ public class Lightning {
         JSONObject actionObj = new JSONObject();
         try {
             actionObj.put("action_type", "lightning_visual");
-            actionObj.put("cells", cells);
+            actionObj.put("cells", Utils.putToJSONArray(cells));
             actionObj.put("duration", DURATION);
         } catch (JSONException ignore) {
         }

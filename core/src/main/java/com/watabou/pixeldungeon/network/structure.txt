@@ -298,7 +298,7 @@ action visual_show_banner
     "action_type": "show_banner"
     "banner": BOSS_SLAIN
     "color": 0x000000, // int RGB COLOR
-    "fadeTime": 1f //float, seconds
+    "fade_time": 1f //float, seconds
     "show_time": 9999999f //float, seconds
 }
 
@@ -328,7 +328,7 @@ action wound_visual
 {
     "action_type": "wound_visual"
     "pos": 2
-    "duration": 1f;
+    "time_to_fade": 1f;
 }
 
 action ripple_visual
