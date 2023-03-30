@@ -248,6 +248,9 @@ public class SendData {
     }
 
     public static void flush(int networkID) {
+    if (networkID <= -1) {
+        return;
+    }
         if (clients[networkID] != null) {
             clients[networkID].flush();
         }
@@ -431,6 +434,9 @@ public class SendData {
     }
 
     public static void sendCustomAction(JSONObject action_obj, int networkID) {
+        if (networkID <= -1) {
+            return;
+        }
         if (clients[networkID] != null) {
             clients[networkID].packet.addAction(action_obj);
             clients[networkID].flush();
