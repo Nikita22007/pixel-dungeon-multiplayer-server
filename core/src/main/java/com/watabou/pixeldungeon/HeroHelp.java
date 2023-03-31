@@ -30,7 +30,7 @@ public class HeroHelp {
 
     public static int HeroCount() {
         int count = 0;
-        for (int i = 0; i < Settings.maxPlayers; i++) {
+        for (int i = 0; i < heroes.length; i++) {
             if ((!(heroes[i] == null)) && (heroes[i].isAlive())) {
                 count++;
             }
@@ -66,7 +66,7 @@ public class HeroHelp {
     public static String GetHeroesClass() {
         int count = HeroCount();
         if (count == 1) {
-            for (int i = 0; i < Settings.maxPlayers; i++) {
+            for (int i = 0; i < heroes.length; i++) {
                 if ((!(heroes[i] == null)) && (heroes[i].isAlive())) {
                     return heroes[i].className();
                 }
@@ -75,7 +75,7 @@ public class HeroHelp {
         String ClassName = "";
         if (count > 1) {
 
-            for (int i = 0; i < Settings.maxPlayers; i++) {
+            for (int i = 0; i < heroes.length; i++) {
                 if ((!(heroes[i] == null)) && (heroes[i].isAlive())) {
                     if (ClassName == "") {
                         ClassName = heroes[i].className();
@@ -104,7 +104,7 @@ public class HeroHelp {
     }
 
     public static boolean haveAliveHero() {
-        for (int i = 0; i < Settings.maxPlayers; i++) {
+        for (int i = 0; i < heroes.length; i++) {
             if (Dungeon.heroes[i] != null && Dungeon.heroes[i].isAlive()) {
                 return true;
             }

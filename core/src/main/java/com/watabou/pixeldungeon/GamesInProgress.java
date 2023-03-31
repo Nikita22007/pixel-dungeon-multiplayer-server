@@ -56,7 +56,7 @@ public class GamesInProgress { //TODO refactor
 		info.depth = depth;
 		info.level = level;
 		info.challenges = challenges;
-		state.put( cl, info );
+		state.put( HeroClass.WARRIOR, info );
 	}
 	
 	public static void setUnknown( HeroClass cl ) {

@@ -47,9 +47,6 @@ public class StatusPane extends Component {    //remove when server is not clien
 	@Override
 	public void update() {
 		super.update();
-		if (Dungeon.heroes[0]==null){
-			return;
-		}
 	}
 	
 	private static class MenuButton extends Button {

@@ -48,6 +48,8 @@ import com.watabou.pixeldungeon.windows.WndError;
 import com.watabou.pixeldungeon.windows.WndOptions;
 import com.watabou.utils.Callback;
 
+import static com.watabou.pixeldungeon.BuildConfig.DEBUG;
+
 public class StartScene extends PixelScene {			//client  Scene
 
 	private static final float BUTTON_HEIGHT	= 24;
@@ -140,6 +142,10 @@ public class StartScene extends PixelScene {			//client  Scene
 		btnLoad = new GameButton( TXT_LOAD ) {
 			@Override
 			protected void onClick() {
+				if (!Server.startServer()){
+					StartScene.this.add(new WndError("Server starting error"));
+					return;
+				}
 				InterLevelSceneServer.restore();
 			}
 		};
@@ -230,7 +236,7 @@ public class StartScene extends PixelScene {			//client  Scene
 		shields.get(curClass = cl).highlight(true);
 
 		GamesInProgress.Info info = GamesInProgress.check(curClass);
-		if (false && (info != null)) {
+		if (DEBUG && (info != null)) {
 
 			btnLoad.visible = true;
 			btnLoad.secondary(Utils.format(TXT_DPTH_LVL, info.depth, info.level), info.challenges);

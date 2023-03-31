@@ -215,6 +215,7 @@ public class Hero extends Char {
 	private static final String ATTACK		= "attackSkill";
 	private static final String DEFENSE		= "defenseSkill";
 	private static final String STRENGTH	= "STR";
+	private static final String GOLD        = "gold";
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
 	
@@ -232,7 +233,9 @@ public class Hero extends Char {
 		
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
-		
+
+		bundle.put( GOLD, gold );
+
 		belongings.storeInBundle( bundle );
 	}
 	
@@ -256,7 +259,7 @@ public class Hero extends Char {
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
-		info.level = bundle.getInt( LEVEL );
+		info.level = -1;
 	}
 	
 	public String className() {

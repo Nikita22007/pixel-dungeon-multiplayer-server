@@ -69,8 +69,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
+import static com.watabou.pixeldungeon.BuildConfig.DEBUG;
 import static com.watabou.pixeldungeon.HeroHelp.getHeroID;
 import static com.watabou.pixeldungeon.network.SendData.addToSendHeroVisibleCells;
 import static com.watabou.pixeldungeon.network.SendData.addToSendLevelVisitedState;
@@ -392,8 +394,7 @@ public class Dungeon {
 	*/
 	private static final String VERSION		= "version";
 	private static final String CHALLENGES	= "challenges";
-	private static final String HERO		= "hero";
-	private static final String GOLD		= "gold";
+	private static final String HEROES		= "heroes";
 	private static final String DEPTH		= "depth";
 	private static final String LEVEL		= "level";
 	private static final String DROPPED		= "dropped%d";
@@ -404,6 +405,7 @@ public class Dungeon {
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
+	private static final String MAX_PLAYERS_SETTING		= "max_players_count";
 
 	private static String thisGameSaveFile;
 	private static String thisGameDepthSaveFile;
@@ -445,9 +447,9 @@ public class Dungeon {
 			Bundle bundle = new Bundle();
 			
 			bundle.put( VERSION, Game.version );
+			bundle.put( MAX_PLAYERS_SETTING, Settings.maxPlayers );
 			bundle.put( CHALLENGES, challenges );
-			bundle.put( HERO, heroes[0] );
-			bundle.put( GOLD, heroes[0].gold);
+			bundle.put( HEROES, Arrays.asList(heroes));
 			bundle.put( DEPTH, depth );
 			
 			for (int d : droppedItems.keyArray()) {
@@ -500,23 +502,22 @@ public class Dungeon {
 	}
 	
 	public static void saveAll() throws IOException { //fixme
-		if (heroes[0]==null)  {
-			return;
-		}
-		if (heroes[0].isAlive()) {
-			
+		//if (heroes[0].isAlive()) {
+			if (!DEBUG){
+				return;
+			}
 			Actor.fixTime();
-			saveGame( gameFile( heroes[0].heroClass ) );
+			saveGame( gameFile( null) );
 			saveLevel();
 			
-			GamesInProgress.set( heroes[0].heroClass, depth, heroes[0].lvl, challenges != 0 );
-			
-		} else if (WndResurrect.instance != null) {
-			
-			WndResurrect.instance.hide();
-			/*Hero*/ heroes[0].reallyDie( WndResurrect.causeOfDeath );
-			
-		}
+			GamesInProgress.set( null, depth, -1, challenges != 0 );
+
+//		} else if (WndResurrect.instance != null) {
+//
+//			WndResurrect.instance.hide();
+//			/*Hero*/ heroes[0].reallyDie( WndResurrect.causeOfDeath );
+//
+//		}
 	}
 	
 	public static void loadGame( HeroClass cl ) throws IOException {
@@ -577,15 +578,16 @@ public class Dungeon {
 
 		@SuppressWarnings("unused")
 		String version = bundle.getString( VERSION );
-
-		if (!fullLoad) {
-			heroes=new Hero[1];
-			heroes[0] = null; //TODO FIX LOAD
-			heroes[0]= (Hero) bundle.get(HERO);
-
-			heroes[0].gold = bundle.getInt(GOLD);
-			depth = bundle.getInt(DEPTH);
+		Collection<Bundlable> loadedHeroes = bundle.getCollection(HEROES);
+		heroes = new Hero[bundle.getInt(MAX_PLAYERS_SETTING)];
+		{
+			int i = 0;
+			for (Bundlable hero : loadedHeroes) {
+				heroes[i] =(Hero) hero;
+				i++;
+			}
 		}
+		depth = bundle.getInt(DEPTH);
 		Statistics.restoreFromBundle( bundle );
 		Journal.restoreFromBundle( bundle );
 		
@@ -650,7 +652,7 @@ public class Dungeon {
 		if (info.depth == -1) {
 			info.depth = bundle.getInt( "maxDepth" );	// FIXME
 		}
-		Hero.preview( info, bundle.getBundle( HERO ) );
+		Hero.preview( info, null );
 	}
 	
 	public static void fail( String desc ) { //todo rewritre it

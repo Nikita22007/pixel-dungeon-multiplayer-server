@@ -7,7 +7,7 @@ public class Settings {
     public static int defaultRelayServerPort = 25555;
     public static boolean returnDisabled = true;
 
-    public static int maxPlayers;
+    public static int maxPlayers = 4; // todo setup while loading
     public static boolean killOnDisconnect = false;
 
     public static enum ResurrectModeEnum {

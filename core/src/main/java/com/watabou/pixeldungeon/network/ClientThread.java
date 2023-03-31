@@ -37,6 +37,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
+import static com.watabou.pixeldungeon.Dungeon.heroes;
 import static com.watabou.pixeldungeon.Dungeon.level;
 
 class ClientThread implements Callable<String> {
@@ -291,7 +292,7 @@ class ClientThread implements Callable<String> {
         packet.addInventoryFull(newHero);
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work
-            for (int i = 0; i < Settings.maxPlayers; i++) {
+            for (int i = 0; i < heroes.length; i++) {
                 if (Dungeon.heroes[i] == null) {
                     Dungeon.heroes[i] = newHero;
                     newHero.networkID = threadID;
