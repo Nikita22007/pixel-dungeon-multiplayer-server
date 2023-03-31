@@ -403,6 +403,7 @@ public class Hero extends Char {
 	public boolean act() {
 
 		if (networkID < 0){
+			rest(false);
 			return true;
 		}
 
