@@ -37,10 +37,11 @@ public class Server extends Thread {
     protected static RelayThread relay;
 
     //NSD
-    public static RegListenerState regListenerState = RegListenerState.NONE;
+    public static volatile RegListenerState regListenerState = RegListenerState.NONE;
     protected static NsdManager nsdManager;
     protected static NsdManager.RegistrationListener registrationListener;
-    protected static int TIME_TO_STOP = 3000;
+    protected static final int TIME_TO_STOP = 3000; //ms
+    protected static final int TIME_TO_START_LISTENER = 10000; //ms
     protected static final int SLEEP_TIME = 100; // ms
 
     protected static Thread serverStepThread;
@@ -93,8 +94,15 @@ public class Server extends Thread {
             initializeRegistrationListener();
         }
         registerService(localPort);
+        int timeToWait = TIME_TO_START_LISTENER;
         while (regListenerState == RegListenerState.NONE) {
-        }//should  we use  Sleep?
+            try {
+                sleep(SLEEP_TIME);
+                timeToWait -= SLEEP_TIME;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         started = (regListenerState == RegListenerState.REGISTERED);
         serverThread = new Server();
@@ -108,23 +116,24 @@ public class Server extends Thread {
         if (!started) {
             return true;
         }
+        started = false;
         if (relay != null) {
             relay.interrupt();
             relay = null;
         }
         serverStepThread.interrupt();
-        started = false;
         //ClientThread.sendAll(Codes.SERVER_CLOSED); //todo
         unregisterService();
         int sleep_time = TIME_TO_STOP;
         try {
             while ((regListenerState != RegListenerState.UNREGISTERED && regListenerState != RegListenerState.UNREGISTRATION_FAILED) && (sleep_time > 0)) {
+                //noinspection BusyWait
                 Thread.sleep(SLEEP_TIME);
                 sleep_time -= SLEEP_TIME;
             }
         } catch (InterruptedException ignored) {
         }
-        return true;
+        return sleep_time >0;
     }
 
     public static void parseActions() {
@@ -240,7 +249,9 @@ public class Server extends Thread {
             @Override
             public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
                 // Registration failed! Put debugging code here to determine why.
+                GLog.h("Registration failed: %d?", errorCode);
                 regListenerState = RegListenerState.REGISTRATION_FAILED;
+                throw new RuntimeException("NsdService registration failed: " + errorCode);
             }
 
             @Override
@@ -253,8 +264,9 @@ public class Server extends Thread {
             @Override
             public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
                 // Unregistration failed. Put debugging code here to determine why.
-                GLog.h("Unregistration failed: WHY?");
+                GLog.h("Unregistration failed: %d?", errorCode);
                 regListenerState = RegListenerState.UNREGISTRATION_FAILED;
+                throw new RuntimeException("NsdService unRegistration failed: " + errorCode);
             }
         };
     }
