@@ -220,6 +220,10 @@ public abstract class Actor implements Bundlable {
 		do {
 			synchronized (all) {
 			synchronized (chars) {
+					if (all.isEmpty()){
+						now = 0.0F;
+						return;
+					}
 					now = Float.MAX_VALUE;
 					current = null;
 
