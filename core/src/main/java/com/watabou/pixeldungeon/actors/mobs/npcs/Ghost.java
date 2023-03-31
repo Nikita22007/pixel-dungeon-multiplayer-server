@@ -134,13 +134,14 @@ public class Ghost extends NPC {
 		//todo visual send this!!!!
 		final float FADE_TIME = 0.5f;
 		
-		a.destroy();
+		//a.destroy();
 		/*a.getSprite().parent.add(new AlphaTweener(a.getSprite(), 0, FADE_TIME ) {
 			protected void onComplete() {
 				a.getSprite().killAndErase();
 				parent.erase( this );
 			};
-		} );*/a.getSprite().killAndErase();
+		} );*///a.getSprite().killAndErase();
+		a.die(null);
 		
 		b.pos = a.pos;
 		GameScene.add( b );

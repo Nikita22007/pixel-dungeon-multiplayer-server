@@ -55,11 +55,9 @@ public class ImpShopkeeper extends Shopkeeper {
 				heap.destroy();
 			}
 		}
-		
-		destroy();
-		
+
 		getSprite().emitter().burst( Speck.factory( Speck.WOOL ), 15 );
-		getSprite().killAndErase();
+		die(null);
 	}
 	
 	@Override

@@ -68,10 +68,8 @@ public class Shopkeeper extends NPC {
 				heap.destroy();
 			}
 		}
-		
-		destroy();
-		
-		getSprite().killAndErase();
+
+		die(null);
 		CellEmitter.get( pos ).burst( ElmoParticle.FACTORY, 6 );
 	}
 	
