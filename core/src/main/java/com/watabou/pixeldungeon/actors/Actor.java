@@ -205,13 +205,15 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static void process() {
+		boolean busy_hero = false;
 		if (current instanceof Hero) {
 			Hero hero = (Hero) current;
 			if (hero.networkID == -1) {
 				hero.rest(false);
 			}
+			//busy_hero = !hero.getReady();
 		}
-		if (current != null) {
+		if ((!busy_hero)&&(current != null)) {
 			return;
 		}
 	
