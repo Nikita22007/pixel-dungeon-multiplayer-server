@@ -2,18 +2,9 @@ package com.watabou.pixeldungeon.levels;
 
 import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.actors.Actor;
-import com.watabou.pixeldungeon.items.Heap;
-import com.watabou.pixeldungeon.items.Item;
-import com.watabou.pixeldungeon.items.potions.PotionOfFrost;
-import com.watabou.pixeldungeon.items.rings.Ring;
-import com.watabou.pixeldungeon.items.rings.RingOfSatiety;
 import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.items.weapon.melee.WarHammer;
-import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
 import com.watabou.pixeldungeon.levels.painters.Painter;
-import com.watabou.pixeldungeon.levels.traps.FireTrap;
-import com.watabou.pixeldungeon.levels.traps.ToxicTrap;
-import com.watabou.pixeldungeon.plants.Icecap;
 
 import static com.watabou.pixeldungeon.levels.Terrain.ALARM_TRAP;
 import static com.watabou.pixeldungeon.levels.Terrain.FIRE_TRAP;

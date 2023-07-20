@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.actors.hero;
 
-import android.graphics.drawable.LevelListDrawable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -107,7 +105,6 @@ import com.watabou.pixeldungeon.scenes.SurfaceScene;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
 import com.watabou.pixeldungeon.ui.AttackIndicator;
-import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndMessage;
 import com.watabou.pixeldungeon.windows.WndResurrect;

@@ -3,7 +3,6 @@ package com.watabou.pixeldungeon.network;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NavUtils;
 
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
