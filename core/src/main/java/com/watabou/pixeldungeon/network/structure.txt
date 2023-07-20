@@ -160,6 +160,7 @@ server:
         "resume_button_visible": false
         "iron_keys_count": -1
         "depth": -1
+        "cell_listener_prompt": "" //empty/null == null
     }
     "badge":
     {

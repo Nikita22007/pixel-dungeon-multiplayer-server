@@ -19,12 +19,12 @@ package com.watabou.pixeldungeon.scenes;
 
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.hero.Hero;
+import com.watabou.pixeldungeon.network.SendData;
 
 import org.jetbrains.annotations.Nullable;
 
 public class CellSelector{
-
-	public Listener listener = null;
+	private Listener listener = null;
 	
 	public boolean enabled;
 	public Hero owner;
@@ -36,9 +36,9 @@ public class CellSelector{
 	}
 
 	public void select( int cell ) {
-		if (enabled && listener != null && cell != -1) {
+		if (enabled && getListener() != null && cell != -1) {
 			
-			listener.onSelect( cell );
+			getListener().onSelect( cell );
 			GameScene.ready(owner);
 			
 		} else {
@@ -50,13 +50,23 @@ public class CellSelector{
 
 	
 	public void cancel() {
-		if (listener != null) {
-			listener.onSelect( null );
+		if (getListener() != null) {
+			getListener().onSelect( null );
 		}
 		
 		GameScene.ready(owner);
 	}
-	
+
+
+	public Listener getListener() {
+		return listener;
+	}
+
+	public void setListener(Listener listener) {
+		this.listener = listener;
+		SendData.sendCellListenerPrompt(listener != null ? listener.prompt() : null, owner.networkID);
+	}
+
 	public interface Listener {
 		void onSelect( @Nullable Integer cellz );
 		@Nullable String prompt();

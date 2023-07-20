@@ -246,9 +246,9 @@ public class SendData {
     }
 
     public static void flush(int networkID) {
-    if (networkID <= -1) {
-        return;
-    }
+        if (networkID <= -1) {
+            return;
+        }
         if (clients[networkID] != null) {
             clients[networkID].flush();
         }
@@ -450,5 +450,23 @@ public class SendData {
         } catch (JSONException ignored) {
         }
         sendCustomActionForAll(action);
+    }
+
+    public static void sendCellListenerPrompt(String new_prompt, int networkID) {
+        if (clients[networkID] == null) {
+            return;
+        }
+        try {
+            AtomicReference<JSONObject> dataRef = clients[networkID].packet.dataRef;
+            synchronized (clients[networkID].packet.dataRef) {
+                JSONObject uiObj = dataRef.get().optJSONObject("iu");
+                uiObj = uiObj != null ? uiObj : new JSONObject();
+                uiObj.put("cell_listener_prompt", new_prompt == null ? "" : new_prompt);
+                dataRef.get().put("ui", uiObj);
+            }
+            clients[networkID].flush();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
