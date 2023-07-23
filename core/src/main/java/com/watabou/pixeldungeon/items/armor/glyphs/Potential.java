@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.items.armor.glyphs;
 import com.watabou.noosa.Camera;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.nikita22007.multiplayer.client.effects.Lightning;
+import com.nikita22007.multiplayer.server.effects.Lightning;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.levels.Level;

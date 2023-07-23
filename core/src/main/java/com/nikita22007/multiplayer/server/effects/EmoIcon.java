@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.nikita22007.multiplayer.client.effects;
+package com.nikita22007.multiplayer.server.effects;
 
 import com.watabou.pixeldungeon.sprites.CharSprite;
 
 import org.json.JSONObject;
 
-public abstract class EmoIcon {
+public abstract class  EmoIcon {
 
 	protected float maxSize = 2;
 	protected float timeScale = 1;

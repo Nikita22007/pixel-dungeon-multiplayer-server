@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.sprites;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
-import com.nikita22007.multiplayer.client.effects.DeathRay;
+import com.nikita22007.multiplayer.server.effects.DeathRay;
 
 public class EyeSprite extends MobSprite {
 	

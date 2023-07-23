@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.sprites;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.mobs.Shaman;
-import com.nikita22007.multiplayer.client.effects.Lightning;
+import com.nikita22007.multiplayer.server.effects.Lightning;
 
 public class ShamanSprite extends MobSprite {
 	

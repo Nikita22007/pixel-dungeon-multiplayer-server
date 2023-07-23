@@ -22,7 +22,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Bleeding;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Cripple;
-import com.nikita22007.multiplayer.client.effects.Wound;
+import com.nikita22007.multiplayer.server.effects.Wound;
 import com.watabou.utils.Random;
 
 public class GrippingTrap {

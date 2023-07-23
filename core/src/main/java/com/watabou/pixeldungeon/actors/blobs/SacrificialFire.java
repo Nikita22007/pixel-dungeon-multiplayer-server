@@ -31,7 +31,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
 import com.watabou.pixeldungeon.effects.Flare;
-import com.nikita22007.multiplayer.client.effects.Wound;
+import com.nikita22007.multiplayer.server.effects.Wound;
 import com.watabou.pixeldungeon.effects.particles.SacrificialParticle;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfWipeOut;
 import com.watabou.pixeldungeon.scenes.GameScene;

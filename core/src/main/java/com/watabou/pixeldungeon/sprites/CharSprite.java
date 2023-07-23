@@ -18,15 +18,14 @@
 package com.watabou.pixeldungeon.sprites;
 
 import com.nikita22007.multiplayer.noosa.MovieClip;
-import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
-import com.nikita22007.multiplayer.client.effects.EmoIcon;
-import com.nikita22007.multiplayer.client.effects.FloatingText;
+import com.nikita22007.multiplayer.server.effects.EmoIcon;
+import com.nikita22007.multiplayer.server.effects.FloatingText;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.Splash;
 import com.watabou.pixeldungeon.effects.TorchHalo;

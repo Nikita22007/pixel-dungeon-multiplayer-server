@@ -22,7 +22,7 @@ import java.util.HashSet;
 
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.nikita22007.multiplayer.client.effects.Lightning;
+import com.nikita22007.multiplayer.server.effects.Lightning;
 import com.watabou.pixeldungeon.effects.particles.SparkParticle;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
 import com.watabou.pixeldungeon.levels.Level;

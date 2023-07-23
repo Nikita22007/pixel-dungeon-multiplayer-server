@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.scenes;
 
-import com.nikita22007.multiplayer.client.ui.Banner;
+import com.nikita22007.multiplayer.server.ui.Banner;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Visual;
