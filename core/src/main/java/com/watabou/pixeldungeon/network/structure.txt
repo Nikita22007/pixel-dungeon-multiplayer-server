@@ -337,10 +337,10 @@ action ripple_visual
     "pos": 2
 }
 
-action missle_sprite_visual
+action missile_sprite_visual
 //com.nikita22007.multiplayer.server.sprites.MissileSprite
 {
-    "action_type": "missle_sprite_visual"
+    "action_type": "missile_sprite_visual"
     "from": 2
     "to": 4
     "speed": 240f

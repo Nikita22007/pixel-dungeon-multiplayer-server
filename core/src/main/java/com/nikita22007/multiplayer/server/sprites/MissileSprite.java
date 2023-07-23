@@ -74,15 +74,19 @@ public class MissileSprite {
 
 		JSONObject action = new JSONObject();
 		try {
-			action.put("action_type", "missle_sprite_visual");
+			action.put("action_type", "missile_sprite_visual");
 			action.put("from", from);
 			action.put("to", to);
 			action.put("speed", SPEED);
 			action.put("angular_speed", angularSpeed);
 			action.put("angle", angle);
 
-			action.put("item_iamge", image);
-			action.put("item_glowing", glowing.toJsonObject());
+			action.put("item_image", image);
+			if (glowing != null){
+				action.put("item_glowing", glowing.toJsonObject());
+			} else {
+				action.put("item_glowing", JSONObject.NULL);
+			}
 		} catch (JSONException ignore) {
 		}
 		SendData.sendCustomActionForAll(action);
