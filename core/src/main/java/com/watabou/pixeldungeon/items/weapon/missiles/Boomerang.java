@@ -22,7 +22,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.pixeldungeon.sprites.MissileSprite;
+import com.nikita22007.multiplayer.server.sprites.MissileSprite;
 
 public class Boomerang extends MissileWeapon {
 
@@ -81,7 +81,7 @@ public class Boomerang extends MissileWeapon {
 	
 	private void circleBack( int from, Hero owner ) {
 		
-		((MissileSprite) curUser.getSprite().parent.recycle( MissileSprite.class )).
+		MissileSprite.
 			reset( from, curUser.pos, curItem, null );
 		
 		if (throwEquiped) {

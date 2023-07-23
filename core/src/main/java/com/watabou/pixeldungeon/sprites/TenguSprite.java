@@ -17,6 +17,7 @@
  */
 package com.watabou.pixeldungeon.sprites;
 
+import com.nikita22007.multiplayer.server.sprites.MissileSprite;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.items.weapon.missiles.Shuriken;
@@ -71,7 +72,7 @@ public class TenguSprite extends MobSprite {
 	public void attack( int cell ) {
 		if (!Level.adjacent( cell, ch.pos )) {
 			
-			((MissileSprite)parent.recycle( MissileSprite.class )).
+			MissileSprite.
 				reset( ch.pos, cell, new Shuriken(), new Callback() {			
 					@Override
 					public void call() {

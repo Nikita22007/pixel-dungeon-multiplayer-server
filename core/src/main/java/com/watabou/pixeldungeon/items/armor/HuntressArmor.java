@@ -27,7 +27,7 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.weapon.missiles.Shuriken;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.pixeldungeon.sprites.MissileSprite;
+import com.nikita22007.multiplayer.server.sprites.MissileSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 
@@ -69,7 +69,7 @@ public class HuntressArmor extends ClassArmor {
 					}
 				};
 				
-				((MissileSprite) curUser.getSprite().parent.recycle( MissileSprite.class )).
+				MissileSprite.
 					reset( curUser.pos, mob.pos, proto, callback );
 				
 				targets.put( callback, mob );

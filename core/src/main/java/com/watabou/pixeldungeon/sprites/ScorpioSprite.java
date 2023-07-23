@@ -17,6 +17,7 @@
  */
 package com.watabou.pixeldungeon.sprites;
 
+import com.nikita22007.multiplayer.server.sprites.MissileSprite;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.items.weapon.missiles.Dart;
@@ -76,7 +77,7 @@ public class ScorpioSprite extends MobSprite {
 		if (anim == zap) {
 			idle();
 			
-			((MissileSprite)parent.recycle( MissileSprite.class )).
+			MissileSprite.
 			reset( ch.pos, cellToAttack, new Dart(), new Callback() {			
 				@Override
 				public void call() {

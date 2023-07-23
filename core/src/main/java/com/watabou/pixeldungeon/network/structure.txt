@@ -338,11 +338,11 @@ action ripple_visual
 }
 
 action missle_sprite_visual
-//com.watabou.pixeldungeon.sprites.MissileSprite
+//com.nikita22007.multiplayer.server.sprites.MissileSprite
 {
     "action_type": "missle_sprite_visual"
-    "start_pos": 2
-    "end_pos": 4
+    "from": 2
+    "to": 4
     "speed": 240f
      // calculable "duration": distance.length / speed
     "angular_speed": 720f //degrees

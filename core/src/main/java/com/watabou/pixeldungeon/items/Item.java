@@ -41,7 +41,7 @@ import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.MissileSprite;
+import com.nikita22007.multiplayer.server.sprites.MissileSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -611,8 +611,8 @@ public abstract class Item implements Bundlable {
 		}
 		final float finalDelay = delay;
 		
-		((MissileSprite) user.getSprite().parent.recycle( MissileSprite.class )).
-			reset( user.pos, cell, this, new Callback() {			
+		MissileSprite.
+			reset( user.pos, cell, this, new Callback() {
 				@Override
 				public void call() {
 					Item.this.detach( user.belongings.backpack ).onThrow( cell );
