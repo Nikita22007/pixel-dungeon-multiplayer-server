@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon;
 
+import android.annotation.SuppressLint;
+
 import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -528,7 +530,8 @@ public class Dungeon {
 		loadGame( fileName, false );
 	}
 	
-	public static void loadGame( String fileName, boolean fullLoad ) throws IOException {
+	@SuppressLint("DefaultLocale")
+	public static void loadGame(String fileName, boolean fullLoad ) throws IOException {
 		
 		Bundle bundle = gameBundle( fileName );
 		
@@ -578,8 +581,8 @@ public class Dungeon {
 
 		@SuppressWarnings("unused")
 		String version = bundle.getString( VERSION );
-		Collection<Bundlable> loadedHeroes = bundle.getCollection(HEROES);
 		heroes = new Hero[bundle.getInt(MAX_PLAYERS_SETTING)];
+		Collection<Bundlable> loadedHeroes = bundle.getCollection(HEROES);
 		{
 			int i = 0;
 			for (Bundlable hero : loadedHeroes) {
