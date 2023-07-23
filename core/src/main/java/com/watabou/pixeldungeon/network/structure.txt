@@ -194,8 +194,11 @@ item:
     "defaultAction": "give"/ "null" // if "null" then defaultAction == null :)
     "sprite_sheet": "items.png"
     "image": 0;
-    "glowing": ???
-
+    "glowing":
+    {
+        "color": 0x334411 //rgb int
+        "period": 1f //float, seconds
+    }
     "name": "smth"
     "info": "missingno"
 
@@ -211,11 +214,7 @@ item:
     "identified": false
     "level_known": false
     "show_bar": false
-    "glowing":
-    {
-        "color": 0x334411 //rgb int
-        "period": 1f //float, seconds
-    }
+
     "ui":
     {
         top_left...
@@ -338,7 +337,20 @@ action ripple_visual
     "pos": 2
 }
 
-
+action missle_sprite_visual
+//com.watabou.pixeldungeon.sprites.MissileSprite
+{
+    "action_type": "missle_sprite_visual"
+    "start_pos": 2
+    "end_pos": 4
+    "speed": 240f
+     // calculable "duration": distance.length / speed
+    "angular_speed": 720f //degrees
+    "angle": 0f //degrees
+    //item:
+    item_image: 3 //index in spritesheet
+    item_glowing: glowing //see item
+}
 
 server_actions
 type: "reset_level" -> clears level
