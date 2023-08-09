@@ -431,14 +431,24 @@ public class SendData {
         }
     }
 
-    public static void sendCustomAction(JSONObject action_obj, int networkID) {
+    public static void sendCustomAction(JSONObject action_obj, int networkID, boolean flush) {
         if (networkID <= -1) {
             return;
         }
         if (clients[networkID] != null) {
             clients[networkID].packet.addAction(action_obj);
-            clients[networkID].flush();
+            if (flush) {
+                clients[networkID].flush();
+            }
         }
+    }
+
+    public static void sendCustomAction(JSONObject action_obj, int networkID) {
+        sendCustomAction(action_obj, networkID, true);
+    }
+
+    public static void addToSendCustomAction(JSONObject action_obj, int networkID) {
+        sendCustomAction(action_obj, networkID, false);
     }
 
     public static void sendActionDiscoverTile(int pos, int oldValue) {

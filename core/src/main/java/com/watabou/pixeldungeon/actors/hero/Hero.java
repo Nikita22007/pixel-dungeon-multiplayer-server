@@ -1405,10 +1405,10 @@ public class Hero extends Char {
 		for (int y = ay; y <= by; y++) {
 			for (int x = ax, p = ax + y * Level.WIDTH; x <= bx; x++, p++) {
 				
-				if (Dungeon.visible[p]) {
+				if (Dungeon.visible[p]) { // at this moment Dungeon.visible stores current hero visible
 					
 					if (intentional) {
-						getSprite().parent.addToBack( new CheckedCell( p ) );
+						CheckedCell.SendCheckedCell(p, this);
 					}
 					
 					if (Level.secret[p] && (intentional || Random.Float() < level)) {

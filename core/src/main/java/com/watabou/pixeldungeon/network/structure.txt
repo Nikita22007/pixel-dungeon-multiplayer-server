@@ -352,5 +352,12 @@ action missile_sprite_visual
     item_glowing: glowing //see item
 }
 
+
+action CheckedCell
+{
+    "action_type": "checked_cell_visual"
+    "pos": 2
+}
+
 server_actions
 type: "reset_level" -> clears level
