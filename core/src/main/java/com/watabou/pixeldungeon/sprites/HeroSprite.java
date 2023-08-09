@@ -25,7 +25,6 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.utils.Callback;
@@ -55,6 +54,7 @@ public class HeroSprite extends CharSprite {
 	
 	public void updateArmor() {
 
+		//choose line from texture (it is split on lines). Split it on frames
 		TextureFilm film = new TextureFilm( tiers(), ((Hero)ch).tier(), FRAME_WIDTH, FRAME_HEIGHT );
 		
 		idle = new Animation( 1, true );
@@ -125,7 +125,8 @@ public class HeroSprite extends CharSprite {
 		run.delay = on ? 0.625f / RUN_FRAMERATE : 1f / RUN_FRAMERATE;
 		return on;
 	}
-	
+
+	//returns texture split on horizontal lines. One line - one tier
 	public static TextureFilm tiers() {
 		if (tiers == null) {
 			SmartTexture texture = TextureCache.get( Assets.ROGUE );

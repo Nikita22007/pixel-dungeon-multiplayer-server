@@ -70,7 +70,9 @@ public class TextureFilm {
 			}
 		}
 	}
-	
+
+	// copies atlas
+	// moves all frames right and bottom, new top-left same as atlas[key] frame
 	public TextureFilm( TextureFilm atlas, Object key, int width, int height ) {
 	
 		texWidth = atlas.texWidth;

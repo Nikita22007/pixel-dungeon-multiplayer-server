@@ -19,7 +19,6 @@ package com.watabou.pixeldungeon.sprites;
 
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.utils.Random;
 
 public class SheepSprite extends MobSprite {
 	
