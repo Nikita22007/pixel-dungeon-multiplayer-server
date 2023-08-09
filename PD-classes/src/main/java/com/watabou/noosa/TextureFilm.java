@@ -28,15 +28,24 @@ import com.watabou.gltextures.TextureCache;
 
 import android.graphics.RectF;
 
+/**
+ * Contains set of texture-independent frames
+ * Frame is RectF with values 0..1, frame * texture.size == frame in pixels
+ */
 public class TextureFilm {
-	
+
 	private static final RectF FULL = new RectF( 0, 0, 1, 1 );
 	
 	private int texWidth;
 	private int texHeight;
 	
 	protected HashMap<Object,RectF> frames = new HashMap<Object, RectF>();
-	
+
+	/**
+	 * TextureFilm with one frame (full size of image)
+	 * Uses size of texture to calculate count of frames.
+	 * @param tx texture or key of texture
+	 */
 	public TextureFilm( Object tx ) {
 		
 		SmartTexture texture = TextureCache.get( tx );
@@ -46,11 +55,24 @@ public class TextureFilm {
 		
 		add( null, FULL );
 	}
-	
+
+	/**
+	 * TextureFilm split on rectangle frames. Frames are numbered from left to right and has height as source texture
+	 * Uses size of texture to calculate count of frames.
+	 * @param texture texture
+	 * @param width with of frame
+	 */
 	public TextureFilm( SmartTexture texture, int width ) {
 		this( texture, width, texture.height );
 	}
-	
+
+	/**
+	 * TextureFilm split on rectangle frames. Frames are numbered from left to right from top to bottom.
+	 * Uses size of texture to calculate count of frames
+	 * @param tx key of texture or texture
+	 * @param width with of frame
+	 * @param height height of frame
+	 */
 	public TextureFilm( Object tx, int width, int height ) {
 		
 		SmartTexture texture = TextureCache.get( tx );
@@ -71,8 +93,14 @@ public class TextureFilm {
 		}
 	}
 
-	// copies atlas
-	// moves all frames right and bottom, new top-left same as atlas[key] frame
+	/**
+	 * TextureFilm split on rectangle frames. Frames are numbered from left to right from top to bottom.
+	 * Frames are shifted so that top-left of new.frames[0] is top_left of atlas.frames[id]
+	 * Uses full size of TextureFilm to calculate count of frames.
+	 * @param atlas source TextureFilm
+	 * @param width with of frame
+	 * @param height height of frame
+	 */
 	public TextureFilm( TextureFilm atlas, Object key, int width, int height ) {
 	
 		texWidth = atlas.texWidth;
