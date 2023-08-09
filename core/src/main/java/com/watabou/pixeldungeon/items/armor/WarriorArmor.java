@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.items.armor;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -114,7 +114,7 @@ public class WarriorArmor extends ClassArmor {
 						}
 						
 						CellEmitter.center( dest ).burst( Speck.factory( Speck.DUST ), 10 );
-						Camera.main.shake( 2, 0.5f );
+						Camera.shake( 2, 0.5f );
 						
 						curUser.spendAndNext( LEAP_TIME );
 					}

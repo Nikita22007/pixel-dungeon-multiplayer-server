@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.items.armor.glyphs;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.nikita22007.multiplayer.server.effects.Lightning;
@@ -49,7 +49,7 @@ public class Potential extends Glyph {
 			
 			checkOwner( defender );
 			if (defender instanceof Hero) {
-				Camera.main.shake( 2, 0.3f );
+				Camera.shake( 2, 0.3f );
 			}
 			
 			int[] points = {attacker.pos, defender.pos};

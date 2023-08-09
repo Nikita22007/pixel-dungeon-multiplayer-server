@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.actors.mobs;
 
 import java.util.HashSet;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
@@ -105,7 +105,7 @@ public class DM300 extends Mob {
 		
 		if (Dungeon.visible[cell]) {
 			CellEmitter.get( cell ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
-			Camera.main.shake( 3, 0.7f );
+			Camera.shake( 3, 0.7f );
 			Sample.INSTANCE.play( Assets.SND_ROCKS );
 			
 			if (Level.water[cell]) {

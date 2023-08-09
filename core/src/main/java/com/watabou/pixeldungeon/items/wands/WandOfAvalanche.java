@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.items.wands;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
@@ -98,7 +98,7 @@ public class WandOfAvalanche extends Wand {
 				}
 			}
 
-			Camera.main.shake( 3, 0.07f * (3 + shake) );
+			Camera.shake( 3, 0.07f * (3 + shake) );
 		}
 
 		if (!curUser.isAlive()) {

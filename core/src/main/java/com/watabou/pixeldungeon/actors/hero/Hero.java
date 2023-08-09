@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
@@ -684,7 +684,7 @@ public class Hero extends Char {
 				switch (heap.type) {
 				case TOMB:
 					Sample.INSTANCE.play( Assets.SND_TOMB );
-					Camera.main.shake( 1, 0.5f );
+					Camera.shake( 1, 0.5f );
 					break;
 				case SKELETON:
 					break;
@@ -959,7 +959,7 @@ public class Hero extends Char {
 	private boolean getCloser( final int target ) {
 		
 		if (rooted) {
-			Camera.main.shake( 1, 1f );
+			Camera.shake( 1, 1f );
 			return false;
 		}
 		

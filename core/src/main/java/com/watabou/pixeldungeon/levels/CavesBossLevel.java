@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.noosa.Scene;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
@@ -235,7 +235,7 @@ public class CavesBossLevel extends Level {
 			Dungeon.observeAll();
 			
 			CellEmitter.get( arenaDoor ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
-			Camera.main.shake( 3, 0.7f );
+			Camera.shake( 3, 0.7f );
 			Sample.INSTANCE.play( Assets.SND_ROCKS );
 		}
 	}

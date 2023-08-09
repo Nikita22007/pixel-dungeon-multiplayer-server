@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.items.wands;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -63,7 +63,7 @@ public class WandOfLightning extends Wand {
 		}
 		
 		if (ch instanceof Hero) {
-			Camera.main.shake( 2, 0.3f );
+			Camera.shake( 2, 0.3f );
 		}
 		
 		affected.add( ch );

@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.actors.mobs;
 
 import java.util.HashSet;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.ResultDescriptions;
 import com.watabou.pixeldungeon.actors.Char;
@@ -104,7 +104,7 @@ public class Shaman extends Mob implements Callback {
 				
 				if (enemy instanceof Hero) {
 					
-					Camera.main.shake( 2, 0.3f );
+					Camera.shake( 2, 0.3f );
 					
 					if (!enemy.isAlive()) {
 						Dungeon.fail( Utils.format( ResultDescriptions.MOB, 

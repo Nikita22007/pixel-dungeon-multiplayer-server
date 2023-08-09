@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.plants;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
@@ -49,7 +49,7 @@ public class Earthroot extends Plant {
 		
 		if (Dungeon.visible[pos]) {
 			CellEmitter.bottom( pos ).start( EarthParticle.FACTORY, 0.05f, 8 );
-			Camera.main.shake( 1, 0.4f );
+			Camera.shake( 1, 0.4f );
 		}
 	}
 	

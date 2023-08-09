@@ -405,5 +405,16 @@ action unload_sample
     "action_type": "unload_sample"
     "sample": "snd_boss.mp3"
 }
+
+//camera
+
+action shake_camera
+{
+    "action_type": "shake_camera"
+    "magnitude": 1f
+    "duration": 2f
+}
+
+
 server_actions
 type: "reset_level" -> clears level

@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.actors;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
@@ -163,7 +163,7 @@ public abstract class Char extends Actor {
 			if (enemy instanceof Hero) {
 				((Hero)enemy).interrupt();
 				if (effectiveDamage > enemy.getHT() / 4) {
-					Camera.main.shake( GameMath.gate( 1, effectiveDamage / (enemy.getHT() / 4), 5), 0.3f );
+					Camera.shake( GameMath.gate( 1, effectiveDamage / (enemy.getHT() / 4), 5), 0.3f );
 				}
 			}
 			

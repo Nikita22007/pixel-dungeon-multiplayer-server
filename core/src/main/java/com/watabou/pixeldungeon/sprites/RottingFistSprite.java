@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.sprites;
 
-import com.watabou.noosa.Camera;
+import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.pixeldungeon.Assets;
 
@@ -63,7 +63,7 @@ public class RottingFistSprite extends MobSprite {
 			acc.set( 0 );
 			place( ch.pos );
 			
-			Camera.main.shake( 4, 0.2f );
+			Camera.shake( 4, 0.2f );
 		}
 	}
 }
