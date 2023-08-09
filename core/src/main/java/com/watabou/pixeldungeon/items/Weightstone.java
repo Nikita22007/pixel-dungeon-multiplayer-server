@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.items;
 import java.util.ArrayList;
 
 import com.watabou.noosa.BitmapTextMultiline;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.weapon.Weapon;

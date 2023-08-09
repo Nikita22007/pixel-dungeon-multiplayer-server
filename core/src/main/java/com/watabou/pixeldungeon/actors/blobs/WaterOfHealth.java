@@ -17,9 +17,8 @@
  */
 package com.watabou.pixeldungeon.actors.blobs;
 
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.Journal;
 import com.watabou.pixeldungeon.Journal.Feature;
 import com.watabou.pixeldungeon.actors.buffs.Hunger;

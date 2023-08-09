@@ -25,8 +25,6 @@ import android.graphics.RectF;
 
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
-import com.watabou.utils.Point;
-import com.watabou.utils.PointF;
 
 public class MovieClip extends Image {
 

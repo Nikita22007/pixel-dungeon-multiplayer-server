@@ -23,7 +23,7 @@ import android.text.Editable;
 import android.widget.EditText;
 
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.PixelDungeon;
@@ -186,19 +186,7 @@ public class WndSettings extends Window {
 		btnMusic.setRect( 0, (configureRelay != null ? configureRelay.bottom() : BTN_HEIGHT) + GAP, WIDTH, BTN_HEIGHT );
 		btnMusic.checked( PixelDungeon.music() );
 		add( btnMusic );
-		
-		CheckBox btnSound = new CheckBox( TXT_SOUND ) {
-			@Override
-			protected void onClick() {
-				super.onClick();
-				PixelDungeon.soundFx( checked() );
-				Sample.INSTANCE.play( Assets.SND_CLICK );
-			}
-		};
-		btnSound.setRect( 0, btnMusic.bottom() + GAP, WIDTH, BTN_HEIGHT );
-		btnSound.checked( PixelDungeon.soundFx() );
-		add( btnSound );
-		
+
 		if (inGame) {
 			
 		} else {
@@ -209,7 +197,7 @@ public class WndSettings extends Window {
 					PixelDungeon.landscape( !PixelDungeon.landscape() );
 				}
 			};
-			btnOrientation.setRect( 0, btnSound.bottom() + GAP, WIDTH, BTN_HEIGHT );
+			btnOrientation.setRect( 0, btnMusic.bottom() + GAP, WIDTH, BTN_HEIGHT );
 			add( btnOrientation );
 			
 			resize( WIDTH, (int)btnOrientation.bottom() );

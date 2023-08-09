@@ -28,7 +28,7 @@ import android.view.View;
 
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
@@ -140,9 +140,6 @@ public class PixelDungeon extends Game {
 		if (Preferences.INSTANCE.getBoolean( Preferences.KEY_LANDSCAPE, false ) != landscape) {
 			landscape( !landscape );
 		}
-		
-		Music.INSTANCE.enable( music() );
-		Sample.INSTANCE.enable( soundFx() );
 		
 		Sample.INSTANCE.load( 
 			Assets.SND_CLICK, 
@@ -345,15 +342,6 @@ public class PixelDungeon extends Game {
 	
 	public static boolean music() {
 		return Preferences.INSTANCE.getBoolean( Preferences.KEY_MUSIC, true );
-	}
-	
-	public static void soundFx( boolean value ) {
-		Sample.INSTANCE.enable( value );
-		Preferences.INSTANCE.put( Preferences.KEY_SOUND_FX, value );
-	}
-	
-	public static boolean soundFx() {
-		return Preferences.INSTANCE.getBoolean( Preferences.KEY_SOUND_FX, true );
 	}
 	
 	public static void donated( String value ) {

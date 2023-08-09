@@ -18,7 +18,7 @@
 package com.nikita22007.multiplayer.server.effects;
 
 import com.nikita22007.multiplayer.utils.Utils;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.Callback;

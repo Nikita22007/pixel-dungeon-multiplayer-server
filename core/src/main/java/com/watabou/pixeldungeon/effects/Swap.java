@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.effects;
 
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Visual;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;

@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.items;
 
 import androidx.annotation.Nullable;
 
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;

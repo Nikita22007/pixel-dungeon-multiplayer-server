@@ -372,5 +372,38 @@ action flare
     "angle": 45 //degrees
     "angular_speed" 180 //degrees
 }
+
+
+/// sound
+action play_sample //play sample by id, load it, if is not loaded.
+{
+    "action_type": "play_sample"
+    "sample": "snd_boss.mp3"
+    "left_volume" : 1f
+    "right_volume": 1f
+    "rate": 1.1f
+}
+
+action load_sample
+{
+    "action_type": "load_sample"
+    "samples": [
+        "snd_boss.mp3"
+    ]
+}
+
+action reload_sample //if sample is not inside new list, it removes.
+{
+    "action_type": "reload_sample"
+    "samples": [
+        "snd_boss.mp3"
+    ]
+}
+
+action unload_sample
+{
+    "action_type": "unload_sample"
+    "sample": "snd_boss.mp3"
+}
 server_actions
 type: "reset_level" -> clears level

@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.sprites;
 
 import com.watabou.noosa.TextureFilm;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.effects.MagicMissile;
 import com.watabou.utils.Callback;

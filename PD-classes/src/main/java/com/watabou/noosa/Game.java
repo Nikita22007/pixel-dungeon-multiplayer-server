@@ -30,14 +30,11 @@ import com.watabou.glscripts.Script;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.input.Keys;
 import com.watabou.input.Touchscreen;
-import com.watabou.noosa.audio.Music;
-import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BitmapCache;
 import com.watabou.utils.SystemTime;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.opengl.GLES20;
@@ -135,9 +132,6 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		
 		now = 0;
 		view.onResume();
-		
-		Music.INSTANCE.resume();
-		Sample.INSTANCE.resume();
 	}
 	
 	@Override
@@ -150,18 +144,12 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		
 		view.onPause();
 		Script.reset();
-		
-		Music.INSTANCE.pause();
-		Sample.INSTANCE.pause();
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		destroyGame();
-		
-		Music.INSTANCE.mute();
-		Sample.INSTANCE.reset();
 	}
 	
 	@SuppressLint({ "Recycle", "ClickableViewAccessibility" })

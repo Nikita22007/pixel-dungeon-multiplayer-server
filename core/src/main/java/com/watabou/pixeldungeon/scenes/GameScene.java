@@ -22,7 +22,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Music;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;

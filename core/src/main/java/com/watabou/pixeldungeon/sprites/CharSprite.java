@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.sprites;
 
 import com.nikita22007.multiplayer.noosa.MovieClip;
-import com.watabou.noosa.audio.Sample;
+import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
