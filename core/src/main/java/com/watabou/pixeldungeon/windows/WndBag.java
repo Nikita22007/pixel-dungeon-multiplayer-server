@@ -133,7 +133,7 @@ public class WndBag extends WndTabbed {
 		} catch (JSONException ignored) {
 		}
 
-		SendData.sendWindow(owner.networkID, "wnd_bag", id, wnd_obj);
+		SendData.sendWindow(owner.networkID, "wnd_bag", getId(), wnd_obj);
 	}
 
 	@Override

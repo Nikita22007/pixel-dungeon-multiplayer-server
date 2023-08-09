@@ -47,7 +47,7 @@ public class WndOptions extends Window {
 			}
 			params.put("options", optionsArr);
 		} catch (JSONException ignored) {}
-		SendData.sendWindow(owner.networkID, "wnd_option", id, params);
+		SendData.sendWindow(owner.networkID, "wnd_option", getId(), params);
 	}
 
 	public WndOptions(String title, String message, String... options) {

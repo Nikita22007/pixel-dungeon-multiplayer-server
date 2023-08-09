@@ -30,11 +30,10 @@ import com.watabou.pixeldungeon.actors.buffs.FlavourBuff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
-import com.watabou.pixeldungeon.effects.Flare;
+import com.nikita22007.multiplayer.server.effects.Flare;
 import com.nikita22007.multiplayer.server.effects.Wound;
 import com.watabou.pixeldungeon.effects.particles.SacrificialParticle;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfWipeOut;
-import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.ui.BuffIndicator;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
@@ -115,7 +114,7 @@ public class SacrificialFire extends Blob {
 					Journal.remove( Feature.SACRIFICIAL_FIRE );
 					
 					GLog.w( TXT_REWARD );
-					GameScene.effect( new Flare( 7, 32 ).color( 0x66FFFF, true ).show( ch.getSprite().parent, DungeonTilemap.tileCenterToWorld( fire.pos ), 2f ) );
+					new Flare( 7, 32 ).color( 0x66FFFF, true ).show( ch.getSprite().parent, DungeonTilemap.tileCenterToWorld( fire.pos ), 2f );
 					Dungeon.level.drop( new ScrollOfWipeOut(), fire.pos );
 				}
 			} else {

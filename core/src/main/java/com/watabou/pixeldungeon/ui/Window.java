@@ -56,7 +56,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 
 	private Hero ownerHero;
 	//Each window CURRENTLY open for ownerHero has a unique id. Two windows can have the same id only with different ownerHero.
-	public int id;
+	private int id;
 
 	public static final int TITLE_COLOR = 0xFFFF44;
 
@@ -70,7 +70,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 	}
 
 	protected synchronized void attachToHero(Hero hero) {
-		if (id > 0) {
+		if (getId() > 0) {
 			if (hero != getOwnerHero()) {
 				assert false;
 			}
@@ -83,9 +83,9 @@ public class Window extends Group implements Signal.Listener<Key> {
 		if (!windows.containsKey(hero)) {
 			windows.put(hero, new HashMap<>(3));
 		}
-		id = idCounter.get(hero) + 1;
-		idCounter.put(hero, id);
-		windows.get(hero).put(id, this);
+		setId(idCounter.get(hero) + 1);
+		idCounter.put(hero, getId());
+		windows.get(hero).put(getId(), this);
 	}
 
 	public Window( int width, int height ) {
@@ -188,7 +188,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 		Keys.event.remove( this );
 
 		if (getOwnerHero() != null) {
-			Window removed = windows.get(ownerHero).remove(id);
+			Window removed = windows.get(ownerHero).remove(getId());
 			if ((removed != null) && (removed != this)) {
 				throw new AssertionError("Removed window is not current Window");
 			}
@@ -232,5 +232,13 @@ public class Window extends Group implements Signal.Listener<Key> {
 
 	private void setOwnerHero(Hero ownerHero) {
 		this.ownerHero = ownerHero;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

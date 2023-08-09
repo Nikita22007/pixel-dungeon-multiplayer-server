@@ -21,6 +21,7 @@ import com.watabou.gltextures.SmartTexture;
 import com.watabou.noosa.NinePatch;
 import com.watabou.pixeldungeon.Assets;
 
+//used only inside windows
 public class ShadowBox extends NinePatch {
 
 	public static final float SIZE	= 16;

@@ -359,5 +359,18 @@ action CheckedCell
     "pos": 2
 }
 
+action flare
+{
+    "action_type": "flare_visual"
+    "position_x": 1f
+    "position_y": 2f
+    "color": 0xFFFFFF //(hardlight)
+    "duration": 3f
+    "light_mode": false
+    "rays": 3 //count of rays
+    "radius": 5f
+    "angle": 45 //degrees
+    "angular_speed" 180 //degrees
+}
 server_actions
 type: "reset_level" -> clears level

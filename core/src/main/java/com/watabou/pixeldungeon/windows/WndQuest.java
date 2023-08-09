@@ -96,7 +96,7 @@ public class WndQuest extends Window {
 			}
 			params.put("options", optionsArr);
 		} catch (JSONException ignored) {}
-		SendData.sendWindow(owner.networkID, "wnd_quest", id, params);
+		SendData.sendWindow(owner.networkID, "wnd_quest", getId(), params);
 	}
 	
 	protected void onSelect( int index ) {};

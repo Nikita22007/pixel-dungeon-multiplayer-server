@@ -682,6 +682,7 @@ public class Dungeon {
 		
 		resultDescription = desc;
 		Rankings.INSTANCE.submit( true );
+		//todo: send win. (Surface scene)
 	}
 	
 	public static void observeAll() {
