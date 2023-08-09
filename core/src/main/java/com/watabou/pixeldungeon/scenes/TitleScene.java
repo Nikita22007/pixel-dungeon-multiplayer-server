@@ -31,7 +31,6 @@ import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.effects.BannerSprites;
-import com.watabou.pixeldungeon.effects.Fireball;
 import com.watabou.pixeldungeon.ui.Archs;
 import com.watabou.pixeldungeon.ui.ExitButton;
 import com.watabou.pixeldungeon.ui.PrefsButton;
@@ -66,9 +65,6 @@ public class TitleScene extends PixelScene {
 		
 		title.x = (w - title.width()) / 2;
 		title.y = (h - height) / 2;
-		
-		placeTorch( title.x + 18, title.y + 20 );
-		placeTorch( title.x + title.width - 18, title.y + 20 );
 		
 		Image signs = new Image( BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON_SIGNS ) ) {
 			private float time = 0;
@@ -130,12 +126,6 @@ public class TitleScene extends PixelScene {
 		add( btnExit );
 		
 		fadeIn();
-	}
-	
-	private void placeTorch( float x, float y ) {
-		Fireball fb = new Fireball();
-		fb.setPos( x, y );
-		add( fb );
 	}
 	
 	private static class DashboardItem extends Button {
