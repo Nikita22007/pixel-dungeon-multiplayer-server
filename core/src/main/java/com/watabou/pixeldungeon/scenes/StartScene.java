@@ -37,7 +37,6 @@ import com.watabou.pixeldungeon.actors.hero.HeroClass;
 import com.watabou.pixeldungeon.effects.BannerSprites;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.BannerSprites.Type;
-import com.watabou.pixeldungeon.ui.Archs;
 import com.watabou.pixeldungeon.ui.ExitButton;
 import com.watabou.pixeldungeon.ui.Icons;
 import com.watabou.pixeldungeon.ui.RedButton;
@@ -106,11 +105,7 @@ public class StartScene extends PixelScene {			//client  Scene
 		float left = (w - width) / 2;
 		float top = (h - height) / 2; 
 		float bottom = h - top;
-		
-		Archs archs = new Archs();
-		archs.setSize( w, h );
-		add( archs ); 
-		
+
 		Image title = BannerSprites.get( Type.SELECT_YOUR_HERO );
 		title.x = align( (w - title.width()) / 2 );
 		title.y = align( top );
