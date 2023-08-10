@@ -21,7 +21,6 @@
 
 package com.watabou.gltextures;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;

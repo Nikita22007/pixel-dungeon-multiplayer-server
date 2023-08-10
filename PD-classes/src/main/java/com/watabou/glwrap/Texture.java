@@ -33,9 +33,7 @@ public class Texture {
 
 	public static final int NEAREST	= GLES20.GL_NEAREST;
 	public static final int LINEAR	= GLES20.GL_LINEAR;
-	
-	public static final int REPEAT	= GLES20.GL_REPEAT;
-	public static final int MIRROR	= GLES20.GL_MIRRORED_REPEAT;
+
 	public static final int CLAMP	= GLES20.GL_CLAMP_TO_EDGE;
 	
 	public int id;
@@ -50,11 +48,7 @@ public class Texture {
 		
 		bind();
 	}
-	
-	public static void activate( int index ) {
-		GLES20.glActiveTexture( GLES20.GL_TEXTURE0 + index );
-	}
-	
+
 	public void bind() {
 		if (id != bound_id) {
 			GLES20.glBindTexture( GLES20.GL_TEXTURE_2D, id );
@@ -109,31 +103,7 @@ public class Texture {
 			GLES20.GL_UNSIGNED_BYTE,
 			imageBuffer );
 	}
-	
-	public void pixels( int w, int h, byte[] pixels ) {
-		
-		bind();
-		
-		ByteBuffer imageBuffer = ByteBuffer.
-			allocateDirect( w * h ).
-			order( ByteOrder.nativeOrder() );
-		imageBuffer.put( pixels );
-		imageBuffer.position( 0 );
-		
-		GLES20.glPixelStorei( GLES20.GL_UNPACK_ALIGNMENT, 1 );
 
-		GLES20.glTexImage2D(
-			GLES20.GL_TEXTURE_2D,
-			0,
-			GLES20.GL_ALPHA,
-			w,
-			h,
-			0,
-			GLES20.GL_ALPHA,
-			GLES20.GL_UNSIGNED_BYTE,
-			imageBuffer );
-	}
-	
 	// If getConfig returns null (unsupported format?), GLUtils.texImage2D works
 	// incorrectly. In this case we need to load pixels manually
 	public void handMade( Bitmap bitmap, boolean recode ) {
@@ -159,25 +129,5 @@ public class Texture {
 		
 		premultiplied = false;
 	}
-	
-	public static Texture create( Bitmap bmp ) {
-		Texture tex = new Texture();
-		tex.bitmap( bmp );
-		
-		return tex;
-	}
-	
-	public static Texture create( int width, int height, int[] pixels ) {
-		Texture tex = new Texture();
-		tex.pixels( width, height, pixels );
-		
-		return tex;
-	}
-	
-	public static Texture create( int width, int height, byte[] pixels ) {
-		Texture tex = new Texture();
-		tex.pixels( width, height, pixels );
-		
-		return tex;
-	}
+
 }

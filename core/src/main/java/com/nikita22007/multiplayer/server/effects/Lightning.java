@@ -1,5 +1,5 @@
 /*
- * Pixel Dungeon
+ * Pixel Dungeon Multiplayer
  * Copyright (C) 2021-2023 Nikita Shaposhnikov
  *
  * This program is free software: you can redistribute it and/or modify
