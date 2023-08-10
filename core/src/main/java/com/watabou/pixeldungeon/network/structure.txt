@@ -249,6 +249,16 @@ action move char:
     "animation_state_after_move": "idle" // ...
 }
 
+action AlphaTweener:
+{
+    "action_type": "sprite_action"
+    "action": "alpha_tweener"
+    "actor_id":1
+    "start_alpha": 1f
+    "target_alpha": 1f
+    "interval": 3f
+}
+
 action destroy char
 {
     "action_type": "destroy_char"

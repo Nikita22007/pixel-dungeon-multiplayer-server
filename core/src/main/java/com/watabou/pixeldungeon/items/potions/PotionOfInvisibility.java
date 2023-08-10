@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.items.potions;
 
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
@@ -57,7 +57,7 @@ public class PotionOfInvisibility extends Potion {
 	
 	public static void melt( Char ch ) {
 		if (ch.getSprite().parent != null) {
-			ch.getSprite().parent.add( new AlphaTweener(ch.getSprite(), ALPHA, 0.4f ) );
+			AlphaTweener.showAlphaTweener(ch.getSprite(), ALPHA, 0.4f );
 		} else {
 			ch.getSprite().alpha( ALPHA );
 		}

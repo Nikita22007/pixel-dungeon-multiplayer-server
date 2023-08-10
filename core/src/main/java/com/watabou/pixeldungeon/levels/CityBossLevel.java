@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.levels;
 
 import com.watabou.noosa.Scene;
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Bones;
 import com.watabou.pixeldungeon.Dungeon;
@@ -193,7 +193,7 @@ public class CityBossLevel extends Level {
 			if (Dungeon.visible[boss.pos]) {
 				boss.notice();
 				boss.getSprite().alpha( 0 );
-				boss.getSprite().parent.add( new AlphaTweener(boss.getSprite(), 1, 0.1f ) );
+				AlphaTweener.showAlphaTweener(boss.getSprite(), 1, 0.1f );
 			}
 			
 			set( arenaDoor, Terrain.LOCKED_DOOR );

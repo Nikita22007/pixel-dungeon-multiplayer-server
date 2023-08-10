@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.items.wands;
 
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -66,7 +66,7 @@ public class WandOfBlink extends Wand {
 		
 		if (ch.invisible == 0) {
 			ch.getSprite().alpha( 0 );
-			ch.getSprite().parent.add( new AlphaTweener(ch.getSprite(), 1, 0.4f ) );
+			AlphaTweener.showAlphaTweener(ch.getSprite(), 1, 0.4f );
 		}
 		
 		ch.getSprite().emitter().start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );

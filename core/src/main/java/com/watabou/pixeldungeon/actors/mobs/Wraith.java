@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.actors.mobs;
 
 import java.util.HashSet;
 
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -116,7 +116,7 @@ public class Wraith extends Mob {
 			GameScene.add( w, SPAWN_DELAY );
 			
 			w.getSprite().alpha( 0 );
-			w.getSprite().parent.add( new AlphaTweener(w.getSprite(), 1, 0.5f ) );
+			AlphaTweener.showAlphaTweener(w.getSprite(), 1, 0.5f );
 			
 			w.getSprite().emitter().burst( ShadowParticle.CURSE, 5 );
 			

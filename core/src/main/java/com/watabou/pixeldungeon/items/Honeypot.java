@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.items;
 import java.util.ArrayList;
 
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
@@ -107,7 +107,7 @@ public class Honeypot extends Item {
 			Actor.addDelayed( new Pushing( bee, pos, newPos ), -1 );
 			
 			bee.getSprite().alpha( 0 );
-			bee.getSprite().parent.add( new AlphaTweener(bee.getSprite(), 1, 0.15f ) );
+			AlphaTweener.showAlphaTweener(bee.getSprite(), 1, 0.15f );
 			
 			Sample.INSTANCE.play( Assets.SND_BEE );
 		}

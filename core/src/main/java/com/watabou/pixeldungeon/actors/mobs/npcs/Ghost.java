@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.actors.mobs.npcs;
 import java.util.HashSet;
 
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.tweeners.AlphaTweener;
+import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Challenges;
 import com.watabou.pixeldungeon.Dungeon;
@@ -131,10 +131,10 @@ public class Ghost extends NPC {
 	}
 	
 	public static void replace( final Mob a, final Mob b ) {
-		//todo visual send this!!!!
+		//todo fix this!!!!
 		final float FADE_TIME = 0.5f;
-		
-		//a.destroy();
+		AlphaTweener.showAlphaTweener(a.getSprite(),0, FADE_TIME);
+				//a.destroy();
 		/*a.getSprite().parent.add(new AlphaTweener(a.getSprite(), 0, FADE_TIME ) {
 			protected void onComplete() {
 				a.getSprite().killAndErase();
@@ -148,7 +148,7 @@ public class Ghost extends NPC {
 		
 		b.getSprite().flipHorizontal = a.getSprite().flipHorizontal;
 		b.getSprite().alpha( 0 );
-		b.getSprite().parent.add( new AlphaTweener(b.getSprite(), 1, FADE_TIME ) );
+		AlphaTweener.showAlphaTweener(b.getSprite(), 1, FADE_TIME );
 	}
 
 	public static class Quest {

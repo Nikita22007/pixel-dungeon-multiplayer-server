@@ -1,9 +1,5 @@
-/*
- * Pixel Dungeon
- * Copyright (C) 2012-2015  Oleg Dolya
- *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+/* Pixel Dungeon Multiplayer
+ * Copyright (C) 2021-2023 Shaposhnikov Nikita
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +15,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.watabou.noosa.tweeners;
+package com.nikita22007.multiplayer.noosa.tweeners;
 
-import com.watabou.noosa.Visual;
+import com.watabou.pixeldungeon.network.SendData;
+import com.watabou.pixeldungeon.sprites.CharSprite;
+import com.watabou.pixeldungeon.utils.GLog;
 
-public class AlphaTweener extends Tweener {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-	public Visual image;
-	
-	public float start;
-	public float delta;
-	
-	public AlphaTweener( Visual image, float alpha, float time ) {
-		super( image, time );
-		
-		this.image = image;
-		start = image.alpha();
-		delta = alpha - start;
+public class AlphaTweener {
+	private AlphaTweener(){
+		throw new RuntimeException("Forbidden");
 	}
 
-	@Override
-	protected void updateValues( float progress ) {
-		image.alpha( start + delta * progress );
+	public static void showAlphaTweener(CharSprite image, float target_alpha, float interval ) {
+		if (image.ch == null) {
+			GLog.n("Can't add alpha tweener to unknown character");
+		} else {
+			JSONObject actionObj = new JSONObject();
+			try {
+				actionObj.put("action_type", "sprite_action");
+				actionObj.put("action", "alpha_tweener");
+				actionObj.put("actor_id", image.ch.id());
+				actionObj.put("start_alpha", image.alpha());
+				actionObj.put("target_alpha", target_alpha);
+				actionObj.put("interval", interval);
+			} catch (JSONException ignored) {
+			}
+			SendData.sendCustomActionForAll(actionObj);
+		}
 	}
 }
