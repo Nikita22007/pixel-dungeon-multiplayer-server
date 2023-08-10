@@ -59,8 +59,6 @@ public class WandOfBlink extends Wand {
 	
 	public static void appear( Char ch, int pos ) {
 		
-		ch.getSprite().interruptMotion();
-		
 		ch.move( pos );
 		ch.getSprite().place( pos );
 		

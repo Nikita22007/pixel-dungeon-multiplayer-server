@@ -20,7 +20,6 @@ package com.watabou.pixeldungeon.sprites;
 import com.nikita22007.multiplayer.noosa.MovieClip;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
@@ -47,7 +46,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteAction;
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteState;
 
-public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip.Listener {
+public class CharSprite extends MovieClip implements MovieClip.Listener {
 
 	public static final int DEFAULT		= 0xFFFFFF;
 	public static final int POSITIVE	= 0x00FF00;
@@ -86,8 +85,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected Animation die;
 
 	protected Callback animCallback;
-
-	protected Tweener motion;
 
 	protected Emitter burning;
 	protected Emitter levitation;
@@ -175,12 +172,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 
 		ch.onMotionComplete();
-	}
-
-	public void interruptMotion() {
-		if (motion != null) {
-			onComplete( motion );
-		}
 	}
 
 	public void attack( int cell ) {
@@ -415,15 +406,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (emo != null) {
 			setEmo(null);
-		}
-	}
-
-	@Override
-	public void onComplete( Tweener tweener ) {
-	if (tweener == motion) {
-
-			motion.killAndErase();
-			motion = null;
 		}
 	}
 
