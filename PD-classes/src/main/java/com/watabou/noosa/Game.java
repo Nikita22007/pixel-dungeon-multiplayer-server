@@ -237,7 +237,6 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		GLES20.glEnable( GL10.GL_SCISSOR_TEST );
 		
 		TextureCache.reload();
-		RenderedText.reloadCache();
 	}
 	
 	protected void destroyGame() {
