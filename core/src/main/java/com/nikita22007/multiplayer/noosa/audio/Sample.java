@@ -99,7 +99,7 @@ public enum Sample {
 
 		JSONObject actionObj = new JSONObject();
 		try {
-			actionObj.put("action_type", "unload_sample");
+			actionObj.put("action_type", "play_sample");
 			actionObj.put("sample", id);
 			actionObj.put("left_volume", leftVolume);
 			actionObj.put("right_volume", rightVolume);

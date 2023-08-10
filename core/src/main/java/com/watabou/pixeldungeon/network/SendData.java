@@ -14,6 +14,7 @@ import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.windows.WndStory;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -414,7 +415,7 @@ public class SendData {
     public static void sendFlashChar(CharSprite sprite, float flashTime) {
     }
 
-    public static void sendCustomActionForAll(JSONObject action_obj) {
+    public static void sendCustomActionForAll(@NotNull JSONObject action_obj) {
         for (int i = 0; i < clients.length; i++) {
             sendCustomAction(action_obj, i);
         }

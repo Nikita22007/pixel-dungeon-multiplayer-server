@@ -33,7 +33,7 @@ public class Server extends Thread {
     //network
     protected static ServerSocket serverSocket;
     protected static Server serverThread;
-    protected static ClientThread[] clients;
+    protected static ClientThread[] clients = new ClientThread[0];
     protected static RelayThread relay;
 
     //NSD
