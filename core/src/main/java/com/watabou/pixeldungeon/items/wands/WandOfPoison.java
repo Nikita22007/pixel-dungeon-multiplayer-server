@@ -23,7 +23,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 
@@ -47,8 +47,8 @@ public class WandOfPoison extends Wand {
 		}
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.poison( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.poison( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

@@ -20,7 +20,7 @@ package com.watabou.pixeldungeon.sprites;
 import com.watabou.noosa.TextureFilm;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.utils.Callback;
 
 public class BurningFistSprite extends MobSprite {
@@ -60,16 +60,10 @@ public class BurningFistSprite extends MobSprite {
 		if (anim == attack) {
 
 			Sample.INSTANCE.play( Assets.SND_ZAP );
-			MagicMissile.shadow( parent, ch.pos, posToShoot, 
-				new Callback() {			
-					@Override
-					public void call() {
-						ch.onAttackComplete();
-					}
-				} );
-			
+			MagicMissile.shadow( ch.pos, posToShoot );
 			idle();
-			
+			ch.onAttackComplete();
+
 		} else {
 			super.onComplete( anim );
 		}

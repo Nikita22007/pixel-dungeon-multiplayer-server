@@ -22,7 +22,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.effects.Swap;
 import com.watabou.pixeldungeon.items.Dewdrop;
 import com.watabou.pixeldungeon.items.Heap;
@@ -121,8 +121,8 @@ public class WandOfReach extends Wand {
 		}
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.force( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.force( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

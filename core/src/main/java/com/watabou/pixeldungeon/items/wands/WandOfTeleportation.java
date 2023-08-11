@@ -22,7 +22,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
@@ -74,8 +74,8 @@ public class WandOfTeleportation extends Wand {
 		}
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.coldLight( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.coldLight( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

@@ -25,7 +25,7 @@ import com.watabou.pixeldungeon.actors.buffs.Amok;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Vertigo;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 
@@ -53,8 +53,9 @@ public class WandOfAmok extends Wand {
 		}
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.purpleLight( curUser.getSprite().parent, curUser.pos, cell, callback );
+	@Override
+	protected void fx( int cell ) {
+		MagicMissile.purpleLight( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

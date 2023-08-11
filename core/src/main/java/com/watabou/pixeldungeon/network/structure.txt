@@ -305,6 +305,8 @@ action add_item_to_bag
     // remove: removes item. item field in action  will be ignored
 }
 
+
+//effects
 action visual_degradation
 {
     "action_type": "degradation"
@@ -355,6 +357,14 @@ action ripple_visual
 {
     "action_type": "ripple_visual"
     "pos": 2
+}
+
+action magic_missile_visual
+{
+    "action_type": "magic_missile_visual"
+    "type": "bluelight"
+    "from": 2
+    "to": 3
 }
 
 action missile_sprite_visual
@@ -434,6 +444,7 @@ action shake_camera
     "magnitude": 1f
     "duration": 2f
 }
+
 
 
 server_actions

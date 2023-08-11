@@ -22,7 +22,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.blobs.Regrowth;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
@@ -71,8 +71,8 @@ public class WandOfRegrowth extends Wand {
 		}
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.foliage( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.foliage( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

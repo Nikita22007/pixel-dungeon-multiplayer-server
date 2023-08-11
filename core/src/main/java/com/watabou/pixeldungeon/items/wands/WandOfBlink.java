@@ -23,7 +23,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
 import com.watabou.utils.Callback;
@@ -51,8 +51,8 @@ public class WandOfBlink extends Wand {
 	}
 	
 	@Override
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.whiteLight( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.whiteLight( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 		curUser.getSprite().visible = false;
 	}

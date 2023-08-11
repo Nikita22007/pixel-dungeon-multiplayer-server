@@ -27,7 +27,7 @@ import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Invisibility;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroClass;
-import com.watabou.pixeldungeon.effects.MagicMissile;
+import com.nikita22007.multiplayer.server.effects.MagicMissile;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.ItemStatusHandler;
 import com.watabou.pixeldungeon.items.KindOfWeapon;
@@ -39,7 +39,6 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 public abstract class Wand extends KindOfWeapon {
@@ -338,8 +337,8 @@ public abstract class Wand extends KindOfWeapon {
 		return (tier * tier - tier + 10) / 2 + level;
 	}
 	
-	protected void fx( int cell, Callback callback ) {
-		MagicMissile.blueLight( curUser.getSprite().parent, curUser.pos, cell, callback );
+	protected void fx( int cell ) {
+		MagicMissile.blueLight( curUser.pos, cell );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 
@@ -426,16 +425,12 @@ public abstract class Wand extends KindOfWeapon {
 				if (curWand.getCurCharges() > 0) {
 					
 					curUser.busy();
-					
-					curWand.fx( cell, new Callback() {
-						@Override
-						public void call() {
-							curWand.onZap( cell );
-							curWand.wandUsed(curUser);
-						}
-					} );
-					
+					curWand.fx( cell);
+
 					Invisibility.dispel(curUser);
+
+					curWand.onZap( cell );
+					curWand.wandUsed(curUser);
 					
 				} else {
 					

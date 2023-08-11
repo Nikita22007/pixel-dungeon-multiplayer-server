@@ -88,7 +88,7 @@ public class WandOfLightning extends Wand {
 	}
 	
 	@Override
-	protected void fx( int cell, Callback callback ) {
+	protected void fx( int cell ) {
 		
 		nPoints = 0;
 		points[nPoints++] =curUser.pos;
@@ -106,7 +106,7 @@ public class WandOfLightning extends Wand {
 			CellEmitter.center( cell ).burst( SparkParticle.FACTORY, 3 );
 			
 		}
-		Lightning.showLightning( points, nPoints, callback );
+		Lightning.showLightning( points, nPoints, null );
 	}
 	
 	@Override

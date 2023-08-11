@@ -426,6 +426,7 @@ public class SendData {
     }
 
     public static void sendCustomActionForAll(@NotNull JSONObject action_obj) {
+        assert action_obj.has("action_type") : "Action object must contains \"action_type\" field";
         for (int i = 0; i < clients.length; i++) {
             sendCustomAction(action_obj, i);
         }

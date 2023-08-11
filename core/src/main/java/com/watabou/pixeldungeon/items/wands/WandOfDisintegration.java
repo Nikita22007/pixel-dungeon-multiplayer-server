@@ -97,11 +97,10 @@ public class WandOfDisintegration extends Wand {
 	}
 	
 	@Override
-	protected void fx( int cell, Callback callback ) {
+	protected void fx( int cell ) {
 		
 		cell = Ballistica.trace[Math.min( Ballistica.distance, distance() ) - 1];
 		DeathRay.showDeathRayCentered( curUser.pos, cell );
-		callback.call();
 	}
 	
 	@Override
