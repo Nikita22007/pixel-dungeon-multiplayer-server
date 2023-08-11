@@ -250,6 +250,15 @@ action move char:
     "animation_state_after_move": "idle" // ...
 }
 
+action swap char:
+{
+    "action_type":  "sprite_action"
+    "action": "swap"
+    "from": 0
+    "to": 1
+    "actor_id" 0
+}
+
 action AlphaTweener:
 {
     "action_type": "sprite_action"

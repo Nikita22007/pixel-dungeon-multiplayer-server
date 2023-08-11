@@ -206,7 +206,15 @@ public class SendData {
         }
     }
 
-    public static void sendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to) {
+    public static void addToSendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to){
+        sendCharSpriteAction(actorID, action, cell_from, cell_to, false);
+    }
+
+    public static void sendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to){
+        sendCharSpriteAction(actorID, action, cell_from, cell_to, true);
+    }
+
+    public static void sendCharSpriteAction(int actorID, String action, Integer cell_from, Integer cell_to, boolean send) {
         JSONObject actionObj = new JSONObject();
         try {
             actionObj.put("action_type", "sprite_action");
@@ -223,7 +231,9 @@ public class SendData {
                 continue;
             }
             client.packet.addAction(actionObj);
-            client.flush();
+            if (send) {
+                client.flush();
+            }
         }
     }
 

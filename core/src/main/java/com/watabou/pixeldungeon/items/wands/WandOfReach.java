@@ -63,7 +63,7 @@ public class WandOfReach extends Wand {
 			
 			Char ch = Actor.findChar( c );
 			if (ch != null) {
-				Actor.addDelayed( new Swap( curUser, ch ), -1 );
+				Swap.SwapChars( curUser, ch );
 				break;
 			}
 			

@@ -2,6 +2,9 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
+ * Pixel Dungeon Multiplayer
+ * Copyright (C) 2021-2023 Nikita Shaposhnikov
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,58 +20,24 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import com.watabou.noosa.Game;
-import com.watabou.noosa.Visual;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
-import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.sprites.CharSprite;
-import com.watabou.utils.PointF;
+import com.watabou.pixeldungeon.network.SendData;
 
-public class Swap extends Actor {
-
-	private Char ch1;
-	private Char ch2;
+public class Swap {
 	
-	private Effect eff1;
-	private Effect eff2;
-	
-	private float delay;
-	
-	public Swap( Char ch1, Char ch2 ) {
-
-		this.ch1 = ch1;
-		this.ch2 = ch2;
-		
-		delay = Level.distance( ch1.pos,  ch2.pos ) * 0.1f;
-		
-		eff1 = new Effect(ch1.getSprite(), ch1.pos, ch2.pos );
-		eff2 = new Effect(ch2.getSprite(), ch2.pos, ch1.pos );
+	public static void SwapChars( Char ch1, Char ch2 ) {
+		SendData.addToSendCharSpriteAction(ch1.id(), "swap", ch1.pos, ch2.pos);
+		SendData.addToSendCharSpriteAction(ch2.id(), "swap", ch2.pos, ch1.pos);
 		Sample.INSTANCE.play( Assets.SND_TELEPORT );
+		finish(ch1, ch2);
 	}
 	
-	@Override
-	protected boolean act() {
-		return false;
-	}
-	
-	private void finish( Effect eff ) {
-		if (eff == eff1) {
-			eff1 = null;
-		}
-		if (eff == eff2) {
-			eff2 = null;
-		}
-		
-		if (eff1 == null && eff2 == null) {
-			Actor.remove( this );
-			next();
-			
+	private static void finish(Char ch1, Char ch2) {
 			int pos = ch1.pos;
 			ch1.pos = ch2.pos;
 			ch2.pos = pos;
@@ -91,48 +60,7 @@ public class Swap extends Actor {
 			if (ch1 instanceof Hero || ch2 instanceof Hero) {
 				Dungeon.observeAll();
 			}
-		}
 	}
 
-	private class Effect extends Visual {
-
-		private CharSprite sprite;
-		private PointF end;
-		private float passed;
-		
-		public Effect( CharSprite sprite, int from, int to ) {
-			super( 0, 0, 0, 0 );
-		
-			this.sprite = sprite;
-			
-			point( sprite.worldToCamera( from ) );
-			end = sprite.worldToCamera( to );
-			
-			speed.set( 2 * (end.x - x) / delay, 2 * (end.y - y) / delay );
-			acc.set( -speed.x / delay, -speed.y / delay );
-			
-			passed = 0;
-			
-			sprite.parent.add( this );
-		}
-		
-		@Override
-		public void update() {
-			super.update();
-
-			if ((passed += Game.elapsed) < delay) {
-				sprite.x = x;
-				sprite.y = y;
-				
-			} else {
-				
-				sprite.point( end );
-				
-				killAndErase();
-				finish( this );
-				
-			}
-		}
-	}
-
+	private Swap(){}
 }
