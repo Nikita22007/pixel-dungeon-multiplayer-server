@@ -161,6 +161,7 @@ server:
         "iron_keys_count": -1
         "depth": -1
         "cell_listener_prompt": "" //empty/null == null
+        "attack_indicator_target":  2 // character id. -1 == no target
     }
     "badge":
     {

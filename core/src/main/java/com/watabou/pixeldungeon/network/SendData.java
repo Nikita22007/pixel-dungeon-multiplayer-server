@@ -480,4 +480,25 @@ public class SendData {
             e.printStackTrace();
         }
     }
+    public static void sendHeroAttackIndicator(@Nullable Integer target, int networkID) {
+        sendHeroAttackIndicator(target == null? -1: target, networkID);
+    }
+
+    public static void sendHeroAttackIndicator(int target, int networkID) {
+        if (clients[networkID] == null) {
+            return;
+        }
+        try {
+            AtomicReference<JSONObject> dataRef = clients[networkID].packet.dataRef;
+            synchronized (clients[networkID].packet.dataRef) {
+                JSONObject uiObj = dataRef.get().optJSONObject("iu");
+                uiObj = uiObj != null ? uiObj : new JSONObject();
+                uiObj.put("attack_indicator_target", target);
+                dataRef.get().put("ui", uiObj);
+            }
+            clients[networkID].flush();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
