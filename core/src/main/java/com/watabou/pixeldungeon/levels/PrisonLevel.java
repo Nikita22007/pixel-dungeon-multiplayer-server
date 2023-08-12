@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.levels;
 
 import com.watabou.noosa.Scene;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
@@ -26,8 +26,12 @@ import com.watabou.pixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.watabou.pixeldungeon.effects.Halo;
 import com.watabou.pixeldungeon.effects.particles.FlameParticle;
 import com.watabou.pixeldungeon.levels.Room.Type;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PrisonLevel extends RegularLevel {
 
@@ -157,7 +161,7 @@ public class PrisonLevel extends RegularLevel {
 	public static void addVisuals( Level level, Scene scene ) {
 		for (int i=0; i < LENGTH; i++) {
 			if (level.map[i] == Terrain.WALL_DECO) {
-				scene.add( new Torch( i ) );
+				new Torch( i );
 			}
 		}
 	}
@@ -165,10 +169,28 @@ public class PrisonLevel extends RegularLevel {
 	private static class Torch extends Emitter {
 		
 		private int pos;
-		
+
+		public static void addTorch(int pos) {
+			addTorch(pos, 0xFFFFCC);
+		}
+
+		public static void addTorch(int pos, int color) {
+			JSONObject actionObj = new JSONObject();
+			try {
+				actionObj.put("action_type", "emitter_decor");
+				actionObj.put("type", "torch");
+				actionObj.put("color", color);
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+			SendData.sendCustomActionForAll(actionObj);
+		}
+
 		public Torch( int pos ) {
 			super();
-			
+
+			addTorch(pos);
+
 			this.pos = pos;
 			
 			PointF p = DungeonTilemap.tileCenterToWorld( pos );
@@ -176,14 +198,7 @@ public class PrisonLevel extends RegularLevel {
 			
 			pour( FlameParticle.FACTORY, 0.15f );
 			
-			add( new Halo( 16, 0xFFFFCC, 0.2f ).point( p.x, p.y ) );
-		}
-		
-		@Override
-		public void update() {
-			if (visible = Dungeon.visible[pos]) {
-				super.update();
-			}
+			//add( new Halo( 16, 0xFFFFCC, 0.2f ).point( p.x, p.y ) );
 		}
 	}
 }

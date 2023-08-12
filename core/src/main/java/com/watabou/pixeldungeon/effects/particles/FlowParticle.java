@@ -19,9 +19,9 @@ package com.watabou.pixeldungeon.effects.particles;
 
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.utils.PointF;
@@ -29,10 +29,11 @@ import com.watabou.utils.Random;
 
 public class FlowParticle extends PixelParticle {
 
-	public static final Emitter.Factory FACTORY = new Factory() {	
+	public static final Emitter.Factory FACTORY = new Factory() {
+
 		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((FlowParticle)emitter.recycle( FlowParticle.class )).reset( x, y );
+		public String factoryName() {
+			return "flow";
 		}
 	};
 	

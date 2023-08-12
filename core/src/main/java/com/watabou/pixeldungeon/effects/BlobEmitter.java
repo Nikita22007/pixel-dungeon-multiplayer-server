@@ -17,17 +17,14 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import com.watabou.noosa.particles.Emitter;
-import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.pixeldungeon.DungeonTilemap;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
-import com.watabou.utils.Random;
 
 public class BlobEmitter extends Emitter {
 
 	private static final int WIDTH	= Blob.WIDTH;
 	private static final int LENGTH	= Blob.LENGTH;
-	
+
 	private Blob blob;
 	
 	public BlobEmitter( Blob blob ) {
@@ -37,17 +34,23 @@ public class BlobEmitter extends Emitter {
 		this.blob = blob;
 		blob.use( this );
 	}
-	
+
+	@Override
+	public void pour(Factory factory, float interval) {
+		return;
+	}
+
+	/*
 	@Override
 	protected void emit( int index ) {
-		
+
 		if (blob.volume <= 0) {
 			return;
 		}
-		
+
 		int[] map = blob.cur;
 		float size = DungeonTilemap.SIZE;
-		
+
 		for (int i=0; i < LENGTH; i++) {
 			if (map[i] > 0 && Dungeon.visible[i]) {
 				float x = ((i % WIDTH) + Random.Float()) * size;
@@ -55,5 +58,5 @@ public class BlobEmitter extends Emitter {
 				factory.emit( this, index, x, y );
 			}
 		}
-	}
+	}*/
 }

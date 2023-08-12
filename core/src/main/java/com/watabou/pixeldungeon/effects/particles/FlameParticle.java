@@ -17,21 +17,24 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 
 public class FlameParticle extends PixelParticle.Shrinking {
 	
-	public static final Emitter.Factory FACTORY = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((FlameParticle)emitter.recycle( FlameParticle.class )).reset( x, y );
-		}
+	public static final Emitter.Factory FACTORY = new Factory() {
 		@Override
 		public boolean lightMode() {
 			return true;
-		};
+		}
+
+		@Override
+		public String factoryName() {
+			return "flame";
+		}
+
+		;
 	};
 	
 	public FlameParticle() {

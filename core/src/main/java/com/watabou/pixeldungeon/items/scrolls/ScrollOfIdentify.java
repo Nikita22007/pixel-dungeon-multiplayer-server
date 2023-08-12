@@ -18,7 +18,7 @@
 package com.watabou.pixeldungeon.items.scrolls;
 
 import com.watabou.pixeldungeon.Badges;
-import com.watabou.pixeldungeon.effects.Identification;
+import com.nikita22007.multiplayer.server.effects.Identification;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.windows.WndBag;
@@ -34,7 +34,7 @@ public class ScrollOfIdentify extends InventoryScroll {
 	@Override
 	protected void onItemSelected( Item item ) {
 		
-		curUser.getSprite().parent.add( new Identification( curUser.getSprite().center().offset( 0, -16 ) ) );
+		Identification.showIdentification( curUser.getSprite().center().offset( 0, -16 ));
 		
 		item.identify();
 		GLog.i( "It is " + item );

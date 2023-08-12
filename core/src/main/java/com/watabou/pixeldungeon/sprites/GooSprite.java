@@ -18,9 +18,9 @@
 package com.watabou.pixeldungeon.sprites;
 
 import com.watabou.noosa.TextureFilm;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -84,10 +84,11 @@ public class GooSprite extends MobSprite {
 	
 	public static class GooParticle extends PixelParticle.Shrinking {
 		
-		public static final Emitter.Factory FACTORY = new Factory() {	
+		public static final Emitter.Factory FACTORY = new Factory() {
+
 			@Override
-			public void emit( Emitter emitter, int index, float x, float y ) {
-				((GooParticle)emitter.recycle( GooParticle.class )).reset( x, y );
+			public String factoryName() {
+				return "goo";
 			}
 		};
 		

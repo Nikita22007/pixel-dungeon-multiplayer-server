@@ -18,15 +18,19 @@
 package com.watabou.pixeldungeon.levels;
 
 import com.watabou.noosa.Scene;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Imp;
 import com.watabou.pixeldungeon.levels.Room.Type;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CityLevel extends RegularLevel {
 
@@ -134,7 +138,7 @@ public class CityLevel extends RegularLevel {
 	public static void addVisuals( Level level, Scene scene ) {
 		for (int i=0; i < LENGTH; i++) {
 			if (level.map[i] == Terrain.WALL_DECO) {
-				scene.add( new Smoke( i ) );
+				new Smoke( i );
 			}
 		}
 	}
@@ -142,32 +146,37 @@ public class CityLevel extends RegularLevel {
 	private static class Smoke extends Emitter {
 		
 		private int pos;
-		
+
 		private static final Emitter.Factory factory = new Factory() {
-			
+
 			@Override
-			public void emit( Emitter emitter, int index, float x, float y ) {
-				SmokeParticle p = (SmokeParticle)emitter.recycle( SmokeParticle.class );
-				p.reset( x, y );
+			public String factoryName() {
+				return "smoke_level";
 			}
 		};
-		
+
+		public static void addSmoke(int pos) {
+			JSONObject actionObj = new JSONObject();
+			try {
+				actionObj.put("action_type", "emitter_decor");
+				actionObj.put("type", "smoke");
+				actionObj.put("pos", pos);
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+			SendData.sendCustomActionForAll(actionObj);
+		}
+
 		public Smoke( int pos ) {
 			super();
-			
+			addSmoke(pos);
+
 			this.pos = pos;
 			
 			PointF p = DungeonTilemap.tileCenterToWorld( pos );
 			pos( p.x - 4, p.y - 2, 4, 0 );
 			
 			pour( factory, 0.2f );
-		}
-		
-		@Override
-		public void update() {
-			if (visible = Dungeon.visible[pos]) {
-				super.update();
-			}
 		}
 	}
 	

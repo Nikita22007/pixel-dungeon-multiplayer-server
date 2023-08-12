@@ -21,8 +21,6 @@
 
 package com.watabou.noosa;
 
-import com.watabou.noosa.particles.Emitter;
-
 import java.util.ArrayList;
 
 public class Group extends Gizmo {
@@ -33,8 +31,6 @@ public class Group extends Gizmo {
 	// than calling members.getSize()
 	public int length;
 
-	public static boolean freezeEmitters = false;
-	
 	public Group() {
 		members = new ArrayList<Gizmo>();
 		length = 0;
@@ -63,12 +59,8 @@ public class Group extends Gizmo {
 				if (!members.contains(g)) {
 					continue;
 				}
-				if (g != null && g.exists && g.active
-						//functionality for the freezing of emitters(particle effects), effects are given a second
-						//from load to get started so they aren't frozen before anything is generated.
-						&& !(freezeEmitters && Game.timeTotal > 1f && g instanceof Emitter)) {
+				if (g != null && g.exists && g.active)
 					g.update();
-				}
 			}
 		}
     }

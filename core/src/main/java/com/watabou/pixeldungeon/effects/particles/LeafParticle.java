@@ -17,35 +17,54 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.pixeldungeon.Dungeon;
-import com.watabou.utils.ColorMath;
 import com.watabou.utils.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LeafParticle extends PixelParticle.Shrinking {
-	
-	public static int color1;
-	public static int color2;
-	
-	
-	public static final Emitter.Factory GENERAL = new Factory() {	
+
+	public static final Emitter.Factory GENERAL = new Factory() {
+
+        @Override
+		public String factoryName() {
+			return "leaf";
+		}
+
 		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			LeafParticle p = ((LeafParticle)emitter.recycle( LeafParticle.class ));
-			p.color( ColorMath.random( 0x004400, 0x88CC44 ) );
-			p.reset( x, y );
+		public JSONObject customParams() {
+			JSONObject object = super.customParams();
+			try {
+				object.put("first_color", 0x004400);
+				object.put("second_color", 0x88CC44);
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+			return object;
 		}
 	};
 	
-	public static final Emitter.Factory LEVEL_SPECIFIC = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			LeafParticle p = ((LeafParticle)emitter.recycle( LeafParticle.class ));
-			p.color( ColorMath.random( Dungeon.level.color1, Dungeon.level.color2 ) );
-			p.reset( x, y );
-		}
+	public static final Emitter.Factory LEVEL_SPECIFIC = new Factory() {
+        @Override
+			public String factoryName() {
+				return "leaf";
+			}
+
+			@Override
+			public JSONObject customParams() {
+				JSONObject object = super.customParams();
+				try {
+					object.put("first_color", Dungeon.level.color1);
+					object.put("second_color", Dungeon.level.color2);
+				} catch (JSONException e) {
+					throw new RuntimeException(e);
+				}
+				return object;
+			}
 	};
 	
 	public LeafParticle() {

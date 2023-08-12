@@ -95,9 +95,6 @@ public abstract class Level implements Bundlable {
 	
 	private static final String TXT_HIDDEN_PLATE_CLICKS = "A hidden pressure plate clicks!";
 	
-	public static boolean resizingNeeded;
-	public static int loadedMapSize;
-	
 	public int[] map;
 	public boolean[] visited;
 	public boolean[] mapped;
@@ -146,9 +143,7 @@ public abstract class Level implements Bundlable {
 	private static final String BLOBS		= "blobs";
 	
 	public void create() {
-		
-		resizingNeeded = false;
-		
+
 		map = new int[LENGTH];
 		visited = new boolean[LENGTH];
 		Arrays.fill( visited, false );

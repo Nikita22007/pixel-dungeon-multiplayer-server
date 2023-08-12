@@ -17,17 +17,18 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.utils.Random;
 
 public class SmokeParticle extends PixelParticle {
 	
-	public static final Emitter.Factory FACTORY = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((SmokeParticle)emitter.recycle( SmokeParticle.class )).reset( x, y );
+	public static final Emitter.Factory FACTORY = new Factory() {
+
+        @Override
+		public String factoryName() {
+			return "smoke";
 		}
 	};
 	

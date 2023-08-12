@@ -17,30 +17,31 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 public class PurpleParticle extends PixelParticle {
 	
-	public static final Emitter.Factory MISSILE = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((PurpleParticle)emitter.recycle( PurpleParticle.class )).reset( x, y );
+	public static final Emitter.Factory MISSILE = new Factory() {
+        @Override
+		public String factoryName() {
+			return "purple_missile";
 		}
 	};
 	
-	public static final Emitter.Factory BURST = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((PurpleParticle)emitter.recycle( PurpleParticle.class )).resetBurst( x, y );
-		}
-		@Override
+	public static final Emitter.Factory BURST = new Factory() {
+        @Override
 		public boolean lightMode() {
 			return true;
+		}
+
+		@Override
+		public String factoryName() {
+			return "purple_burst";
 		}
 	};
 	

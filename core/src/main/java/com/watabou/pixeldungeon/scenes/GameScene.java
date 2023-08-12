@@ -23,7 +23,7 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Music;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
@@ -213,7 +213,8 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private void addBlobSprite( final Blob gas ) {
 		if (gas.emitter == null) {
-			gases.add( new BlobEmitter( gas ) );
+			//gases.add( new BlobEmitter( gas ) );
+			new BlobEmitter( gas );
 		}
 	}
 	
@@ -279,11 +280,10 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	public static SpellSprite spellSprite() {
 		return (SpellSprite)scene.spells.recycle( SpellSprite.class );
 	}
-	
+
 	public static Emitter emitter() {
 		if (scene != null) {
-			Emitter emitter = (Emitter)scene.emitters.recycle( Emitter.class );
-			emitter.revive();
+			Emitter emitter = new Emitter();
 			return emitter;
 		} else {
 			return null;

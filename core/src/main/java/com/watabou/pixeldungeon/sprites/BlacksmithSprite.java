@@ -19,11 +19,12 @@ package com.watabou.pixeldungeon.sprites;
 
 import com.watabou.noosa.TextureFilm;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.levels.Level;
+import com.watabou.utils.PointF;
 
 public class BlacksmithSprite extends MobSprite {
 	
@@ -53,18 +54,8 @@ public class BlacksmithSprite extends MobSprite {
 		super.link( ch );
 		
 		emitter = new Emitter();
-		emitter.autoKill = false;
-		emitter.pos( x + 7, y + 12 );
-		parent.add( emitter );
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		
-		if (emitter != null) {
-			emitter.visible = visible;
-		}
+
+		emitter.pos(this, new PointF(7, 12));
 	}
 	
 	@Override
@@ -73,6 +64,7 @@ public class BlacksmithSprite extends MobSprite {
 		
 		if (visible && emitter != null && anim == idle) {
 			emitter.burst( Speck.factory( Speck.FORGE ), 3 );
+			//todo
 			//float volume = 0.2f / (Level.distance( ch.pos, Dungeon.hero.pos )); //Это будет чтено  при  передаче
 			float volume = 0.2f / (Level.distance( ch.pos, ch.pos));
 			Sample.INSTANCE.play( Assets.SND_EVOKE, volume, volume, 0.8f  );

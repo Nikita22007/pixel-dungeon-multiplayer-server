@@ -17,34 +17,35 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.Random;
 
 public class PoisonParticle extends PixelParticle {
 	
-	public static final Emitter.Factory MISSILE = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((PoisonParticle)emitter.recycle( PoisonParticle.class )).resetMissile( x, y );
-		}
+	public static final Emitter.Factory MISSILE = new Factory() {
 		@Override
 		public boolean lightMode() {
 			return true;
-		};
+		}
+
+		@Override
+		public String factoryName() {
+			return "poison_missile";
+		}
 	};
 	
-	public static final Emitter.Factory SPLASH = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((PoisonParticle)emitter.recycle( PoisonParticle.class )).resetSplash( x, y );
-		}
+	public static final Emitter.Factory SPLASH = new Factory() {
 		@Override
 		public boolean lightMode() {
 			return true;
 		};
+		@Override
+		public String factoryName() {
+			return "poison_splash";
+		}
 	};
 	
 	public PoisonParticle() {

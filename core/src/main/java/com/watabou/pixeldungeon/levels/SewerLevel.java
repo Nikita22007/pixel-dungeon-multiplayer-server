@@ -17,19 +17,21 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import com.watabou.noosa.Game;
 import com.watabou.noosa.Scene;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Ghost;
 import com.watabou.pixeldungeon.items.DewVial;
-import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SewerLevel extends RegularLevel {
 
@@ -128,7 +130,7 @@ public class SewerLevel extends RegularLevel {
 	public static void addVisuals( Level level, Scene scene ) {
 		for (int i=0; i < LENGTH; i++) {
 			if (level.map[i] == Terrain.WALL_DECO) {
-				scene.add( new Sink( i ) );
+				new Sink( i );
 			}
 		}
 	}
@@ -161,29 +163,33 @@ public class SewerLevel extends RegularLevel {
 		private float rippleDelay = 0;
 		
 		private static final Emitter.Factory factory = new Factory() {
-			
+
 			@Override
-			public void emit( Emitter emitter, int index, float x, float y ) {
-				WaterParticle p = (WaterParticle)emitter.recycle( WaterParticle.class );
-				p.reset( x, y );
+			public String factoryName() {
+				return "sink";
 			}
 		};
-		
+
+		public static void addSink(int pos) {
+			JSONObject actionObj = new JSONObject();
+			try {
+				actionObj.put("action_type", "emitter_decor");
+				actionObj.put("type", "sink");
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+			SendData.sendCustomActionForAll(actionObj);
+		}
+
 		public Sink( int pos ) {
 			super();
-			
+			addSink(pos);
 			this.pos = pos;
 			
 			PointF p = DungeonTilemap.tileCenterToWorld( pos );
 			pos( p.x - 2, p.y + 1, 4, 0 );
 			
 			pour( factory, 0.05f );
-		}
-		
-		@Override
-		public void update() {
-			//todo send emmiter?
-			return;
 		}
 	}
 

@@ -17,12 +17,18 @@
  */
 package com.watabou.pixeldungeon.effects;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.scenes.GameScene;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.watabou.utils.PointF.PI;
 
 public class Splash {
 	
@@ -40,11 +46,11 @@ public class Splash {
 		emitter.pos( p );
 		
 		FACTORY.color = color;
-		FACTORY.dir = -3.1415926f / 2;
-		FACTORY.cone = 3.1415926f;
+		FACTORY.dir = -PI / 2;
+		FACTORY.cone = PI;
 		emitter.burst( FACTORY, n );
 	}
-	
+
 	public static void at( PointF p, final float dir, final float cone, final int color, int n ) {
 		
 		if (n <= 0) {
@@ -67,14 +73,23 @@ public class Splash {
 		public int color;
 		public float dir;
 		public float cone;
-		
+
 		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			PixelParticle p = (PixelParticle)emitter.recycle( PixelParticle.Shrinking.class );
-			
-			p.reset( x, y, color, 4, Random.Float( 0.5f, 1.0f ) );
-			p.speed.polar( Random.Float( dir - cone / 2, dir + cone / 2 ), Random.Float( 40, 80 ) );
-			p.acc.set( 0, +100 );
+		public String factoryName() {
+			return "splash";
+		}
+
+		@Override
+		public JSONObject customParams() {
+			JSONObject object = super.customParams();
+			try {
+				object.put("color", color);
+				object.put("dir", dir);
+				object.put("cone", cone);
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+			return object;
 		}
 	}
 }

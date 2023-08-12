@@ -22,10 +22,13 @@ import android.util.SparseArray;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Speck extends Image {
 
@@ -417,13 +420,24 @@ public class Speck extends Image {
 		if (factory == null) {
 			factory = new Emitter.Factory() {
 				@Override
-				public void emit ( Emitter emitter, int index, float x, float y ) {
-					Speck p = (Speck)emitter.recycle( Speck.class );
-					p.reset( index, x, y, type );
-				}
-				@Override
 				public boolean lightMode() {
 					return lightMode;
+				}
+
+				@Override
+				public String factoryName() {
+					return "Speck";
+				}
+
+				@Override
+				public JSONObject customParams() {
+					JSONObject obj =  super.customParams();
+					try {
+						obj.put("type", type);
+					} catch (JSONException e) {
+						throw new RuntimeException(e);
+					}
+					return obj;
 				}
 			};
 			factories.put( type, factory );

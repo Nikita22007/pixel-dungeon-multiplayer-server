@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.sprites;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.effects.particles.ShadowParticle;
 
@@ -32,16 +32,6 @@ public class CursePersonificationSprite extends WraithSprite {
 		if (cloud == null) {
 			cloud = emitter();
 			cloud.pour( ShadowParticle.UP, 0.1f );
-		}
-	}
-	
-	@Override
-	public void update() {
-		
-		super.update();
-		
-		if (cloud != null) {
-			cloud.visible = visible;
 		}
 	}
 	

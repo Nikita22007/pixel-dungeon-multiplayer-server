@@ -17,33 +17,34 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 public class ShadowParticle extends PixelParticle.Shrinking {
 	
-	public static final Emitter.Factory MISSILE = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((ShadowParticle)emitter.recycle( ShadowParticle.class )).reset( x, y );
+	public static final Emitter.Factory MISSILE = new Factory() {
+
+        @Override
+		public String factoryName() {
+			return "shadow_missile";
 		}
 	};
 	
-	public static final Emitter.Factory CURSE = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((ShadowParticle)emitter.recycle( ShadowParticle.class )).resetCurse( x, y );
+	public static final Emitter.Factory CURSE = new Factory() {
+        @Override
+		public String factoryName() {
+			return "shadow_curse";
 		}
 	};
 	
-	public static final Emitter.Factory UP = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((ShadowParticle)emitter.recycle( ShadowParticle.class )).resetUp( x, y );
+	public static final Emitter.Factory UP = new Factory() {
+        @Override
+		public String factoryName() {
+			return "shadow_up";
 		}
 	};
 	

@@ -17,10 +17,8 @@
  */
 package com.nikita22007.multiplayer.server.effects;
 
-import com.watabou.noosa.Group;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.utils.Callback;
 
 import org.json.JSONException;
 import org.json.JSONObject;

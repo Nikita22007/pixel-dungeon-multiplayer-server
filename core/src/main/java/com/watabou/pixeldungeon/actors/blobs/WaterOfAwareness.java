@@ -28,7 +28,7 @@ import com.watabou.pixeldungeon.actors.buffs.Awareness;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.BlobEmitter;
-import com.watabou.pixeldungeon.effects.Identification;
+import com.nikita22007.multiplayer.server.effects.Identification;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
@@ -47,7 +47,7 @@ public class WaterOfAwareness extends WellWater {
 	protected boolean affectHero( Hero hero ) {
 		
 		Sample.INSTANCE.play( Assets.SND_DRINK );
-		emitter.parent.add( new Identification( DungeonTilemap.tileCenterToWorld( pos ) ) );
+		Identification.showIdentification( DungeonTilemap.tileCenterToWorld( pos ));
 		
 		hero.belongings.observe();
 		
@@ -84,8 +84,8 @@ public class WaterOfAwareness extends WellWater {
 		} else {
 			item.identify();
 			Badges.validateItemLevelAquired( item );
-			
-			emitter.parent.add( new Identification( DungeonTilemap.tileCenterToWorld( pos ) ) );
+
+			Identification.showIdentification( DungeonTilemap.tileCenterToWorld( pos ));
 			
 			Journal.remove( Feature.WELL_OF_AWARENESS );
 			

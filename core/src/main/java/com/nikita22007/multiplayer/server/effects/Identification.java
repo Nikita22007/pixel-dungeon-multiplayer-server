@@ -2,6 +2,9 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
+ * Pixel Dungeon Multiplayer
+ * Copyright (C) 2021-2023 Nikita Shaposhnikov
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,39 +18,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.watabou.pixeldungeon.sprites;
+package com.nikita22007.multiplayer.server.effects;
 
-import com.nikita22007.multiplayer.noosa.particles.Emitter;
-import com.watabou.pixeldungeon.actors.Char;
-import com.watabou.pixeldungeon.effects.Speck;
+import com.watabou.utils.PointF;
 
-public class FetidRatSprite extends RatSprite {
-	
-	private Emitter cloud;
-	
-	@Override
-	public void link( Char ch ) {
-		super.link( ch );
-		
-		if (cloud == null) {
-			cloud = emitter();
-			cloud.pour( Speck.factory( Speck.PARALYSIS ), 0.7f );
-		}
+public class Identification {
+
+	private static final int COLOR = 0x4488CC;
+
+	private static final int[] DOTS = {
+		-1, -3,
+		 0, -3,
+		+1, -3,
+		-1, -2,
+		+1, -2,
+		+1, -1,
+		 0,  0,
+		+1,  0,
+		 0, +1,
+		 0, +3
+	};
+
+	public static void showIdentification(PointF p){
+		Degradation.Degradation(p, DOTS, COLOR);
 	}
-	
-	@Override
-	public void update() {
-		
-		super.update();
 
-	}
-	
-	@Override
-	public void die() {
-		super.die();
-		
-		if (cloud != null) {
-			cloud.on = false;
-		}
+	public Identification(PointF p) {
+		showIdentification(p);
 	}
 }

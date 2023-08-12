@@ -19,7 +19,7 @@ package com.watabou.pixeldungeon.sprites;
 
 import com.nikita22007.multiplayer.noosa.MovieClip;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.actors.Char;
@@ -45,6 +45,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteAction;
 import static com.watabou.pixeldungeon.network.SendData.sendCharSpriteState;
+import static com.watabou.utils.PointF.PI;
 
 public class CharSprite extends MovieClip implements MovieClip.Listener {
 
@@ -123,19 +124,30 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 		ch.updateSpriteState();
 	}
 
+	/**
+	 * Returns visual position of sprite.
+	 * <p>
+	 * The sprite sticks to the bottom edge of the cell (y) and is centered in width (x)
+	 * @param cell cell position in grid
+	 * @return visual position
+	 */
 	public PointF worldToCamera( int cell ) {
 
-		final int csize = DungeonTilemap.SIZE;
-
+		final int cellSize = DungeonTilemap.SIZE;
+		final int x = cell % Level.WIDTH;
+		final int y = cell / Level.WIDTH;
 		return new PointF(
-			((cell % Level.WIDTH) + 0.5f) * csize ,
-			((cell / Level.WIDTH) + 1.0f) * csize
+				( x + 0.5f) * cellSize - width * 0.5f,
+				( y + 1.0f) * cellSize - height
 		);
 	}
 
 	public void place( int cell ) {
 		sendCharSpriteAction(ch.id(), "place", null, cell);
-		point( worldToCamera( cell ) );
+	}
+
+	public PointF point(){
+		return DungeonTilemap.tileToWorld(ch.pos).offset(OffsetFromTile());
 	}
 
 	public void showStatus( int color, String text, Object... args ) {
@@ -143,11 +155,10 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 			if (args.length > 0) {
 				text = Utils.format( text, args );
 			}
-			x += width * 0.5f;
 			if (ch != null) {
-				FloatingText.show( x, y, ch.pos, text, color );
+				FloatingText.show( center().x, center().y - height / 2, ch.pos, text, color );
 			} else {
-				FloatingText.show( x, y, text, color );
+				FloatingText.show( center().x, center().y - height / 2, text, color );
 			}
 		}
 	}
@@ -248,6 +259,23 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 		play( die );
 	}
 
+	@Override
+	public PointF center(){
+		return DungeonTilemap.tileToWorld(ch.pos).offset(OffsetCenterFromTile());
+	}
+
+	public PointF OffsetFromTile() {
+		return new PointF(
+			DungeonTilemap.SIZE - height, (DungeonTilemap.SIZE - width) / 2
+		);
+	}
+
+	public PointF OffsetCenterFromTile() {
+		return new PointF(
+				DungeonTilemap.SIZE - height/2, DungeonTilemap.SIZE / 2
+		);
+	}
+
 	public Emitter emitter() {
 		Emitter emitter = GameScene.emitter();
 		emitter.pos( this );
@@ -256,13 +284,13 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 
 	public Emitter centerEmitter() {
 		Emitter emitter = GameScene.emitter();
-		emitter.pos( center() );
+		emitter.cellPosWithShift( ch.pos, OffsetCenterFromTile() );
 		return emitter;
 	}
 
 	public Emitter bottomEmitter() {
 		Emitter emitter = GameScene.emitter();
-		emitter.pos( x, y + height, width, 0 );
+		emitter.cellPosWithShift(ch.pos, OffsetFromTile().offset(0,height), width, 0 );
 		return emitter;
 	}
 
@@ -359,12 +387,6 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 			listener.onComplete( curAnim );
 		}
 
-		if (burning != null) {
-			burning.visible = visible;
-		}
-		if (levitation != null) {
-			levitation.visible = visible;
-		}
 		if (sleeping) {
 			showSleep();
 		} else {

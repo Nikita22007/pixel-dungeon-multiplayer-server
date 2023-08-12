@@ -398,7 +398,6 @@ action flare
     OR
     "pos": 1 //cell
 
-
     "color": 0xFFFFFF //(hardlight)
     "duration": 3f
     "light_mode": false
@@ -408,6 +407,77 @@ action flare
     "angular_speed" 180 //degrees
 }
 
+action emitter_visual
+{
+    "action_type": emitter_visual
+
+    "pos": 2
+    OR
+    "target_char": 3 //id
+    "fill_target": true
+    OR
+    "position_x": 4f
+    "position_y": 3f
+
+    "shift_x": 4f //pixels, from top-left of target.sprite or cell
+    "shift_y": 5f //pixels, from top-left of target.sprite or cell
+
+    "width": 1f
+    "height": 32f
+
+    "factory": Emitter.Factory
+
+}
+
+Emitter.Factory
+{
+    "factory_type": "Speck"
+    "light_mode": false
+
+    //CUSTOM PARMS
+    "type" : 2 //Speck factory
+
+    "first_color", "second_color" //leaf
+
+    "color", "dir", "cone" //splash
+}
+
+
+factories:
+speck
+
+blast
+earth
+elmo
+energy
+flame
+flow
+poison_missile
+poison_splash
+purple_missile
+purple_burst
+sartificial
+shadow_missile
+shadow_curse
+shadow_up
+shaft
+snow
+smoke
+spark
+splash
+web
+wind
+wool
+
+goo
+
+Emitter_decor
+{
+    "action_type" : "emitter_decor"
+    "type": "sink" / "smoke" / "torch"
+
+    "color": 0xFFFFCC //torch
+}
 
 /// sound
 action play_sample //play sample by id, load it, if is not loaded.

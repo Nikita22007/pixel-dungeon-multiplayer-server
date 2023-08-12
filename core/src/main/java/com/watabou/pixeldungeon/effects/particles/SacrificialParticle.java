@@ -17,21 +17,22 @@
  */
 package com.watabou.pixeldungeon.effects.particles;
 
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
-import com.watabou.noosa.particles.Emitter.Factory;
+import com.nikita22007.multiplayer.noosa.particles.Emitter.Factory;
 
 public class SacrificialParticle extends PixelParticle.Shrinking {
 	
-	public static final Emitter.Factory FACTORY = new Factory() {	
-		@Override
-		public void emit( Emitter emitter, int index, float x, float y ) {
-			((SacrificialParticle)emitter.recycle( SacrificialParticle.class )).reset( x, y );
-		}
-		@Override
+	public static final Emitter.Factory FACTORY = new Factory() {
+        @Override
 		public boolean lightMode() {
 			return true;
-		};
+		}
+
+		@Override
+		public String factoryName() {
+			return "sartificial";
+		}
 	};
 	
 	public SacrificialParticle() {

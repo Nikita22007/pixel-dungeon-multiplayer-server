@@ -24,8 +24,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
-import com.watabou.noosa.particles.BitmaskEmitter;
-import com.watabou.noosa.particles.Emitter;
+import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.noosa.ui.Button;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
@@ -332,8 +331,7 @@ public class StartScene extends PixelScene {			//client  Scene
 		
 		private Image avatar;
 		private BitmapText name;
-		private Emitter emitter;
-		
+
 		private float brightness;
 		
 		private int normal;
@@ -373,9 +371,6 @@ public class StartScene extends PixelScene {			//client  Scene
 			
 			name = PixelScene.createText( 9 );
 			add( name );
-			
-			emitter = new BitmaskEmitter( avatar );
-			add( emitter );
 		}
 		
 		@Override
@@ -392,11 +387,6 @@ public class StartScene extends PixelScene {			//client  Scene
 		
 		@Override
 		protected void onTouchDown() {
-			
-			emitter.revive();
-			emitter.start( Speck.factory( Speck.LIGHT ), 0.05f, 7 );
-			
-			Sample.INSTANCE.play( Assets.SND_CLICK, 1, 1, 1.2f );
 			updateClass( cl );
 		}
 		

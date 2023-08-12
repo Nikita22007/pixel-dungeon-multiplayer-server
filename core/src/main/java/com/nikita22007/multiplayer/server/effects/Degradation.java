@@ -78,22 +78,26 @@ public class Degradation {
 	};
 
 	public static void weapon( PointF p ) {
-		Degradation( p, WEAPON );
+		Degradation( p, WEAPON, 0x4488CC );
 	}
 
 	public static void armor( PointF p ) {
-		Degradation( p, ARMOR );
+		Degradation( p, ARMOR, 0x4488CC );
 	}
 
 	public static void ring( PointF p ) {
-		Degradation( p, RING );
+		Degradation( p, RING, 0x4488CC );
 	}
 
 	public static void wand( PointF p ) {
-		Degradation( p, WAND );
+		Degradation( p, WAND, 0x4488CC );
 	}
 
-	private static void Degradation(PointF p, int[] matrix ) {
+
+	public static void Degradation(PointF p, int[] matrix, int color ) {
+		showDegradation(p, matrix, color);
+	}
+	public static void showDegradation(PointF p, int[] matrix, int color ) {
 		JSONObject action = new JSONObject();
 		try {
 			action.put("action_type", "degradation");
