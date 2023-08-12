@@ -1209,7 +1209,7 @@ public class Hero extends Char {
 		}
 		DewVial.autoDrink( this );
 		if (isAlive()) {
-			new Flare( 8, 32 ).color( 0xFFFF66, true ).show(getSprite(), 2f ) ;
+			new Flare( 8, 32 ).color( 0xFFFF66, true ).show(pos, 2f ) ;
 			return;
 		}
 		

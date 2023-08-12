@@ -202,7 +202,7 @@ class Mob extends Char {
 			state = FLEEING;
 		} else if (buff instanceof Sleep) {
 			if (getSprite() != null) {
-				new Flare(4, 32).color(0x44ffff, true).show(getSprite(), 2f);
+				new Flare(4, 32).color(0x44ffff, true).show(pos, 2f);
 			}
 			state = SLEEPEING;
 			postpone(Sleep.SWS);

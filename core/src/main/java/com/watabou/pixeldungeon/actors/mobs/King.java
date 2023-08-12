@@ -182,7 +182,7 @@ public class King extends Mob {
 						GameScene.add( undead );
 
 						WandOfBlink.appear( undead, j );
-						new Flare( 3, 32 ).color( 0x000000, false ).show(undead.getSprite(), 2f ) ;
+						new Flare( 3, 32 ).color( 0x000000, false ).show(undead.pos, 2f ) ;
 
 						PathFinder.distance[j] = Integer.MAX_VALUE;
 						

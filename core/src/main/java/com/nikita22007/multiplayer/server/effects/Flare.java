@@ -18,14 +18,11 @@
  */
 package com.nikita22007.multiplayer.server.effects;
 
-import androidx.annotation.NonNull;
-
-import com.watabou.noosa.Group;
-import com.watabou.noosa.Visual;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.utils.PointF;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,12 +38,14 @@ public final class Flare {
 	private final float angle;
 
 	private float angularSpeed;
-	private PointF pos;
+
+	@Nullable
+	private PointF position = null;
+	private int pos = -1;
 
 	public Flare( int nRays, float radius ) {
 
 		color = 0;
-		pos = new PointF(0,0);
 
 		this.nRays = nRays;
 		this.radius = radius;
@@ -69,26 +68,26 @@ public final class Flare {
 	}
 
 	public void point(PointF pos){
+		this.position = pos;
+	}
+
+	public void show(int pos, float duration ) {
 		this.pos = pos;
-	}
-
-	public void show(@NonNull Visual visual, float duration ) {
-		show(visual.parent, visual.center(),duration);
-	}
-
-	public void show(Group ignoredParent, PointF pos, float duration ) {
-		point( pos );
-
 		this.duration = duration;
 
 		SendThis();
 	}
+
 	public void SendThis(){
 		try{
 			JSONObject actionObj = new JSONObject();
 			actionObj.put("action_type", "flare_visual");
-			actionObj.put("position_x", pos.x);
-			actionObj.put("position_y", pos.y);
+			if (position != null) {
+				actionObj.put("position_x", position.x);
+				actionObj.put("position_y", position.y);
+			} else {
+				actionObj.put("pos", pos);
+			}
 			actionObj.put("color", color);
 			actionObj.put("duration", duration);
 			actionObj.put("light_mode", lightMode);
@@ -100,7 +99,7 @@ public final class Flare {
 		}catch (JSONException ignore){}
 	}
 
-	@Contract ("_ ->this")
+	@Contract ("_ -> this")
 	public Flare setAngularSpeed(float angularSpeed) {
 		this.angularSpeed = angularSpeed;
 		return this;

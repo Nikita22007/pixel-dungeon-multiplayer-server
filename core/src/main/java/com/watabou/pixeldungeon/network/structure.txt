@@ -392,8 +392,13 @@ action CheckedCell
 action flare
 {
     "action_type": "flare_visual"
+
     "position_x": 1f
     "position_y": 2f
+    OR
+    "pos": 1 //cell
+
+
     "color": 0xFFFFFF //(hardlight)
     "duration": 3f
     "light_mode": false

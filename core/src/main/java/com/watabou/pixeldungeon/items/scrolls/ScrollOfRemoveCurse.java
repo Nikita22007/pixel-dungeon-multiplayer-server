@@ -41,7 +41,7 @@ public class ScrollOfRemoveCurse extends Scroll {
 	@Override
 	protected void doRead() {
 		
-		new Flare( 6, 32 ).show(curUser.getSprite(), 2f ) ;
+		new Flare( 6, 32 ).show(curUser.pos, 2f ) ;
 		Sample.INSTANCE.play( Assets.SND_READ );
 		Invisibility.dispel(curUser);
 		
