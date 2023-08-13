@@ -9,7 +9,7 @@ public class Camera {
     public static void shake(float magnitude, float duration) {
         JSONObject actionObj = new JSONObject();
         try {
-            actionObj.put("action_name", "shake_camera");
+            actionObj.put("action_type", "shake_camera");
             actionObj.put("magnitude", magnitude);
             actionObj.put("duration", duration);
         } catch (JSONException ignored) {
