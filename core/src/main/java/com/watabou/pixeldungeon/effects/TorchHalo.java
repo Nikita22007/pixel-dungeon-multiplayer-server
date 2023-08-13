@@ -55,7 +55,6 @@ public class TorchHalo extends Halo {
 			am = phase * brightness;
 		}
 		
-		point( target.x + target.width / 2, target.y + target.height / 2 );
 	}
 	
 	@Override

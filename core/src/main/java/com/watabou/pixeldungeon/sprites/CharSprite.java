@@ -260,7 +260,6 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 		play( die );
 	}
 
-	@Override
 	public PointF center(){
 		return DungeonTilemap.tileToWorld(ch.pos).offset(OffsetCenterFromTile());
 	}

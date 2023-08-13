@@ -81,7 +81,7 @@ public class SpellSprite extends Image {
 			return;
 		}
 		x = target.getSprite().center().x - SIZE / 2;
-		y = target.getSprite().y - SIZE;
+		y = target.getSprite().point().y - SIZE;
 		
 		switch (phase) {
 		case FADE_IN:

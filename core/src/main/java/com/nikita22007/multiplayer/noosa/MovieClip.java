@@ -23,6 +23,8 @@ package com.nikita22007.multiplayer.noosa;
 
 import android.graphics.RectF;
 
+import com.watabou.gltextures.SmartTexture;
+import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 
@@ -98,27 +100,43 @@ public class MovieClip extends Image {
 
 	//from Image and Visual
 	/*
-	public float x,y,width,height;
+
+	public float width,height;
 	public boolean flipHorizontal = false;
 
-	public PointF center() {
-		return new PointF( x + width / 2, y + height / 2 );
-	}
-	public PointF point() {
-		return new PointF( x, y );
+	public float alpha = 1f;
+
+	public SmartTexture texture;
+	protected RectF frame;
+
+	public float alpha() {
+		return alpha;
 	}
 
-	public PointF point( PointF p ) {
-		x = p.x;
-		y = p.y;
-		return p;
+	public void alpha(float alpha) {
+		this.alpha = alpha;
 	}
 
-	public Point point(Point p ) {
-		x = p.x;
-		y = p.y;
-		return p;
+	public void texture( Object tx ) {
+		texture = tx instanceof SmartTexture ? (SmartTexture)tx : TextureCache.get( tx );
+		frame( new RectF( 0, 0, 1, 1 ) );
 	}
+
+	public void frame( RectF frame ) {
+		this.frame = frame;
+
+		width = frame.width() * texture.width;
+		height = frame.height() * texture.height;
+	}
+
+	public void frame( int left, int top, int width, int height ) {
+		frame( texture.uvRect( left, top, left + width, top + height ) );
+	}
+
+	public RectF frame() {
+		return new RectF( frame );
+	}
+
 	public void kill() {
 	}
 	*/
