@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
-import static com.watabou.pixeldungeon.network.NetworkPacket.packItem;
+import static com.watabou.pixeldungeon.items.Item.packItem;
 import static com.watabou.pixeldungeon.network.Server.clients;
 
 public class SendData {

@@ -13,14 +13,9 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
 import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
-import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.bags.Bag;
-import com.watabou.pixeldungeon.items.weapon.Weapon;
-import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.plants.Plant;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
@@ -459,100 +454,6 @@ public class NetworkPacket {
         return actionsArr;
     }
 
-    public static final int DEGRADED = 0xFF4444;
-    public static final int UPGRADED = 0x44FF44;
-    public static final int WARNING = 0xFF8800;
-    private static final String TXT_STRENGTH = ":%d";
-    private static final String TXT_TYPICAL_STR = "%d?";
-
-    private static final String TXT_LEVEL = "%+d";
-    private static final String TXT_CURSED = "";//"-";
-
-    private static JSONObject itemUI(@NotNull Item item, @NotNull Hero owner) throws JSONException {
-        JSONObject ui = new JSONObject();
-        JSONObject topLeft = new JSONObject();
-        JSONObject topRight = new JSONObject();
-        JSONObject bottomRight = new JSONObject();
-
-        topLeft.put("visible", true);
-        topRight.put("visible", true);
-        bottomRight.put("visible", true);
-
-        topLeft.put("text", item.status());
-
-        boolean isArmor = item instanceof Armor;
-        boolean isWeapon = item instanceof Weapon;
-        if (isArmor || isWeapon) {
-            if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon))) {
-                int str = isArmor ? ((Armor) item).STR : ((Weapon) item).STR;
-                topRight.put("text", Utils.format(TXT_STRENGTH, str));
-                if (str > owner.STR()) {
-                    topRight.put("color", DEGRADED);
-                } else {
-                    topRight.put("color", null);
-                }
-            } else {
-                topRight.put("text", Utils.format(TXT_TYPICAL_STR, isArmor ?
-                        ((Armor) item).typicalSTR() :
-                        ((MeleeWeapon) item).typicalSTR()));
-                topRight.put("color", WARNING);
-            }
-        } else {
-            topRight.put("text", null);
-        }
-
-        int level = item.visiblyUpgraded();
-        if (level != 0 || (item.cursed && item.cursedKnown)) {
-            bottomRight.put("text", item.levelKnown ? Utils.format(TXT_LEVEL, level) : TXT_CURSED);
-            bottomRight.put("color", level > 0 ? (item.isBroken() ? WARNING : UPGRADED) : DEGRADED);
-        } else {
-            bottomRight.put("text", null);
-        }
-        ui.put("top_left", topLeft);
-        ui.put("top_right", topRight);
-        ui.put("bottom_right", bottomRight);
-        return ui;
-    }
-
-
-    public static JSONObject packItem(@NotNull Item item, @Nullable Hero hero) {
-        JSONObject itemObj = new JSONObject();
-        try {
-            if (hero != null) {
-                itemObj.put("actions", packActions(item, hero));
-                itemObj.put("default_action", item.defaultAction == null ? "null" : item.defaultAction);
-                itemObj.put("info", item.info(hero));
-                itemObj.put("ui", itemUI(item, hero));
-            }
-            //itemObj.put("sprite_sheet")
-            itemObj.put("image", item.image());
-            itemObj.put("name", item.name());
-            itemObj.put("stackable", item.stackable);
-            itemObj.put("quantity", item.quantity());
-            itemObj.put("durability", item.durability());
-            itemObj.put("max_durability", item.maxDurability());
-            itemObj.put("known", item.isKnown());
-            itemObj.put("cursed", item.visiblyCursed());
-            itemObj.put("identified", item.isIdentified());
-            itemObj.put("level_known", item.levelKnown);
-            itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
-            itemObj.put("level", item.visiblyUpgraded());
-            ItemSprite.Glowing glowing = item.glowing();
-            if (glowing != null) {
-                itemObj.put("glowing", glowing.toJsonObject());
-            }
-            else{
-                itemObj.put("glowing", JSONObject.NULL);
-            }
-            if (item instanceof Bag) {
-                itemObj = packBag((Bag) item, hero, itemObj);
-            }
-        } catch (JSONException e) {
-            Log.e("Packet", "JSONException inside packItem. " + e.toString());
-        }
-        return itemObj;
-    }
-
     @NotNull
     public JSONObject packBag(Bag bag) {
         if ((bag.owner != null) && (bag.owner instanceof Hero)) {
@@ -564,7 +465,7 @@ public class NetworkPacket {
 
     @NotNull
     public JSONObject packBag(@NotNull Bag bag, Hero hero) {
-        return packItem(bag, hero);
+        return Item.packItem(bag, hero);
     }
 
     @NotNull
@@ -577,7 +478,7 @@ public class NetworkPacket {
 
         for (Item item : bag.items) {
             JSONObject serializedItem;
-            serializedItem = packItem(item, hero);
+            serializedItem = Item.packItem(item, hero);
             if (serializedItem.length() == 0) {
                 Log.w("Packet", "item hadn't serialized");
             }
@@ -659,7 +560,7 @@ public class NetworkPacket {
                 slotObj.put("id", slot.id);
                 slotObj.put("sprite", slot.sprite);
                 slotObj.put("image_id", slot.image_id);
-                slotObj.put("item", (slot.item != null) ? packItem(slot.item, hero) : JSONObject.NULL);
+                slotObj.put("item", (slot.item != null) ? Item.packItem(slot.item, hero) : JSONObject.NULL);
             } catch (JSONException e) {
                 Log.wtf("NetworkPacket", "JsonException while adding special slot" + e.toString());
             }
@@ -712,7 +613,7 @@ public class NetworkPacket {
         heapObj = new JSONObject();
         try {
             heapObj.put("pos", heap.pos);
-            heapObj.put("visible_item", packItem(heap.items.getFirst(), observer));
+            heapObj.put("visible_item", Item.packItem(heap.items.getFirst(), observer));
             int heapImage = -1;
             if (!heap.showsFirstItem()) {
                 heapImage = heap.image();

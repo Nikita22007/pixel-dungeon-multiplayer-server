@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.items;
 
-import androidx.annotation.Nullable;
+import android.util.Log;
 
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
@@ -34,9 +34,11 @@ import com.watabou.pixeldungeon.items.bags.Bag;
 import com.watabou.pixeldungeon.items.rings.Ring;
 import com.watabou.pixeldungeon.items.wands.Wand;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
+import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.mechanics.Ballistica;
+import com.watabou.pixeldungeon.network.NetworkPacket;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
@@ -49,10 +51,16 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.watabou.pixeldungeon.DungeonTilemap.tileCenterToWorld;
 import static com.watabou.pixeldungeon.network.SendData.sendRemoveItemFromInventory;
@@ -61,6 +69,9 @@ import static com.watabou.pixeldungeon.network.SendData.sendUpdateItemFull;
 
 public abstract class Item implements Bundlable {
 
+	public static final int DEGRADED = 0xFF4444;
+	public static final int UPGRADED = 0x44FF44;
+	public static final int WARNING = 0xFF8800;
 	private static final String TXT_PACK_FULL	= "Your pack is too full for the %s";
 	
 	private static final String TXT_BROKEN		= "Because of frequent use, your %s has broken.";
@@ -70,7 +81,12 @@ public abstract class Item implements Bundlable {
 	private static final String TXT_TO_STRING_X		= "%s x%d";
 	private static final String TXT_TO_STRING_LVL	= "%s%+d";
 	private static final String TXT_TO_STRING_LVL_X	= "%s%+d x%d";
-	
+
+	protected static final String TXT_STRENGTH = ":%d";
+	protected static final String TXT_TYPICAL_STR = "%d?";
+	protected static final String TXT_LEVEL = "%+d";
+	protected static final String TXT_CURSED = "";//"-";
+
 	private static final float DURABILITY_WARNING_LEVEL	= 1/6f;
 	
 	protected static final float TIME_TO_THROW		= 1.0f;
@@ -79,7 +95,7 @@ public abstract class Item implements Bundlable {
 
 	public static final String AC_DROP		= "DROP";
 	public static final String AC_THROW		= "THROW";
-	
+
 	public String defaultAction;
 	
 	protected String name = "smth";
@@ -104,6 +120,98 @@ public abstract class Item implements Bundlable {
 			return Generator.Category.order( lhs ) - Generator.Category.order( rhs );
 		}
 	};
+
+	public static JSONObject packItem(@NotNull Item item, @Nullable Hero hero) {
+		return item.toJsonObject(hero);
+	}
+
+	public final JSONObject toJsonObject(@Nullable Hero hero) {
+		@NotNull Item item = this;
+		JSONObject itemObj = new JSONObject();
+		try {
+			if (hero != null) {
+				itemObj.put("actions", NetworkPacket.packActions(item, hero));
+				itemObj.put("default_action", item.defaultAction == null ? "null" : item.defaultAction);
+				itemObj.put("info", item.info(hero));
+				itemObj.put("ui", item.itemUI(hero));
+			}
+			//itemObj.put("sprite_sheet")
+			itemObj.put("image", item.image());
+			itemObj.put("name", item.name());
+			itemObj.put("stackable", item.stackable);
+			itemObj.put("quantity", item.quantity());
+			itemObj.put("durability", item.durability());
+			itemObj.put("max_durability", item.maxDurability());
+			itemObj.put("known", item.isKnown());
+			itemObj.put("cursed", item.visiblyCursed());
+			itemObj.put("identified", item.isIdentified());
+			itemObj.put("level_known", item.levelKnown);
+			itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
+			itemObj.put("level", item.visiblyUpgraded());
+			ItemSprite.Glowing glowing = item.glowing();
+			if (glowing != null) {
+				itemObj.put("glowing", glowing.toJsonObject());
+			}
+			else{
+				itemObj.put("glowing", JSONObject.NULL);
+			}
+			if (item instanceof Bag) {
+				itemObj = NetworkPacket.packBag((Bag) item, hero, itemObj);
+			}
+		} catch (JSONException e) {
+			Log.e("Packet", "JSONException inside packItem. " + e.toString());
+		}
+		return itemObj;
+	}
+
+	@NotNull
+	protected JSONObject itemUI(@NotNull Hero owner) throws JSONException {
+		Objects.requireNonNull(owner);
+		@NotNull Item item = this;
+		JSONObject ui = new JSONObject();
+		JSONObject topLeft = new JSONObject();
+		JSONObject topRight = new JSONObject();
+		JSONObject bottomRight = new JSONObject();
+
+		topLeft.put("visible", true);
+		topRight.put("visible", true);
+		bottomRight.put("visible", true);
+
+		topLeft.put("text", item.status());
+
+		boolean isArmor = item instanceof Armor;
+		boolean isWeapon = item instanceof Weapon;
+		if (isArmor || isWeapon) {
+			if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon))) {
+				int str = isArmor ? ((Armor) item).STR : ((Weapon) item).STR;
+				topRight.put("text", Utils.format(TXT_STRENGTH, str));
+				if (str > owner.STR()) {
+					topRight.put("color", DEGRADED);
+				} else {
+					topRight.put("color", null);
+				}
+			} else {
+				topRight.put("text", Utils.format(TXT_TYPICAL_STR, isArmor ?
+						((Armor) item).typicalSTR() :
+						((MeleeWeapon) item).typicalSTR()));
+				topRight.put("color", WARNING);
+			}
+		} else {
+			topRight.put("text", null);
+		}
+
+		int level = item.visiblyUpgraded();
+		if (level != 0 || (item.cursed && item.cursedKnown)) {
+			bottomRight.put("text", item.levelKnown ? Utils.format(TXT_LEVEL, level) : TXT_CURSED);
+			bottomRight.put("color", level > 0 ? (item.isBroken() ? WARNING : UPGRADED) : DEGRADED);
+		} else {
+			bottomRight.put("text", null);
+		}
+		ui.put("top_left", topLeft);
+		ui.put("top_right", topRight);
+		ui.put("bottom_right", bottomRight);
+		return ui;
+	}
 
 	public boolean isKnown(){
 		return true;
