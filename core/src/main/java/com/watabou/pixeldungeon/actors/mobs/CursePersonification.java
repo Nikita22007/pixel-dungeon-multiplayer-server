@@ -26,11 +26,13 @@ import com.watabou.pixeldungeon.actors.buffs.Paralysis;
 import com.watabou.pixeldungeon.actors.buffs.Roots;
 import com.watabou.pixeldungeon.actors.buffs.Terror;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Ghost;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.items.weapon.enchantments.Death;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.sprites.CursePersonificationSprite;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class CursePersonification extends Mob {
 
@@ -73,7 +75,7 @@ public class CursePersonification extends Mob {
 				int newPos = enemy.pos + ofs;
 				if ((Level.passable[newPos] || Level.avoid[newPos]) && Actor.findChar( newPos ) == null) {
 					
-					Actor.addDelayed( new Pushing( enemy, enemy.pos, newPos ), -1 );
+					sendPushing( enemy, enemy.pos, newPos );
 					
 					enemy.pos = newPos;
 					// FIXME

@@ -21,11 +21,13 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.mobs.Mob;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class Bounce extends Glyph {
 
@@ -43,8 +45,8 @@ public class Bounce extends Glyph {
 				if (attacker.pos - defender.pos == ofs) {
 					int newPos = attacker.pos + ofs;
 					if ((Level.passable[newPos] || Level.avoid[newPos]) && Actor.findChar( newPos ) == null) {
-						
-						Actor.addDelayed( new Pushing( attacker, attacker.pos, newPos ), -1 );
+
+						sendPushing( attacker, attacker.pos, newPos );
 						
 						attacker.pos = newPos;
 						// FIXME

@@ -267,6 +267,16 @@ action swap char:
     "actor_id" 0
 }
 
+effects.pushing
+action push
+{
+    "action_type": "sprite_action"
+    "action": "pushing"/"push"
+    "from": 0
+    "to": 1
+    "actor_id": 3
+}
+
 action AlphaTweener:
 {
     "action_type": "sprite_action"

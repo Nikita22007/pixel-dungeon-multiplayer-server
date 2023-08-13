@@ -25,7 +25,7 @@ import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Burning;
 import com.watabou.pixeldungeon.actors.buffs.Poison;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.items.potions.PotionOfHealing;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
@@ -34,6 +34,8 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.SwarmSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class Swarm extends Mob {
 
@@ -98,7 +100,7 @@ public class Swarm extends Mob {
 				}
 				
 				GameScene.add( clone, SPLIT_DELAY );
-				Actor.addDelayed( new Pushing( clone, pos, clone.pos ), -1 );
+				sendPushing( clone, pos, clone.pos );
 				
 				setHP(getHP() - clone.getHP());
 			}

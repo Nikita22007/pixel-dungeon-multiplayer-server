@@ -29,7 +29,7 @@ import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Gold;
 import com.watabou.pixeldungeon.items.Item;
@@ -39,6 +39,8 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.MimicSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class Mimic extends Mob {
 	
@@ -138,7 +140,7 @@ public class Mimic extends Mob {
 			}
 			if (candidates.size() > 0) {
 				int newPos = Random.element( candidates );
-				Actor.addDelayed( new Pushing( ch, ch.pos, newPos ), -1 );
+				sendPushing( ch, ch.pos, newPos );
 				
 				ch.pos = newPos;
 				// FIXME

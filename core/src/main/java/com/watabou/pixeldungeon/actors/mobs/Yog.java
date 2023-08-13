@@ -38,7 +38,7 @@ import com.watabou.pixeldungeon.actors.buffs.Sleep;
 import com.watabou.pixeldungeon.actors.buffs.Terror;
 import com.watabou.pixeldungeon.actors.buffs.Vertigo;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.effects.particles.ShadowParticle;
 import com.watabou.pixeldungeon.items.keys.SkeletonKey;
 import com.watabou.pixeldungeon.items.scrolls.ScrollOfPsionicBlast;
@@ -54,6 +54,8 @@ import com.watabou.pixeldungeon.sprites.YogSprite;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class Yog extends Mob {
 	
@@ -126,7 +128,7 @@ public class Yog extends Mob {
 			larva.pos = Random.element( spawnPoints );
 			
 			GameScene.add( larva );
-			Actor.addDelayed( new Pushing( larva, pos, larva.pos ), -1 );
+			sendPushing( larva, pos, larva.pos );
 		}
 
 		return super.defenseProc(enemy, damage);

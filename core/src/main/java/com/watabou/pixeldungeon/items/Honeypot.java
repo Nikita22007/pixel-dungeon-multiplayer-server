@@ -26,12 +26,14 @@ import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Bee;
-import com.watabou.pixeldungeon.effects.Pushing;
+import com.nikita22007.multiplayer.server.effects.Pushing;
 import com.watabou.pixeldungeon.effects.Splash;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
+
+import static com.nikita22007.multiplayer.server.effects.Pushing.sendPushing;
 
 public class Honeypot extends Item {
 	
@@ -104,7 +106,7 @@ public class Honeypot extends Item {
 			bee.pos = newPos;
 			
 			GameScene.add( bee );
-			Actor.addDelayed( new Pushing( bee, pos, newPos ), -1 );
+			sendPushing( bee, pos, newPos );
 			
 			bee.getSprite().alpha( 0 );
 			AlphaTweener.showAlphaTweener(bee.getSprite(), 1, 0.15f );
