@@ -40,7 +40,7 @@ public class Identification {
 	};
 
 	public static void showIdentification(PointF p){
-		Degradation.Degradation(p, DOTS, COLOR);
+		Degradation.showDegradation(p, DOTS, COLOR);
 	}
 
 	public Identification(PointF p) {

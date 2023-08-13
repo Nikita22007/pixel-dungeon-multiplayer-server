@@ -313,6 +313,7 @@ action visual_degradation
     "position_x": x //float
     "position_y": y //float
     "matrix":  [x1,y1,x2,y2...] //int
+    "color": 0xFFFFCC //optional. Used for {@link #Identification} because it used different color
 }
 
 action visual_show_banner
