@@ -17,7 +17,7 @@
  */
 package com.watabou.pixeldungeon.items.scrolls;
 
-import com.watabou.pixeldungeon.effects.Enchanting;
+import com.nikita22007.multiplayer.server.effects.Enchanting;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.armor.Armor;

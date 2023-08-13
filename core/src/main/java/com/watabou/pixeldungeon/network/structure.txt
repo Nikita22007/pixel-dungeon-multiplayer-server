@@ -408,6 +408,14 @@ action CheckedCell
     "pos": 2
 }
 
+effects.Enchanting
+action enchanting visual
+{
+    "action_type": "enchanting_visual"
+    "target": 3 // Char.id()
+    "item": Item
+}
+
 action flare
 {
     "action_type": "flare_visual"
