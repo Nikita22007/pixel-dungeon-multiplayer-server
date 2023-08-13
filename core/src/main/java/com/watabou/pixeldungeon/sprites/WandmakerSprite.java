@@ -56,10 +56,11 @@ public class WandmakerSprite extends MobSprite {
 	@Override
 	public void link( Char ch ) {
 		super.link( ch );
-		
+		/*
 		if (shield == null) {
 			parent.add( shield = new Shield() );
 		}
+		*/
 	}
 	
 	@Override

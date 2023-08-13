@@ -36,13 +36,6 @@ public class FetidRatSprite extends RatSprite {
 	}
 	
 	@Override
-	public void update() {
-		
-		super.update();
-
-	}
-	
-	@Override
 	public void die() {
 		super.die();
 		

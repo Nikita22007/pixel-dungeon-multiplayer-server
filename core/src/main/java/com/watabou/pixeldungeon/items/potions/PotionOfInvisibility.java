@@ -56,7 +56,7 @@ public class PotionOfInvisibility extends Potion {
 	}
 	
 	public static void melt( Char ch ) {
-		if (ch.getSprite().parent != null) {
+		if( (ch.getSprite() != null) && (ch.id() != -1)) {
 			AlphaTweener.showAlphaTweener(ch.getSprite(), ALPHA, 0.4f );
 		} else {
 			ch.getSprite().alpha( ALPHA );

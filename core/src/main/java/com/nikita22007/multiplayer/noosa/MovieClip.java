@@ -25,10 +25,9 @@ import android.graphics.RectF;
 
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
-import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 
-public class MovieClip extends Image {
+public class MovieClip {
 
 	protected Animation curAnim;
 	
@@ -99,7 +98,6 @@ public class MovieClip extends Image {
 	}
 
 	//from Image and Visual
-	/*
 
 	public float width,height;
 	public boolean flipHorizontal = false;
@@ -139,5 +137,9 @@ public class MovieClip extends Image {
 
 	public void kill() {
 	}
-	*/
+
+	public void killAndErase(){
+		kill();
+	}
+
 }

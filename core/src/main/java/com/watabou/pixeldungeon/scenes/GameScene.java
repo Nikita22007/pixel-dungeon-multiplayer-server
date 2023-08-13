@@ -99,9 +99,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 		effects = new Group();
 
-		mobs = new Group();
-		add( mobs );
-		
 		for (Mob mob : Dungeon.level.mobs) {
 			addMobSprite( mob );
 			if (Statistics.amuletHeroID>-1) {
@@ -130,7 +127,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			hero = new HeroSprite(heroobj);
 			hero.place( heroobj.pos );
 			hero.updateArmor();
-			mobs.add( hero );
 		}
 
 		ArrayList<Item> dropped = Dungeon.droppedItems.get( Dungeon.depth );
@@ -213,14 +209,12 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private void addMobSprite( Mob mob ) {
 		CharSprite sprite = mob.sprite();
 		sprite.visible = Dungeon.visible[mob.pos];
-		mobs.add( sprite );
 		sprite.link( mob );
 	}
 
 	public void addHeroSprite(Hero hero){
 		CharSprite sprite  = hero.getSprite();
 		sprite.visible = true;
-		mobs.add(sprite);
 		sprite.link(hero);
 	}
 

@@ -48,13 +48,6 @@ public class GhostSprite extends MobSprite {
 	}
 	
 	@Override
-	public void draw() {
-		GLES20.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE );
-		super.draw();
-		GLES20.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );
-	}
-	
-	@Override
 	public void die() {
 		super.die();
 		emitter().start( ShaftParticle.FACTORY, 0.3f, 4 );

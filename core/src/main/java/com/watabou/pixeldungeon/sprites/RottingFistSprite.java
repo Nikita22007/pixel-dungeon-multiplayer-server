@@ -50,17 +50,21 @@ public class RottingFistSprite extends MobSprite {
 	@Override
 	public void attack( int cell ) {
 		super.attack( cell );
-		
+
+		/*
 		speed.set( 0, -FALL_SPEED );
 		acc.set( 0, FALL_SPEED * 4 );
+		 */
 	}
 	
 	@Override
 	public void onComplete( Animation anim ) {
 		super.onComplete( anim );
 		if (anim == attack) {
+			/*
 			speed.set( 0 );
 			acc.set( 0 );
+			 */
 			place( ch.pos );
 			
 			Camera.shake( 4, 0.2f );
