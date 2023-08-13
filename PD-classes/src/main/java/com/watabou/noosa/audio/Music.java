@@ -38,7 +38,7 @@ public enum Music implements MediaPlayer.OnPreparedListener, MediaPlayer.OnError
 	private String lastPlayed;
 	private boolean looping;
 	
-	private boolean enabled = true;
+	private boolean enabled = false;
 	
 	public void play( String assetName, boolean looping ) {
 		
