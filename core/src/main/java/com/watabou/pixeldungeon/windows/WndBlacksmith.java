@@ -26,12 +26,17 @@ import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.watabou.pixeldungeon.items.Item;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.scenes.PixelScene;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.ui.ItemSlot;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WndBlacksmith extends Window {
 
@@ -55,21 +60,23 @@ public class WndBlacksmith extends Window {
 		"Reforge them";
 	
 	public WndBlacksmith(Blacksmith troll, final Hero hero ) {
-		
-		super();
-		
-		IconTitle titlebar = new IconTitle();
-		titlebar.icon( troll.sprite() );
-		titlebar.label( Utils.capitalize( troll.name ) );
-		titlebar.setRect( 0, 0, WIDTH, 0 );
-		add( titlebar );
-		
-		BitmapTextMultiline message = PixelScene.createMultiline( TXT_PROMPT, 6 );
-		message.maxWidth = WIDTH;
-		message.measure();
-		message.y = titlebar.bottom() + GAP;
-		add( message );
-		
+
+		super(hero);
+
+		CharSprite trollSprite =  troll.sprite();
+		String title = Utils.capitalize(troll.name);
+		String text = TXT_PROMPT;
+		String reforgeText = TXT_REFORGE;
+
+		JSONObject params = new JSONObject();
+		try {
+			params.put("title", title);
+			params.put("text", text);
+			params.put("sprite", trollSprite.spriteName());
+			params.put("reforge_text", reforgeText);
+		} catch (JSONException ignored) {}
+		SendData.sendWindow(hero.networkID, "wnd_blacksmith", getId(), params);
+
 		btnItem1 = new ItemButton() {
 			@Override
 			protected void onClick() {
@@ -77,7 +84,7 @@ public class WndBlacksmith extends Window {
 				GameScene.selectItem( hero, itemSelector, WndBag.Mode.UPGRADEABLE, TXT_SELECT );
 			}
 		};
-		btnItem1.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.y + message.height() + BTN_GAP, BTN_SIZE, BTN_SIZE );
+		btnItem1.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, 1, BTN_SIZE, BTN_SIZE );
 		add( btnItem1 );
 		
 		btnItem2 = new ItemButton() {
