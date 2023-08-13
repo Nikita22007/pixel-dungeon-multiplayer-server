@@ -226,6 +226,7 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 		} else if (tx < fx) {
 			flipHorizontal = true;
 		}
+		sendCharSpriteAction(ch.id(), "turn", from, to);
 	}
 
 	public void jump( int from, int to, Callback callback ) {

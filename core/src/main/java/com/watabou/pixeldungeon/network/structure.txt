@@ -250,6 +250,14 @@ action move char:
     "animation_state_after_move": "idle" // ...
 }
 
+action "sprite_action"
+{
+    action_type: "sprite_action"
+    "action": "turn"
+    "from": 0
+    "to": 1
+}
+
 action swap char:
 {
     "action_type":  "sprite_action"
