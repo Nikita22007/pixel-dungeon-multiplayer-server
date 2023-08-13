@@ -44,7 +44,6 @@ import com.watabou.pixeldungeon.network.Server;
 import com.watabou.pixeldungeon.plants.Plant;
 import com.watabou.pixeldungeon.sprites.CharSprite;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
-import com.watabou.pixeldungeon.ui.StatusPane;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.windows.WndBag;
 
@@ -58,7 +57,8 @@ import java.util.ArrayList;
 import static com.watabou.noosa.Game.timeTotal;
 
 public class GameScene extends PixelScene {     //only client, exclude static
-	
+
+	//todo SEND THIS
 	private static final String TXT_WELCOME			= "Welcome to the level %d of Pixel Dungeon!";
 	private static final String TXT_WELCOME_BACK	= "Welcome back to the level %d of Pixel Dungeon!";
 	private static final String TXT_NIGHT_MODE		= "Be cautious, since the dungeon is even more dangerous at night!";
@@ -73,7 +73,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 
 	//graphics
 	private Group mobs;
-	private Group emitters;
 	private Group effects;
 	private Group gases;
 	private Group spells;
@@ -98,7 +97,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		Dungeon.level.addVisuals( this );
 
-		emitters = new Group();
 		effects = new Group();
 
 		mobs = new Group();
@@ -111,7 +109,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			}
 		}
 		
-		add( emitters );
 		add( effects );
 		
 		gases = new Group();
@@ -136,11 +133,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 			mobs.add( hero );
 		}
 
-		StatusPane sb = new StatusPane();
-		sb.camera = uiCamera;
-		sb.setSize( uiCamera.width, 0 );
-		add( sb );
-		
 		ArrayList<Item> dropped = Dungeon.droppedItems.get( Dungeon.depth );
 		if (dropped != null) {
 			for (Item item : dropped) {
