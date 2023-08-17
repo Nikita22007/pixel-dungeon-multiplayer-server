@@ -2,6 +2,9 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
+ * Pixel Dungeon Multiplayer
+ * Copyright (C) 2021-2023 Nikita Shaposhnikov
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,8 +31,8 @@ public final class CheckedCell {
 	public static void SendCheckedCell(int pos, @NotNull Hero hero){
 		try {
 			JSONObject actionObj = new JSONObject();
+			actionObj.put("action_type", "checked_cell_visual");
 			actionObj.put("pos", pos);
-			actionObj.put("", pos);
 			SendData.addToSendCustomAction(actionObj, hero.networkID);
 		}catch (JSONException ignore) {
 
