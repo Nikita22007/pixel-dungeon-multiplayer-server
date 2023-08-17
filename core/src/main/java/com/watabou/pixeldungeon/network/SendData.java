@@ -430,7 +430,6 @@ public class SendData {
     }
 
     public static void sendCustomActionForAll(@NotNull JSONObject action_obj) {
-        assert action_obj.has("action_type") : "Action object must contains \"action_type\" field";
         for (int i = 0; i < clients.length; i++) {
             sendCustomAction(action_obj, i);
         }
@@ -448,6 +447,7 @@ public class SendData {
     }
 
     public static void sendCustomAction(JSONObject action_obj, int networkID, boolean flush) {
+        assert action_obj.has("action_type") : "Action object must contains \"action_type\" field";
         if (networkID <= -1) {
             return;
         }
