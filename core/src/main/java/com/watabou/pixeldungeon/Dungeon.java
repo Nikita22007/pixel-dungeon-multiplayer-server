@@ -707,11 +707,15 @@ public class Dungeon {
 		level.updateFieldOfView( hero );
 		System.arraycopy( Level.fieldOfView, 0, visible, 0, visible.length );
 
-		BArray.or( level.visited, visible, level.visited );
+		boolean[] newVisited;
 
+		newVisited = BArray.or( level.visited, visible, null );
+		boolean[] diff;
+		diff = BArray.xor(level.visited, newVisited, null);
+				level.visited  = newVisited;
 		if (send) {
 			int networkID = getHeroID(hero);
-			addToSendLevelVisitedState(level,networkID);
+			addToSendLevelVisitedState(level, networkID, diff);
 			addToSendHeroVisibleCells(visible,networkID);
 			SendData.flush(networkID);
 		}
@@ -719,7 +723,7 @@ public class Dungeon {
 	
 	private static boolean[] passable = new boolean[Level.LENGTH];
 	
-	public static int findPath( Char ch, int from, int to, boolean pass[], boolean[] visible ) {
+	public static int findPath( Char ch, int from, int to, boolean[] pass, boolean[] visible ) {
 		
 		if (Level.adjacent( from, to )) {
 			return Actor.findChar( to ) == null && (pass[to] || Level.avoid[to]) ? to : -1;
@@ -744,7 +748,7 @@ public class Dungeon {
 		
 	}
 	
-	public static int flee( Char ch, int cur, int from, boolean pass[], boolean[] visible ) {
+	public static int flee( Char ch, int cur, int from, boolean[] pass, boolean[] visible ) {
 		
 		if (ch.flying) {
 			BArray.or( pass, Level.avoid, passable );
