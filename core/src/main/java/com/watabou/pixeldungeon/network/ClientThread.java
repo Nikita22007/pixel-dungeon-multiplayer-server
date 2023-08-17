@@ -288,6 +288,8 @@ class ClientThread implements Callable<String> {
         newHero.getSprite().place(newHero.pos);
         packet.packAndAddLevel(level, clientHero);
         packet.pack_and_add_hero(newHero);
+        packet.packAndAddDepth(Dungeon.depth);
+        packet.packAndAddIronKeysCount(Dungeon.depth);
         packet.addInventoryFull(newHero);
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work
