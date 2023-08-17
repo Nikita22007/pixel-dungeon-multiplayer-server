@@ -426,7 +426,7 @@ public class Speck extends Image {
 
 				@Override
 				public String factoryName() {
-					return "Speck";
+					return "speck";
 				}
 
 				@Override

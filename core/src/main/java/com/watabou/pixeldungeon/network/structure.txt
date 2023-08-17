@@ -41,8 +41,8 @@ server:
         "exit": 000
         level_visual:
         {
-             first_color: 12345 //level.color1
-             second_color: 54321 //level.color2
+             first_color: 12345 //level.color1, deprecated
+             second_color: 54321 //level.color2, deprecated
              tiles_texture //level.tilesTex()
              water_texture //level.waterTex()
         }
@@ -452,13 +452,16 @@ action emitter_visual
     "width": 1f
     "height": 32f
 
+    "interval": 1f;
+    "quantity": 20;
+
     "factory": Emitter.Factory
 
 }
 
 Emitter.Factory
 {
-    "factory_type": "Speck"
+    "factory_type": "speck"
     "light_mode": false
 
     //CUSTOM PARMS
@@ -479,6 +482,7 @@ elmo
 energy
 flame
 flow
+leaf
 poison_missile
 poison_splash
 purple_missile

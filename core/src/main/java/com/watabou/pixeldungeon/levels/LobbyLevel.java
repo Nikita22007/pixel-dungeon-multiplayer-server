@@ -2,6 +2,7 @@ package com.watabou.pixeldungeon.levels;
 
 import com.watabou.pixeldungeon.BuildConfig;
 import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.items.scrolls.ScrollOfEnchantment;
 import com.watabou.pixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.watabou.pixeldungeon.items.weapon.melee.WarHammer;
 import com.watabou.pixeldungeon.levels.painters.Painter;
@@ -31,10 +32,6 @@ public class LobbyLevel extends DeadEndLevel {
         viewDistance = ((int) (SIZE * 1.5));
         exit = entrance + Level.WIDTH;
         map[exit] = Terrain.EXIT;
-        MeleeWeapon n = new WarHammer();
-        n.levelKnown = true;
-        n.enchant();
-        this.drop(n,center+1);
         if (BuildConfig.DEBUG) {
             {
                 int pos = center - 2-this.WIDTH;
@@ -58,6 +55,9 @@ public class LobbyLevel extends DeadEndLevel {
                 Painter.set(this, pos,SUMMONING_TRAP);
                 pos+=1;
             }
+
+            ScrollOfEnchantment n = new ScrollOfEnchantment();
+            this.drop(n,center+1);
         }
 
         return true;

@@ -192,6 +192,10 @@ public class Emitter {
 
 			actionObj.put("width", width);
 			actionObj.put("height", height);
+
+			actionObj.put("interval", interval);
+			actionObj.put("quantity", quantity);
+
 			actionObj.put("factory", factory.toJsonObject());
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
