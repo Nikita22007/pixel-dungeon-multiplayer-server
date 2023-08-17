@@ -26,6 +26,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
@@ -123,13 +124,15 @@ public class PixelDungeon extends Game {
 			"com.watabou.pixeldungeon.items.wands.WandOfTelekinesis" );
 	}
 
-	private FirebaseAnalytics mFirebaseAnalytics;
+	private static FirebaseAnalytics mFirebaseAnalytics;
+	private static FirebaseCrashlytics mFirebaseCrashlytics;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+		mFirebaseCrashlytics = FirebaseCrashlytics.getInstance();
 
 		updateImmersiveMode();
 		
@@ -381,7 +384,10 @@ public class PixelDungeon extends Game {
 	 */
 	
 	public static void reportException( Throwable tr ) {
-		Log.e( "PD", Log.getStackTraceString( tr ) ); 
+		Log.e( "PDMP", Log.getStackTraceString( tr ) );
+		if (mFirebaseAnalytics != null){
+			mFirebaseCrashlytics.recordException(tr);
+		}
 	}
 
 	@Override
