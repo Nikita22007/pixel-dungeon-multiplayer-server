@@ -1101,7 +1101,7 @@ public class Hero extends Char {
 			levelUp = true;
 		}
 
-		SendHeroLevel(networkID, lvl, exp);2
+		SendHeroLevel(networkID, lvl, exp);
 
 		if (levelUp) {
 			
