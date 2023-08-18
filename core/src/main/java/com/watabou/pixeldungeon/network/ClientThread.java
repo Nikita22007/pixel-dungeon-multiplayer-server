@@ -287,7 +287,7 @@ class ClientThread implements Callable<String> {
         Actor.occupyCell(newHero);
         newHero.getSprite().place(newHero.pos);
         packet.packAndAddLevel(level, clientHero);
-        packet.pack_and_add_hero(newHero);
+        packet.packAndAddHero(newHero);
         packet.packAndAddDepth(Dungeon.depth);
         packet.packAndAddIronKeysCount(Dungeon.depth);
         packet.addInventoryFull(newHero);
@@ -439,7 +439,9 @@ class ClientThread implements Callable<String> {
 
     private void sendInitData() {
         packet.packAndAddLevel(level, clientHero);
-        packet.pack_and_add_hero(clientHero);
+        packet.packAndAddHero(clientHero);
+        packet.packAndAddDepth(Dungeon.depth);
+        packet.packAndAddIronKeysCount(Dungeon.depth);
         packet.addInventoryFull(clientHero);
 
         synchronized (Dungeon.heroes) { //todo fix it. It is not work

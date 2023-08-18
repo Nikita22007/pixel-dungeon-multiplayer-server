@@ -57,7 +57,6 @@ import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.StartScene;
 import com.watabou.pixeldungeon.utils.BArray;
 import com.watabou.pixeldungeon.utils.Utils;
-import com.watabou.pixeldungeon.windows.WndResurrect;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -289,16 +288,16 @@ public class Dungeon {
         switchLevel(level);
         for (Hero hero:heroes) {
             if (hero!=null){
-                swichLevelChangePosition(pos,hero);
+                switchLevelChangePosition(pos,hero);
             }
         }
 	}
 
-	private static void swichLevelChangePosition(int pos, @NotNull Hero hero)
+	private static void switchLevelChangePosition(int pos, @NotNull Hero hero)
     {
         hero.pos = pos != -1 ? (Level.getNearClearCell(pos)) : Level.getNearClearCell(level.exit);
 
-		sendDepth(hero.networkID, depth);
+        sendDepth(hero.networkID, depth);
 
         Light light = hero.buff( Light.class );
         hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );

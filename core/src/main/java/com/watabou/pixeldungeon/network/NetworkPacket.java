@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
@@ -253,7 +254,7 @@ public class NetworkPacket {
         JSONObject object = new JSONObject();
         String class_name = hero.heroClass.name();
         int subclass_id = 0;
-        int strength = hero.STR;
+        int strength = hero.getSTR();
         int lvl = hero.lvl;
         int exp = hero.exp;
         try {
@@ -270,12 +271,47 @@ public class NetworkPacket {
         return object;
     }
 
-    public void pack_and_add_hero(@NotNull Hero hero) {
+    public void packAndAddHero(@NotNull Hero hero) {
         addActor(packActor(hero, true));
         addHero(packHero(hero));
     }
 
-    public void packAndAddLevelEntrance(int pos) {
+    public void packAndAddHeroLevel(@NotNull int lvl, int exp) {
+        synchronized (dataRef) {
+            JSONObject data = dataRef.get();
+            @NotNull
+            JSONObject heroObj = data.optJSONObject("hero");
+            if (heroObj == null){
+                heroObj = new JSONObject();
+            }
+            try {
+                heroObj.put("lvl", lvl);
+                heroObj.put("exp", exp);
+                data.put("hero", heroObj);
+            } catch (JSONException e) {
+                PixelDungeon.reportException(e);
+            }
+        }
+    }
+
+    public void packAndAddHeroStrength(@NotNull int str) {
+        synchronized (dataRef) {
+            JSONObject data = dataRef.get();
+            @NotNull
+            JSONObject heroObj = data.optJSONObject("hero");
+            if (heroObj == null){
+                heroObj = new JSONObject();
+            }
+            try {
+                heroObj.put("strength", str);
+                data.put("hero", heroObj);
+            } catch (JSONException e) {
+                PixelDungeon.reportException(e);
+            }
+        }
+    }
+
+        public void packAndAddLevelEntrance(int pos) {
         try {
             synchronized (dataRef) {
                 JSONObject data = dataRef.get();

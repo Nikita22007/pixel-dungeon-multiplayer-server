@@ -110,6 +110,8 @@ import com.watabou.pixeldungeon.windows.WndTradeItem;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import static com.watabou.pixeldungeon.network.SendData.SendHeroLevel;
+import static com.watabou.pixeldungeon.network.SendData.SendHeroStrength;
 import static com.watabou.pixeldungeon.network.SendData.sendResumeButtonVisible;
 
 public class Hero extends Char {
@@ -162,7 +164,7 @@ public class Hero extends Char {
 	public MissileWeapon rangedWeapon = null;
 	public Belongings belongings;
 	
-	public int STR;
+	protected int STR;
 	//public boolean weakened = false;
 	
 	public float awareness;
@@ -204,7 +206,7 @@ public class Hero extends Char {
 	}
 
 	public int STR() {
-		return  this.buff(Weakness.class)!=null ? STR - 2 : STR; //it was "weakened", but this is more easy
+		return this.buff(Weakness.class) != null ? STR - 2 : STR; //it was "weakened", but this is more easy
 	}
 
 	private static final String ATTACK		= "attackSkill";
@@ -1098,7 +1100,9 @@ public class Hero extends Char {
 			
 			levelUp = true;
 		}
-		
+
+		SendHeroLevel(networkID, lvl, exp);2
+
 		if (levelUp) {
 			
 			GLog.p( TXT_NEW_LEVEL, lvl );
@@ -1485,6 +1489,16 @@ public class Hero extends Char {
 
 	public CellSelector cellSelector;
 	public CellSelector.Listener defaultCellListener;
+
+	public int getSTR() {
+		return STR;
+	}
+
+	public void setSTR(int STR) {
+		this.STR = STR;
+		SendHeroStrength(networkID,this.STR);
+	}
+
 	public static interface Doom {
 		public void onDeath();
 	}

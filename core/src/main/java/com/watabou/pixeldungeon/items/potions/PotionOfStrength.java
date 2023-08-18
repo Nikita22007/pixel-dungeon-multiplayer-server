@@ -32,7 +32,7 @@ public class PotionOfStrength extends Potion {
 	protected void apply( Hero hero ) {
 		setKnown();
 		
-		hero.STR++;
+		hero.setSTR(hero.getSTR() + 1);
 		hero.getSprite().showStatus( CharSprite.POSITIVE, "+1 str" );
 		GLog.p( "Newfound strength surges through your body." );
 		

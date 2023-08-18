@@ -72,6 +72,17 @@ public class SendData {
         }
     }
 
+    public static void SendHeroLevel(int ID, int lvl, int exp) {
+        if ((ID != -1) && (clients[ID] != null)) {
+            clients[ID].packet.packAndAddHeroLevel(lvl, exp);
+        }
+    }
+    public static void SendHeroStrength(int ID, int str) {
+        if ((ID != -1) && (clients[ID] != null)) {
+            clients[ID].packet.packAndAddHeroStrength(str);
+        }
+    }
+
     //---------------------------UI  and mechanics
     public static void sendResumeButtonVisible(int ID, boolean visible) {
         if ((ID != -1) && (clients[ID] != null)) {
