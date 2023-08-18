@@ -564,7 +564,7 @@ public class Hero extends Char {
 			
 		} else {
 			
-			if (Level.fieldOfView[npc.pos] && getCloser( npc.pos )) {
+			if (this.fieldOfView[npc.pos] && getCloser( npc.pos )) {
 				
 				return true;
 				
@@ -835,7 +835,7 @@ public class Hero extends Char {
 			
 		} else {
 			
-			if (Level.fieldOfView[enemy.pos] && getCloser( enemy.pos )) {
+			if (this.fieldOfView[enemy.pos] && getCloser( enemy.pos )) {
 				
 				return true;
 				
@@ -934,7 +934,7 @@ public class Hero extends Char {
 		boolean newMob = false;
 		
 		for (Mob m : Dungeon.level.mobs) {
-			if (Level.fieldOfView[ m.pos ] && m.hostile) {
+			if (this.fieldOfView[ m.pos ] && m.hostile) {
 				visible.add( m );
 				if (!visibleEnemies.contains( m )) {
 					newMob = true;
@@ -991,7 +991,7 @@ public class Hero extends Char {
 				passable[i] = p[i] && (v[i] || m[i]);
 			}
 			
-			step = Dungeon.findPath( this, pos, target, passable, Level.fieldOfView );
+			step = Dungeon.findPath( this, pos, target, passable, this.fieldOfView );
 		}
 		
 		if (step != -1) {
@@ -1030,7 +1030,7 @@ public class Hero extends Char {
 			
 			curAction = new HeroAction.Cook( cell );
 			
-		} else if (Level.fieldOfView[cell] && (ch = Actor.findChar( cell )) instanceof Mob) {
+		} else if (this.fieldOfView[cell] && (ch = Actor.findChar( cell )) instanceof Mob) {
 			
 			if (ch instanceof NPC) {
 				curAction = new HeroAction.Interact( (NPC)ch );
@@ -1038,7 +1038,7 @@ public class Hero extends Char {
 				curAction = new HeroAction.Attack( ch );
 			}
 			
-		} else if (Level.fieldOfView[cell] && (heap = Dungeon.level.heaps.get( cell )) != null && heap.type != Heap.Type.HIDDEN) {
+		} else if (this.fieldOfView[cell] && (heap = Dungeon.level.heaps.get( cell )) != null && heap.type != Heap.Type.HIDDEN) {
 
 			switch (heap.type) {
 			case HEAP:

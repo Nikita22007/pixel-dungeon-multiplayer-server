@@ -704,7 +704,7 @@ public class Dungeon {
 		}
 
 		level.updateFieldOfView( hero );
-		System.arraycopy( Level.fieldOfView, 0, visible, 0, visible.length );
+		System.arraycopy( hero.fieldOfView, 0, visible, 0, visible.length );
 
 		boolean[] newVisited;
 

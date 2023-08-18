@@ -729,7 +729,7 @@ public abstract class Item implements Bundlable {
 			} );
 	}
 	
-	public static Hero curUser = null;
+	public static Hero curUser = null; //todo make private
 	protected static Item curItem = null;
 	protected static CellSelector.Listener thrower = new CellSelector.Listener() {	
 		@Override

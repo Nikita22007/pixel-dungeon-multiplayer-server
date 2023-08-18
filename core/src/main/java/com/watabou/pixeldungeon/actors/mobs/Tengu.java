@@ -110,7 +110,7 @@ public class Tengu extends Mob {
 
     @Override
     protected boolean getCloser(int target) {
-        if (Level.fieldOfView[target]) {
+        if (this.fieldOfView[target]) {
             jump();
             return true;
         } else {
@@ -141,7 +141,7 @@ public class Tengu extends Mob {
             int trapPos;
             do {
                 trapPos = Random.Int(Level.LENGTH);
-            } while (!Level.fieldOfView[trapPos] || !Level.passable[trapPos]);
+            } while (!this.fieldOfView[trapPos] || !Level.passable[trapPos]); //todo possible infinity lop
 
             if (Dungeon.level.map[trapPos] == Terrain.INACTIVE_TRAP) {
                 Level.set(trapPos, Terrain.POISON_TRAP);
@@ -154,7 +154,7 @@ public class Tengu extends Mob {
         do {
             newPos = Random.Int(Level.LENGTH);
         } while (
-                !Level.fieldOfView[newPos] ||
+                !this.fieldOfView[newPos] ||
                         !Level.passable[newPos] ||
                         (enemy != null && Level.adjacent(newPos, enemy.pos)) ||
                         Actor.findChar(newPos) != null);

@@ -76,7 +76,7 @@ public class Succubus extends Mob {
 	
 	@Override
 	protected boolean getCloser( int target ) {
-		if (Level.fieldOfView[target] && Level.distance( pos, target ) > 2 && delay <= 0) {
+		if (this.fieldOfView[target] && Level.distance( pos, target ) > 2 && delay <= 0) {
 			
 			blink( target );
 			spend( -1 / speed() );

@@ -76,7 +76,8 @@ public abstract class Char extends Actor {
 	private static final String TXT_SMB_MISSED	= "%s %s %s's attack";
 	
 	private static final String TXT_OUT_OF_PARALYSIS	= "The pain snapped %s out of paralysis";
-	
+	public boolean[] fieldOfView = new boolean[Level.LENGTH];
+
 	public int pos = 0;
 	
 	private CharSprite sprite = new RatSprite();

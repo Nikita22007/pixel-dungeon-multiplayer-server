@@ -100,9 +100,7 @@ public abstract class Level implements Bundlable {
 	public boolean[] mapped;
 	
 	public int viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 3: 8;
-	
-	public static boolean[] fieldOfView = new boolean[LENGTH];
-	
+
 	public static boolean[] passable	= new boolean[LENGTH];
 	public static boolean[] losBlocking	= new boolean[LENGTH];
 	public static boolean[] flamable	= new boolean[LENGTH];
@@ -770,9 +768,9 @@ public abstract class Level implements Bundlable {
 		
 		boolean sighted = c.buff( Blindness.class ) == null && c.buff( Shadows.class ) == null && c.isAlive();
 		if (sighted) {
-			ShadowCaster.castShadow( cx, cy, fieldOfView, c.viewDistance );
+			ShadowCaster.castShadow( cx, cy, c.fieldOfView, c.viewDistance );
 		} else {
-			Arrays.fill( fieldOfView, false );
+			Arrays.fill( c.fieldOfView, false );
 		}
 
 		int sense = 1;
@@ -792,11 +790,11 @@ public abstract class Level implements Bundlable {
 			int len = bx - ax + 1;
 			int pos = ax + ay * WIDTH;
 			for (int y = ay; y <= by; y++, pos+=WIDTH) {
-				Arrays.fill( fieldOfView, pos, pos + len, true );
+				Arrays.fill( c.fieldOfView, pos, pos + len, true );
 			}
 			
 			for (int i=0; i < LENGTH; i++) {
-				fieldOfView[i] &= discoverable[i];
+				c.fieldOfView[i] &= discoverable[i];
 			}
 		}
 		
@@ -804,49 +802,49 @@ public abstract class Level implements Bundlable {
 			if (c.buff( MindVision.class ) != null) {
 				for (Mob mob : mobs) {
 					int p = mob.pos;
-					fieldOfView[p] = true;
-					fieldOfView[p + 1] = true;
-					fieldOfView[p - 1] = true;
-					fieldOfView[p + WIDTH + 1] = true;
-					fieldOfView[p + WIDTH - 1] = true;
-					fieldOfView[p - WIDTH + 1] = true;
-					fieldOfView[p - WIDTH - 1] = true;
-					fieldOfView[p + WIDTH] = true;
-					fieldOfView[p - WIDTH] = true;
+					c.fieldOfView[p] = true;
+					c.fieldOfView[p + 1] = true;
+					c.fieldOfView[p - 1] = true;
+					c.fieldOfView[p + WIDTH + 1] = true;
+					c.fieldOfView[p + WIDTH - 1] = true;
+					c.fieldOfView[p - WIDTH + 1] = true;
+					c.fieldOfView[p - WIDTH - 1] = true;
+					c.fieldOfView[p + WIDTH] = true;
+					c.fieldOfView[p - WIDTH] = true;
 				}
 			} else if (c instanceof Hero && ((Hero)c).heroClass == HeroClass.HUNTRESS) {
 				for (Mob mob : mobs) {
 					int p = mob.pos;
 					if (distance( c.pos, p) == 2) {
-						fieldOfView[p] = true;
-						fieldOfView[p + 1] = true;
-						fieldOfView[p - 1] = true;
-						fieldOfView[p + WIDTH + 1] = true;
-						fieldOfView[p + WIDTH - 1] = true;
-						fieldOfView[p - WIDTH + 1] = true;
-						fieldOfView[p - WIDTH - 1] = true;
-						fieldOfView[p + WIDTH] = true;
-						fieldOfView[p - WIDTH] = true;
+						c.fieldOfView[p] = true;
+						c.fieldOfView[p + 1] = true;
+						c.fieldOfView[p - 1] = true;
+						c.fieldOfView[p + WIDTH + 1] = true;
+						c.fieldOfView[p + WIDTH - 1] = true;
+						c.fieldOfView[p - WIDTH + 1] = true;
+						c.fieldOfView[p - WIDTH - 1] = true;
+						c.fieldOfView[p + WIDTH] = true;
+						c.fieldOfView[p - WIDTH] = true;
 					}
 				}
 			}
 			if (c.buff( Awareness.class ) != null) {
 				for (Heap heap : heaps.values()) {
 					int p = heap.pos;
-					fieldOfView[p] = true;
-					fieldOfView[p + 1] = true;
-					fieldOfView[p - 1] = true;
-					fieldOfView[p + WIDTH + 1] = true;
-					fieldOfView[p + WIDTH - 1] = true;
-					fieldOfView[p - WIDTH + 1] = true;
-					fieldOfView[p - WIDTH - 1] = true;
-					fieldOfView[p + WIDTH] = true;
-					fieldOfView[p - WIDTH] = true;
+					c.fieldOfView[p] = true;
+					c.fieldOfView[p + 1] = true;
+					c.fieldOfView[p - 1] = true;
+					c.fieldOfView[p + WIDTH + 1] = true;
+					c.fieldOfView[p + WIDTH - 1] = true;
+					c.fieldOfView[p - WIDTH + 1] = true;
+					c.fieldOfView[p - WIDTH - 1] = true;
+					c.fieldOfView[p + WIDTH] = true;
+					c.fieldOfView[p - WIDTH] = true;
 				}
 			}
 		}
 		
-		return fieldOfView;
+		return c.fieldOfView;
 	}
 	
 	public static int distance( int a, int b ) {

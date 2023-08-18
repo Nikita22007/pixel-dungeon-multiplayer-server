@@ -151,7 +151,7 @@ class Mob extends Char {
 
 		boolean enemyInFOV =
 				enemy != null && enemy.isAlive() &&
-						Level.fieldOfView[enemy.pos] && enemy.invisible <= 0;
+						this.fieldOfView[enemy.pos] && enemy.invisible <= 0;
 
 		return state.act(enemyInFOV, justAlerted);
 	}
@@ -163,7 +163,7 @@ class Mob extends Char {
 
 				HashSet<Mob> enemies = new HashSet<Mob>();
 				for (Mob mob : Dungeon.level.mobs) {
-					if (mob != this && Level.fieldOfView[mob.pos]) {
+					if (mob != this && this.fieldOfView[mob.pos]) {
 						enemies.add(mob);
 					}
 				}
@@ -230,7 +230,7 @@ class Mob extends Char {
 
 		int step = Dungeon.findPath(this, pos, target,
 				Level.passable,
-				Level.fieldOfView);
+				this.fieldOfView);
 		if (step != -1) {
 			move(step);
 			return true;
@@ -242,7 +242,7 @@ class Mob extends Char {
 	protected boolean getFurther(int target) {
 		int step = Dungeon.flee(this, pos, target,
 				Level.passable,
-				Level.fieldOfView);
+				this.fieldOfView);
 		if (step != -1) {
 			move(step);
 			return true;

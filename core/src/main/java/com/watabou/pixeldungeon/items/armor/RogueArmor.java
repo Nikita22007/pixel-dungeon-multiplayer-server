@@ -21,6 +21,7 @@ import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Actor;
+import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Blindness;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.hero.Hero;
@@ -80,7 +81,7 @@ public class RogueArmor extends ClassArmor {
 		public void onSelect( Integer target ) {
 			if (target != null) {
 
-				if (!Level.fieldOfView[target] || 
+				if (!curUser.fieldOfView[target] ||
 					!(Level.passable[target] || Level.avoid[target]) || 
 					Actor.findChar( target ) != null) {
 					
@@ -91,7 +92,7 @@ public class RogueArmor extends ClassArmor {
 				curUser.setHP(curUser.getHP() - (curUser.getHP() / 3));
 				
 				for (Mob mob : Dungeon.level.mobs) {
-					if (Level.fieldOfView[mob.pos]) {
+					if (curUser.fieldOfView[mob.pos]) {
 						Buff.prolong( mob, Blindness.class, 2 );
 						mob.state = mob.WANDERING;
 						mob.getSprite().emitter().burst( Speck.factory( Speck.LIGHT ), 4 );

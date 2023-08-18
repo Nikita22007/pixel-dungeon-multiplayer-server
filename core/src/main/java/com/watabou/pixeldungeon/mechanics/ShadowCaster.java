@@ -31,7 +31,7 @@ public final class ShadowCaster {
 	private static final int HEIGHT	= Level.HEIGHT;
 	
 	private static int distance;
-	private static int limits[];
+	private static int[] limits;
 	
 	private static boolean[] losBlocking;
 	private static boolean[] fieldOfView;
@@ -49,7 +49,7 @@ public final class ShadowCaster {
 	
 	private static Obstacles obs = new Obstacles();
 	
-	public static void castShadow( int x, int y, boolean[] fieldOfView, int distance ) {
+	public synchronized static void castShadow( int x, int y, boolean[] fieldOfView, int distance ) {
 
 		losBlocking = Level.losBlocking;
 
