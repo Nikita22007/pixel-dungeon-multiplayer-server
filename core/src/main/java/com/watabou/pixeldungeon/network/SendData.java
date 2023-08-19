@@ -3,6 +3,7 @@ package com.watabou.pixeldungeon.network;
 import android.util.Log;
 
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
@@ -23,8 +24,8 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
 import static com.watabou.pixeldungeon.items.Item.packItem;
+import static com.watabou.pixeldungeon.network.NetworkPacket.addToArray;
 import static com.watabou.pixeldungeon.network.Server.clients;
 
 public class SendData {
@@ -288,11 +289,14 @@ public class SendData {
             return;
         }
         for (int i = 0; i < clients.length; i++) {
-            if (clients[i] == null) {
+            ClientThread client = clients[i];
+            if (client == null) {
                 continue;
             }
-            clients[i].packet.addChatMessage(messageObj);
-            clients[i].flush();
+            client.packet.addChatMessage(messageObj);
+            client.flush();
+        }
+    }
         }
     }
 
@@ -438,6 +442,23 @@ public class SendData {
     }
 
     public static void sendFlashChar(CharSprite sprite, float flashTime) {
+
+        if (sprite.ch == null){
+            PixelDungeon.reportException(new RuntimeException("char sprite has not owner. Ignored"));
+            return;
+        }
+
+        JSONObject actionObj = new JSONObject();
+        try {
+            actionObj.put("action_type", "sprite_action");
+            actionObj.put("action", "flash");
+            actionObj.put("actor_id", sprite.ch.id());
+            actionObj.put("flash_time", flashTime);
+            sendCustomActionForAll(actionObj);
+        } catch (JSONException e) {
+            PixelDungeon.reportException(e);
+        }
+
     }
 
     public static void sendCustomActionForAll(@NotNull JSONObject action_obj) {

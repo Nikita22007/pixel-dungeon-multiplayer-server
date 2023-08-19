@@ -287,6 +287,14 @@ action AlphaTweener:
     "interval": 3f
 }
 
+sprite action flash:
+{
+    "action_type": "sprite_action"
+    "action": "flash"
+    "actor_id":1
+    "flash_time": 3f
+}
+
 action destroy char
 {
     "action_type": "destroy_char"
