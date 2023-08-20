@@ -151,8 +151,7 @@ public class Emitter {
 	 * @param interval interval between emitting
 	 */
 	public void pour( Factory factory, float interval ) {
-		//todo
-		//start( factory, interval, 0 );
+		start( factory, interval, 0 );
 	}
 
 	/**
@@ -161,7 +160,12 @@ public class Emitter {
 	 * @param interval interval between emitting
 	 */
 	public void start( Factory factory, float interval, int quantity ) {
-		
+
+		if (quantity == 0) {
+			//todo
+			return;
+		}
+
 		this.factory = factory;
 		this.lightMode = factory.lightMode();
 		
