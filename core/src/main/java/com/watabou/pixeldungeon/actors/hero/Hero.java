@@ -23,6 +23,7 @@ import java.util.HashSet;
 
 import com.nikita22007.multiplayer.noosa.Camera;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
+import com.watabou.BuildConfig;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Bones;
@@ -784,7 +785,7 @@ public class Hero extends Char {
 	private boolean actAscend( HeroAction.Ascend action ) {
 		int stairs = action.dst;
 		if (pos == stairs && pos == Dungeon.level.entrance) {
-			if (Settings.returnDisabled){
+			if (Settings.returnDisabled && (!BuildConfig.DEBUG)){
 				GameScene.show(new WndMessage(TXT_NO_RETURN_ALLOWED, this));
 				ready();
 				return false;
