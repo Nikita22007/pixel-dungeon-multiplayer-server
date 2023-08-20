@@ -136,11 +136,11 @@ public class StartScene extends PixelScene {			//client  Scene
 		btnLoad = new GameButton( TXT_LOAD ) {
 			@Override
 			protected void onClick() {
+				InterLevelSceneServer.restore();
 				if (!Server.startServer()){
 					StartScene.this.add(new WndError("Server starting error"));
 					return;
 				}
-				InterLevelSceneServer.restore();
 			}
 		};
 		add( btnLoad );
