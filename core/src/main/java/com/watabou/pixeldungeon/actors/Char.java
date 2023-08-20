@@ -137,13 +137,15 @@ public abstract class Char extends Actor {
 	}
 	
 	public boolean attack( Char enemy ) {
-		
-		boolean visibleFight = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];
+
+		boolean[] visibleFight = Dungeon.visibleForHeroes(pos, enemy.pos);
 		
 		if (hit( this, enemy, false )) {
-			
-			if (visibleFight) {
-				GLog.i( TXT_HIT, name, enemy.name );
+
+			for (int i = 0; i < visibleFight.length; i++) {
+				if (visibleFight[i]) {
+					GLog.iWithTarget(i, TXT_HIT, name, enemy.name);
+				}
 			}
 			
 			// FIXME
@@ -156,9 +158,12 @@ public abstract class Char extends Actor {
 			effectiveDamage = attackProc( enemy, effectiveDamage );
 			effectiveDamage = enemy.defenseProc( this, effectiveDamage );
 			enemy.damage( effectiveDamage, this );
-			
-			if (visibleFight) {
-				Sample.INSTANCE.play( Assets.SND_HIT, 1, 1, Random.Float( 0.8f, 1.25f ) );
+
+
+			for (int i = 0; i < visibleFight.length; i++) {
+				if (visibleFight[i]) {
+					Sample.INSTANCE.play( Assets.SND_HIT, 1, 1, Random.Float( 0.8f, 1.25f ), Dungeon.heroes[i] );
+				}
 			}
 
 			if (enemy instanceof Hero) {
@@ -171,7 +176,7 @@ public abstract class Char extends Actor {
 			enemy.getSprite().bloodBurstA( getSprite().center(), effectiveDamage );
 			enemy.getSprite().flash();
 			
-			if (!enemy.isAlive() && visibleFight) {
+			if (false) {//(!enemy.isAlive() && visibleFight) {
 				if (enemy instanceof Hero) {
 					
 					if (((Hero)enemy).killerGlyph != null) {
@@ -199,19 +204,21 @@ public abstract class Char extends Actor {
 			return true;
 			
 		} else {
-			
-			if (visibleFight) {
-				String defense = enemy.defenseVerb();
-				enemy.getSprite().showStatus( CharSprite.NEUTRAL, defense );
-				if (this instanceof Hero) {
-					GLog.i( TXT_YOU_MISSED, enemy.name, defense );
-				} else {
-					GLog.i( TXT_SMB_MISSED, enemy.name, defense, name );
+			String defense = enemy.defenseVerb();
+			enemy.getSprite().showStatus(CharSprite.NEUTRAL, defense); //"status" contains target cell, so it can be checked on client
+
+			for (int ID = 0; ID < visibleFight.length; ID++) {
+				if (visibleFight[ID]) {
+					Hero currHero = Dungeon.heroes[ID];
+					if (this == currHero) {
+						GLog.iWithTarget(ID, TXT_YOU_MISSED, enemy.name, defense);
+					} else {
+						GLog.iWithTarget(ID, TXT_SMB_MISSED, enemy.name, defense, name);
+					}
+
+					Sample.INSTANCE.play(Assets.SND_MISS, currHero);
 				}
-				
-				Sample.INSTANCE.play( Assets.SND_MISS );
 			}
-			
 			return false;
 			
 		}
@@ -273,8 +280,11 @@ public abstract class Char extends Actor {
 		if (buff( Paralysis.class ) != null) {
 			if (Random.Int( dmg ) >= Random.Int(getHP())) {
 				Buff.detach( this, Paralysis.class );
-				if (Dungeon.visible[pos]) {
-					GLog.i( TXT_OUT_OF_PARALYSIS, name );
+				boolean[] visible = Dungeon.visibleForHeroes(pos);
+				for (int ID = 0; ID < visible.length; ID++) {
+					if (visible[ID]) {
+						GLog.i(TXT_OUT_OF_PARALYSIS, name, Dungeon.heroes[ID]);
+					}
 				}
 			}
 		}
@@ -497,9 +507,9 @@ public abstract class Char extends Actor {
 		if (flying && Dungeon.level.map[pos] == Terrain.DOOR) {
 			Door.enter( pos );
 		}
-		
+
 		if (!(this instanceof Hero)) {
-			getSprite().visible = Dungeon.visible[pos];
+			getSprite().visible = Dungeon.visibleforAnyHero(pos);
 		}
 	}
 	

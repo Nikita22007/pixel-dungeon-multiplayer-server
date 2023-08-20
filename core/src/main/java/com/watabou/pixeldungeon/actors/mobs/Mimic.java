@@ -168,9 +168,12 @@ public class Mimic extends Mob {
 			m.getSprite().turnTo(pos, Level.NEIGHBOURS8[Random.Int(7)]);
 		}
 
-		if (Dungeon.visible[m.pos]) {
-			CellEmitter.get( pos ).burst( Speck.factory( Speck.STAR ), 10 );
-			Sample.INSTANCE.play( Assets.SND_MIMIC );
+		CellEmitter.get( pos ).burst( Speck.factory( Speck.STAR ), 10 );
+		boolean[] visible = Dungeon.visibleForHeroes(m.pos);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				Sample.INSTANCE.play(Assets.SND_MIMIC, Dungeon.heroes[ID]);
+			}
 		}
 		
 		return m;

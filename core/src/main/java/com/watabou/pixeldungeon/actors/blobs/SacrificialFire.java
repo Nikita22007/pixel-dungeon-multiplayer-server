@@ -64,13 +64,18 @@ public class SacrificialFire extends Blob {
 		volume = off[pos] = cur[pos];
 		Char ch = Actor.findChar( pos );
 		if (ch != null) {
-			if (Dungeon.visible[pos] && ch.buff( Marked.class ) == null) {
-				ch.getSprite().emitter().burst( SacrificialParticle.FACTORY, 20 );
-				Sample.INSTANCE.play( Assets.SND_BURNING );
+			ch.getSprite().emitter().burst( SacrificialParticle.FACTORY, 20 );
+			if (ch.buff(Marked.class) == null) {
+				boolean[] visible = Dungeon.visibleForHeroes(pos);
+				for (int ID = 0; ID < visible.length; ID++) {
+					if (visible[ID]) {
+						Sample.INSTANCE.play(Assets.SND_BURNING, Dungeon.heroes[ID]);
+					}
+				}
 			}
 			Buff.prolong( ch, Marked.class, Marked.DURATION );
 		}
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			Journal.add( Feature.SACRIFICIAL_FIRE );
 		}
 	}

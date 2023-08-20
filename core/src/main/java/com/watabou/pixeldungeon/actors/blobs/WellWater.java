@@ -51,7 +51,7 @@ public class WellWater extends Blob {
 	protected void evolve() {
 		volume = off[pos] = cur[pos];
 		
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			if (this instanceof WaterOfAwareness) {
 				Journal.add( Feature.WELL_OF_AWARENESS );
 			} else if (this instanceof WaterOfHealth) {
@@ -99,7 +99,7 @@ public class WellWater extends Blob {
 				do {
 					newPlace = pos + Level.NEIGHBOURS8[Random.Int( 8 )];
 				} while (!Level.passable[newPlace] && !Level.avoid[newPlace]);
-				Dungeon.level.drop( heap.pickUp(), newPlace );
+				Dungeon.level.drop( heap.pickUp(), newPlace ).sendDropVisualAction(pos);
 				
 				return false;
 				

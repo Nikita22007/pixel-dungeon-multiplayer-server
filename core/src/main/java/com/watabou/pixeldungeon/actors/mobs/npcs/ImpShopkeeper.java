@@ -32,18 +32,21 @@ public class ImpShopkeeper extends Shopkeeper {
 	{
 		name = "ambitious imp";
 		spriteClass = ImpSprite.class;
+		seenBefore = new boolean[Dungeon.heroes.length];
 	}
 	
-	private boolean seenBefore = false;
+	private final boolean[] seenBefore;
 	
 	@Override
 	protected boolean act() {
 
-		if (!seenBefore && Dungeon.visible[pos]) {
-			yell( Utils.format( TXT_GREETINGS ) );
-			seenBefore = true;
+		boolean[] visible = Dungeon.visibleForHeroes(pos);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (!seenBefore[ID] && visible[ID]) {
+				yell(Utils.format(TXT_GREETINGS), Dungeon.heroes[ID]);
+				seenBefore[ID] = true;
+			}
 		}
-		
 		return super.act();
 	}
 	

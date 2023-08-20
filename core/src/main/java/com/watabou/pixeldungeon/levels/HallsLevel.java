@@ -148,7 +148,8 @@ public class HallsLevel extends RegularLevel {
 			}
 		}
 	}
-	
+
+	//TODO send this
 	private static class Stream extends Group {
 		
 		private int pos;
@@ -165,21 +166,7 @@ public class HallsLevel extends RegularLevel {
 		
 		@Override
 		public void update() {
-			
-			if (visible = Dungeon.visible[pos]) {
-				
-				super.update();
-				
-				if ((delay -= Game.elapsed) <= 0) {
-					
-					delay = Random.Float( 2 );
-					
-					PointF p = DungeonTilemap.tileToWorld( pos );
-					((FireParticle)recycle( FireParticle.class )).reset( 
-						p.x + Random.Float( DungeonTilemap.SIZE ), 
-						p.y + Random.Float( DungeonTilemap.SIZE ) );
-				}
-			}
+
 		}
 		
 		@Override

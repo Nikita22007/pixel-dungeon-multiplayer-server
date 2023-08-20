@@ -409,6 +409,13 @@ action missile_sprite_visual
     item_glowing: glowing //see item
 }
 
+action item_drop_visual
+{
+    "action_type": "heap_drop_visual"
+    "from": 1
+    "to": 3
+    "item": item
+}
 
 action CheckedCell
 {

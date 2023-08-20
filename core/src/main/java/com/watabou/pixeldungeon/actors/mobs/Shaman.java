@@ -39,9 +39,10 @@ import com.watabou.utils.Random;
 public class Shaman extends Mob implements Callback {
 
 	private static final float TIME_TO_ZAP	= 2f;
-	
+
 	private static final String TXT_LIGHTNING_KILLED = "%s's lightning bolt killed you...";
-	
+	private static final String TXT_LIGHTNING_KILLED_SB = "%s's lightning bolt killed %s...";
+
 	{
 		name = "gnoll shaman";
 		spriteClass = ShamanSprite.class;
@@ -85,7 +86,7 @@ public class Shaman extends Mob implements Callback {
 			
 		} else {
 			
-			boolean visible = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];
+			boolean visible = Dungeon.visibleforAnyHero(pos) ||  Dungeon.visibleforAnyHero(enemy.pos);
 			if (visible) {
 				((ShamanSprite) getSprite()).zap( enemy.pos );
 			}
@@ -101,15 +102,20 @@ public class Shaman extends Mob implements Callback {
 				
 				enemy.getSprite().centerEmitter().burst( SparkParticle.FACTORY, 3 );
 				enemy.getSprite().flash();
-				
+
 				if (enemy instanceof Hero) {
-					
-					Camera.shake( 2, 0.3f );
-					
+					for (Hero hero : Dungeon.heroes) {
+						if (hero == enemy) {
+							Camera.shake(2, 0.3f, hero);
+							GLog.n(TXT_LIGHTNING_KILLED, name, hero);
+						} else {
+							GLog.n(TXT_LIGHTNING_KILLED_SB, name, enemy.name, hero);
+						}
+					}
+
 					if (!enemy.isAlive()) {
-						Dungeon.fail( Utils.format( ResultDescriptions.MOB, 
-							Utils.indefinite( name ), Dungeon.depth ) );
-						GLog.n( TXT_LIGHTNING_KILLED, name );
+						Dungeon.fail(Utils.format(ResultDescriptions.MOB,
+								Utils.indefinite(name), Dungeon.depth));
 					}
 				}
 			} else {

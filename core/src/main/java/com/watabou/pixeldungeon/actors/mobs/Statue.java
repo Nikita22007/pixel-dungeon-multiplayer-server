@@ -76,7 +76,7 @@ public class Statue extends Mob {
 	
 	@Override
 	protected boolean act() {
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			Journal.add( Journal.Feature.STATUE );
 		}
 		return super.act();

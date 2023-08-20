@@ -45,6 +45,7 @@ public class Imp extends NPC {
 	{
 		name = "ambitious imp";
 		spriteClass = ImpSprite.class;
+		seenBefore = new boolean[Dungeon.heroes.length];
 	}
 	
 	private static final String TXT_GOLEMS1	=
@@ -73,21 +74,27 @@ public class Imp extends NPC {
 	private static final String TXT_CYA	= "See you, %s!";
 	private static final String TXT_HEY	= "Psst, %s!";
 	
-	private boolean seenBefore = false;
+	private final boolean[] seenBefore;
 	
 	@Override
 	protected boolean act() {
-		
-		if (!Quest.given && Dungeon.visible[pos]) {
-			if (!seenBefore) {
-			//	yell( Utils.format( TXT_HEY, Dungeon.hero.className() ) );
-				yell( Utils.format( TXT_HEY, HeroHelp.GetHeroesClass()) );
+
+		if (!Quest.given) {
+			boolean[] visible = Dungeon.visibleForHeroes(pos);
+			for (int ID = 0; ID < seenBefore.length; ID++) {
+
+				if (visible[ID]) {
+					if (!seenBefore[ID]) {
+						//	yell( Utils.format( TXT_HEY, Dungeon.hero.className() ) );
+						Hero hero = Dungeon.heroes[ID];
+						yell(Utils.format(TXT_HEY, hero.className()), hero);
+					}
+					seenBefore[ID] = true;
+				} else {
+					seenBefore[ID] = false;
+				}
 			}
-			seenBefore = true;
-		} else {
-			seenBefore = false;
 		}
-		
 		throwItem();
 		
 		return super.act();

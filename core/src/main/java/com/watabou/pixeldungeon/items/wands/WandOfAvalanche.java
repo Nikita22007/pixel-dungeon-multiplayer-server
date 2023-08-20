@@ -59,7 +59,7 @@ public class WandOfAvalanche extends Wand {
 		int size = 1 + level / 3;
 		PathFinder.buildDistanceMap( cell, BArray.not( Level.solid, null ), size );
 
-		int shake = 0;
+		int[] shake = new int[Dungeon.heroes.length];
 		for (int i=0; i < Level.LENGTH; i++) {
 
 			int d = PathFinder.distance[i];
@@ -87,18 +87,29 @@ public class WandOfAvalanche extends Wand {
 					Dungeon.level.press( i, null );
 				}
 
-				if (Dungeon.visible[i]) {
+				boolean[] visible = Dungeon.visibleForHeroes(i);
+
+				for (int ID = 0; ID < visible.length; ID++){
+					if (visible[ID]) {
+						if (shake[ID] < size - d) {
+							shake[ID] = size - d;
+						}
+					}
+				}
+
+				if (Dungeon.visibleforAnyHero(i)) {
 					CellEmitter.get(i).start(Speck.factory(Speck.ROCK), 0.07f, 3 + (size - d));
 					if (Level.water[i]) {
 						GameScene.ripple( i );
 					}
-					if (shake < size - d) {
-						shake = size - d;
-					}
 				}
 			}
 
-			Camera.shake( 3, 0.07f * (3 + shake) );
+			for (int ID = 0; ID < shake.length; ID++) {
+				if (shake[ID] > 0) {
+					Camera.shake(3, 0.07f * (3 + shake[ID]));
+				}
+			}
 		}
 
 		if (!curUser.isAlive()) {

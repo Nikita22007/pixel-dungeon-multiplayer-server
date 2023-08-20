@@ -297,7 +297,20 @@ public class SendData {
             client.flush();
         }
     }
+
+    public static void sendMessage(int ID, String message, int color) {
+        JSONObject messageObj;
+        try {
+            messageObj = new JSONObject().put("text", message).put("color", color);
+        } catch (JSONException e) {
+            return;
         }
+        ClientThread client = clients[ID];
+        if (client == null) {
+            return;
+        }
+        client.packet.addChatMessage(messageObj);
+        client.flush();
     }
 
     public static void addToSendShowStatus(Float x, Float y, Integer key, String text, int color, boolean ignorePosition) {
@@ -467,7 +480,7 @@ public class SendData {
         }
     }
 
-    public static void sendCustomAction(JSONObject action_obj, Hero hero) {
+    public static void sendCustomAction(@NotNull JSONObject action_obj, @NotNull Hero hero) {
         if (hero.networkID <= -1) {
             return;
         }

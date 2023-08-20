@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Barkskin;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
@@ -71,7 +72,7 @@ public class Plant implements Bundlable {
 	public void wither() {
 		Dungeon.level.uproot( pos );
 
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			CellEmitter.get( pos ).burst( LeafParticle.GENERAL, 6 );
 		}
 
@@ -146,13 +147,17 @@ public class Plant implements Bundlable {
 		
 		public Plant couch( int pos ) {
 			try {
-				if (Dungeon.visible[pos]) {
-					Sample.INSTANCE.play( Assets.SND_PLANT );
+				boolean[] visible = Dungeon.visibleForHeroes(pos);
+				for (int ID = 0; ID < visible.length; ID++) {
+					if (visible[ID]) {
+						Sample.INSTANCE.play(Assets.SND_PLANT, Dungeon.heroes[ID]);
+					}
 				}
 				Plant plant = plantClass.newInstance();
 				plant.pos = pos;
 				return plant;
 			} catch (Exception e) {
+				PixelDungeon.reportException(e);
 				return null;
 			}
 		}

@@ -130,18 +130,8 @@ public class Goo extends Mob {
 							Goo.super.doAttack( enemy );
 						}
 					};
-					
-					if (Dungeon.visible[pos] || Dungeon.visible[dest]) {
-						
-						getSprite().jump( pos, dest, afterJump );
-						return false;
-						
-					} else {
-						
-						afterJump.call();
-						return true;
-						
-					}
+					getSprite().jump( pos, dest, afterJump );
+					return true;
 				} else {
 					
 					getSprite().idle();
@@ -162,9 +152,9 @@ public class Goo extends Mob {
 			spend( PUMP_UP_DELAY );
 			
 			((GooSprite) getSprite()).pumpUp();
-			
-			if (Dungeon.visible[pos]) {
-				getSprite().showStatus( CharSprite.NEGATIVE, "!!!" );
+
+			getSprite().showStatus( CharSprite.NEGATIVE, "!!!" );
+			if (Dungeon.visibleforAnyHero(pos)) {
 				GLog.n( "Goo is pumping itself up!" );
 			}
 				

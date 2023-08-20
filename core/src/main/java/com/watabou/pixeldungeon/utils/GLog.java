@@ -37,13 +37,16 @@ public class GLog {
 	private static final Pattern PUNCTUATION = Pattern.compile( ".*[.,;?! ]$" );
 
 	public static void i( String text, Object... args ) {
+		iWithTarget(null, text, args);
+	}
+	public static void iWithTarget( Integer ID,  String text, Object... args ) {
 		
 		if (args.length > 0) {
 			text = Utils.format( text, args );
 		}
-		
+
 		Log.i( TAG, text );
-		sendMessage(text);
+		sendMessage(ID, text);
 	}
 	
 	public static void p( String text, Object... args ) {
@@ -53,16 +56,24 @@ public class GLog {
 	public static void n( String text, Object... args ) {
 		i( NEGATIVE + text, args );
 	}
-	
+
+	public static void nWithTarget(Integer ID, String text, Object... args ) {
+		iWithTarget(ID, NEGATIVE + text, args );
+	}
+
 	public static void w( String text, Object... args ) {
 		i( WARNING + text, args );
 	}
-	
+
+	public static void wWithTarget(Integer ID, String text, Object... args ) {
+		iWithTarget(ID, WARNING + text, args );
+	}
+
 	public static void h( String text, Object... args ) {
 		i( HIGHLIGHT + text, args );
 	}
 
-	protected static void sendMessage(String text) {
+	protected static void sendMessage(Integer ID, String text) {
 		int color = CharSprite.DEFAULT;
 		if (text.startsWith(GLog.POSITIVE)) {
 			text = text.substring(GLog.POSITIVE.length());
@@ -81,7 +92,11 @@ public class GLog {
 		text = Utils.capitalize(text) +
 				(PUNCTUATION.matcher(text).matches() ? "" : ".");
 
-		SendData.sendMessageToAll(text, color);
+		if (ID == null) {
+			SendData.sendMessageToAll(text, color);
+		} else {
+			SendData.sendMessage(ID, text, color);
+		}
 
 	}
 

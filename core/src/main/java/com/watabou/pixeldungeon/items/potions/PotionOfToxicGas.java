@@ -22,6 +22,7 @@ import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.blobs.Blob;
 import com.watabou.pixeldungeon.actors.blobs.ToxicGas;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.scenes.GameScene;
 
 public class PotionOfToxicGas extends Potion {
@@ -32,11 +33,16 @@ public class PotionOfToxicGas extends Potion {
 	
 	@Override
 	public void shatter( int cell ) {
-		if (Dungeon.visible[cell]) {
-			setKnown();
-			
-			splash( cell );
-			Sample.INSTANCE.play( Assets.SND_SHATTER );
+		splash( cell );
+
+		boolean[] visible = Dungeon.visibleForHeroes(cell);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				Hero hero = Dungeon.heroes[ID];
+				setKnown(hero);
+
+				Sample.INSTANCE.play(Assets.SND_SHATTER, hero);
+			}
 		}
 		
 		GameScene.add( Blob.seed( cell, 1000, ToxicGas.class ) );

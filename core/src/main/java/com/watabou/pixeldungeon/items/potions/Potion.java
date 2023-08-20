@@ -214,17 +214,22 @@ public class Potion extends Item {
 	}
 	
 	public void shatter( int cell ) {
-		if (Dungeon.visible[cell]) {
-			GLog.i( "The flask shatters and " + color() + " liquid splashes harmlessly" );
-			Sample.INSTANCE.play( Assets.SND_SHATTER );
-			splash( cell );
+		boolean[] visible = Dungeon.visibleForHeroes(cell);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				GLog.iWithTarget(ID, "The flask shatters and " + color() + " liquid splashes harmlessly");
+				Sample.INSTANCE.play(Assets.SND_SHATTER, Dungeon.heroes[ID]);
+			}
 		}
+		splash( cell );
 	}
 	
 	public boolean isKnown() {
 		return handler.isKnown( this );
 	}
-	
+	public void setKnown(Hero hero) {
+		setKnown();
+	}
 	public void setKnown() {
 		if (!isKnown()) {
 			handler.know( this );

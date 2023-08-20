@@ -70,11 +70,13 @@ public class Skeleton extends Mob {
 				}
 			}
 		}
-		
-		if (Dungeon.visible[pos]) {
-			Sample.INSTANCE.play( Assets.SND_BONES );
+
+		boolean[] visible = Dungeon.visibleForHeroes(pos);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				Sample.INSTANCE.play(Assets.SND_BONES, Dungeon.heroes[ID]);
+			}
 		}
-		
 		if (heroKilled) {
 			Dungeon.fail( Utils.format( ResultDescriptions.MOB, Utils.indefinite( name ), Dungeon.depth ) );
 			GLog.n( TXT_HERO_KILLED );

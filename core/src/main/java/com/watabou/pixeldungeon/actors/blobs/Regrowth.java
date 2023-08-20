@@ -53,9 +53,7 @@ public class Regrowth extends Blob {
 						mapUpdated = true;
 						
 						GameScene.updateMap( i );
-						if (Dungeon.visible[i]) {
-							GameScene.discoverTile( i, c );
-						}
+						GameScene.discoverTile( i, c );
 					}
 					
 					Char ch = Actor.findChar( i );

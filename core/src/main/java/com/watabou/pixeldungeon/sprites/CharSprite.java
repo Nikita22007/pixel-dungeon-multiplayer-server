@@ -22,6 +22,7 @@ import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.nikita22007.multiplayer.noosa.particles.Emitter;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.DungeonTilemap;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.nikita22007.multiplayer.server.effects.EmoIcon;
 import com.nikita22007.multiplayer.server.effects.FloatingText;
@@ -157,6 +158,7 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 			}
 			if (ch != null) {
 				FloatingText.show( center().x, center().y - height / 2, ch.pos, text, color );
+				PixelDungeon.reportException(new RuntimeException("Showing status on CharSprite without Char!!!"));
 			} else {
 				FloatingText.show( center().x, center().y - height / 2, text, color );
 			}
@@ -237,9 +239,7 @@ public class CharSprite extends MovieClip implements MovieClip.Listener {
 
 		turnTo( from, to );
 
-		if (visible && Level.water[ch.pos] && !ch.flying) {
-			GameScene.ripple( ch.pos );
-		}
+		GameScene.ripple( ch.pos );
 		if (jumpCallback != null) {
 			jumpCallback.call();
 		}

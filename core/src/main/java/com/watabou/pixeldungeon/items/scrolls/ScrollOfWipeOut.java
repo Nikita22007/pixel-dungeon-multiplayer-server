@@ -96,7 +96,7 @@ public class ScrollOfWipeOut extends Item {
 			switch (heap.type) {
 			case FOR_SALE:
 				heap.type = Type.HEAP;
-				if (Dungeon.visible[heap.pos]) {
+				if (Dungeon.visibleforAnyHero(heap.pos)) {
 					CellEmitter.center( heap.pos ).burst( Speck.factory( Speck.COIN ), 2 );
 				}
 				break;

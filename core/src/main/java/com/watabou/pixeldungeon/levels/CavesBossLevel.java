@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.levels;
 
+import androidx.annotation.NonNull;
+
 import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.noosa.Scene;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
@@ -227,7 +229,7 @@ public class CavesBossLevel extends Level {
 			} while (
 				!passable[boss.pos] ||
 				!outsideEntraceRoom( boss.pos ) ||
-				Dungeon.visible[boss.pos]);
+				Dungeon.visibleforAnyHero(boss.pos));
 			GameScene.add( boss );
 			
 			set( arenaDoor, Terrain.WALL );
@@ -240,7 +242,8 @@ public class CavesBossLevel extends Level {
 		}
 	}
 	
-	@Override
+	@NonNull
+    @Override
 	public Heap drop( Item item, int cell ) {
 		
 		if (!keyDropped && item instanceof SkeletonKey) {

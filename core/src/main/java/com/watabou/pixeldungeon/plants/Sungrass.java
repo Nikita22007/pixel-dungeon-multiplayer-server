@@ -45,7 +45,7 @@ public class Sungrass extends Plant {
 			Buff.affect( ch, Health.class );
 		}
 		
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			CellEmitter.get( pos ).start( ShaftParticle.FACTORY, 0.2f, 3 );
 		}
 	}

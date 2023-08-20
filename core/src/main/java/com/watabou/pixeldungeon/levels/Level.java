@@ -74,6 +74,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class Level implements Bundlable {
 
 	public static enum Feeling {
@@ -358,7 +360,7 @@ public abstract class Level implements Bundlable {
 		int cell;
 		do {
 			cell = Random.Int( LENGTH );
-		} while (!passable[cell] || Dungeon.visible[cell] || Actor.findChar( cell ) != null);
+		} while (!passable[cell] || Dungeon.visibleforAnyHero(cell) || Actor.findChar( cell ) != null);
 		return cell;
 	}
 	
@@ -508,7 +510,8 @@ public abstract class Level implements Bundlable {
 
 		SendData.sendLevelCell(Dungeon.level,  cell);
 	}
-	
+
+	@NotNull
 	public Heap drop( Item item, int cell ) {
 		
 		if (Dungeon.isChallenged( Challenges.NO_FOOD ) && item instanceof Food) {
@@ -748,8 +751,11 @@ public abstract class Level implements Bundlable {
 		}
 		
 		if (trap) {
-			if (Dungeon.visible[cell]) {
-				Sample.INSTANCE.play( Assets.SND_TRAP );
+			boolean[] visible = Dungeon.visibleForHeroes(cell);
+			for (int ID = 0; ID < visible.length; ID++) {
+				if (visible[ID]) {
+					Sample.INSTANCE.play(Assets.SND_TRAP, Dungeon.heroes[ID]);
+				}
 			}
 			set( cell, Terrain.INACTIVE_TRAP );
 			GameScene.updateMap( cell );

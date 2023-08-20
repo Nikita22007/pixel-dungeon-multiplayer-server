@@ -601,7 +601,7 @@ public class Hero extends Char {
 	
 	private boolean actCook( HeroAction.Cook action ) {
 		int dst = action.dst;
-		if (Dungeon.visible[dst]) {
+		if (this.fieldOfView[pos]) {
 
 			ready();
 			AlchemyPot.operate( this, dst );
@@ -1278,7 +1278,7 @@ public class Hero extends Char {
 			}
 			
 			Item item = Random.element( items );
-			Dungeon.level.drop( item, cell );
+			Dungeon.level.drop( item, cell ).sendDropVisualAction(pos);
 			items.remove( item );
 		}
 		
@@ -1405,7 +1405,7 @@ public class Hero extends Char {
 		for (int y = ay; y <= by; y++) {
 			for (int x = ax, p = ax + y * Level.WIDTH; x <= bx; x++, p++) {
 				
-				if (Dungeon.visible[p]) { // at this moment Dungeon.visible stores current hero visible
+				if (this.fieldOfView[p]) {
 					
 					if (intentional) {
 						CheckedCell.SendCheckedCell(p, this);

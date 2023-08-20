@@ -94,22 +94,9 @@ public class Eye extends Mob {
 	protected boolean doAttack( Char enemy ) {
 
 		spend( attackDelay() );
-		
-		boolean rayVisible = false;
-		
-		for (int i=0; i < Ballistica.distance; i++) {
-			if (Dungeon.visible[Ballistica.trace[i]]) {
-				rayVisible = true;
-			}
-		}
-		
-		if (rayVisible) {
-			getSprite().attack( hitCell );
-			return false;
-		} else {
-			attack( enemy );
-			return true;
-		}
+
+		getSprite().attack( hitCell );
+		return false;
 	}
 	
 	@Override
@@ -126,11 +113,9 @@ public class Eye extends Mob {
 			
 			if (hit( this, ch, true )) {
 				ch.damage( Random.NormalIntRange( 14, 20 ), this );
-				
-				if (Dungeon.visible[pos]) {
-					ch.getSprite().flash();
-					CellEmitter.center( pos ).burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
-				}
+
+				ch.getSprite().flash();
+				CellEmitter.center( pos ).burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
 				
 				if (!ch.isAlive() && ch instanceof Hero) {
 					Dungeon.fail( Utils.format( ResultDescriptions.MOB, Utils.indefinite( name ), Dungeon.depth ) );

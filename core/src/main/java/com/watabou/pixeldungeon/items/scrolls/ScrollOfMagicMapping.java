@@ -45,7 +45,7 @@ public class ScrollOfMagicMapping extends Scroll {
 		boolean[] mapped = Dungeon.level.mapped;
 		boolean[] discoverable = Level.discoverable;
 
-		boolean noticed = false;
+		boolean[] noticed = new boolean[Dungeon.heroes.length];
 		
 		for (int i=0; i < length; i++) {
 			
@@ -58,12 +58,16 @@ public class ScrollOfMagicMapping extends Scroll {
 					
 					Level.set( i, Terrain.discover( terr ) );						
 					GameScene.updateMap( i );
-					
-					if (Dungeon.visible[i]) {
-						GameScene.discoverTile( i, terr );
-						discover( i );
-						
-						noticed = true;
+
+					if (Dungeon.visibleforAnyHero(i)) {
+						GameScene.discoverTile(i, terr);
+						discover(i);
+					}
+					boolean[] visible = Dungeon.visibleForHeroes(i);
+					for (int ID = 0; ID < visible.length; ID++) {
+						if (visible[ID]) {
+							noticed[ID] = true;
+						}
 					}
 				}
 			}
@@ -71,10 +75,11 @@ public class ScrollOfMagicMapping extends Scroll {
 		Dungeon.observeAll();
 		
 		GLog.i( TXT_LAYOUT );
-		if (noticed) {
-			Sample.INSTANCE.play( Assets.SND_SECRET );
+		for (int ID = 0; ID < noticed.length; ID++) {
+			if (noticed[ID]) {
+				Sample.INSTANCE.play(Assets.SND_SECRET, Dungeon.heroes[ID]);
+			}
 		}
-		
 		SpellSprite.show( curUser, SpellSprite.MAP );
 		Sample.INSTANCE.play( Assets.SND_READ );
 		Invisibility.dispel(curUser);

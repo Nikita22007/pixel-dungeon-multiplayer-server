@@ -37,12 +37,16 @@ public class AlarmTrap {
 				mob.beckon( pos );
 			}
 		}
-		
-		if (Dungeon.visible[pos]) {
-			GLog.w( "The trap emits a piercing sound that echoes throughout the dungeon!" );
-			CellEmitter.center( pos ).start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
+
+		boolean[] visible = Dungeon.visibleForHeroes(pos);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				GLog.wWithTarget(ID, "The trap emits a piercing sound that echoes throughout the dungeon!");
+			}
 		}
-		
+		if (Dungeon.visibleforAnyHero(pos)) {
+			CellEmitter.center(pos).start(Speck.factory(Speck.SCREAM), 0.3f, 3);
+		}
 		Sample.INSTANCE.play( Assets.SND_ALERT );
 	}
 }

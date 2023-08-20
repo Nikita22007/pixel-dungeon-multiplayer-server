@@ -20,6 +20,7 @@ package com.watabou.pixeldungeon.levels.features;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.scenes.GameScene;
@@ -30,9 +31,12 @@ public class Door {
 		Level.set( pos, Terrain.OPEN_DOOR );
 		GameScene.updateMap( pos );
 		Dungeon.observeAll();
-		
-		if (Dungeon.visible[pos]) {
-			Sample.INSTANCE.play( Assets.SND_OPEN );
+
+		boolean[] visible = Dungeon.visibleForHeroes(pos);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				Sample.INSTANCE.play(Assets.SND_OPEN, Dungeon.heroes[ID]);
+			}
 		}
 	}
 	

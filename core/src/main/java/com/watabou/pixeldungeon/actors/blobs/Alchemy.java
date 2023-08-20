@@ -45,7 +45,7 @@ public class Alchemy extends Blob {
 	protected void evolve() {
 		volume = off[pos] = cur[pos];
 		
-		if (Dungeon.visible[pos]) {
+		if (Dungeon.visibleforAnyHero(pos)) {
 			Journal.add( Journal.Feature.ALCHEMY );
 		}
 	}
@@ -63,7 +63,7 @@ public class Alchemy extends Blob {
 			
 			Item result = heap.transmute();
 			if (result != null) {
-				Dungeon.level.drop( result, cell );
+				Dungeon.level.drop( result, cell ).sendDropVisualAction(cell);
 			}
 		}
 	}

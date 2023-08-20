@@ -59,7 +59,7 @@ public class EyeSprite extends MobSprite {
 		super.onComplete( anim );
 		
 		if (anim == attack) {
-			if (Dungeon.visible[ch.pos] || Dungeon.visible[attackPos]) {
+			if (Dungeon.visibleforAnyHero(ch.pos) || Dungeon.visibleforAnyHero(attackPos)) {
 				DeathRay.showDeathRayCentered( ch.pos,  attackPos);
 			}
 		}

@@ -227,7 +227,8 @@ public class CavesLevel extends RegularLevel {
 			}
 		}
 	}
-	
+
+	//todo send this
 	private static class Vein extends Group {
 		
 		private int pos;
@@ -244,21 +245,7 @@ public class CavesLevel extends RegularLevel {
 		
 		@Override
 		public void update() {
-			
-			if (visible = Dungeon.visible[pos]) {
-				
-				super.update();
-				
-				if ((delay -= Game.elapsed) <= 0) {
-					
-					delay = Random.Float();
-					
-					PointF p = DungeonTilemap.tileToWorld( pos );
-					((Sparkle)recycle( Sparkle.class )).reset( 
-						p.x + Random.Float( DungeonTilemap.SIZE ), 
-						p.y + Random.Float( DungeonTilemap.SIZE ) );
-				}
-			}
+
 		}
 	}
 	

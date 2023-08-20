@@ -48,7 +48,7 @@ public class WandOfRegrowth extends Wand {
 				
 				Level.set( p, Terrain.GRASS );
 				GameScene.updateMap( p );
-				if (Dungeon.visible[p]) {
+				if (Dungeon.visibleforAnyHero(cell)) {
 					GameScene.discoverTile( p, c );
 				}
 				

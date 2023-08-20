@@ -22,8 +22,10 @@ import android.util.Log;
 
 import com.nikita22007.multiplayer.utils.Utils;
 import com.watabou.BuildConfig;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.network.SendData;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -83,14 +85,21 @@ public enum Sample {
 	}
 
 	public void play( String id ) {
-		play( id, 1 );
+		play( id, null );
 	}
-
+	public void play( String id, Hero hero ) {
+		play( id, 1, hero );
+	}
 	public void play( String id, float volume ) {
-		play( id, volume, volume, 1 );
+		play( id, volume, null );
 	}
-
+	public void play( String id, float volume, Hero hero ) {
+		play( id, volume, volume, 1, hero );
+	}
 	public void play( String id, float leftVolume, float rightVolume, float rate ) {
+		play( id, leftVolume, rightVolume, rate, null );
+	}
+	public void play( String id, float leftVolume, float rightVolume, float rate, @Nullable Hero hero) {
 		if (!ids.contains( id )) {
 			assert !BuildConfig.DEBUG: "playing unloaded sample: " + id;
 			Log.e("Sound", "playing unloaded sample: " + id);
@@ -105,6 +114,10 @@ public enum Sample {
 			actionObj.put("right_volume", rightVolume);
 			actionObj.put("rate", rate);
 		} catch (JSONException ignored) {}
-		SendData.sendCustomActionForAll(actionObj);
+		if (hero != null){
+			SendData.sendCustomAction(actionObj, hero);
+		} else {
+			SendData.sendCustomActionForAll(actionObj);
+		}
 	}
 }

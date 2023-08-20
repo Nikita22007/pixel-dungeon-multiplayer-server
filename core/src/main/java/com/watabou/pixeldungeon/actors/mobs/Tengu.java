@@ -162,11 +162,14 @@ public class Tengu extends Mob {
         getSprite().move(pos, newPos);
         move(newPos);
 
-        if (Dungeon.visible[newPos]) {
-            CellEmitter.get(newPos).burst(Speck.factory(Speck.WOOL), 6);
-            Sample.INSTANCE.play(Assets.SND_PUFF);
-        }
 
+        boolean[] visible = Dungeon.visibleForHeroes(newPos);
+        CellEmitter.get(newPos).burst(Speck.factory(Speck.WOOL), 6);
+        for (int ID = 0; ID < visible.length; ID++) {
+            if (visible[ID]) {
+                Sample.INSTANCE.play(Assets.SND_PUFF, Dungeon.heroes[ID]);
+            }
+        }
         spend(1 / speed());
     }
 

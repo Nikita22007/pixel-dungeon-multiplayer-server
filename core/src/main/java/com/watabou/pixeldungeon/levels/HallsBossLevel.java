@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.levels;
 
+import androidx.annotation.NonNull;
+
 import com.watabou.noosa.Scene;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Bones;
@@ -187,7 +189,7 @@ public class HallsBossLevel extends Level {
 				boss.pos = Random.Int( LENGTH );
 			} while (
 				!passable[boss.pos] ||
-				Dungeon.visible[boss.pos]);
+				Dungeon.visibleforAnyHero(boss.pos));
 			GameScene.add( boss );
 			boss.spawnFists();
 			
@@ -201,7 +203,8 @@ public class HallsBossLevel extends Level {
 		CellEmitter.get( cell ).start( FlameParticle.FACTORY, 0.1f, 3 );
 	}
 	
-	@Override
+	@NonNull
+    @Override
 	public Heap drop( Item item, int cell ) {
 		
 		if (!keyDropped && item instanceof SkeletonKey) {

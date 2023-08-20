@@ -79,10 +79,13 @@ public class Brute extends Mob {
 		if (isAlive() && !enraged && getHP() < getHT() / 4) {
 			enraged = true;
 			spend( TICK );
-			if (Dungeon.visible[pos]) {
-				GLog.w( TXT_ENRAGED, name );
-				getSprite().showStatus( CharSprite.NEGATIVE, "enraged" );
+			boolean[] visible = Dungeon.visibleForHeroes(pos);
+			for (int ID = 0; ID < visible.length; ID ++) {
+				if (visible[ID]) {
+					GLog.wWithTarget(ID, TXT_ENRAGED, name);
+				}
 			}
+			getSprite().showStatus( CharSprite.NEGATIVE, "enraged" );
 		}
 	}
 	

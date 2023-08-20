@@ -89,7 +89,7 @@ public class DM300 extends Mob {
 			setHP(getHP() + Random.Int( 1, getHT() - getHP()));
 			getSprite().emitter().burst( ElmoParticle.FACTORY, 5 );
 			
-			if (Dungeon.visible[step] /*&& Dungeon.hero.isAlive()*/) {//FixMe if anybody on the floor
+			if (Dungeon.visibleforAnyHero(step)) { //todo check players floor
 				GLog.n( "DM-300 repairs itself!" );
 			}
 		}
@@ -102,17 +102,22 @@ public class DM300 extends Mob {
 			step+1+Level.WIDTH
 		};
 		int cell = cells[Random.Int( cells.length )];
-		
-		if (Dungeon.visible[cell]) {
-			CellEmitter.get( cell ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
-			Camera.shake( 3, 0.7f );
-			Sample.INSTANCE.play( Assets.SND_ROCKS );
-			
+
+		CellEmitter.get( cell ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
+		boolean[] visible = Dungeon.visibleForHeroes(cell);
+		for (int ID = 0; ID < visible.length; ID++) {
+			if (visible[ID]) {
+				Camera.shake(3, 0.7f, Dungeon.heroes[ID]);
+				Sample.INSTANCE.play(Assets.SND_ROCKS, Dungeon.heroes[ID]);
+			}
+		}
+
+		if (Dungeon.visibleforAnyHero(cell)) {
 			if (Level.water[cell]) {
-				GameScene.ripple( cell );
+				GameScene.ripple(cell);
 			} else if (Dungeon.level.map[cell] == Terrain.EMPTY) {
-				Level.set( cell, Terrain.EMPTY_DECO );
-				GameScene.updateMap( cell );
+				Level.set(cell, Terrain.EMPTY_DECO);
+				GameScene.updateMap(cell);
 			}
 		}
 
@@ -120,6 +125,7 @@ public class DM300 extends Mob {
 		if (ch != null && ch != this) {
 			Buff.prolong( ch, Paralysis.class, 2 );
 		}
+
 	}
 	
 	@Override

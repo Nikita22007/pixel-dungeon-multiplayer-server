@@ -62,7 +62,7 @@ public class WandOfTeleportation extends Wand {
 			
 				ch.pos = pos;
 				ch.getSprite().place( ch.pos );
-				ch.getSprite().visible = Dungeon.visible[pos];
+				ch.getSprite().visible = true;// Dungeon.visible[pos];
 				GLog.i( curUser.name + " teleported " + ch.name + " to somewhere" );
 				
 			}

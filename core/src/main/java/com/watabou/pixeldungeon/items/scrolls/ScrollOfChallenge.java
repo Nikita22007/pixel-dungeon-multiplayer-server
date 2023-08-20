@@ -41,7 +41,7 @@ public class ScrollOfChallenge extends Scroll {
 		
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
 			mob.beckon( curUser.pos );
-			if (Dungeon.visible[mob.pos]) {
+			if (curUser.fieldOfView[mob.pos]) {
 				Buff.affect( mob, Rage.class, Level.distance( curUser.pos, mob.pos ) );
 			}
 		}

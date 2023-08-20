@@ -24,6 +24,7 @@ import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.Dungeon;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Burning;
@@ -41,6 +42,7 @@ import com.watabou.pixeldungeon.items.food.ChargrilledMeat;
 import com.watabou.pixeldungeon.items.food.FrozenCarpaccio;
 import com.watabou.pixeldungeon.items.food.MysteryMeat;
 import com.watabou.pixeldungeon.items.scrolls.Scroll;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
 import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
@@ -48,6 +50,9 @@ import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.watabou.pixeldungeon.network.SendData.sendHeap;
 import static com.watabou.pixeldungeon.network.SendData.sendHeapRemoving;
@@ -192,6 +197,19 @@ public class Heap implements Bundlable {
 		sendHeap(this);
 	}
 
+	public void sendDropVisualAction(int from) {
+		JSONObject actionObj = new JSONObject();
+		try {
+			actionObj.put("action_type", "heap_drop_visual");
+			actionObj.put("from", from);
+			actionObj.put("to", this.pos);
+			actionObj.put("item", this.peek());
+			SendData.sendCustomActionForAll(actionObj);
+		} catch (JSONException e) {
+			PixelDungeon.reportException(e);
+		}
+	}
+
 	public void replace( Item a, Item b ) {
 		int index = items.indexOf( a );
 		if (index != -1) {
@@ -233,14 +251,12 @@ public class Heap implements Bundlable {
 		
 		if (burnt || evaporated) {
 			
-			if (Dungeon.visible[pos]) {
 				if (burnt) {
 					burnFX( pos );
 				} else {
 					evaporateFX( pos );
 				}
-			}
-			
+
 			if (isEmpty()) {
 				destroy();
 			}

@@ -266,7 +266,7 @@ class Mob extends Char {
 
 	protected boolean doAttack(Char enemy) {
 
-		boolean visible = Dungeon.visible[pos];
+		boolean visible = (Dungeon.visibleforAnyHero(pos));
 
 		if (visible) {
 			getSprite().attack(enemy.pos);
@@ -360,8 +360,8 @@ class Mob extends Char {
 
 		getExp(hero);
 
-		if (hero.isAlive() && !Dungeon.visible[pos]) {
-			GLog.i(TXT_DIED);
+		if (hero.isAlive() && !hero.fieldOfView[pos]) {
+			GLog.i(TXT_DIED, hero);
 		}
 	}
 
@@ -435,6 +435,10 @@ class Mob extends Char {
 	
 	public void yell( String str ) {
 		GLog.n( "%s: \"%s\" ", name, str );
+	}
+
+	public void yell( String str, Hero hero ) {
+		GLog.nWithTarget(hero.id(), "%s: \"%s\" ", name, str );
 	}
 	
 	public interface AiState {

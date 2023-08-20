@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.nikita22007.multiplayer.utils.Utils.putToJSONArray;
@@ -60,10 +61,10 @@ public class NetworkPacket {
         }
     }
 
-    public void addAction(JSONObject actionObj) {
+    public void addAction(@NotNull JSONObject actionObj) {
+        Objects.requireNonNull(actionObj);
         synchronized (dataRef) {
             try {
-
                 JSONObject data = dataRef.get();
                 if (!data.has("actions")) {
                     data.put("actions", new JSONArray());

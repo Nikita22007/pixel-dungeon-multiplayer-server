@@ -292,10 +292,13 @@ public class King extends Mob {
 		
 		@Override
 		public void die( Object cause ) {
-			super.die( cause );
-			
-			if (Dungeon.visible[pos]) {
-				Sample.INSTANCE.play( Assets.SND_BONES );
+			super.die(cause);
+
+			boolean[] visible = Dungeon.visibleForHeroes(pos);
+			for (int ID = 0; ID < visible.length; ID++) {
+				if (visible[ID]) {
+					Sample.INSTANCE.play(Assets.SND_BONES, Dungeon.heroes[ID]);
+				}
 			}
 		}
 		

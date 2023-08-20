@@ -33,7 +33,8 @@ public class CellEmitter {
 		return emitter;
 	}
 	
-	public static Emitter center( int cell ) {
+	@SuppressWarnings("IntegerDivisionInFloatingPointContext")
+	public static Emitter center(int cell ) {
 		Emitter emitter = GameScene.emitter();
 		assert emitter != null;
 		emitter.cellPosWithShift(cell, DungeonTilemap.SIZE/2, DungeonTilemap.SIZE/2);

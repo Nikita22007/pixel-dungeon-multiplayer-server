@@ -27,6 +27,7 @@ import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
+import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Gold;
@@ -34,6 +35,7 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -50,10 +52,9 @@ public class ItemSprite extends MovieClip {
 	protected static TextureFilm film;
 	
 	public Heap heap;
-	
+
+	@SuppressWarnings({"UnusedDeclaration", "FieldCanBeLocal"})
 	private Glowing glowing;
-	private float phase;
-	private boolean glowUp;
 	
 	private float dropInterval;
 	
@@ -128,6 +129,7 @@ public class ItemSprite extends MovieClip {
 			CellEmitter.center( heap.pos ).burst( Speck.factory( Speck.COIN ), 5 );
 			Sample.INSTANCE.play( Assets.SND_GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
 		}
+		dropEffects();
 	}
 	
 	public void drop( int from ) {
@@ -148,7 +150,8 @@ public class ItemSprite extends MovieClip {
 	
 	public ItemSprite view( int image, Glowing glowing ) {
 		frame( film.get( image ) );
-		if ((this.glowing = glowing) == null) {
+		this.glowing = glowing;
+		if (glowing == null) {
 			resetColor();
 		}
 		return this;
@@ -156,54 +159,38 @@ public class ItemSprite extends MovieClip {
 	
 	@Override
 	public void update() {
+	}
+
+	public void dropEffects() {
 		super.update();
 
-		visible = (heap == null || Dungeon.visible[heap.pos]);
-		
-		if (dropInterval > 0 && (dropInterval -= Game.elapsed) <= 0) {
-			
-			speed.set( 0 );
-			acc.set( 0 );
-			place( heap.pos );
-			
-			if (visible) {
-				boolean water = Level.water[heap.pos];
-				
-				if (water) {
-					GameScene.ripple( heap.pos );
-				} else {
-					int cell = Dungeon.level.map[heap.pos];
-					water = (cell == Terrain.WELL || cell == Terrain.ALCHEMY);
-				}
-				
-				if (!(heap.peek() instanceof Gold)) {
-					Sample.INSTANCE.play( water ? Assets.SND_WATER : Assets.SND_STEP, 0.8f, 0.8f, 1.2f );
+		if (heap == null) {
+			return;
+		}
+		visible = Dungeon.visibleforAnyHero(heap.pos);
+		speed.set(0);
+		acc.set(0);
+		place(heap.pos);
+
+		boolean water = Level.water[heap.pos];
+		if (visible) {
+			if (water) {
+				GameScene.ripple(heap.pos);
+			} else {
+				int cell = Dungeon.level.map[heap.pos];
+				water = (cell == Terrain.WELL || cell == Terrain.ALCHEMY);
+			}
+		}
+		if (!(heap.peek() instanceof Gold)) {
+			boolean[] visibleForHeroes = Dungeon.visibleForHeroes(heap.pos);
+			for (int ID = 0; ID < visibleForHeroes.length; ID++) {
+				if (visibleForHeroes[ID]) {
+					Sample.INSTANCE.play(water ? Assets.SND_WATER : Assets.SND_STEP, 0.8f, 0.8f, 1.2f, Dungeon.heroes[ID]);
 				}
 			}
 		}
-		
-		if (visible && glowing != null) {
-			if (glowUp && (phase += Game.elapsed) > glowing.period) {
-				
-				glowUp = false;
-				phase = glowing.period;
-				
-			} else if (!glowUp && (phase -= Game.elapsed) < 0) {
-				
-				glowUp = true;
-				phase = 0;
-				
-			}
-			
-			float value = phase / glowing.period * 0.6f;
-			
-			rm = gm = bm = 1 - value;
-			ra = glowing.red * value;
-			ga = glowing.green * value;
-			ba = glowing.blue * value;
-		}
+
 	}
-	
 	public static int pick( int index, int x, int y ) {
 		Bitmap bmp = TextureCache.get( Assets.ITEMS ).bitmap;
 		int rows = bmp.getWidth() / SIZE;

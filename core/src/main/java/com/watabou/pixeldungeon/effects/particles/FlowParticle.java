@@ -92,19 +92,7 @@ public class FlowParticle extends PixelParticle {
 		
 		@Override
 		public void update() {
-			
-			if (visible = Dungeon.visible[pos]) {
-				
-				super.update();
-				
-				if ((delay -= Game.elapsed) <= 0) {
-					
-					delay = Random.Float( DELAY );
-					
-					((FlowParticle)recycle( FlowParticle.class )).reset( 
-						x + Random.Float( DungeonTilemap.SIZE ), y );
-				}
-			}
+
 		}
 	}
 }

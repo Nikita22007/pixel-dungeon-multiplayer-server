@@ -305,15 +305,16 @@ class ClientThread implements Callable<String> {
             if (newHero.networkID == -1) {
                 throw new RuntimeException("Can not find place for hero");
             }
-
-            Dungeon.observe(newHero, false);
         }
         Scene scene = Game.scene();
         if (scene instanceof GameScene) {
             ((GameScene) scene).addHeroSprite(newHero);
         }
         addAllCharsToSend();
-        packet.packAndAddVisiblePositions(Dungeon.visible);
+
+        Dungeon.observe(newHero, false);
+        packet.packAndAddVisiblePositions(newHero.fieldOfView);
+
         //TODO send all  information
 
         flush();
@@ -443,12 +444,10 @@ class ClientThread implements Callable<String> {
         packet.packAndAddDepth(Dungeon.depth);
         packet.packAndAddIronKeysCount(Dungeon.depth);
         packet.addInventoryFull(clientHero);
-
-        synchronized (Dungeon.heroes) { //todo fix it. It is not work
-            Dungeon.observe(clientHero, false); //todo fix this
-        }
         addAllCharsToSend();
-        packet.packAndAddVisiblePositions(Dungeon.visible);
+
+        Dungeon.observe(clientHero, false);
+        packet.packAndAddVisiblePositions(clientHero.fieldOfView);
         //TODO send all  information
 
         flush();

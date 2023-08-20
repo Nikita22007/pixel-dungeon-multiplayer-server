@@ -80,10 +80,8 @@ public class Honeypot extends Item {
 	private void shatter( int pos, Hero owner ) {
 		Sample.INSTANCE.play( Assets.SND_SHATTER );
 		
-		if (Dungeon.visible[pos]) {
 			Splash.at( pos, 0xffd500, 5 );
-		}
-		
+
 		int newPos = pos;
 		if (Actor.findChar( pos ) != null) {
 			ArrayList<Integer> candidates = new ArrayList<Integer>();

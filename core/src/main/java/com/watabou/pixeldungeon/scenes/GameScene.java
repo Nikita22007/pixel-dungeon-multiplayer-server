@@ -208,7 +208,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 	private void addMobSprite( Mob mob ) {
 		CharSprite sprite = mob.sprite();
-		sprite.visible = Dungeon.visible[mob.pos];
+		sprite.visible = true;//Dungeon.visible[mob.pos];
 		sprite.link( mob );
 	}
 

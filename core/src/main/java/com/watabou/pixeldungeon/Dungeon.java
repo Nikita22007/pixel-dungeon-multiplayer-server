@@ -98,9 +98,6 @@ public class Dungeon {
 	//public static int gold;
 	// Reason of death
 	public static String resultDescription;
-
-	// Hero's field of view
-	public static boolean[] visible = new boolean[Level.LENGTH];
 	
 	public static boolean nightMode;
 	
@@ -165,8 +162,12 @@ public class Dungeon {
 				Statistics.completedWithNoKilling = false;
 			}
 		}
-		
-		Arrays.fill( visible, false );
+
+		for (Hero hero: heroes) {
+			if (hero != null) {
+				Arrays.fill(hero.fieldOfView, false);
+			}
+		}
 		
 		Level level;
 		switch (depth) {
@@ -238,8 +239,12 @@ public class Dungeon {
 	public static void resetLevel() {
 		
 		Actor.clear();
-		
-		Arrays.fill( visible, false );
+
+		for (Hero hero: heroes) {
+			if (hero != null) {
+				Arrays.fill(hero.fieldOfView, false);
+			}
+		}
 		
 		level.reset();
 		switchLevelToAll( level, level.entrance );
@@ -704,22 +709,47 @@ public class Dungeon {
 		}
 
 		level.updateFieldOfView( hero );
-		System.arraycopy( hero.fieldOfView, 0, visible, 0, visible.length );
 
 		boolean[] newVisited;
 
-		newVisited = BArray.or( level.visited, visible, null );
+		newVisited = BArray.or( level.visited, hero.fieldOfView, null );
 		boolean[] diff;
 		diff = BArray.xor(level.visited, newVisited, null);
 				level.visited  = newVisited;
 		if (send) {
 			int networkID = getHeroID(hero);
 			addToSendLevelVisitedState(level, networkID, diff);
-			addToSendHeroVisibleCells(visible,networkID);
+			addToSendHeroVisibleCells(hero.fieldOfView,networkID);
 			SendData.flush(networkID);
 		}
 	}
-	
+
+	public static boolean visibleforAnyHero(int pos) {
+		for (Hero hero : heroes) {
+			if (hero == null) {
+				continue;
+			}
+			if (hero.fieldOfView[pos]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean[] visibleForHeroes(int ...positions) {
+		boolean[] result = new boolean[heroes.length];
+		for (int pos : positions) {
+			for (int i = 0; i < heroes.length; i++) {
+				if (heroes[i] == null) {
+					result[i] = false;
+				} else {
+					result[i] = result[i] || heroes[i].fieldOfView[pos];
+				}
+			}
+		}
+		return result;
+	}
+
 	private static boolean[] passable = new boolean[Level.LENGTH];
 	
 	public static int findPath( Char ch, int from, int to, boolean[] pass, boolean[] visible ) {

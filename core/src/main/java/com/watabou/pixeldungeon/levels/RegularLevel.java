@@ -540,7 +540,8 @@ public abstract class RegularLevel extends Level {
 	public int randomRespawnCell() {
 		int count = 0;
 		int cell = -1;
-		
+
+		//todo
 		while (true) {
 			
 			if (++count > 10) {
@@ -553,7 +554,7 @@ public abstract class RegularLevel extends Level {
 			}
 			
 			cell = room.random();
-			if (!Dungeon.visible[cell] && Actor.findChar( cell ) == null && Level.passable[cell]) {
+			if (!Dungeon.visibleforAnyHero(cell) && Actor.findChar( cell ) == null && Level.passable[cell]) {
 				return cell;
 			}
 			

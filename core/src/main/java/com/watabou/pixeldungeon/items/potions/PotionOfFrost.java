@@ -41,18 +41,20 @@ public class PotionOfFrost extends Potion {
 		
 		Fire fire = (Fire)Dungeon.level.blobs.get( Fire.class );
 		
-		boolean visible = false;
+		boolean[] visible = new boolean[Dungeon.heroes.length];
 		for (int i=0; i < Level.LENGTH; i++) {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-				visible = Freezing.affect( i, fire ) || visible;
+				Freezing.affect( i, fire );
+				visible = BArray.or(visible, Dungeon.visibleForHeroes(i), visible);
 			}
 		}
-		
-		if (visible) {
-			splash( cell );
-			Sample.INSTANCE.play( Assets.SND_SHATTER );
-			
-			setKnown();
+
+		splash( cell );
+		for (int ID = 0; ID  < visible.length; ID++) {
+			if (visible[ID]) {
+				Sample.INSTANCE.play(Assets.SND_SHATTER,Dungeon.heroes[ID]);
+				setKnown();
+			}
 		}
 	}
 	

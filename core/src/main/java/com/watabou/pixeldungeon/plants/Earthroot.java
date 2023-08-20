@@ -21,6 +21,7 @@ import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.particles.EarthParticle;
 import com.watabou.pixeldungeon.items.potions.PotionOfParalyticGas;
@@ -46,10 +47,17 @@ public class Earthroot extends Plant {
 		if (ch != null) {
 			Buff.affect( ch, Armor.class ).level = ch.getHT();
 		}
-		
-		if (Dungeon.visible[pos]) {
-			CellEmitter.bottom( pos ).start( EarthParticle.FACTORY, 0.05f, 8 );
-			Camera.shake( 1, 0.4f );
+
+		if (Dungeon.visibleforAnyHero(pos)) {
+			CellEmitter.bottom(pos).start(EarthParticle.FACTORY, 0.05f, 8);
+		}
+
+		boolean[] visible = Dungeon.visibleForHeroes(pos);
+
+		for (int ID = 0; ID < visible.length; ID ++) {
+			if (visible[ID]) {
+				Camera.shake(1, 0.4f, Dungeon.heroes[ID]);
+			}
 		}
 	}
 	

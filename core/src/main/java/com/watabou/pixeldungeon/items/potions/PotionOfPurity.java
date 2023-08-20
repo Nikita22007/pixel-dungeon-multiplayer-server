@@ -73,7 +73,7 @@ public class PotionOfPurity extends Potion {
 						blob.volume -= value;
 						procd = true;
 
-						if (Dungeon.visible[i]) {
+						if (Dungeon.visibleforAnyHero(i)) {
 							CellEmitter.get(i).burst(Speck.factory(Speck.DISCOVER), 1);
 						}
 					}
@@ -81,22 +81,25 @@ public class PotionOfPurity extends Potion {
 				}
 			}
 		}
+
+		if (procd) {
+			splash(cell);
+		}
+
 		for (Hero hero : Dungeon.heroes) {
 
 			if (hero != null&& hero.isAlive()) {
 				boolean heroAffected = PathFinder.distance[hero.pos] < Integer.MAX_VALUE;
 
 				if (procd) {
-
-					if (Dungeon.visible[cell]) {
-						splash(cell);
-						Sample.INSTANCE.play(Assets.SND_SHATTER);
+					if (hero.fieldOfView[cell]) {
+						Sample.INSTANCE.play(Assets.SND_SHATTER, hero);
 					}
 
 					setKnown();
 
 					if (heroAffected) {
-						GLog.p(TXT_FRESHNESS);
+						GLog.p(TXT_FRESHNESS, hero);
 					}
 
 				} else {
@@ -104,7 +107,7 @@ public class PotionOfPurity extends Potion {
 					super.shatter(cell);
 
 					if (heroAffected) {
-						GLog.i(TXT_FRESHNESS);
+						GLog.i(TXT_FRESHNESS, hero);
 						setKnown();
 					}
 

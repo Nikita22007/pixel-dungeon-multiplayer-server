@@ -84,7 +84,7 @@ public class Warlock extends Mob implements Callback {
 			
 		} else {
 			
-			boolean visible = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];
+			boolean visible = Dungeon.visibleforAnyHero(pos) || Dungeon.visibleforAnyHero(enemy.pos);
 			if (visible) {
 				((WarlockSprite) getSprite()).zap( enemy.pos );
 			} else {

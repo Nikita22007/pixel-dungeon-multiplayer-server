@@ -52,7 +52,7 @@ public class Foliage extends Blob {
 					regrowth = true;
 				}
 				
-				visible = visible || Dungeon.visible[pos];
+				visible = visible || Dungeon.visibleforAnyHero(pos);
 				
 			} else {
 				off[pos] = 0;

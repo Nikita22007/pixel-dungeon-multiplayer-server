@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.levels;
 
+import androidx.annotation.NonNull;
+
 import com.watabou.noosa.Scene;
 import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
@@ -187,10 +189,10 @@ public class CityBossLevel extends Level {
 			} while (
 				!passable[boss.pos] ||
 				!outsideEntraceRoom( boss.pos ) ||
-				(Dungeon.visible[boss.pos] && count++ < 20));
+				(Dungeon.visibleforAnyHero(boss.pos) && count++ < 20));
 			GameScene.add( boss );
 			
-			if (Dungeon.visible[boss.pos]) {
+			if (Dungeon.visibleforAnyHero(boss.pos)) {
 				boss.notice();
 				boss.getSprite().alpha( 0 );
 				AlphaTweener.showAlphaTweener(boss.getSprite(), 1, 0.1f );
@@ -202,6 +204,7 @@ public class CityBossLevel extends Level {
 		}
 	}
 	
+	@NonNull
 	@Override
 	public Heap drop( Item item, int cell ) {
 		
