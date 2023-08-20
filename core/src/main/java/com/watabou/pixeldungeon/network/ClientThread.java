@@ -125,7 +125,11 @@ class ClientThread implements Callable<String> {
                         Integer cell = data.getInt(token);
                         if (clientHero.cellSelector != null) {
                             if (clientHero.cellSelector.getListener() != null) {
-                                clientHero.cellSelector.getListener().onSelect(cell);
+                                if (cell != -1) {
+                                    clientHero.cellSelector.getListener().onSelect(cell);
+                                } else {
+                                    clientHero.cellSelector.cancel();
+                                }
                                 GameScene.ready(clientHero);
                             }
                         }
