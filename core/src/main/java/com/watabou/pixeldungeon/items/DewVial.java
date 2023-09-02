@@ -25,7 +25,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.effects.particles.ShaftParticle;
 import com.watabou.pixeldungeon.sprites.CharSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -159,7 +159,7 @@ public class DewVial extends Item {
 		}
 	}
 	
-	private static final Glowing WHITE = new Glowing( 0xFFFFCC );
+	private static final ItemSpriteGlowing WHITE = new ItemSpriteGlowing( 0xFFFFCC );
 
 	public void updateGlowing() {
 		setGlowing(isFull() ? WHITE : null);

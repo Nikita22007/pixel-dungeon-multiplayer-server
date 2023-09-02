@@ -21,7 +21,7 @@ package com.nikita22007.multiplayer.server.sprites;
 import com.watabou.pixeldungeon.DungeonTilemap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
@@ -53,7 +53,7 @@ public class MissileSprite {
 		}
 	}
 
-	public static void reset(int from, int to, int image, ItemSprite.Glowing glowing, Callback listener) {
+	public static void reset(int from, int to, int image, ItemSpriteGlowing glowing, Callback listener) {
 		float angularSpeed, angle; //degrees
 
 		PointF start = DungeonTilemap.tileToWorld(from);

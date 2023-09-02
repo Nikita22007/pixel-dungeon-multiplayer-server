@@ -25,7 +25,7 @@ import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.KindOfWeapon;
 import com.watabou.pixeldungeon.items.weapon.enchantments.*;
 import com.watabou.pixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -251,8 +251,8 @@ abstract public class Weapon extends KindOfWeapon {
 		public void storeInBundle( Bundle bundle ) {	
 		}
 		
-		public ItemSprite.Glowing glowing() {
-			return ItemSprite.Glowing.WHITE;
+		public ItemSpriteGlowing glowing() {
+			return ItemSpriteGlowing.WHITE;
 		}
 		
 		@SuppressWarnings("unchecked")

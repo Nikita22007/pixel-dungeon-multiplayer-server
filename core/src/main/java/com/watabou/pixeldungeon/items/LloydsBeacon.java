@@ -27,7 +27,7 @@ import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
@@ -162,7 +162,7 @@ public class LloydsBeacon extends Item {
 		return true;
 	}
 	
-	private static final Glowing WHITE = new Glowing( 0xFFFFFF );
+	private static final ItemSpriteGlowing WHITE = new ItemSpriteGlowing( 0xFFFFFF );
 
 	public void updateGlowing() {
 		setGlowing(getReturnDepth() != -1 ? WHITE : null);

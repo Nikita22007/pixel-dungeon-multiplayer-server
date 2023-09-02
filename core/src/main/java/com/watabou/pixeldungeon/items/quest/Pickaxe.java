@@ -33,7 +33,7 @@ import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -46,7 +46,7 @@ public class Pickaxe extends Weapon {
 	
 	private static final String TXT_NO_VEIN = "There is no dark gold vein near you to mine";
 	
-	private static final Glowing BLOODY = new Glowing( 0x550000 );
+	private static final ItemSpriteGlowing BLOODY = new ItemSpriteGlowing( 0x550000 );
 	
 	{
 		name = "pickaxe";

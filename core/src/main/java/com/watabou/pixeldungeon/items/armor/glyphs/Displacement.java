@@ -24,15 +24,14 @@ import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.utils.Random;
 
 public class Displacement extends Glyph {
 
 	private static final String TXT_DISPLACEMENT	= "%s of displacement";
 	
-	private static ItemSprite.Glowing BLUE = new ItemSprite.Glowing( 0x66AAFF );
+	private static ItemSpriteGlowing BLUE = new ItemSpriteGlowing( 0x66AAFF );
 	
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage ) {
@@ -64,7 +63,7 @@ public class Displacement extends Glyph {
 	}
 
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return BLUE;
 	}
 }

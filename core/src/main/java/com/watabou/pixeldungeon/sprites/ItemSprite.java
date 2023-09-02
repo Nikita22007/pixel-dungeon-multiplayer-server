@@ -20,14 +20,12 @@ package com.watabou.pixeldungeon.sprites;
 import android.graphics.Bitmap;
 
 import com.watabou.gltextures.TextureCache;
-import com.watabou.noosa.Game;
 import com.watabou.noosa.MovieClip;
 import com.watabou.noosa.TextureFilm;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.DungeonTilemap;
-import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.effects.CellEmitter;
 import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.Gold;
@@ -35,13 +33,9 @@ import com.watabou.pixeldungeon.items.Heap;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.levels.Terrain;
-import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ItemSprite extends MovieClip {
 
@@ -54,7 +48,7 @@ public class ItemSprite extends MovieClip {
 	public Heap heap;
 
 	@SuppressWarnings({"UnusedDeclaration", "FieldCanBeLocal"})
-	private Glowing glowing;
+	private ItemSpriteGlowing glowing;
 	
 	private float dropInterval;
 	
@@ -66,7 +60,7 @@ public class ItemSprite extends MovieClip {
 		this( item.image(), item.glowing() );
 	}
 	
-	public ItemSprite( int image, Glowing glowing ) {
+	public ItemSprite( int image, ItemSpriteGlowing glowing ) {
 		super( Assets.ITEMS );
 		
 		if (film == null) {
@@ -148,7 +142,7 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 	
-	public ItemSprite view( int image, Glowing glowing ) {
+	public ItemSprite view( int image, ItemSpriteGlowing glowing ) {
 		frame( film.get( image ) );
 		this.glowing = glowing;
 		if (glowing == null) {
@@ -198,41 +192,5 @@ public class ItemSprite extends MovieClip {
 		int col = index % rows;
 		return bmp.getPixel( col * SIZE + x, row * SIZE + y );
 	}
-	
-	public static class Glowing {
-		
-		public static final Glowing WHITE = new Glowing( 0xFFFFFF, 0.6f );
-		
-		public int color;
-		public float red;
-		public float green;
-		public float blue;
-		public float period;
-		
-		public Glowing( int color ) {
-			this( color, 1f );
-		}
-		
-		public Glowing( int color, float period ) {
-			
-			this.color = color;
-			
-			red = (color >> 16) / 255f;
-			green = ((color >> 8) & 0xFF) / 255f;
-			blue = (color & 0xFF) / 255f;
-			
-			this.period = period;
-		}
-		public JSONObject toJsonObject(){
-			JSONObject result = new JSONObject();
-			try {
-			result.put("color", color);
-			result.put("period", period);
-			} catch (JSONException ignored){
-				return new JSONObject();
-			}
-			return result;
 
-		}
-	}
 }

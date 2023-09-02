@@ -44,7 +44,7 @@ import com.watabou.pixeldungeon.items.food.MysteryMeat;
 import com.watabou.pixeldungeon.items.scrolls.Scroll;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.utils.Bundlable;
@@ -109,7 +109,7 @@ public class Heap implements Bundlable {
 		return (type == Type.HEAP || type == Type.FOR_SALE || type == Type.HIDDEN || type == Type.CRYSTAL_CHEST);
 	}
 
-	public ItemSprite.Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return (type == Type.HEAP || type == Type.FOR_SALE) && items.size() > 0 ? items.peek().glowing() : null;
 	}
 

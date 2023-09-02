@@ -42,8 +42,8 @@ import com.watabou.pixeldungeon.network.NetworkPacket;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.CellSelector;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.nikita22007.multiplayer.server.sprites.MissileSprite;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -148,7 +148,7 @@ public abstract class Item implements Bundlable {
 			itemObj.put("level_known", item.levelKnown);
 			itemObj.put("show_bar", item.isUpgradable() && item.levelKnown);
 			itemObj.put("level", item.visiblyUpgraded());
-			ItemSprite.Glowing glowing = item.glowing();
+			ItemSpriteGlowing glowing = item.glowing();
 			if (glowing != null) {
 				itemObj.put("glowing", glowing.toJsonObject());
 			}
@@ -575,14 +575,14 @@ public abstract class Item implements Bundlable {
 		return image;
 	}
 
-	private ItemSprite.Glowing glowing = null;
+	private ItemSpriteGlowing glowing = null;
 
 	@Nullable
-	public final ItemSprite.Glowing glowing() {
+	public final ItemSpriteGlowing glowing() {
 		return glowing;
 	}
 
-	public void setGlowing(ItemSprite.Glowing glowing) {
+	public void setGlowing(ItemSpriteGlowing glowing) {
 		this.glowing = glowing;
 	}
 

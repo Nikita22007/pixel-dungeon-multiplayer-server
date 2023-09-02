@@ -24,8 +24,7 @@ import com.watabou.pixeldungeon.effects.Speck;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
@@ -33,7 +32,7 @@ public class Affection extends Glyph {
 
 	private static final String TXT_AFFECTION	= "%s of affection";
 	
-	private static ItemSprite.Glowing PINK = new ItemSprite.Glowing( 0xFF4488 );
+	private static ItemSpriteGlowing PINK = new ItemSpriteGlowing( 0xFF4488 );
 	
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage) {
@@ -62,7 +61,7 @@ public class Affection extends Glyph {
 	}
 
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return PINK;
 	}
 }

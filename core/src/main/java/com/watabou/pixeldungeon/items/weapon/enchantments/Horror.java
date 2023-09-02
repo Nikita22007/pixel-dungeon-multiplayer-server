@@ -17,22 +17,20 @@
  */
 package com.watabou.pixeldungeon.items.weapon.enchantments;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.buffs.Buff;
 import com.watabou.pixeldungeon.actors.buffs.Terror;
 import com.watabou.pixeldungeon.actors.buffs.Vertigo;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.weapon.Weapon;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.utils.Random;
 
 public class Horror extends Weapon.Enchantment {
 
 	private static final String TXT_ELDRITCH	= "eldritch %s";
 	
-	private static ItemSprite.Glowing GREY = new ItemSprite.Glowing( 0x222222 );
+	private static ItemSpriteGlowing GREY = new ItemSpriteGlowing( 0x222222 );
 	
 	@Override
 	public boolean proc( Weapon weapon, Char attacker, Char defender, int damage ) {
@@ -56,7 +54,7 @@ public class Horror extends Weapon.Enchantment {
 	}
 	
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return GREY;
 	}
 	

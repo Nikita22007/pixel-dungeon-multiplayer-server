@@ -26,7 +26,7 @@ import com.watabou.pixeldungeon.items.EquipableItem;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.armor.glyphs.*;
 import com.watabou.pixeldungeon.sprites.HeroSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.utils.Bundlable;
@@ -355,8 +355,8 @@ public class Armor extends EquipableItem {
 		public void storeInBundle( Bundle bundle ) {	
 		}
 		
-		public ItemSprite.Glowing glowing() {
-			return ItemSprite.Glowing.WHITE;
+		public ItemSpriteGlowing glowing() {
+			return ItemSpriteGlowing.WHITE;
 		}
 		
 		public boolean checkOwner( Char owner ) {

@@ -17,18 +17,17 @@
  */
 package com.watabou.pixeldungeon.items.armor.glyphs;
 
-import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.Char;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 
 public class AutoRepair extends Glyph {
 
 	private static final String TXT_AUTO_REPAIR	= "%s of auto-repair";
 
-	private static Glowing GRAY = new Glowing( 0xCC8888 );
+	private static ItemSpriteGlowing GRAY = new ItemSpriteGlowing( 0xCC8888 );
 	
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage) {
@@ -45,7 +44,7 @@ public class AutoRepair extends Glyph {
 	}
 	
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return GRAY;
 	}
 

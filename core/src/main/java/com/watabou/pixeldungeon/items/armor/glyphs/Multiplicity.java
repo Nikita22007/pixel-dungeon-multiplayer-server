@@ -28,15 +28,14 @@ import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.items.wands.WandOfBlink;
 import com.watabou.pixeldungeon.levels.Level;
 import com.watabou.pixeldungeon.scenes.GameScene;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.utils.Random;
 
 public class Multiplicity extends Glyph {
 
 	private static final String TXT_MULTIPLICITY	= "%s of multiplicity";
 	
-	private static ItemSprite.Glowing PINK = new ItemSprite.Glowing( 0xCCAA88 );
+	private static ItemSpriteGlowing PINK = new ItemSpriteGlowing( 0xCCAA88 );
 	
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage) {
@@ -75,7 +74,7 @@ public class Multiplicity extends Glyph {
 	}
 
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return PINK;
 	}
 }

@@ -27,15 +27,14 @@ import com.watabou.pixeldungeon.effects.particles.SnowParticle;
 import com.watabou.pixeldungeon.items.armor.Armor;
 import com.watabou.pixeldungeon.items.armor.Armor.Glyph;
 import com.watabou.pixeldungeon.levels.Level;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.sprites.ItemSprite.Glowing;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.utils.Random;
 
 public class AntiEntropy extends Glyph {
 
 	private static final String TXT_ANTI_ENTROPY	= "%s of anti-entropy";
 	
-	private static ItemSprite.Glowing BLUE = new ItemSprite.Glowing( 0x0000FF );
+	private static ItemSpriteGlowing BLUE = new ItemSpriteGlowing( 0x0000FF );
 	
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage) {
@@ -61,7 +60,7 @@ public class AntiEntropy extends Glyph {
 	}
 
 	@Override
-	public Glowing glowing() {
+	public ItemSpriteGlowing glowing() {
 		return BLUE;
 	}
 }
