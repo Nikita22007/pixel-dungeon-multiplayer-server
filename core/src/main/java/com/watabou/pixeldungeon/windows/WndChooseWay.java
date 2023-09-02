@@ -20,14 +20,7 @@ package com.watabou.pixeldungeon.windows;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroSubClass;
 import com.watabou.pixeldungeon.items.TomeOfMastery;
-import com.watabou.pixeldungeon.network.SendData;
-import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.Utils;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class WndChooseWay extends WndOptions {
 

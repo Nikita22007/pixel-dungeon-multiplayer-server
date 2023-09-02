@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import androidx.annotation.NonNull;
-
 import com.nikita22007.multiplayer.noosa.Camera;
 import com.watabou.noosa.Scene;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
@@ -39,6 +37,8 @@ import com.watabou.pixeldungeon.levels.painters.Painter;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class CavesBossLevel extends Level {
 	
@@ -242,7 +242,7 @@ public class CavesBossLevel extends Level {
 		}
 	}
 	
-	@NonNull
+	@NotNull
     @Override
 	public Heap drop( Item item, int cell ) {
 		

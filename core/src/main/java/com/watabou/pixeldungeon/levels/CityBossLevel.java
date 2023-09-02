@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import androidx.annotation.NonNull;
-
 import com.watabou.noosa.Scene;
 import com.nikita22007.multiplayer.noosa.tweeners.AlphaTweener;
 import com.watabou.pixeldungeon.Assets;
@@ -36,6 +34,8 @@ import com.watabou.pixeldungeon.levels.painters.Painter;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class CityBossLevel extends Level {
 	
@@ -204,9 +204,9 @@ public class CityBossLevel extends Level {
 		}
 	}
 	
-	@NonNull
+	@NotNull
 	@Override
-	public Heap drop( Item item, int cell ) {
+	public Heap drop(Item item, int cell ) {
 		
 		if (!keyDropped && item instanceof SkeletonKey) {
 			

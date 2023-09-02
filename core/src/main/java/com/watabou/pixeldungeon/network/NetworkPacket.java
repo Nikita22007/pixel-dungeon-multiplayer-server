@@ -2,8 +2,6 @@ package com.watabou.pixeldungeon.network;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.watabou.pixeldungeon.PixelDungeon;
 import com.watabou.pixeldungeon.actors.Actor;
 import com.watabou.pixeldungeon.actors.Char;
@@ -535,7 +533,8 @@ public class NetworkPacket {
         return bagObj;
     }
 
-    public JSONArray packBags(@NonNull Bag[] bags) {
+    public JSONArray packBags(@NotNull Bag... bags) {
+        Objects.requireNonNull(bags);
         JSONArray bagsObj = new JSONArray();
         for (Bag bag : bags) {
             if (bag == null) {

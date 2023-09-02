@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import androidx.annotation.NonNull;
-
 import java.util.List;
 
 import com.watabou.noosa.Scene;
@@ -41,6 +39,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Graph;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PrisonBossLevel extends RegularLevel {
 
@@ -330,9 +330,8 @@ public class PrisonBossLevel extends RegularLevel {
 		}
 	}
 	
-	@NonNull
     @Override
-	public Heap drop( Item item, int cell ) {
+	public @NotNull Heap drop(Item item, int cell ) {
 		
 		if (!keyDropped && item instanceof SkeletonKey) {
 			

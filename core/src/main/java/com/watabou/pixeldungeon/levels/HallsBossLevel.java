@@ -17,8 +17,6 @@
  */
 package com.watabou.pixeldungeon.levels;
 
-import androidx.annotation.NonNull;
-
 import com.watabou.noosa.Scene;
 import com.watabou.pixeldungeon.Assets;
 import com.watabou.pixeldungeon.Bones;
@@ -36,6 +34,8 @@ import com.watabou.pixeldungeon.levels.painters.Painter;
 import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import org.jetbrains.annotations.NotNull;
 
 public class HallsBossLevel extends Level {
 	
@@ -203,7 +203,7 @@ public class HallsBossLevel extends Level {
 		CellEmitter.get( cell ).start( FlameParticle.FACTORY, 0.1f, 3 );
 	}
 	
-	@NonNull
+	@NotNull
     @Override
 	public Heap drop( Item item, int cell ) {
 		
