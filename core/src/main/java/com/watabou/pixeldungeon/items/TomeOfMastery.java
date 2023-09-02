@@ -117,11 +117,11 @@ public class TomeOfMastery extends Item {
 	
 	private void read( Hero hero, HeroSubClass sc1, HeroSubClass sc2 ) {
 		if (hero.subClass == sc1) {
-			GameScene.show( new WndChooseWay( this, sc2 ) );
+			GameScene.show( new WndChooseWay(hero, this, sc2 ) );
 		} else if (hero.subClass == sc2) {
-			GameScene.show( new WndChooseWay( this, sc1 ) );
+			GameScene.show( new WndChooseWay(hero, this, sc1 ) );
 		} else {
-			GameScene.show( new WndChooseWay( this, sc1, sc2 ) );
+			GameScene.show( new WndChooseWay( hero,this, sc1, sc2 ) );
 		}
 	}
 	

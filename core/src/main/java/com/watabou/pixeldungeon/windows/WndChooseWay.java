@@ -17,106 +17,104 @@
  */
 package com.watabou.pixeldungeon.windows;
 
+import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.hero.HeroSubClass;
 import com.watabou.pixeldungeon.items.TomeOfMastery;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.HighlightedText;
-import com.watabou.pixeldungeon.ui.RedButton;
+import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WndChooseWay extends Window {
 	
 	private static final int WIDTH		= 120;
 	private static final int BTN_HEIGHT	= 18;
 	private static final float GAP		= 2;
-	
-	public WndChooseWay( final TomeOfMastery tome, final HeroSubClass way1, final HeroSubClass way2 ) {
+	private static final String TXT_REMASTERY	= "Do you want to respec into %s?";
+	private static final String TXT_MASTERY	= "Which way will you follow?";
+
+	private final TomeOfMastery tome;
+	private final HeroSubClass way1, way2;
+
+	public WndChooseWay(final Hero owner, final TomeOfMastery tome, final HeroSubClass way1, final HeroSubClass way2 ) {
 		
-		super();
-		
-		final String TXT_MASTERY	= "Which way will you follow?";
+		super(owner);
+
+		this.tome = tome;
+		this.way1 = way1;
+		this.way2 = way2;
+
 		final String TXT_CANCEL		= "I'll decide later";
 		
-		float bottom = createCommonStuff( tome, way1.desc() + "\n\n" + way2.desc() + "\n\n" + TXT_MASTERY );
-		
-		RedButton btnWay1 = new RedButton( Utils.capitalize( way1.title() ) ) {
-			@Override
-			protected void onClick() {
-				hide();
-				tome.choose( way1 );
-			}
-		};
-		btnWay1.setRect( 0, bottom + GAP, (WIDTH - GAP) / 2, BTN_HEIGHT );
-		add( btnWay1 );
-		
-		RedButton btnWay2 = new RedButton( Utils.capitalize( way2.title() ) ) {
-			@Override
-			protected void onClick() {
-				hide();
-				tome.choose( way2 );
-			}
-		};
-		btnWay2.setRect( btnWay1.right() + GAP, btnWay1.top(), btnWay1.width(), BTN_HEIGHT );
-		add( btnWay2 );
-		
-		RedButton btnCancel = new RedButton( TXT_CANCEL ) {
-			@Override
-			protected void onClick() {
-				hide();
-			}
-		};
-		btnCancel.setRect( 0, btnWay2.bottom() + GAP, WIDTH, BTN_HEIGHT );
-		add( btnCancel );
-		
-		resize( WIDTH, (int)btnCancel.bottom() );
+		JSONObject params = createCommonStuff( tome, way1.desc() + "\n\n" + way2.desc() + "\n\n" + TXT_MASTERY );
+
+
+		JSONArray optionsArr = new JSONArray();
+		optionsArr.put(way1.title());
+		optionsArr.put(way2.title());
+		optionsArr.put(TXT_CANCEL);
+		try {
+			params.put("options", optionsArr);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+
+		SendData.sendWindow(owner.networkID, "wnd_choose_way", getId(), params);
 	}
 	
-	public WndChooseWay( final TomeOfMastery tome, final HeroSubClass way ) {
-		
-		super();
-		
-		final String TXT_REMASTERY	= "Do you want to respec into %s?";
-		
+	public WndChooseWay( final Hero owner, final TomeOfMastery tome, final HeroSubClass way ) {
+
+		super(owner);
+
+		this.tome = tome;
+		this.way1 = way;
+		this.way2 = null;
+
 		final String TXT_OK		= "Yes, I want to respec";
 		final String TXT_CANCEL	= "Maybe later";
 		
-		float bottom = createCommonStuff( tome, way.desc() + "\n\n" + Utils.format( TXT_REMASTERY, Utils.indefinite( way.title() ) ) );
-		
-		RedButton btnWay = new RedButton( TXT_OK ) {
-			@Override
-			protected void onClick() {
-				hide();
-				tome.choose( way );
-			}
-		};
-		btnWay.setRect( 0, bottom + GAP, WIDTH, BTN_HEIGHT );
-		add( btnWay );
-		
-		RedButton btnCancel = new RedButton( TXT_CANCEL ) {
-			@Override
-			protected void onClick() {
-				hide();
-			}
-		};
-		btnCancel.setRect( 0, btnWay.bottom() + GAP, WIDTH, BTN_HEIGHT );
-		add( btnCancel );
-		
-		resize( WIDTH, (int)btnCancel.bottom() );
+		JSONObject params = createCommonStuff( tome, way.desc() + "\n\n" + Utils.format( TXT_REMASTERY, Utils.indefinite( way.title() ) ) );
+
+		JSONArray optionsArr = new JSONArray();
+		optionsArr.put(TXT_OK);
+		optionsArr.put(TXT_CANCEL);
+		try {
+			params.put("options", optionsArr);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+
+		SendData.sendWindow(owner.networkID, "wnd_choose_way", getId(), params);
 	}
-	
-	private float createCommonStuff( TomeOfMastery tome, String text ) {
-		IconTitle titlebar = new IconTitle();
-		titlebar.icon( new ItemSprite( tome.image(), null ) );
-		titlebar.label( tome.name() );
-		titlebar.setRect( 0, 0, WIDTH, 0 );
-		add( titlebar );
-		
-		HighlightedText hl = new HighlightedText( 6 );
-		hl.text( text, WIDTH );
-		hl.setPos( titlebar.left(), titlebar.bottom() + GAP );
-		add( hl );
-		
-		return hl.bottom();
+
+	@NotNull
+	private JSONObject createCommonStuff(@NotNull TomeOfMastery tome, @NotNull String text ) {
+		JSONObject obj = new JSONObject();
+
+		try {
+			obj.put("title", tome.name());
+			obj.put("title_icon", tome.image());
+			obj.put("message", text);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+		return obj;
 	}
+
+	protected void onSelect(int index) {
+		hide();
+		if (index == 0) {
+			tome.choose(way1);
+		}
+		if (index == 1) {
+			if (way2 != null) {
+				tome.choose(way2);
+			}
+		}
+	};
+
 }
