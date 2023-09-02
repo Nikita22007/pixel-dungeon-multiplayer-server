@@ -30,7 +30,9 @@ import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 
-public class WndImp extends Window {
+import org.jetbrains.annotations.NotNull;
+
+public class WndImp extends WndOptions {
 	
 	private static final String TXT_MESSAGE	= 
 		"Oh yes! You are my hero!\n" +
@@ -41,33 +43,26 @@ public class WndImp extends Window {
 	private static final int WIDTH		= 120;
 	private static final int BTN_HEIGHT	= 20;
 	private static final int GAP		= 2;
-	
-	public WndImp( final Imp imp, final DwarfToken tokens ) {
-		
-		super();
-		
-		IconTitle titlebar = new IconTitle();
-		titlebar.icon( new ItemSprite( tokens.image(), null ) );
-		titlebar.label( Utils.capitalize( tokens.name() ) );
-		titlebar.setRect( 0, 0, WIDTH, 0 );
-		add( titlebar );
-		
-		BitmapTextMultiline message = PixelScene.createMultiline( TXT_MESSAGE, 6 );
-		message.maxWidth = WIDTH;
-		message.measure();
-		message.y = titlebar.bottom() + GAP;
-		add( message );
-		
-		RedButton btnReward = new RedButton( TXT_REWARD ) {
-			@Override
-			protected void onClick() {
-				takeReward( imp, tokens, Imp.Quest.reward, getOwnerHero());
-			}
-		};
-		btnReward.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );
-		add( btnReward );
-		
-		resize( WIDTH, (int)btnReward.bottom() );
+
+	@NotNull
+	private final Imp imp;
+	@NotNull
+	private final DwarfToken tokens;
+
+	public WndImp(@NotNull final Hero owner, @NotNull final Imp imp, @NotNull final DwarfToken tokens ) {
+		super(owner);
+		this.imp = imp;
+		this.tokens = tokens;
+
+		sendWnd(
+				owner,
+				tokens.image(),
+				null,
+				Utils.capitalize(tokens.name()),
+				TXT_MESSAGE,
+				TXT_REWARD
+		);
+
 	}
 	
 	private void takeReward( Imp imp, DwarfToken tokens, Item reward, Hero hero ) {
@@ -86,5 +81,9 @@ public class WndImp extends Window {
 		imp.flee(hero);
 		
 		Imp.Quest.complete();
+	}
+	@Override
+	protected void onSelect(int index) {
+		takeReward(imp, tokens, Imp.Quest.reward, getOwnerHero());
 	}
 }

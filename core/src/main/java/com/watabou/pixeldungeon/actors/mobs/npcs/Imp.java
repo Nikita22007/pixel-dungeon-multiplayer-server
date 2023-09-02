@@ -131,7 +131,7 @@ public class Imp extends NPC {
 			
 			DwarfToken tokens = hero.belongings.getItem( DwarfToken.class );
 			if (tokens != null && (tokens.quantity() >= 8 || (!Quest.alternative && tokens.quantity() >= 6))) {
-				GameScene.show( new WndImp( this, tokens ) );
+				GameScene.show( new WndImp( hero,this, tokens ) );
 			} else {
 				tell(hero, Quest.alternative ? TXT_MONKS2 : TXT_GOLEMS2, hero.className() );
 			}
