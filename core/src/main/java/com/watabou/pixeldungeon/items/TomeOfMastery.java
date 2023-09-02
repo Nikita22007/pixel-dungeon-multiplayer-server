@@ -35,6 +35,8 @@ import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 import com.watabou.pixeldungeon.windows.WndChooseWay;
 
+import org.jetbrains.annotations.NotNull;
+
 public class TomeOfMastery extends Item {
 
 	private static final String TXT_BLINDED	= "You can't read while blinded";
@@ -52,7 +54,12 @@ public class TomeOfMastery extends Item {
 		
 		unique = true;
 	}
-	
+
+	@NotNull
+	public String name(Hero owner) {
+		return owner != null && owner.subClass != HeroSubClass.NONE ? "Tome of Remastery" : "Tome of Mastery";
+	}
+
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );

@@ -29,11 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WndChooseWay extends Window {
-	
-	private static final int WIDTH		= 120;
-	private static final int BTN_HEIGHT	= 18;
-	private static final float GAP		= 2;
+public class WndChooseWay extends WndOptions {
+
 	private static final String TXT_REMASTERY	= "Do you want to respec into %s?";
 	private static final String TXT_MASTERY	= "Which way will you follow?";
 
@@ -49,21 +46,19 @@ public class WndChooseWay extends Window {
 		this.way2 = way2;
 
 		final String TXT_CANCEL		= "I'll decide later";
-		
-		JSONObject params = createCommonStuff( tome, way1.desc() + "\n\n" + way2.desc() + "\n\n" + TXT_MASTERY );
 
+		String message =  way1.desc() + "\n\n" + way2.desc() + "\n\n" + TXT_MASTERY;
+		sendWnd(
+				owner,
+				tome.image(),
+				null,
+				tome.name(owner),
+				message,
+				way1.title(),
+				way2.title(),
+				TXT_CANCEL
+		);
 
-		JSONArray optionsArr = new JSONArray();
-		optionsArr.put(way1.title());
-		optionsArr.put(way2.title());
-		optionsArr.put(TXT_CANCEL);
-		try {
-			params.put("options", optionsArr);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-
-		SendData.sendWindow(owner.networkID, "wnd_choose_way", getId(), params);
 	}
 	
 	public WndChooseWay( final Hero owner, final TomeOfMastery tome, final HeroSubClass way ) {
@@ -77,32 +72,17 @@ public class WndChooseWay extends Window {
 		final String TXT_OK		= "Yes, I want to respec";
 		final String TXT_CANCEL	= "Maybe later";
 		
-		JSONObject params = createCommonStuff( tome, way.desc() + "\n\n" + Utils.format( TXT_REMASTERY, Utils.indefinite( way.title() ) ) );
 
-		JSONArray optionsArr = new JSONArray();
-		optionsArr.put(TXT_OK);
-		optionsArr.put(TXT_CANCEL);
-		try {
-			params.put("options", optionsArr);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-
-		SendData.sendWindow(owner.networkID, "wnd_choose_way", getId(), params);
-	}
-
-	@NotNull
-	private JSONObject createCommonStuff(@NotNull TomeOfMastery tome, @NotNull String text ) {
-		JSONObject obj = new JSONObject();
-
-		try {
-			obj.put("title", tome.name());
-			obj.put("title_icon", tome.image());
-			obj.put("message", text);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-		return obj;
+		String message = way.desc() + "\n\n" + Utils.format( TXT_REMASTERY, Utils.indefinite( way.title() ));
+				sendWnd(
+				owner,
+				tome.image(),
+				null,
+				tome.name(owner),
+				message,
+				TXT_OK,
+				TXT_CANCEL
+		);
 	}
 
 	protected void onSelect(int index) {
