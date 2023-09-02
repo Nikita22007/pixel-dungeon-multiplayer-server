@@ -21,22 +21,33 @@ import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.scenes.PixelScene;
+import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.ui.RedButton;
 import com.watabou.pixeldungeon.ui.Window;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WndOptions extends Window {
+public abstract class WndOptions extends Window {
 
 	private static final int WIDTH			= 120;
 	private static final int MARGIN 		= 2;
 	private static final int BUTTON_HEIGHT	= 20;
-	
-	public WndOptions(Hero owner, String title, String message, String... options ) {
+
+	public WndOptions(Hero owner, String title, String message, String... options) {
 		super(owner);
-		init(title, message, options);
+		sendWnd(owner, null, null, title, message, options);
+	}
+
+	public WndOptions(@NotNull Hero owner, int icon, @Nullable ItemSpriteGlowing iconGlowing, String title, String message, String... options) {
+		super(owner);
+		sendWnd(owner, icon, iconGlowing, title, message, options);
+	}
+
+	protected void sendWnd(@NotNull Hero owner, @Nullable Integer icon, @Nullable ItemSpriteGlowing iconGlowing, @NotNull String title, String message, @NotNull String... options) {
 		JSONObject params = new JSONObject();
 		try {
 			params.put("title", title);
@@ -46,7 +57,12 @@ public class WndOptions extends Window {
 				optionsArr.put(options[i]);
 			}
 			params.put("options", optionsArr);
-		} catch (JSONException ignored) {}
+			if (icon != null) {
+				params.put("icon", icon);
+				params.put("icon_glowing", iconGlowing == null ? JSONObject.NULL : iconGlowing.toJsonObject());
+			}
+		} catch (JSONException ignored) {
+		}
 		SendData.sendWindow(owner.networkID, "wnd_option", getId(), params);
 	}
 
@@ -87,6 +103,10 @@ public class WndOptions extends Window {
 		
 		resize( WIDTH, (int)pos );
 	}
-	
-	protected void onSelect( int index ) {};
+
+	protected WndOptions(Hero hero){
+		super(hero);
+	};
+
+	protected abstract void onSelect( int index );
 }
