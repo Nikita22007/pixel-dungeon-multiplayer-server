@@ -107,12 +107,7 @@ public class ItemSprite extends MovieClip {
 	public void place( int p ) {
 		point( worldToCamera( p ) );
 	}
-	
-	public void drop(Heap heap) {
-		dropEffects(heap, heap.pos);
-	}
 
-	
 	public ItemSprite view( int image, ItemSpriteGlowing glowing ) {
 		frame( film.get( image ) );
 		this.glowing = glowing;
@@ -126,7 +121,7 @@ public class ItemSprite extends MovieClip {
 	public void update() {
 	}
 
-	public static void dropEffects(Heap heap, int from) {
+	public static void dropEffects(Heap heap) {
 
 		if (heap == null) {
 			return;

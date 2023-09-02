@@ -17,6 +17,8 @@
  */
 package com.watabou.pixeldungeon.items;
 
+import androidx.annotation.NonNull;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -44,6 +46,7 @@ import com.watabou.pixeldungeon.items.food.MysteryMeat;
 import com.watabou.pixeldungeon.items.scrolls.Scroll;
 import com.watabou.pixeldungeon.network.SendData;
 import com.watabou.pixeldungeon.plants.Plant.Seed;
+import com.watabou.pixeldungeon.sprites.ItemSprite;
 import com.watabou.pixeldungeon.sprites.ItemSpriteGlowing;
 import com.watabou.pixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.pixeldungeon.utils.GLog;
@@ -172,8 +175,8 @@ public class Heap implements Bundlable {
 	public Item peek() {
 		return items.peek();
 	}
-	
-	public void drop( Item item ) {
+
+	public void drop(@NonNull Item item ) {
 
 		if (item.stackable) {
 			
@@ -195,6 +198,7 @@ public class Heap implements Bundlable {
 			items.addFirst( item );
 		}
 		sendHeap(this);
+		ItemSprite.dropEffects(this);
 	}
 
 	public void sendDropVisualAction(int from) {
@@ -299,7 +303,7 @@ public class Heap implements Bundlable {
 		CellEmitter.get( pos ).burst( Speck.factory( Speck.BUBBLE ), 3 );
 		Splash.at( pos, 0xFFFFFF, 3 );
 		
-		float chances[] = new float[items.size()];
+		float[] chances = new float[items.size()];
 		int count = 0;
 		
 		int index = 0;
