@@ -581,6 +581,7 @@ public abstract class Char extends Actor {
 		return sprite.getEmoJsonObject();
 	}
 	public static final class GodPunishment{
+		@SuppressWarnings("InstantiationOfUtilityClass")
 		public static final GodPunishment INSTANCE = new GodPunishment();
 	}
 }

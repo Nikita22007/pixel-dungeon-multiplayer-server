@@ -108,39 +108,10 @@ public class ItemSprite extends MovieClip {
 		point( worldToCamera( p ) );
 	}
 	
-	public void drop() {
-
-		if (heap.isEmpty()) {
-			return;
-		}
-			
-		dropInterval = DROP_INTERVAL;
-		
-		speed.set( 0, -100 );
-		acc.set( 0, -speed.y / DROP_INTERVAL * 2 );
-		
-		if (visible && heap != null && heap.peek() instanceof Gold) {
-			CellEmitter.center( heap.pos ).burst( Speck.factory( Speck.COIN ), 5 );
-			Sample.INSTANCE.play( Assets.SND_GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
-		}
-		dropEffects();
+	public void drop(Heap heap) {
+		dropEffects(heap, heap.pos);
 	}
-	
-	public void drop( int from ) {
 
-		if (heap.pos == from) {
-			drop();
-		} else {
-			
-			float px = x;
-			float py = y;		
-			drop();
-			
-			place( from );
-	
-			speed.offset( (px-x) / DROP_INTERVAL, (py-y) / DROP_INTERVAL );
-		}
-	}
 	
 	public ItemSprite view( int image, ItemSpriteGlowing glowing ) {
 		frame( film.get( image ) );
@@ -155,36 +126,44 @@ public class ItemSprite extends MovieClip {
 	public void update() {
 	}
 
-	public void dropEffects() {
-		super.update();
+	public static void dropEffects(Heap heap, int from) {
 
 		if (heap == null) {
 			return;
 		}
-		visible = Dungeon.visibleforAnyHero(heap.pos);
-		speed.set(0);
-		acc.set(0);
-		place(heap.pos);
 
-		boolean water = Level.water[heap.pos];
-		if (visible) {
+		if (heap.isEmpty()) {
+			return;
+		}
+
+		boolean visible = Dungeon.visibleforAnyHero(heap.pos);
+		boolean[] visibleForHeroes = Dungeon.visibleForHeroes(heap.pos);
+
+		if (!visible) {
+			return; //optimization
+		}
+
+		if (heap.peek() instanceof Gold) {
+			CellEmitter.center(heap.pos).burst(Speck.factory(Speck.COIN), 5);
+			for (int ID = 0; ID < visibleForHeroes.length; ID++) {
+				Sample.INSTANCE.play(Assets.SND_GOLD, 1, 1, Random.Float(0.9f, 1.1f));
+			}
+		} else {
+			boolean water = Level.water[heap.pos];
 			if (water) {
 				GameScene.ripple(heap.pos);
 			} else {
 				int cell = Dungeon.level.map[heap.pos];
 				water = (cell == Terrain.WELL || cell == Terrain.ALCHEMY);
 			}
-		}
-		if (!(heap.peek() instanceof Gold)) {
-			boolean[] visibleForHeroes = Dungeon.visibleForHeroes(heap.pos);
 			for (int ID = 0; ID < visibleForHeroes.length; ID++) {
 				if (visibleForHeroes[ID]) {
 					Sample.INSTANCE.play(water ? Assets.SND_WATER : Assets.SND_STEP, 0.8f, 0.8f, 1.2f, Dungeon.heroes[ID]);
 				}
 			}
 		}
-
 	}
+
 	public static int pick( int index, int x, int y ) {
 		Bitmap bmp = TextureCache.get( Assets.ITEMS ).bitmap;
 		int rows = bmp.getWidth() / SIZE;
