@@ -31,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public abstract class WndOptions extends Window {
 
 	private static final int WIDTH			= 120;
@@ -39,15 +41,15 @@ public abstract class WndOptions extends Window {
 
 	public WndOptions(Hero owner, String title, String message, String... options) {
 		super(owner);
-		sendWnd(owner, null, null, title, message, options);
+		sendWnd(null, null, title, null, message, options);
 	}
 
 	public WndOptions(@NotNull Hero owner, int icon, @Nullable ItemSpriteGlowing iconGlowing, String title, String message, String... options) {
 		super(owner);
-		sendWnd(owner, icon, iconGlowing, title, message, options);
+		sendWnd(icon, iconGlowing, title, null, message, options);
 	}
 
-	protected void sendWnd(@NotNull Hero owner, @Nullable Integer icon, @Nullable ItemSpriteGlowing iconGlowing, @NotNull String title, String message, @NotNull String... options) {
+	protected void sendWnd(@Nullable Integer icon, @Nullable ItemSpriteGlowing iconGlowing, @NotNull String title, @Nullable Integer titleColor, @NotNull String message, @NotNull String... options) {
 		JSONObject params = new JSONObject();
 		try {
 			params.put("title", title);
@@ -60,10 +62,14 @@ public abstract class WndOptions extends Window {
 			if (icon != null) {
 				params.put("icon", icon);
 				params.put("icon_glowing", iconGlowing == null ? JSONObject.NULL : iconGlowing.toJsonObject());
+				params.put("title_color", titleColor == null ? JSONObject.NULL : titleColor);
 			}
 		} catch (JSONException ignored) {
 		}
-		SendData.sendWindow(owner.networkID, "wnd_option", getId(), params);
+		SendData.sendWindow(getOwnerHero().networkID, "wnd_option", getId(), params);
+	}
+	protected void sendWnd(WndOptionsParams params) {
+		SendData.sendWindow(getOwnerHero().networkID, "wnd_option", getId(), params.toJSONObject());
 	}
 
 	public WndOptions(String title, String message, String... options) {
@@ -107,6 +113,37 @@ public abstract class WndOptions extends Window {
 	protected WndOptions(Hero hero){
 		super(hero);
 	};
+
+	protected static final class WndOptionsParams {
+		public @Nullable Integer icon = null;
+		public @Nullable ItemSpriteGlowing iconGlowing = null;
+		public @NotNull String title = "Untitled";
+		public @Nullable Integer titleColor = null;
+		public @NotNull String message = "MissingNo";
+		public ArrayList<String> options = new ArrayList<String>(3);
+
+		public JSONObject toJSONObject() {
+			JSONObject params = new JSONObject();
+
+			try {
+				params.put("title", title);
+				params.put("message", message);
+				JSONArray optionsArr = new JSONArray();
+				for (int i = 0; i < options.size(); i += 1) {
+					optionsArr.put(options.get(i));
+				}
+				params.put("options", optionsArr);
+				if (icon != null) {
+					params.put("icon", icon);
+					params.put("icon_glowing", iconGlowing == null ? JSONObject.NULL : iconGlowing.toJsonObject());
+					params.put("title_color", titleColor == null ? JSONObject.NULL : titleColor);
+				}
+			} catch (JSONException ignored) {
+			}
+			return params;
+		}
+
+	}
 
 	protected abstract void onSelect( int index );
 }

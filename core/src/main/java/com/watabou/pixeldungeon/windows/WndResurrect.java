@@ -17,19 +17,13 @@
  */
 package com.watabou.pixeldungeon.windows;
 
-import com.watabou.noosa.BitmapTextMultiline;
-import com.watabou.noosa.Game;
 import com.watabou.pixeldungeon.Rankings;
 import com.watabou.pixeldungeon.Statistics;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.items.Ankh;
 import com.watabou.pixeldungeon.scenes.InterLevelSceneServer;
-import com.watabou.pixeldungeon.scenes.PixelScene;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.RedButton;
-import com.watabou.pixeldungeon.ui.Window;
 
-public class WndResurrect extends Window {
+public class WndResurrect extends WndOptions {
 	
 	private static final String TXT_MESSAGE	= "You died, but you were given another chance to win this dungeon. Will you take it?";
 	private static final String TXT_YES		= "Yes, I will fight!";
@@ -38,63 +32,44 @@ public class WndResurrect extends Window {
 	private static final int WIDTH		= 120;
 	private static final int BTN_HEIGHT	= 20;
 	private static final float GAP		= 2;
-	
-	public static WndResurrect instance;
+
 	public static Object causeOfDeath;
 	
 	public WndResurrect(final Ankh ankh, final Hero hero, Object causeOfDeath ) {
-		
-		super();
-		
-		instance = this;
+		super(hero);
+
 		WndResurrect.causeOfDeath = causeOfDeath;
-		
-		IconTitle titlebar = new IconTitle();
-		titlebar.icon( new ItemSprite( ankh.image(), null ) );
-		titlebar.label( ankh.name() );
-		titlebar.setRect( 0, 0, WIDTH, 0 );
-		add( titlebar );
-		
-		BitmapTextMultiline message = PixelScene.createMultiline( TXT_MESSAGE, 6 );
-		message.maxWidth = WIDTH;
-		message.measure();
-		message.y = titlebar.bottom() + GAP;
-		add( message );
-		
-		RedButton btnYes = new RedButton( TXT_YES ) {
-			@Override
-			protected void onClick() {
-				hide();
-				
-				Statistics.ankhsUsed++;
-				InterLevelSceneServer.resurrect(hero);
-			}
-		};
-		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );
-		add( btnYes );
-		
-		RedButton btnNo = new RedButton( TXT_NO ) {
-			@Override
-			protected void onClick() {
-				hide();
-				
-				Rankings.INSTANCE.submit( false );
-				hero.reallyDie( WndResurrect.causeOfDeath );
-			}
-		};
-		btnNo.setRect( 0, btnYes.bottom() + GAP, WIDTH, BTN_HEIGHT );
-		add( btnNo );
-		
-		resize( WIDTH, (int)btnNo.bottom() );
+
+		sendWnd(
+				ankh.image(),
+				null,
+				ankh.name(),
+				null, TXT_MESSAGE,
+				TXT_YES,
+				TXT_NO
+		);
 	}
 	
 	@Override
 	public void destroy() {
 		super.destroy();
-		instance = null;
 	}
 	
 	@Override
 	public void onBackPressed() {
+	}
+
+	@Override
+	protected void onSelect(int index) {
+		if (index == 1) {
+			hide();
+			Rankings.INSTANCE.submit( false );
+			getOwnerHero().reallyDie( WndResurrect.causeOfDeath );
+		} else {
+			hide();
+			Statistics.ankhsUsed++;
+			InterLevelSceneServer.resurrect(getOwnerHero());
+
+		}
 	}
 }

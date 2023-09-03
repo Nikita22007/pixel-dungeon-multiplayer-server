@@ -42,11 +42,10 @@ public class WndChooseWay extends WndOptions {
 
 		String message =  way1.desc() + "\n\n" + way2.desc() + "\n\n" + TXT_MASTERY;
 		sendWnd(
-				owner,
 				tome.image(),
 				null,
 				tome.name(owner),
-				message,
+				null, message,
 				way1.title(),
 				way2.title(),
 				TXT_CANCEL
@@ -68,11 +67,10 @@ public class WndChooseWay extends WndOptions {
 
 		String message = way.desc() + "\n\n" + Utils.format( TXT_REMASTERY, Utils.indefinite( way.title() ));
 				sendWnd(
-				owner,
-				tome.image(),
+						tome.image(),
 				null,
 				tome.name(owner),
-				message,
+						null, message,
 				TXT_OK,
 				TXT_CANCEL
 		);

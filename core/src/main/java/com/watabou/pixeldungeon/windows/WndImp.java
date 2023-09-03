@@ -17,16 +17,11 @@
  */
 package com.watabou.pixeldungeon.windows;
 
-import com.watabou.noosa.BitmapTextMultiline;
 import com.watabou.pixeldungeon.Dungeon;
 import com.watabou.pixeldungeon.actors.hero.Hero;
 import com.watabou.pixeldungeon.actors.mobs.npcs.Imp;
 import com.watabou.pixeldungeon.items.Item;
 import com.watabou.pixeldungeon.items.quest.DwarfToken;
-import com.watabou.pixeldungeon.scenes.PixelScene;
-import com.watabou.pixeldungeon.sprites.ItemSprite;
-import com.watabou.pixeldungeon.ui.RedButton;
-import com.watabou.pixeldungeon.ui.Window;
 import com.watabou.pixeldungeon.utils.GLog;
 import com.watabou.pixeldungeon.utils.Utils;
 
@@ -55,11 +50,10 @@ public class WndImp extends WndOptions {
 		this.tokens = tokens;
 
 		sendWnd(
-				owner,
 				tokens.image(),
 				null,
 				Utils.capitalize(tokens.name()),
-				TXT_MESSAGE,
+				null, TXT_MESSAGE,
 				TXT_REWARD
 		);
 
