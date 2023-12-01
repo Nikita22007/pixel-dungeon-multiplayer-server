@@ -32,7 +32,7 @@ public class WndTitledMessage extends Window {
 	
 	public WndTitledMessage( Image icon, String title, String message ) {
 		
-		this( new IconTitle( icon, title ), message );
+		this( new IconTitle( title ), message );
 
 	}
 	

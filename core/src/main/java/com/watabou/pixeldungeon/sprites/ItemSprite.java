@@ -20,7 +20,6 @@ package com.watabou.pixeldungeon.sprites;
 import android.graphics.Bitmap;
 
 import com.watabou.gltextures.TextureCache;
-import com.watabou.noosa.MovieClip;
 import com.watabou.noosa.TextureFilm;
 import com.nikita22007.multiplayer.noosa.audio.Sample;
 import com.watabou.pixeldungeon.Assets;
@@ -37,89 +36,9 @@ import com.watabou.pixeldungeon.scenes.GameScene;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class ItemSprite extends MovieClip {
+public abstract class ItemSprite  {
 
 	public static final int SIZE	= 16;
-	
-	private static final float DROP_INTERVAL = 0.4f;
-	
-	protected static TextureFilm film;
-	
-	public Heap heap;
-
-	@SuppressWarnings({"UnusedDeclaration", "FieldCanBeLocal"})
-	private ItemSpriteGlowing glowing;
-	
-	private float dropInterval;
-	
-	public ItemSprite() {
-		this( ItemSpriteSheet.SMTH, null );
-	}
-	
-	public ItemSprite( Item item ) {
-		this( item.image(), item.glowing() );
-	}
-	
-	public ItemSprite( int image, ItemSpriteGlowing glowing ) {
-		super( Assets.ITEMS );
-		
-		if (film == null) {
-			film = new TextureFilm( texture, SIZE, SIZE );
-		}
-		
-		view( image, glowing );
-	}
-	
-	public void originToCenter() {
-		origin.set(SIZE / 2 );
-	}
-	
-	public void link() {
-		link( heap );
-	}
-	
-	public void link( Heap heap ) {
-		this.heap = heap;
-		view( heap.image(), heap.glowing() );
-		place( heap.pos );
-	}
-	
-	@Override
-	public void revive() {
-		super.revive();
-		
-		speed.set( 0 );
-		acc.set( 0 );
-		dropInterval = 0;
-		
-		heap = null;
-	}
-	
-	public PointF worldToCamera( int cell ) {
-		final int csize = DungeonTilemap.SIZE;
-		
-		return new PointF(
-			cell % Level.WIDTH * csize + (csize - SIZE) * 0.5f,
-			cell / Level.WIDTH * csize + (csize - SIZE) * 0.5f
-		);
-	}
-	
-	public void place( int p ) {
-		point( worldToCamera( p ) );
-	}
-
-	public ItemSprite view( int image, ItemSpriteGlowing glowing ) {
-		frame( film.get( image ) );
-		this.glowing = glowing;
-		if (glowing == null) {
-			resetColor();
-		}
-		return this;
-	}
-	
-	@Override
-	public void update() {
-	}
 
 	public static void dropEffects(Heap heap) {
 

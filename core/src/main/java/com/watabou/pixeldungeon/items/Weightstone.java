@@ -137,16 +137,12 @@ public class Weightstone extends Item {
 		
 		public WndBalance( final Weapon weapon ) {
 			super();
-			
-			IconTitle titlebar = new IconTitle( weapon );
-			titlebar.setRect( 0, 0, WIDTH, 0 );
-			add( titlebar );
+
 			
 			BitmapTextMultiline tfMesage = PixelScene.createMultiline( Utils.format( TXT_CHOICE, weapon.name() ), 8 );
 			tfMesage.maxWidth = WIDTH - MARGIN * 2;
 			tfMesage.measure();
 			tfMesage.x = MARGIN;
-			tfMesage.y = titlebar.bottom() + MARGIN;
 			add( tfMesage );
 			
 			float pos = tfMesage.y + tfMesage.height();

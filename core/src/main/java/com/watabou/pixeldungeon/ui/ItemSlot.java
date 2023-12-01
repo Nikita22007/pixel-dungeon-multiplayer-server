@@ -37,8 +37,7 @@ public class ItemSlot extends Button { //UI  only -> Client  Only
 	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
-	
-	protected ItemSprite icon;
+
 	protected BitmapText topLeft;
 	protected BitmapText topRight;
 	protected BitmapText bottomRight;
@@ -77,9 +76,6 @@ public class ItemSlot extends Button { //UI  only -> Client  Only
 		
 		super.createChildren();
 		
-		icon = new ItemSprite();
-		add( icon );
-		
 		topLeft = new BitmapText( PixelScene.font1x );
 		add( topLeft );
 		
@@ -93,9 +89,7 @@ public class ItemSlot extends Button { //UI  only -> Client  Only
 	@Override
 	protected void layout() {
 		super.layout();
-		
-		icon.x = x + (width - icon.width) / 2;
-		icon.y = y + (height - icon.height) / 2;
+
 		
 		if (topLeft != null) {
 			topLeft.x = x;
@@ -117,14 +111,10 @@ public class ItemSlot extends Button { //UI  only -> Client  Only
 		if (item == null) {
 			
 			active = false;
-			icon.visible = topLeft.visible = topRight.visible = bottomRight.visible = false;
 			
 		} else {
 			
 			active = true;
-			icon.visible = topLeft.visible = topRight.visible = bottomRight.visible = true;
-			
-			icon.view( item.image(), item.glowing() );
 			
 			topLeft.text( item.status()  );
 			
@@ -176,7 +166,6 @@ public class ItemSlot extends Button { //UI  only -> Client  Only
 		active = value;
 		
 		float alpha = value ? ENABLED : DISABLED;
-		icon.alpha( alpha );
 		topLeft.alpha( alpha );
 		topRight.alpha( alpha );
 		bottomRight.alpha( alpha );
