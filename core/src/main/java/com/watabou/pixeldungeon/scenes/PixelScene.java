@@ -31,9 +31,7 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Scene;
 import com.watabou.noosa.Visual;
 import com.watabou.pixeldungeon.Assets;
-import com.watabou.pixeldungeon.Badges;
 import com.watabou.pixeldungeon.PixelDungeon;
-import com.watabou.pixeldungeon.effects.BadgeBanner;
 import com.watabou.utils.BitmapCache;
 
 public class PixelScene extends Scene {
@@ -260,15 +258,7 @@ public class PixelScene extends Scene {
 	protected void fadeIn( int color, boolean light ) {
 		add( new Fader( color, light ) );
 	}
-	
-	public static void showBadge( Badges.Badge badge ) {
-		BadgeBanner banner = BadgeBanner.show( badge.image );
-		banner.camera = uiCamera;
-		banner.x = align( banner.camera, (banner.camera.width - banner.width) / 2 );
-		banner.y = align( banner.camera, (banner.camera.height - banner.height) / 3 );
-		Game.scene().add( banner );
-	}
-	
+
 	protected static class Fader extends ColorBlock {
 		
 		private static float FADE_TIME = 1f;

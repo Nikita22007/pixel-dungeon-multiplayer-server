@@ -198,7 +198,7 @@ public class Badges {
 	
 	private static void store( Bundle bundle, HashSet<Badge> badges ) {
 		int count = 0;
-		String names[] = new String[badges.size()];
+		String[] names = new String[badges.size()];
 		
 		for (Badge badge:badges) {
 			names[count++] = badge.toString();
@@ -833,14 +833,6 @@ public class Badges {
 		}
 	}
 	
-	public static void validateSupporter() {
-
-		global.add( Badge.SUPPORTER );
-		saveNeeded = true;
-		
-		PixelScene.showBadge( Badge.SUPPORTER );
-	}
-	
 	public static void validateGamesPlayed() {
 		Badge badge = null;
 		if (Rankings.INSTANCE.totalNumber >= 10) {
@@ -888,9 +880,9 @@ public class Badges {
 				GLog.h( "New super badge: %s", badge.description );
 			} else {
 				GLog.h( "New badge: %s", badge.description );
-			}	
-			PixelScene.showBadge( badge );
+			}
 		}
+		//todo add send badges
 	}
 	
 	public static boolean isUnlocked( Badge badge ) {
