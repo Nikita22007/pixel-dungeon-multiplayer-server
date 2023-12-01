@@ -72,10 +72,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	
 
 	//graphics
-	private Group mobs;
 	private Group effects;
-	private Group gases;
-	private Group spells;
 
 	@Override
 	public void create() {
@@ -108,16 +105,10 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		add( effects );
 		
-		gases = new Group();
-		add( gases );
-		
 		for (Blob blob : Dungeon.level.blobs.values()) {
 			blob.emitter = null;
 			addBlobSprite( blob );
 		}
-		
-		spells = new Group();
-		add( spells );
 
 		for ( Hero heroobj:Dungeon.heroes) {
 			if (heroobj == null){
@@ -261,10 +252,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		} catch (JSONException ignore) {
 		}
 		SendData.sendCustomActionForAll(actionObj);
-	}
-	
-	public static SpellSprite spellSprite() {
-		return (SpellSprite)scene.spells.recycle( SpellSprite.class );
 	}
 
 	public static Emitter emitter() {

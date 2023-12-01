@@ -331,7 +331,13 @@ action add_item_to_bag
     // remove: removes item. item field in action  will be ignored
 }
 
-
+//spells
+avtion visual_spell_sprite
+{
+    "action_type": "spell_sprite"
+    "target": 2 //id of target char
+    "spell": 3 //spell id
+}
 //effects
 action visual_degradation
 {
