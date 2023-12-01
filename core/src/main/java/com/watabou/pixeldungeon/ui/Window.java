@@ -31,7 +31,6 @@ import com.watabou.noosa.TouchArea;
 import com.watabou.pixeldungeon.Chrome;
 import com.watabou.pixeldungeon.Settings;
 import com.watabou.pixeldungeon.actors.hero.Hero;
-import com.watabou.pixeldungeon.effects.ShadowBox;
 import com.watabou.pixeldungeon.scenes.PixelScene;
 import com.watabou.utils.Signal;
 
@@ -46,7 +45,6 @@ public class Window extends Group implements Signal.Listener<Key> {
 	protected int height;
 
 	protected TouchArea blocker;
-	protected ShadowBox shadow;
 	protected NinePatch chrome;
 
 	//todo: memory leak. Remove entries when hero removes
@@ -113,13 +111,7 @@ public class Window extends Group implements Signal.Listener<Key> {
 		
 		this.width = width;
 		this.height = height;
-		
-		shadow = new ShadowBox();
-		shadow.am = 0.5f;
-		shadow.camera = PixelScene.uiCamera.visible ? 
-			PixelScene.uiCamera : Camera.main;
-		add( shadow );
-		
+
 		chrome.x = -chrome.marginLeft();
 		chrome.y = -chrome.marginTop();
 		chrome.size( 
@@ -135,11 +127,6 @@ public class Window extends Group implements Signal.Listener<Key> {
 		camera.y = (int)(Game.height - camera.height * camera.zoom) / 2;
 		camera.scroll.set( chrome.x, chrome.y );
 		Camera.add( camera );
-		
-		shadow.boxRect( 
-			camera.x / camera.zoom, 
-			camera.y / camera.zoom, 
-			chrome.width(), chrome.height );
 		
 		Keys.event.add( this );
 	}
@@ -170,7 +157,6 @@ public class Window extends Group implements Signal.Listener<Key> {
 		camera.x = (int)(Game.width - camera.screenWidth()) / 2;
 		camera.y = (int)(Game.height - camera.screenHeight()) / 2;
 		
-		shadow.boxRect( camera.x / camera.zoom, camera.y / camera.zoom, chrome.width(), chrome.height );
 	}
 	
 	public void hide() {

@@ -110,10 +110,6 @@ public class WndStory extends Window {
 	@Override
 	public void update() {
 		super.update();
-		
-		if (delay > 0 && (delay -= Game.elapsed) <= 0) {
-			shadow.visible = chrome.visible = tf.visible = true;
-		}
 	}
 	
 	public static void showChapter( int id ) {
@@ -121,12 +117,7 @@ public class WndStory extends Window {
 		String text = CHAPTERS.get( id );
 		if (text != null) {
 			WndStory wnd = new WndStory( text );
-			if ((wnd.delay = 0.6f) > 0) {
-				wnd.shadow.visible = wnd.chrome.visible = wnd.tf.visible = false;
-			}
-			
 			Game.scene().add( wnd );
-
 		}
 	}
 }
