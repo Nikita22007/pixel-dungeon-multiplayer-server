@@ -69,10 +69,6 @@ public class GameScene extends PixelScene {     //only client, exclude static
 	private static final String TXT_SECRETS	= "The atmosphere hints that this floor hides many secrets.";
 	
 	static GameScene scene;
-	
-
-	//graphics
-	private Group effects;
 
 	@Override
 	public void create() {
@@ -94,16 +90,12 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		
 		Dungeon.level.addVisuals( this );
 
-		effects = new Group();
-
 		for (Mob mob : Dungeon.level.mobs) {
 			addMobSprite( mob );
 			if (Statistics.amuletHeroID>-1) {
 				mob.beckon( Dungeon.heroes[Statistics.amuletHeroID].pos );
 			}
 		}
-		
-		add( effects );
 		
 		for (Blob blob : Dungeon.level.blobs.values()) {
 			blob.emitter = null;
@@ -239,11 +231,7 @@ public class GameScene extends PixelScene {     //only client, exclude static
 		Actor.occupyCell( mob );
 		scene.addMobSprite( mob );
 	}
-	
-	public static void effect( Visual effect ) {
-		scene.effects.add( effect );
-	}
-	
+
 	public static void ripple( int pos ) {
 		JSONObject actionObj = new JSONObject();
 		try {
