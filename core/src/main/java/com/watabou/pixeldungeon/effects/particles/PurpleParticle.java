@@ -50,35 +50,5 @@ public class PurpleParticle extends PixelParticle {
 		
 		lifespan = 0.5f;
 	}
-	
-	public void reset( float x, float y ) {
-		revive();
-		
-		this.x = x;
-		this.y = y;
-		
-		speed.set( Random.Float( -5, +5 ), Random.Float( -5, +5 ) );
-		
-		left = lifespan;
-	}
-	
-	public void resetBurst( float x, float y ) {
-		revive();
-		
-		this.x = x;
-		this.y = y;
-		
-		speed.polar( Random.Float( PointF.PI2 ), Random.Float( 16, 32 ) );
-		
-		left = lifespan;
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		// alpha: 1 -> 0; size: 1 -> 5
-		size( 5 - (am = left / lifespan) * 4 );
-		// color: 0xFF0044 -> 0x220066
-		color( ColorMath.interpolate( 0x220066, 0xFF0044, am ) );
-	}
+
 }

@@ -38,23 +38,5 @@ public class WebParticle extends PixelParticle {
 		color( 0xCCCCCC );
 		lifespan = 2f;
 	}
-	
-	public void reset( float x, float y ) {
-		revive();
-		
-		this.x = x;
-		this.y = y;
-		
-		left = lifespan;
-		angle = Random.Float( 360 );
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		
-		float p = left / lifespan;
-		am = p < 0.5f ? p : 1 - p;
-		scale.y = 16 + p * 8;
-	}
+
 }

@@ -34,12 +34,6 @@ public class MobSprite extends CharSprite {
 		
 		if (anim == die) {
 			MobSprite.this.killAndErase();
-			/*parent.add( new AlphaTweener( this, 0, FADE_TIME ) {
-				@Override
-				protected void onComplete() {
-					MobSprite.this.killAndErase();
-				};
-			} );*/
 		}
 	}
 	

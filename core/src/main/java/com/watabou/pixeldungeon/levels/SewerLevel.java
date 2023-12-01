@@ -193,27 +193,4 @@ public class SewerLevel extends RegularLevel {
 		}
 	}
 
-	public static final class WaterParticle extends PixelParticle {
-		
-		public WaterParticle() {
-			super();
-			
-			acc.y = 50;
-			am = 0.5f;
-			
-			color( ColorMath.random( 0xb6ccc2, 0x3b6653 ) );
-			size( 2 );
-		}
-		
-		public void reset( float x, float y ) {
-			revive();
-			
-			this.x = x;
-			this.y = y;
-			
-			speed.set( Random.Float( -2, +2 ), 0 );
-			
-			left = lifespan = 0.5f;
-		}
-	}
 }

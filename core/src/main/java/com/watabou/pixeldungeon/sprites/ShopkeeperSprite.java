@@ -23,8 +23,6 @@ import com.watabou.pixeldungeon.Assets;
 
 public class ShopkeeperSprite extends MobSprite {
 	
-	private PixelParticle coin;
-	
 	public ShopkeeperSprite() {
 		super();
 		

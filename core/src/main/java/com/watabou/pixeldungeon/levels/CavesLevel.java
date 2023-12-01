@@ -248,24 +248,5 @@ public class CavesLevel extends RegularLevel {
 
 		}
 	}
-	
-	public static final class Sparkle extends PixelParticle {
-		
-		public void reset( float x, float y ) {
-			revive();
-			
-			this.x = x;
-			this.y = y;
-			
-			left = lifespan = 0.5f;
-		}
-		
-		@Override
-		public void update() {
-			super.update();
-			
-			float p = left / lifespan;
-			size( (am = p < 0.5f ? p * 2 : (1 - p) * 2) * 2 );
-		}
-	}
+
 }

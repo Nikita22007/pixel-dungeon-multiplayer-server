@@ -179,31 +179,5 @@ public class CityLevel extends RegularLevel {
 			pour( factory, 0.2f );
 		}
 	}
-	
-	public static final class SmokeParticle extends PixelParticle {
-		
-		public SmokeParticle() {
-			super();
-			
-			color( 0x000000 );
-			speed.set( Random.Float( 8 ), -Random.Float( 8 ) );
-		}
-		
-		public void reset( float x, float y ) {
-			revive();
-			
-			this.x = x;
-			this.y = y;
-			
-			left = lifespan = 2f;
-		}
-		
-		@Override
-		public void update() {
-			super.update();
-			float p = left / lifespan;
-			am = p > 0.8f ? 1 - p : p * 0.25f;
-			size( 8 - p * 4 );
-		}
-	}
+
 }

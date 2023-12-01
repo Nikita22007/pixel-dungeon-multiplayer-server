@@ -21,48 +21,32 @@
 
 package com.watabou.noosa.particles;
 
-import com.watabou.noosa.Game;
-import com.watabou.noosa.PseudoPixel;
+import com.watabou.utils.PointF;
 
-public class PixelParticle extends PseudoPixel {
+public class PixelParticle {
 
 	protected float size;
 	
 	protected float lifespan;
 	protected float left;
-	
+	PointF origin;
+	int color;
 	public PixelParticle() {
 		super();
 		
 		origin.set( +0.5f );
 	}
-	
+	public void revive() {
+	}
 	public void reset( float x, float y, int color, float size, float lifespan ) {
-		revive();
-		
-		this.x = x;
-		this.y = y;
-		
-		color( color );
-		size( this.size = size );
-			
-		this.left = this.lifespan = lifespan;
 	}
-	
-	@Override
-	public void update() {
-		super.update();
 
-		if ((left -= Game.elapsed) <= 0) {
-			kill();
-		}
+	public void update() {
 	}
-	
+
+	public void color(int i) {
+		color = i;
+	}
 	public static class Shrinking extends PixelParticle {
-		@Override
-		public void update() {
-			super.update();
-			size( size * left / lifespan );
-		}
 	}
 }
