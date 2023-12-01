@@ -24,44 +24,37 @@ import android.graphics.Paint;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Image;
+import com.watabou.pixeldungeon.sprites.CharSprite;
 
-public class Halo extends Image {
+public class Halo  {
 	
 	private static final Object CACHE_KEY = Halo.class;
-	
+
 	protected static final int RADIUS	= 64;
-	
 	protected float radius = RADIUS;
 	protected float brightness = 1;
+	protected int color;
+	float x,y;
+	CharSprite target;
 
-	public Halo() {
+	public Halo(CharSprite target) {
 		super();
-		
-		if (!TextureCache.contains( CACHE_KEY )) {
-			Bitmap bmp = Bitmap.createBitmap( RADIUS * 2, RADIUS * 2, Bitmap.Config.ARGB_8888 );
-			Canvas canvas = new Canvas( bmp );
-			Paint paint = new Paint();
-			paint.setColor( 0xFFFFFFFF );
-			canvas.drawCircle( RADIUS, RADIUS, RADIUS * 0.75f, paint );
-			paint.setColor( 0x88FFFFFF );
-			canvas.drawCircle( RADIUS, RADIUS, RADIUS, paint );
-			TextureCache.add( CACHE_KEY, new SmartTexture( bmp ) );
-		}
-		
-		texture( CACHE_KEY );
-		
-		origin.set( RADIUS );
+		this.target = target;
 	}
 	
-	public Halo( float radius, int color, float brightness ) {
-		
-		this();
+	public Halo(CharSprite target, float radius, int color, float brightness ) {
+
+		this(target);
 		
 		hardlight( color );
-		alpha( this.brightness = brightness );
+		this.brightness = brightness;
 		radius( radius );
 	}
-	
+
+	private void hardlight(int color) {
+		this.color = color;
+	}
+
 	public Halo point( float x, float y ) {
 		this.x = x - RADIUS;
 		this.y = y - RADIUS;
@@ -69,6 +62,11 @@ public class Halo extends Image {
 	}
 	
 	public void radius( float value ) {
-		scale.set(  (this.radius = value) / RADIUS );
+		this.radius = value ;
+	}
+
+	public final void putOut()
+	{
+		//todo
 	}
 }
